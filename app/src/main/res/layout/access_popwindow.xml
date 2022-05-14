@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="wrap_content"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:text="@string/quanxian"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:textColor="@color/black"
+
+            android:text="@string/qingqiu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="@string/gouxuanquanxian"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/access_ibility"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/dian"
+                android:gravity="center_vertical"
+                android:text="@string/wuzhangai"
+                android:textColor="@color/black" />
+
+            <CheckBox
+                android:id="@+id/access_ibility_cheak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/access_ziqidong"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="自启动权限"
+                android:textColor="@color/black"
+                android:drawableStart="@drawable/dian"/>
+            <CheckBox
+                android:id="@+id/access_ziqidong_cheak"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:clickable="false"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/access_houtai"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_marginTop="5dp"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableStart="@drawable/dian"
+                android:text="后台启动权限"
+                android:textColor="@color/black"
+                tools:ignore="UseCompatTextViewDrawableXml" />
+            <CheckBox
+                android:id="@+id/access_houtai_cheak"
+                android:layout_alignParentEnd="true"
+                android:clickable="false"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#d9d9d9"
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/dialog_queren"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="完成"
+            android:textColor="#0000ff"
+            android:background="@null"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="1dp"
+            android:background="#d9d9d9"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/dialog_quxiao"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="取消"
+            android:textColor="#0000ff"
+            android:background="@null"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+</LinearLayout>

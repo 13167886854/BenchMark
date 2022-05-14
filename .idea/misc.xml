@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/background_select.xml" value="0.24814814814814815" />
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/button_bac.xml" value="0.24814814814814815" />
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.24814814814814815" />
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/main_shouye_select.xml" value="0.24717948717948718" />
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/pop_window_bac.xml" value="0.26153846153846155" />
+        <entry key="..\:/BenchMark2/app/src/main/res/drawable/red_button_bac.xml" value="0.24444444444444444" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/access_popwindow.xml" value="0.264" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/activity_ceping.xml" value="0.2" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/activity_start.xml" value="0.2" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/ceping_item.xml" value="0.264" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/ceping_xiangxi.xml" value="0.176" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/chukong_juti_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/game_fragment.xml" value="0.2" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_chukong_fragment.xml" value="0.264" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_cpu_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_gpu_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_liuchang_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_neicun_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_wending_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_yinhua_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/juti_yinpan_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/phone_fragment.xml" value="0.264" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/redfingure_juti_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/setting_fragment.xml" value="0.2" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/shezhi_fragment.xml" value="0.23489583333333333" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/tishi_fragment.xml" value="0.23489583333333333" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/wending_juti_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/yinhua_juti_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/layout/zhuye_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.24814814814814815" />
+        <entry key="..\:/BenchMark2/app/src/main/res/xml/access_service.xml" value="0.24947916666666667" />
+        <entry key="..\:/BenchMark2/app/src/main/res/xml/service_xml.xml" value="0.24947916666666667" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageButton
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/menu"/>
+
+        <ImageButton
+            android:id="@+id/qr_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/qr_code" />
+    </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_alignBottom="@id/menu"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/toobar_bac"
+          >
+
+            <ImageView
+                android:id="@+id/a"
+                android:layout_centerVertical="true"
+                android:paddingLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/bac" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="40dp"
+                android:textColor="@color/white"
+                android:text="@string/ceping"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+            <TextView
+                android:textColor="@color/white"
+                android:text="@string/version_1_0"
+                android:layout_width="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/main_fram"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <RadioGroup
+            android:id="@+id/main_select_menu"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#356EDC"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RadioButton
+                android:id="@+id/main_zhuye"
+                android:drawableTop="@drawable/main_zhuye"
+                android:text="@string/main_zhuye"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/main_tishi"
+                android:drawableTop="@drawable/main_tishi"
+                android:text="@string/main_tishi"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+            <RadioButton
+                android:id="@+id/main_setting"
+                android:drawableTop="@drawable/main_setting"
+                android:text="@string/main_setting"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"/>
+        </RadioGroup>
+    </LinearLayout>
+
+
+</LinearLayout>
