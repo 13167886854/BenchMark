@@ -1,5 +1,6 @@
 package com.example.benchmark.utils;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,7 @@ public class AccessUtils {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestIgnoreBatteryOptimizations() {
         try {
+            @SuppressLint("BatteryLife")
             Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
@@ -69,7 +71,7 @@ public class AccessUtils {
         }
     }
 
-    //开启无障碍五服务权限
+    //开启无障碍服务权限
     public  void  openAccessibilityService(){
         try{
             Intent intent1 = new Intent();

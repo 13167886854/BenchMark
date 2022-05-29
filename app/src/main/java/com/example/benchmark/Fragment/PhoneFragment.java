@@ -25,8 +25,7 @@ import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.runtime.Permission;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,7 +84,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener , Ra
                 public void onClick(View v) {
 
                     if (!(accessUtils.isAccessibilityServiceOpen() && accessUtils.isIgnoringBatteryOptimizations())){
-
                         popDiaLog.show();
                     }else
 

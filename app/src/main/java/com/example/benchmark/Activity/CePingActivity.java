@@ -2,35 +2,26 @@ package com.example.benchmark.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
-import com.example.benchmark.Data.InitData;
+import com.example.benchmark.InitbenchMarkData.InitData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
+import com.example.benchmark.utils.RequestDataUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class CePingActivity extends Activity implements View.OnClickListener {
@@ -50,12 +41,19 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ceping);
         initview();
-        if (!(accessUtils.isAccessibilityServiceOpen() && accessUtils.isIgnoringBatteryOptimizations())){
-            popDiaLog.show();
-        }
+
         intent = getIntent();
         initdata(intent);
         ceshi_fanhui.setOnClickListener(this::onClick);
+
+        switch (select_plat){
+            case "移动云手机":{
+                RequestDataUtils.getMobileCloudInfo();
+            }
+            case "红手指云手机":{
+                RequestDataUtils.getRedFingureInfo();
+            }
+        }
 
 
         adapter=new CePingAdapter(CePingActivity.this,ceping_data);
@@ -180,4 +178,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             ceping_data.add(liuchang);
         }
     }
+
+
 }

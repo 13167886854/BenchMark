@@ -36,7 +36,18 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.yanzhenjie:permission:2.0.3'
+
+
+    // 移动云jar包
+    implementation files('libs/ecloud-java-sdk-core-2.0.1.jar')
+    // https://mvnrepository.com/artifact/cn.hutool/hutool-all
+    implementation group: 'cn.hutool', name: 'hutool-all', version: '5.7.17'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+    // OkHttp(网络请求框架)
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
 
 
 }

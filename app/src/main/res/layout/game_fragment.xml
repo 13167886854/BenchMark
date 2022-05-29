@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"/>
             <RadioGroup
                 android:id="@+id/select_game"
-                android:background="#EBF0FF"
+                android:background="@color/white"
                 android:paddingTop="10dp"
                 android:paddingBottom="5dp"
                 android:layout_width="match_parent"

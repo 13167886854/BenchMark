@@ -1,5 +1,6 @@
-package com.example.benchmark.Data;
+package com.example.benchmark.InitbenchMarkData;
 
+import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InitData implements Serializable {
-    private Map<String,CepingData> map;
+    private Map<String, CepingData> map;
     public InitData(){
         map=new HashMap<>();
         CepingData blue_liuchang = new CepingData(98,R.drawable.blue_liuchang,"流畅性", "通过多个不同分辨率的视频，测试出平均帧率，帧抖动率，Jank等参数评估流畅性性能", true);
