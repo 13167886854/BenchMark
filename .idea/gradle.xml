@@ -15,6 +15,10 @@
             <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
+<<<<<<< HEAD
+=======
+        <option name="resolveModulePerSourceSet" value="false" />
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
       </GradleProjectSettings>
     </option>
   </component>

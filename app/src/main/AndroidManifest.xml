@@ -1,18 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.benchmark">
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
      <uses-permission android:name="android.permission.INTERNET"/>
     <permission-group android:name="${applicationId}.andpermission"/>
 
 
     <application
+=======
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <permission-group android:name="${applicationId}.andpermission" />
+    <queries>
+        <package android:name="com.redfinger.app" />
+        <package android:name="com.huawei.cloudphonedaily" />
+        <package android:name="com.chinamobile.cmss.saas.cloundphone" />
+        <package android:name="com.huawei.instructionstream.appui" />
+    </queries>
+    <application
+        android:name=".BaseApp"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BenchMark">
+<<<<<<< HEAD
         <service android:name=".Service.AblService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true"
@@ -24,23 +41,56 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/access_service"
                 />
+=======
+
+        <service
+            android:name=".Service.StabilityMonitorService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            android:label="@string/benchmark_stability_monitor_description"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessible_service_config" />
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
         </service>
 
         <activity
             android:name=".Activity.StartActivity"
             android:exported="true"
+<<<<<<< HEAD
              android:launchMode="singleTask">
+=======
+            android:launchMode="singleTask">
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".Activity.MainActivity" android:launchMode="singleInstancePerTask"/>
         <activity android:name=".Activity.CePingActivity" android:launchMode="singleTask"/>
         <activity android:name=".Activity.JutiZhibiaoActivity" android:launchMode="singleTask"/>
         <activity android:name=".Activity.ShuoMingActivity"/>
+=======
+        <activity
+            android:name=".Activity.MainActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.CePingActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.JutiZhibiaoActivity"
+            android:launchMode="singleTask" />
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
     </application>
 
 

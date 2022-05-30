@@ -6,9 +6,16 @@
     tools:context=".Activity.CePingActivity"
     android:layout_height="match_parent">
     <RelativeLayout
+<<<<<<< HEAD
         android:background="#03A9F4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+=======
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
         <ImageButton
             android:id="@+id/ceshi_fanhui"
@@ -27,7 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/cepingxinix"
+<<<<<<< HEAD
             android:textColor="@color/black"
+=======
+            android:textColor="#03A9F4"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             android:textSize="18sp" />
     </RelativeLayout>
     <LinearLayout
@@ -135,6 +146,10 @@
             android:layout_height="50dp"
             android:background="@drawable/button_bac"
             android:text="@string/tingzhiceshi"
+<<<<<<< HEAD
+=======
+            android:textColor="@color/white"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             android:textSize="18sp"
             android:textStyle="bold"
             />

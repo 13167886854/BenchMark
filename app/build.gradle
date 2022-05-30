@@ -36,6 +36,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+<<<<<<< HEAD
 
 
     // 移动云jar包
@@ -48,6 +49,9 @@ dependencies {
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
     // OkHttp(网络请求框架)
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
+=======
+    implementation 'com.yanzhenjie:permission:2.0.3'
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
 
 }

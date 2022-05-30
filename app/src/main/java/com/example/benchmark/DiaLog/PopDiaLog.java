@@ -1,6 +1,7 @@
 package com.example.benchmark.DiaLog;
 
 import android.annotation.SuppressLint;
+<<<<<<< HEAD
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+=======
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+<<<<<<< HEAD
 import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.Activity.CePingActivity;
@@ -24,6 +31,13 @@ import com.example.benchmark.Activity.MainActivity;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.AblService;
 import com.example.benchmark.utils.AccessUtils;
+=======
+
+import com.example.benchmark.BaseApp;
+import com.example.benchmark.R;
+import com.example.benchmark.utils.AccessUtils;
+import com.example.benchmark.utils.AutoStartUtil;
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
 public class PopDiaLog extends Dialog  implements View.OnClickListener {
     private RelativeLayout ibility,zidong,houtai;
@@ -58,8 +72,12 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
         quxiao.setOnClickListener(this::onClick);
         queren.setOnClickListener(this::onClick);
 
+<<<<<<< HEAD
 
 
+=======
+        setCanceledOnTouchOutside(false);
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
     }
 
@@ -74,10 +92,20 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
         switch (v.getId()){
             case R.id.access_ibility:{
                 accessUtils.openAccessibilityService();
+<<<<<<< HEAD
+=======
+                dismiss();
+                break;
+            }
+            case R.id.access_ziqidong: {
+                AutoStartUtil.openStart(BaseApp.context);
+                dismiss();
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 break;
             }
             case R.id.access_houtai:{
                 accessUtils.requestIgnoreBatteryOptimizations();
+<<<<<<< HEAD
                 break;
             }
             case R.id.dialog_queren:{
@@ -86,6 +114,19 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
             case R.id.dialog_quxiao:{
                 Toast.makeText(context,"权限开启失败",Toast.LENGTH_LONG).show();
                 context.startActivity(new Intent(context, MainActivity.class));
+=======
+                dismiss();
+                break;
+            }
+            case R.id.dialog_queren:{
+//                Toast.makeText(context,"权限开启失败",Toast.LENGTH_LONG).show();
+//                context.startActivity(new Intent(context, MainActivity.class));
+                dismiss();
+                break;
+            }
+            case R.id.dialog_quxiao:{
+                dismiss();
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             }
 
         }

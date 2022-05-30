@@ -6,7 +6,11 @@
     android:padding="10dp">
         <LinearLayout
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="wrap_content"
+=======
+            android:layout_height="match_parent"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -19,7 +23,11 @@
                     android:layout_height="wrap_content"/>
                 <RadioGroup
                     android:id="@+id/select_phone"
+<<<<<<< HEAD
                     android:background="@color/white"
+=======
+                    android:background="#EBF0FF"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                     android:paddingTop="10dp"
                     android:paddingBottom="5dp"
                     android:layout_width="match_parent"
@@ -334,7 +342,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
+<<<<<<< HEAD
                 android:layout_marginTop="40dp"
+=======
+                android:layout_marginTop="20dp"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 >
                 <Button
                     android:id="@+id/blue_start_test"
@@ -346,6 +358,10 @@
                     android:text="@string/starttest"
                     android:textSize="18sp"
                     android:textStyle="bold"
+<<<<<<< HEAD
+=======
+                    android:textColor="@color/white"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                     />
 
             </LinearLayout>

@@ -1,6 +1,9 @@
 package com.example.benchmark.utils;
 
+<<<<<<< HEAD
 import android.annotation.SuppressLint;
+=======
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -12,8 +15,11 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+<<<<<<< HEAD
 import com.example.benchmark.Service.AblService;
 
+=======
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 import java.util.List;
 
 public class AccessUtils {
@@ -39,9 +45,15 @@ public class AccessUtils {
         List<ActivityManager.RunningServiceInfo> services = am.getRunningServices(Short.MAX_VALUE);
         for (ActivityManager.RunningServiceInfo info : services) {
 //            LogUtils.v(info.service.getClassName());
+<<<<<<< HEAD
             if (info.service.getClassName().equals(AblService.class.getName())) {
                 return true;
             }
+=======
+//            if (info.service.getClassName().equals(AblService.class.getName())) {
+//                return true;
+//            }
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         }
         return false;
     }
@@ -62,7 +74,10 @@ public class AccessUtils {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestIgnoreBatteryOptimizations() {
         try {
+<<<<<<< HEAD
             @SuppressLint("BatteryLife")
+=======
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
@@ -71,7 +86,11 @@ public class AccessUtils {
         }
     }
 
+<<<<<<< HEAD
     //开启无障碍服务权限
+=======
+    //开启无障碍五服务权限
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
     public  void  openAccessibilityService(){
         try{
             Intent intent1 = new Intent();

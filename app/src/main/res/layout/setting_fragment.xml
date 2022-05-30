@@ -11,6 +11,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+<<<<<<< HEAD
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,6 +21,17 @@
             android:text="@string/shiyongshuoming"
             android:textColor="@color/black"
             android:textSize="16sp" />
+=======
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/shiyongshuoming"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            />
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

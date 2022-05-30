@@ -19,7 +19,11 @@
                 android:layout_height="wrap_content"/>
             <RadioGroup
                 android:id="@+id/select_game"
+<<<<<<< HEAD
                 android:background="@color/white"
+=======
+                android:background="#EBF0FF"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 android:paddingTop="10dp"
                 android:paddingBottom="5dp"
                 android:layout_width="match_parent"

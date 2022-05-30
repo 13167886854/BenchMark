@@ -2,7 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
+<<<<<<< HEAD
     android:background="@color/white"
+=======
+    android:background="#EBF0FF"
+>>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_marginTop="10dp"
