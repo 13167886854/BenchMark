@@ -3,8 +3,6 @@ package com.example.benchmark.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.benchmark.Activity.CePingActivity;
-import com.example.benchmark.Activity.MainActivity;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public class PhoneFragment extends Fragment implements View.OnClickListener , RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener{
     private Button blue_liuchang,blue_wending,blue_chukong,blue_yinhua;

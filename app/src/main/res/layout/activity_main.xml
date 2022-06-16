@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".Activity.MainActivity">
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,7 +29,6 @@
 
         <RelativeLayout
             android:layout_margin="10dp"
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_alignBottom="@id/menu"
@@ -75,13 +75,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.7"
         >
         <RadioGroup
             android:id="@+id/main_select_menu"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="#03A9F4"
+            android:background="#5465AF"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RadioButton

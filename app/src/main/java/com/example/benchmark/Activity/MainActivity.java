@@ -1,28 +1,20 @@
 package com.example.benchmark.Activity;
 
-import androidx.appcompat.app.ActionBar;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.RadioGroup;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageButton;
-import android.widget.RadioGroup;
-
-import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.Fragment.SettingFragment;
 import com.example.benchmark.Fragment.TishiFragment;
 import com.example.benchmark.Fragment.ZhuyeFragment;
 import com.example.benchmark.R;
-import com.example.benchmark.utils.AccessUtils;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
     private FragmentManager fragmentManager;

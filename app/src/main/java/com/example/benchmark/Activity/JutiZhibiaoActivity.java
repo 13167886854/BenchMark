@@ -11,19 +11,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.JutiAdapter;
 import com.example.benchmark.Data.JuTiData;
-//import com.example.benchmark.Fragment.JuTiChuKongFragment;
-//import com.example.benchmark.Fragment.JuTiCpuFragment;
-//import com.example.benchmark.Fragment.JuTiLiuChangFragment;
-//import com.example.benchmark.Fragment.JuTiWenDingFragment;
-//import com.example.benchmark.Fragment.JuTiYinHuaFragment;
 import com.example.benchmark.Data.MobileCloud;
 import com.example.benchmark.R;
 

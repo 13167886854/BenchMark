@@ -1,7 +1,5 @@
 package com.example.benchmark.Data;
 
-import java.util.List;
-
 /**
  * 流畅类
  */

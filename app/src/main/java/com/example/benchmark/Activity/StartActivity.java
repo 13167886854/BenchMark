@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.benchmark.R;
+
 public class StartActivity extends Activity {
 
     @Override
