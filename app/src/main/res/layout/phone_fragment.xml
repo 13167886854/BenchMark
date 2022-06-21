@@ -353,24 +353,6 @@
             android:textSize="18sp"
             android:textStyle="bold"
             />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="5dp"
-                android:layout_marginTop="40dp">
-                <Button
-                    android:id="@+id/blue_start_test"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/button_bac"
-                    android:text="@string/starttest"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
     </LinearLayout>
 
 </RelativeLayout>
