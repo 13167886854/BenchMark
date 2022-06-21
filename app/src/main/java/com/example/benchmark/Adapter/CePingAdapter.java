@@ -1,9 +1,7 @@
 package com.example.benchmark.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.LayoutInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.JutiZhibiaoActivity;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
-
 
 import java.util.List;
 

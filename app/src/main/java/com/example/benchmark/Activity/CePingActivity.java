@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
-import com.example.benchmark.InitbenchMarkData.InitData;
 import com.example.benchmark.DiaLog.PopDiaLog;
+import com.example.benchmark.InitbenchMarkData.InitData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.RequestDataUtils;

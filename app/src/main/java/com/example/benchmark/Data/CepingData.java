@@ -1,7 +1,5 @@
 package com.example.benchmark.Data;
 
-import android.graphics.drawable.Drawable;
-
 import java.io.Serializable;
 
 public class CepingData implements Serializable {

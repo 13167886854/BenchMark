@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.benchmark.Data.JuTiData;
 import com.example.benchmark.Data.LiuChang;
 import com.example.benchmark.R;
 
