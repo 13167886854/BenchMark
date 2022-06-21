@@ -20,11 +20,16 @@ import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.InitbenchMarkData.InitData;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.OCRService;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.RequestDataUtils;
 import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.CacheConst;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +66,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter);
+        new Thread(() -> deepFile("tessdata")).start();
     }
 
     void initview(){
@@ -191,6 +197,42 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             } else {
                 startService(service);
             }
+        }
+    }
+
+    /**
+     * 将assets中的文件复制出
+     *
+     * @param path
+     */
+    public void deepFile(String path) {
+        String newPath = getExternalFilesDir(null) + "/";
+        try {
+            String str[] = getAssets().list(path);
+            if (str.length > 0) {//如果是目录
+                File file = new File(newPath + path);
+                file.mkdirs();
+                for (String string : str) {
+                    path = path + "/" + string;
+                    deepFile(path);
+                    path = path.substring(0, path.lastIndexOf('/'));//回到原来的path
+                }
+            } else {//如果是文件
+                InputStream is = getAssets().open(path);
+                FileOutputStream fos = new FileOutputStream(new File(newPath + path));
+                byte[] buffer = new byte[1024];
+                while (true) {
+                    int len = is.read(buffer);
+                    if (len == -1) {
+                        break;
+                    }
+                    fos.write(buffer, 0, len);
+                }
+                is.close();
+                fos.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

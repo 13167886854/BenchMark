@@ -46,4 +46,6 @@ dependencies {
     // OkHttp(网络请求框架)
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.yanzhenjie:permission:2.0.3'
+    // 文字识别
+    implementation 'com.rmtheis:tess-two:9.0.0'
 }

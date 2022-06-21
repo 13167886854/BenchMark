@@ -51,6 +51,10 @@
 
         </service>
 
+        <service android:name=".Service.OCRService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
         <activity
             android:name=".Activity.StartActivity"
             android:exported="true"
