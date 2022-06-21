@@ -5,9 +5,10 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:background="#03A9F4"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <ImageButton
             android:id="@+id/jutizhibiao_fanhui"
@@ -26,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/jutizhibiao"
-            android:textColor="@color/black"
+            android:textColor="#03A9F4"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -156,6 +157,7 @@
         <Button
             android:id="@+id/juti_back_ceping"
             android:text="@string/fanhuizongcepingjiegu"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:background="@drawable/button_bac"
@@ -163,6 +165,7 @@
         <Button
             android:id="@+id/juti_next_ceping"
             android:text="@string/nextzhibia"
+            android:textColor="@color/white"
             android:layout_marginStart="20dp"
             android:background="@drawable/button_bac"
             android:layout_width="0dp"

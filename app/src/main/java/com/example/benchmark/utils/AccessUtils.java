@@ -39,9 +39,10 @@ public class AccessUtils {
         List<ActivityManager.RunningServiceInfo> services = am.getRunningServices(Short.MAX_VALUE);
         for (ActivityManager.RunningServiceInfo info : services) {
 //            LogUtils.v(info.service.getClassName());
-            if (info.service.getClassName().equals(AblService.class.getName())) {
-                return true;
-            }
+
+//            if (info.service.getClassName().equals(AblService.class.getName())) {
+//                return true;
+//            }
         }
         return false;
     }
@@ -62,7 +63,6 @@ public class AccessUtils {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void requestIgnoreBatteryOptimizations() {
         try {
-            @SuppressLint("BatteryLife")
             Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);

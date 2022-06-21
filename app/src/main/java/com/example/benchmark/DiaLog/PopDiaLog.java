@@ -12,10 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-
 import com.example.benchmark.Activity.MainActivity;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
+
+import com.example.benchmark.BaseApp;
+import com.example.benchmark.utils.AutoStartUtil;
 
 public class PopDiaLog extends Dialog  implements View.OnClickListener {
     private RelativeLayout ibility,zidong,houtai;
@@ -49,10 +51,7 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
         houtai.setOnClickListener(this::onClick);
         quxiao.setOnClickListener(this::onClick);
         queren.setOnClickListener(this::onClick);
-
-
-
-
+        setCanceledOnTouchOutside(false);
     }
 
     public PopDiaLog(@NonNull Context context) {
@@ -66,18 +65,27 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
         switch (v.getId()){
             case R.id.access_ibility:{
                 accessUtils.openAccessibilityService();
+                dismiss();
+                break;
+            }
+            case R.id.access_ziqidong: {
+                AutoStartUtil.openStart(BaseApp.context);
+                dismiss();
                 break;
             }
             case R.id.access_houtai:{
                 accessUtils.requestIgnoreBatteryOptimizations();
+                dismiss();
                 break;
             }
             case R.id.dialog_queren:{
+//                Toast.makeText(context,"权限开启失败",Toast.LENGTH_LONG).show();
+//                context.startActivity(new Intent(context, MainActivity.class));
+                dismiss();
                 break;
             }
             case R.id.dialog_quxiao:{
-                Toast.makeText(context,"权限开启失败",Toast.LENGTH_LONG).show();
-                context.startActivity(new Intent(context, MainActivity.class));
+                dismiss();
             }
 
         }

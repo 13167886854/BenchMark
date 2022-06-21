@@ -19,6 +19,8 @@ import com.example.benchmark.Adapter.JutiAdapter;
 import com.example.benchmark.Data.JuTiData;
 import com.example.benchmark.Data.MobileCloud;
 import com.example.benchmark.R;
+import com.example.benchmark.utils.CacheConst;
+import com.example.benchmark.utils.CacheUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,9 +105,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break ;
                     }
                     case "触控体验": {
@@ -168,9 +170,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break ;
                     }
                     case "触控体验": {
@@ -234,9 +236,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break ;
                     }
                     case "触控体验": {
@@ -301,9 +303,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break ;
                     }
                     case "触控体验": {
@@ -365,9 +367,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break;
                     }
                     case "触控体验": {
@@ -429,9 +431,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break ;
                     }
                     case "触控体验": {
@@ -493,9 +495,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                     }
                     case "稳定性": {
                         data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", "96%"));
-                        data.add(new JuTiData("启动时长(ms)", "34ms"));
-                        data.add(new JuTiData("退出时长", "21ms"));
+                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
+                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
+                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
                         break;
                     }
                     case "触控体验": {

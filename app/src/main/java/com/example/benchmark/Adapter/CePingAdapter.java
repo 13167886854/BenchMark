@@ -24,11 +24,12 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Context context;
     private List<CepingData> data;
 
+    private OnBenchmarkResultItemClickListener onClickListener;
 
-
-    public CePingAdapter(Context context,List<CepingData> data){
+    public CePingAdapter(Context context,List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener){
         this.context=context;
         this.data=data;
+        this.onClickListener = onClickListener;
     }
     @NonNull
     @Override
@@ -53,16 +54,10 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         //点击事件
         CePingActivity cePingActivity = new CePingActivity();
-        String select_plat = cePingActivity.getSelect_plat();
+
         recyclerViewHolder.itemView.setOnClickListener(v -> {
             int p= recyclerViewHolder.getAdapterPosition();
-            Intent intent = new Intent(context, JutiZhibiaoActivity.class);
-            intent.putExtra("select_plat",select_plat);
-            intent.putExtra("select_item",data.get(p).getCepingItem());
-            intent.putExtra("select_img",data.get(p).getCepingImage());
-            intent.putExtra("select_text",data.get(p).getCepingText());
-            intent.putExtra("select_grade",data.get(p).getGrade());
-            context.startActivity(intent);
+            onClickListener.onClick(data.get(p));
         });
     }
 

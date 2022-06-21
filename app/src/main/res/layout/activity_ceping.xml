@@ -6,9 +6,10 @@
     tools:context=".Activity.CePingActivity"
     android:layout_height="match_parent">
     <RelativeLayout
-        android:background="#03A9F4"
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <ImageButton
             android:id="@+id/ceshi_fanhui"
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/cepingxinix"
-            android:textColor="@color/black"
+            android:textColor="#03A9F4"
             android:textSize="18sp" />
     </RelativeLayout>
     <LinearLayout
@@ -135,6 +136,7 @@
             android:layout_height="50dp"
             android:background="@drawable/button_bac"
             android:text="@string/tingzhiceshi"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             />

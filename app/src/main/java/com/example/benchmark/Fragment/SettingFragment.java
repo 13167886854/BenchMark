@@ -26,7 +26,6 @@ public class SettingFragment extends Fragment {
                 startActivity(new Intent(getActivity(), ShuoMingActivity.class));
             }
         });
-
         return view;
     }
 }

@@ -117,22 +117,22 @@
             android:id="@+id/dialog_queren"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:text="完成"
-            android:textColor="#0000ff"
-            android:background="@null"
+            android:text="权限已全部开启"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="#356EDC"
+            android:layout_margin="18dp"
             android:layout_height="wrap_content"/>
-        <LinearLayout
-            android:layout_width="1dp"
-            android:background="#d9d9d9"
-            android:layout_height="match_parent"/>
 
         <Button
             android:id="@+id/dialog_quxiao"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="取消"
-            android:textColor="#0000ff"
-            android:background="@null"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="#356EDC"
+            android:layout_margin="18dp"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 

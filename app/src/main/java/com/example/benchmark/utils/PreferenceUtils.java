@@ -11,7 +11,6 @@ public class PreferenceUtils {
     private  static final String FILE_NAME="BenchMark";
     private static final String MODE_NAME="isFirst";
 
-
     //获取是否市第一次进入app的Boolean值
     public static  boolean get_isFirst_come(Context context){
         return context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).getBoolean(MODE_NAME,false);
