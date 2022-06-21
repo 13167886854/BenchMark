@@ -7,12 +7,15 @@ import android.content.Intent;
 import android.graphics.Path;
 import android.os.Build;
 import android.provider.Settings;
-import android.util.Log;
+import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.TextView;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.RequiresApi;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -78,6 +81,37 @@ public class AccessibilityUtil {
         for (AccessibilityNodeInfo node : nodeInfoList) {
             if (text.equals(node.getText().toString()))
                 return node;
+        }
+        return null;
+    }
+
+    public static AccessibilityNodeInfo findNodeInfoByText(
+            AccessibilityService service,
+            String className,
+            String text
+    ) {
+        AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
+        if (rootInfo == null) return null;
+        List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByText(text);
+        if (nodeInfoList.isEmpty()) return null;
+        for (AccessibilityNodeInfo node : nodeInfoList) {
+            if (className.equals(node.getClassName().toString()))
+                return node;
+        }
+        return null;
+    }
+
+    public static AccessibilityNodeInfo findNodeInfoByText(
+            AccessibilityNodeInfo parent,
+            String className,
+            String text
+    ) {
+        if (parent == null) return null;
+        if (parent.getText() != null && parent.getText().toString().equals(text)
+                && className.equals(parent.getClassName().toString())) return parent;
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            AccessibilityNodeInfo findNode = findNodeInfoByText(parent.getChild(i), className, text);
+            if (findNode != null) return findNode;
         }
         return null;
     }

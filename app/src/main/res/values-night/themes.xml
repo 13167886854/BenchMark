@@ -2,13 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.BenchMark" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-<<<<<<< HEAD
         <item name="colorPrimary">#ccffff</item>
         <item name="colorPrimaryVariant">#ccffff</item>
-=======
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>

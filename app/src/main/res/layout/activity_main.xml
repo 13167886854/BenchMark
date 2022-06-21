@@ -76,32 +76,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-<<<<<<< HEAD
-        >
-=======
         android:background="@drawable/bg_bottom_nav">
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         <RadioGroup
             android:id="@+id/main_select_menu"
             android:orientation="horizontal"
             android:gravity="center"
-<<<<<<< HEAD
-            android:background="#03A9F4"
-=======
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RadioButton
                 android:id="@+id/main_zhuye"
-<<<<<<< HEAD
-                android:drawableTop="@drawable/main_zhuye"
-                android:text="@string/main_zhuye"
-=======
                 android:drawableTop="@drawable/selector_main_radio_btn_home"
                 android:checked="true"
                 android:text="@string/main_zhuye"
                 android:textColor="@color/white"
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"
@@ -109,14 +96,9 @@
                 android:layout_height="wrap_content"/>
             <RadioButton
                 android:id="@+id/main_tishi"
-<<<<<<< HEAD
-                android:drawableTop="@drawable/main_tishi"
-                android:text="@string/main_tishi"
-=======
                 android:drawableTop="@drawable/selector_main_radio_btn_notify"
                 android:text="@string/main_tishi"
                 android:textColor="@color/white"
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"
@@ -124,14 +106,9 @@
                 android:layout_height="wrap_content"/>
             <RadioButton
                 android:id="@+id/main_setting"
-<<<<<<< HEAD
-                android:drawableTop="@drawable/main_setting"
-                android:text="@string/main_setting"
-=======
                 android:drawableTop="@drawable/selector_main_radio_btn_setting"
                 android:text="@string/main_setting"
                 android:textColor="@color/white"
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"

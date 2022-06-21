@@ -87,9 +87,13 @@ public class StabilityMonitorService extends AccessibilityService {
         } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
             service = new HuaweiCloudPhoneStabilityService(this);
+        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(platformName)) {
+            ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+            service = new NetEaseCloudPhoneStabilityService(this);
         }
         if (!mCaptureScreenThread.isAlive()
-                && !CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(platformName))
+                && !CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(platformName)
+                && !CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(platformName))
             mCaptureScreenThread.start();
         return START_NOT_STICKY;
     }

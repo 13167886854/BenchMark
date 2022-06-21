@@ -26,23 +26,13 @@ import java.util.List;
 public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<CepingData> data;
-<<<<<<< HEAD
 
-
-
-    public CePingAdapter(Context context,List<CepingData> data){
-        this.context=context;
-        this.data=data;
-=======
     private OnBenchmarkResultItemClickListener onClickListener;
-
-
 
     public CePingAdapter(Context context,List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener){
         this.context=context;
         this.data=data;
         this.onClickListener = onClickListener;
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
     }
     @NonNull
     @Override
@@ -67,22 +57,10 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         //点击事件
         CePingActivity cePingActivity = new CePingActivity();
-<<<<<<< HEAD
-        String select_plat = cePingActivity.getSelect_plat();
-        recyclerViewHolder.itemView.setOnClickListener(v -> {
-            int p= recyclerViewHolder.getAdapterPosition();
-            Intent intent = new Intent(context, JutiZhibiaoActivity.class);
-            intent.putExtra("select_plat",select_plat);
-            intent.putExtra("select_item",data.get(p).getCepingItem());
-            intent.putExtra("select_img",data.get(p).getCepingImage());
-            intent.putExtra("select_text",data.get(p).getCepingText());
-            intent.putExtra("select_grade",data.get(p).getGrade());
-            context.startActivity(intent);
-=======
+
         recyclerViewHolder.itemView.setOnClickListener(v -> {
             int p= recyclerViewHolder.getAdapterPosition();
             onClickListener.onClick(data.get(p));
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
         });
     }
 

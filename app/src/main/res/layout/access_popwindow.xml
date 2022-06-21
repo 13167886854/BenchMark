@@ -117,38 +117,22 @@
             android:id="@+id/dialog_queren"
             android:layout_width="0dp"
             android:layout_weight="1"
-<<<<<<< HEAD
-            android:text="完成"
-            android:textColor="#0000ff"
-            android:background="@null"
-            android:layout_height="wrap_content"/>
-        <LinearLayout
-            android:layout_width="1dp"
-            android:background="#d9d9d9"
-            android:layout_height="match_parent"/>
-=======
             android:text="权限已全部开启"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:background="#356EDC"
             android:layout_margin="18dp"
             android:layout_height="wrap_content"/>
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
 
         <Button
             android:id="@+id/dialog_quxiao"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:text="取消"
-<<<<<<< HEAD
-            android:textColor="#0000ff"
-            android:background="@null"
-=======
             android:textColor="@color/white"
             android:textStyle="bold"
             android:background="#356EDC"
             android:layout_margin="18dp"
->>>>>>> 211fdf0 ([feat]华为云手机、云手游，红手指、移动云手机稳定性测评)
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
