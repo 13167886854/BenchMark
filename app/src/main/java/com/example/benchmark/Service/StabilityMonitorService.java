@@ -19,12 +19,16 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
+import android.os.Looper;
 import android.util.Log;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.MainActivity;
+import com.example.benchmark.Data.TestMode;
+import com.example.benchmark.Data.WenDingData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheConst;
@@ -43,6 +47,8 @@ public class StabilityMonitorService extends AccessibilityService {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
+
+    private String platformName;
 
     private IStabilityService service;
 
@@ -73,8 +79,10 @@ public class StabilityMonitorService extends AccessibilityService {
         mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
         mDisplay = mProjection.createVirtualDisplay("ScreenShot", screenWidth, screenHeight, screenDpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
-        String platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
+        platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
 //        platformName = CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME;
+
+
         if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
             service = new RedFingerStabilityService(this);
@@ -170,14 +178,34 @@ public class StabilityMonitorService extends AccessibilityService {
             averageQuitTime += time;
         }
         averageQuitTime /= mQuitTimes.size();
-        Intent resultIntent = new Intent(this, CePingActivity.class);
-        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        //保存测试结果
         CacheUtil.put(CacheConst.KEY_START_SUCCESS_RATE, startSuccessRate);
         CacheUtil.put(CacheConst.KEY_AVERAGE_START_TIME, averageStartTime);
         CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
-        Log.e("QT", "startSuccessRate:" + startSuccessRate +
-                " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
-        startActivity(resultIntent);
+
+        if(TestMode.TestMode==2){//当仅仅测试稳定性时，不需要后续在云端apk测试便直接返回到测试结果activity
+            Intent resultIntent = new Intent(this, CePingActivity.class);
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Log.e("QT", "startSuccessRate:" + startSuccessRate +
+                    " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
+            startActivity(resultIntent);
+            if(Looper.myLooper()==null){
+                Looper.prepare();
+            }
+            Toast.makeText(getApplicationContext(),"稳定性测试结束！",Toast.LENGTH_SHORT).show();
+            Looper.loop();
+
+        }else if(TestMode.TestMode==3){//后续测试需要在对应apk进行,打开相应云手机平台apk
+
+            if(Looper.myLooper()==null){
+                Looper.prepare();
+            }
+            Toast.makeText(getApplicationContext(),"稳定性测试结束,继续在云手机上完成后续测试！",Toast.LENGTH_SHORT).show();
+            Looper.loop();
+        }
+
         Log.e("QT", "Over");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             disableSelf();
@@ -248,4 +276,5 @@ public class StabilityMonitorService extends AccessibilityService {
     @Override
     public void onInterrupt() {
     }
+
 }

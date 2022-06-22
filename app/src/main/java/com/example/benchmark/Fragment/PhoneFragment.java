@@ -3,6 +3,8 @@ package com.example.benchmark.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +30,20 @@ import com.example.benchmark.BaseApp;
 import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
+import com.example.benchmark.utils.ConfigurationUtils;
 import com.example.benchmark.utils.ServiceUtil;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class PhoneFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {
     private Button blue_liuchang, blue_wending, blue_chukong, blue_yinhua;
@@ -86,24 +97,30 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
+            if(blue_wending_cheak.isChecked()){
+                if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
-                popDiaLog.show();
-                return;
+                        || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
+                    popDiaLog.show();
+                    return;
+                }
             }
-            Intent intent = new Intent(getActivity(), CePingActivity.class);
-            //传入cheakbox是否被选中
-            intent.putExtra("blue_liuchang_cheak", blue_liuchang_cheak.isChecked());
-            intent.putExtra("blue_wending_cheak", blue_wending_cheak.isChecked());
-            intent.putExtra("blue_chukong_cheak", blue_chukong_cheak.isChecked());
-            intent.putExtra("blue_yinhua_cheak", blue_yinhua_cheak.isChecked());
-            intent.putExtra("blue_cpu_cheak", blue_cpu_cheak.isChecked());
-            intent.putExtra("blue_gpu_cheak", blue_gpu_cheak.isChecked());
-            intent.putExtra("blue_ram_cheak", blue_ram_cheak.isChecked());
-            intent.putExtra("blue_rom_cheak", blue_rom_cheak.isChecked());
-            intent.putExtra("cheaked_plat", cheak_phone_map.get("cheaked_phone"));
-            startActivity(intent);
+
+
+                    Intent intent = new Intent(getActivity(), CePingActivity.class);
+                    //传入cheakbox是否被选中
+                    intent.putExtra("blue_liuchang_cheak", blue_liuchang_cheak.isChecked());
+                    intent.putExtra("blue_wending_cheak", blue_wending_cheak.isChecked());
+                    intent.putExtra("blue_chukong_cheak", blue_chukong_cheak.isChecked());
+                    intent.putExtra("blue_yinhua_cheak", blue_yinhua_cheak.isChecked());
+                    intent.putExtra("blue_cpu_cheak", blue_cpu_cheak.isChecked());
+                    intent.putExtra("blue_gpu_cheak", blue_gpu_cheak.isChecked());
+                    intent.putExtra("blue_ram_cheak", blue_ram_cheak.isChecked());
+                    intent.putExtra("blue_rom_cheak", blue_rom_cheak.isChecked());
+                    intent.putExtra("cheaked_plat", cheak_phone_map.get("cheaked_phone"));
+                    startActivity(intent);
+
+
         });
         return view;
     }
