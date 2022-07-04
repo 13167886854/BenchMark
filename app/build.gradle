@@ -34,7 +34,11 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
+    
+    //阿里json处理
+    implementation 'com.alibaba:fastjson:1.2.56'
+    //zxing二维码
+    implementation 'com.google.zxing:core:3.5.0'
     // 移动云jar包
     implementation files('libs/ecloud-java-sdk-core-2.0.1.jar')
     // https://mvnrepository.com/artifact/cn.hutool/hutool-all

@@ -9,10 +9,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Messenger;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -35,6 +38,7 @@ import com.example.benchmark.Data.WenDingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.InitbenchMarkData.InitData;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.FxService;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.ConfigurationUtils;
@@ -104,8 +108,8 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_ceping);
 
         //定时尝试从服务器获取测试流畅性数据
-        handler = new Handler();
-        handler.postDelayed(runnable, 5000);//每两秒执行一次runnable.
+        //handler = new Handler();
+        //handler.postDelayed(runnable, 5000);//每5秒执行一次runnable.
 
         initview();
         intent = getIntent();
@@ -212,7 +216,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if(TestMode.TestMode==0){
             //啥也不测试
         }else if(TestMode.TestMode==1){
-            linkWithCloudPhone();
+            //linkWithCloudPhone();
             //仅测试云端apk项目
             //select_plat
             if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(select_plat)) {
@@ -230,7 +234,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             //仅测试稳定性
             startMonitorStability();
         }else if(TestMode.TestMode==3){
-            linkWithCloudPhone();
+            //linkWithCloudPhone();
             //两种都进行测试
             startMonitorStability();
         }
@@ -279,7 +283,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void linkWithCloudPhone(){
+   /* private void linkWithCloudPhone(){
 
         //请求连接云手机app
         OkHttpClient client = new OkHttpClient();
@@ -359,10 +363,8 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }
         });
 
-
-
         return ;
-    }
+    }*/
 
     private void startMonitorStability() {
         MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
@@ -372,6 +374,12 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
         }
     }
+
+
+
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
