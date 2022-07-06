@@ -86,12 +86,12 @@
 
                 <CheckBox
                     android:id="@+id/phone_select_all"
-                    android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:checked="true"
                     android:paddingEnd="10dp"
-                    android:text="@string/quanxuan"/>
+                    android:text="@string/quanxuan" />
             </RelativeLayout>
 
             <LinearLayout

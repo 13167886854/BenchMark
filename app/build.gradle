@@ -34,7 +34,9 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    
+
+    // Palette调色板
+    implementation 'androidx.palette:palette:1.0.0'
     //阿里json处理
     implementation 'com.alibaba:fastjson:1.2.56'
     //zxing二维码
@@ -50,4 +52,6 @@ dependencies {
     // OkHttp(网络请求框架)
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation 'com.yanzhenjie:permission:2.0.3'
+    // 文字识别
+    implementation 'com.rmtheis:tess-two:9.0.0'
 }

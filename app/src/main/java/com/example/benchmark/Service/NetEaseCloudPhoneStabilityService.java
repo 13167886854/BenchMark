@@ -26,6 +26,8 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
     private final String NODE_ID_CANCEL_STILL_QUIT = "com.netease.android.cloudgame:id/cancel_btn";
     private final String NODE_ID_QUIT_PHONE = "com.netease.android.cloudgame:id/dialog_sure";
     private final String NODE_TEXT_QUIT_PHONE = "退出";
+    private final String NODE_TEXT_CONTINUE_WAIT = "继续等待";
+    private final String NODE_ID_CONTINUE_WAIT = "com.netease.android.cloudgame:id/vip_continue_wait_btn";
 
     private final StabilityMonitorService service;
 
@@ -101,6 +103,12 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
         AccessibilityNodeInfo loadGameNode = AccessibilityUtil.findNodeInfo(service,
                 NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
         while (loadGameNode == null) {
+            AccessibilityNodeInfo continueWaitNode = AccessibilityUtil.findNodeInfo(service,
+                    NODE_ID_CONTINUE_WAIT, NODE_TEXT_CONTINUE_WAIT);
+            if (continueWaitNode != null) AccessibilityUtil.performClick(continueWaitNode);
+            AccessibilityNodeInfo enterGameNode = AccessibilityUtil.findNodeInfoByText(
+                    service, "android.widget.Button", "进入游戏");
+            if (enterGameNode != null) AccessibilityUtil.performClick(enterGameNode);
             loadGameNode = AccessibilityUtil
                     .findNodeInfo(service, NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
         }
@@ -108,7 +116,7 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
             loadGameNode = AccessibilityUtil
                     .findNodeInfo(service, NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
         }
-        Log.e("QT", "openTime:"+(System.currentTimeMillis() - mStartTime));
+//        Log.e("QT", "openTime:"+(System.currentTimeMillis() - mStartTime));
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
         //TODO 此处检测黑屏
     }

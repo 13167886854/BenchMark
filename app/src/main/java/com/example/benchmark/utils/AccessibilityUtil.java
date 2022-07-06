@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Path;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -121,7 +122,10 @@ public class AccessibilityUtil {
             String text
     ) {
         if (parent == null) return false;
-        if (parent.getText() != null && parent.getText().toString().equals(text)) return true;
+        if (parent.getText() != null && parent.getText().toString().equals(text)) {
+            Log.e("QT-Accessibility", "class:"+parent.getClassName().toString());
+            return true;
+        }
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (findIsExistText(parent.getChild(i), text))
                 return true;

@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -14,11 +13,7 @@ import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,25 +28,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.benchmark.Data.AudioVideoData;
-import com.example.benchmark.Data.BaseData;
-import com.example.benchmark.Data.SmoothData;
-import com.example.benchmark.Data.TouchData;
 import com.example.benchmark.R;
+import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.CodeUtils;
-import com.example.benchmark.utils.LogUtils;
+import com.example.benchmark.utils.ScoreUtil;
+import com.example.benchmark.utils.ServiceUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
 public class FxService extends Service {
-    public static boolean isFxServiceWorking = false;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
@@ -70,29 +60,14 @@ public class FxService extends Service {
     TextView mFloatView;
     private long startTime;
     private long endTime;
-    //private boolean isColor=true;
-    private boolean isRecording=false;
     private int statusBarHeight;
 
-    private Messenger mMessenger;
-
     private static final String TAG = "FxService";
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
-                case 100:
-                    mFloatView.setText(msg.obj.toString());
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
+
     @Override
     public void onCreate()
     {
         super.onCreate();
-        isFxServiceWorking = true;
         mContext=FxService.this;
         createFloatView();
 
@@ -103,6 +78,7 @@ public class FxService extends Service {
         return null;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void createFloatView()
     {
         wmParams = new LayoutParams();
@@ -125,8 +101,8 @@ public class FxService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = 99999;
-        wmParams.y =99999;
+        wmParams.x = screenWidth - 50;
+        wmParams.y = screenHeight / 2;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -176,41 +152,53 @@ public class FxService extends Service {
                 if (isclick) {
                     //Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                     //点击按钮进行截屏bitmap形式
-                    Bitmap bitmap = screenShot(mediaProjection);
+                    Bitmap bitmap = screenShot();
                     String result = CodeUtils.parseCode(bitmap);
-                    //Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
-                    //JSONObject JsonData =
+                    if ("{}".equals(result)) {
+                        // 空数据，点击无效
+                        return true;
+                    }
                     JSONObject JsonData = JSON.parseObject(result);
-//
-                    //硬件信息获取
-                    BaseData.availRam = (String)JsonData.get("availRam");
-                    BaseData.totalRam = (String)JsonData.get("totalRam");
-                    BaseData.availStorage = (String)JsonData.get("availStorage");
-                    BaseData.totalStorage = (String)JsonData.get("totalStorage");
-                    BaseData.cpuName = (String)JsonData.get("cpuName");
-                    BaseData.cpuCores = (String)JsonData.get("cpuCores");
-                    BaseData.gpuVendor = (String)JsonData.get("gpuVendor");
-                    BaseData.gpuRenderer = (String)JsonData.get("gpuRenderer");
-                    BaseData.gpuVersion = (String)JsonData.get("gpuVersion");
-                    //流畅性信息获取
-                    SmoothData.avergeFPS = (String)JsonData.get("avergeFPS");
-                    SmoothData.frameShakingRate = (String)JsonData.get("frameShakingRate");
-                    SmoothData.lowFrameRate = (String)JsonData.get("lowFrameRate");
-                    SmoothData.frameInterval = (String)JsonData.get("frameInterval");
-                    SmoothData.jankCount = (String)JsonData.get("jankCount");
-                    SmoothData.stutterRate = (String)JsonData.get("stutterRate");
-                    //触控信息获取
-                    TouchData.averageAccuracy = (String)JsonData.get("averageAccuracy");
-                    TouchData.responseTime = (String)JsonData.get("responseTime");
-                    TouchData.averageResponseTime = (String)JsonData.get("averageResponseTime");
-                    //音画质量信息后去
-                    AudioVideoData.resolution = (String)JsonData.get("resolution");
-                    AudioVideoData.maxdifferencevalue = (String)JsonData.get("maxdifferencevalue");
-
-                    Toast.makeText(mContext,result,Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(mContext,(String)JsonData.get("availRam"),Toast.LENGTH_SHORT).show();
-                    //if(JsonData.get(""));
-
+                    // 信息获取
+                    Log.e("QT", JsonData.toJSONString());
+                    ScoreUtil.calcAndSaveCPUScores(
+                            (String)JsonData.get("cpuName"),
+                            getIntDataFromJson(JsonData, "cpuCores")
+                    );
+                    ScoreUtil.calcAndSaveGPUScores(
+                            (String)JsonData.get("gpuVendor"),
+                            (String)JsonData.get("gpuRenderer"),
+                            (String)JsonData.get("gpuVersion")
+                    );
+                    ScoreUtil.calcAndSaveRAMScores(
+                            getFloatDataFromJson(JsonData, "availRam"),
+                            getFloatDataFromJson(JsonData, "totalRam")
+                    );
+                    ScoreUtil.calcAndSaveROMScores(
+                            getFloatDataFromJson(JsonData, "availStorage"),
+                            getFloatDataFromJson(JsonData, "totalStorage")
+                    );
+                    ScoreUtil.calcAndSaveFluencyScores(
+                            getFloatDataFromJson(JsonData, "avergeFPS"),
+                            getFloatDataFromJson(JsonData, "frameShakingRate"),
+                            getFloatDataFromJson(JsonData, "lowFrameRate"),
+                            getFloatDataFromJson(JsonData, "frameInterval"),
+                            getFloatDataFromJson(JsonData, "jankCount"),
+                            getFloatDataFromJson(JsonData, "stutterRate")
+                    );
+                    ScoreUtil.calcAndSaveTouchScores(
+                            getFloatDataFromJson(JsonData, "averageAccuracy"),
+                            getFloatDataFromJson(JsonData, "responseTime"),
+                            getFloatDataFromJson(JsonData, "averageResponseTime")
+                    );
+                    ScoreUtil.calcAndSaveSoundFrameScores(
+                            (String)JsonData.get("resolution"),
+                            getFloatDataFromJson(JsonData, "maxdifferencevalue")
+                    );
+                    CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, true);
+                    Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
+                    ServiceUtil.backToCePingActivity(FxService.this);
+                    stopSelf();
                 }
                 return true;
             }
@@ -231,21 +219,13 @@ public class FxService extends Service {
     public void onDestroy()
     {
         super.onDestroy();
-        isFxServiceWorking = false;
         if(mFloatLayout != null)
-
         {
             mWindowManager.removeView(mFloatLayout);
         }
+        mediaProjection.stop();
+        stopSelf();
     }
-
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        if(mMessenger==null){
-//            mMessenger = (Messenger) intent.getExtras().get("messenger");
-//        }
-//        return super.onStartCommand(intent, flags, startId);
-//    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -260,16 +240,16 @@ public class FxService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public Bitmap screenShot(MediaProjection mediaProjection){
+    public Bitmap screenShot(){
         Objects.requireNonNull(mediaProjection);
         @SuppressLint("WrongConstant")
         ImageReader imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 60);
         VirtualDisplay virtualDisplay = mediaProjection.createVirtualDisplay("screen", screenWidth, screenHeight, 1, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,imageReader.getSurface(), null, null);
         SystemClock.sleep(1000);
-//取最新的图片
+        //取最新的图片
         Image image = imageReader.acquireLatestImage();
-// Image image = imageReader.acquireNextImage();
-//释放 virtualDisplay,不释放会报错
+        // Image image = imageReader.acquireNextImage();
+        //释放 virtualDisplay,不释放会报错
         virtualDisplay.release();
         return image2Bitmap(image);
     }
@@ -288,20 +268,29 @@ public class FxService extends Service {
         int rowPadding = rowStride - pixelStride * width;
         Bitmap bitmap = Bitmap.createBitmap(width+ rowPadding / pixelStride , height, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
-//截取图片
-// Bitmap cutBitmap = Bitmap.createBitmap(bitmap,0,0,width/2,height/2);
-//压缩图片
-// Matrix matrix = new Matrix();
-// matrix.setScale(0.5F, 0.5F);
-// System.out.println(bitmap.isMutable());
-// bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+        //截取图片
+        // Bitmap cutBitmap = Bitmap.createBitmap(bitmap,0,0,width/2,height/2);
+        //压缩图片
+        // Matrix matrix = new Matrix();
+        // matrix.setScale(0.5F, 0.5F);
+        // System.out.println(bitmap.isMutable());
+        // bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
         image.close();
         return bitmap;
     }
 
-    private void asyncThread(Runnable runnable){
-        new Thread(runnable).start();
+    private float getFloatDataFromJson(JSONObject jsonObject, String name) {
+        Object target = jsonObject.getString(name);
+        if (target == null) return 0F;
+        else return Float.parseFloat(target.toString());
     }
+
+    private int getIntDataFromJson(JSONObject jsonObject, String name) {
+        Object target = jsonObject.getString(name);
+        if (target == null) return 0;
+        else return Integer.parseInt(target.toString());
+    }
+
 }
 
 

@@ -35,10 +35,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private RadioGroup main_menu;
     private ImageButton menu,qr_code;
 
-    private Intent fxService;
-
-    private final int REQUEST_FX = 100;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,37 +58,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         main_menu=findViewById(R.id.main_select_menu);
         menu=findViewById(R.id.menu);
         qr_code=findViewById(R.id.qr_code);
-
-        qr_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!Settings.canDrawOverlays(MainActivity.this)) {
-                    toFloatGetPermission();
-                }else{
-                    if(!FxService.isFxServiceWorking){
-                        startFxService();
-                    }else{
-                        stopService(fxService);
-                    }
-
-                }
-            }
-        });
-
-
     }
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-//        Intent intent = getIntent();
-//        overridePendingTransition(0, 0);
-//        finish();
-//        overridePendingTransition(0, 0);
-//        startActivity(intent);
-    }
-
 
     @Override
     protected void onPause() {
@@ -128,44 +94,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             fragmentTransaction.addToBackStack(null);;
         }
         fragmentTransaction.commit();
-    }
-
-    public void toFloatGetPermission() {
-        Toast.makeText(MainActivity.this, "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-        Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getPackageName()));
-        //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-        this.startActivity(intent);
-        //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
-
-    }
-
-
-    private void startFxService(){
-        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
-                this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        if (mMediaProjectionManager != null) {
-            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_FX);
-        }
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_FX && resultCode == RESULT_OK){
-            fxService = new Intent(this, FxService.class)
-                    .putExtra("resultCode", resultCode)
-                    .putExtra("data", data);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //startForegroundService(service);
-                startService(fxService);
-            } else {
-                startService(fxService);
-            }
-
-        }
     }
 
 }

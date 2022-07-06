@@ -18,12 +18,19 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.palette.graphics.Palette;
 
 import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.MainActivity;
@@ -33,6 +40,8 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.ScoreUtil;
+import com.example.benchmark.utils.ServiceUtil;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -44,11 +53,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StabilityMonitorService extends AccessibilityService {
 
+    private final int MSG_CONTINUE_MONITOR = 0;
+    private final int MSG_MONITOR_OVER = 1;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
 
-    private String platformName;
+    private int resultCode;
+    private Intent data;
 
     private IStabilityService service;
 
@@ -66,23 +78,37 @@ public class StabilityMonitorService extends AccessibilityService {
     private boolean isStartCaptureScreen = false;
     private boolean isStartDealBitmap = false;
     private boolean isDealResult = false;
+    private boolean isHaveOtherPerformance = false;
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MSG_CONTINUE_MONITOR) {
+                Toast.makeText(StabilityMonitorService.this,
+                        "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == MSG_MONITOR_OVER) {
+                Toast.makeText(StabilityMonitorService.this,
+                        "稳定性测试结束", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @SuppressLint("WrongConstant")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
-        int resultCode = intent.getIntExtra("resultCode", 0);
-        Intent data = intent.getParcelableExtra("data");
+        resultCode = intent.getIntExtra("resultCode", 0);
+        data = intent.getParcelableExtra("data");
         MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)
                 getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         mProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
         mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
         mDisplay = mProjection.createVirtualDisplay("ScreenShot", screenWidth, screenHeight, screenDpi,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
-        platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
+        isHaveOtherPerformance = intent.getBooleanExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, false);
+        String platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
 //        platformName = CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME;
-
-
         if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
             service = new RedFingerStabilityService(this);
@@ -139,27 +165,38 @@ public class StabilityMonitorService extends AccessibilityService {
 
     private void dealWithBitmap() {
         while (!service.isFinished()) {
-            if (!isStartDealBitmap || mBitmapWithTime.size() < 40) continue;
-            for (long startGameTime : mStartTimes) {
-                Pair<Bitmap, Long> bitmapWithTime = mBitmapWithTime.poll();
-                // black bitmap appear
-                while (bitmapWithTime != null && !isBitmapInvalid(bitmapWithTime.first))
-                    bitmapWithTime = mBitmapWithTime.poll();
-                if (bitmapWithTime == null) break;
-                long blackStartTime = bitmapWithTime.second;
-                // black bitmap disappear
-                while (bitmapWithTime != null && isBitmapInvalid(bitmapWithTime.first))
-                    bitmapWithTime = mBitmapWithTime.poll();
-                if (bitmapWithTime == null) break;
-                mOpenTime.add(bitmapWithTime.second - startGameTime);
-                mStartTimes.remove(0);
-                Log.e("QT", "Open Time: " + (bitmapWithTime.second - startGameTime) +
-                        " blackStartTime:" + blackStartTime + " startGameTime:" + startGameTime);
+//            if (!isStartDealBitmap || mBitmapWithTime.size() < 40) continue;
+            Pair<Bitmap, Long> bitmapWithTime;
+            boolean isBlackOrWhiteExist = false;
+            while (mStartTimes.size() > mOpenTime.size()
+                    && (bitmapWithTime = mBitmapWithTime.poll()) != null) {
+                if (!isBlackOrWhiteExist && isBitmapBlackOrWhite(bitmapWithTime.first)) {
+                    isBlackOrWhiteExist = true;
+                }else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
+                    isBlackOrWhiteExist = false;
+                    mOpenTime.add(bitmapWithTime.second - mStartTimes.get(mOpenTime.size()));
+                }
             }
+//            for (long startGameTime : mStartTimes) {
+//                Pair<Bitmap, Long> bitmapWithTime = mBitmapWithTime.poll();
+//                // black bitmap appear
+//                while (bitmapWithTime != null && !isBitmapInvalid(bitmapWithTime.first))
+//                    bitmapWithTime = mBitmapWithTime.poll();
+//                if (bitmapWithTime == null) break;
+//                long blackStartTime = bitmapWithTime.second;
+//                // black bitmap disappear
+//                while (bitmapWithTime != null && isBitmapInvalid(bitmapWithTime.first))
+//                    bitmapWithTime = mBitmapWithTime.poll();
+//                if (bitmapWithTime == null) break;
+//                mOpenTime.add(bitmapWithTime.second - startGameTime);
+//                mStartTimes.remove(0);
+//                Log.e("QT", "Open Time: " + (bitmapWithTime.second - startGameTime) +
+//                        " blackStartTime:" + blackStartTime + " startGameTime:" + startGameTime);
+//            }
         }
-        mProjection.stop();
-        mImageReader.close();
-        mDisplay.release();
+//        mProjection.stop();
+//        mImageReader.close();
+//        mDisplay.release();
         dealWithResult();
     }
 
@@ -179,38 +216,26 @@ public class StabilityMonitorService extends AccessibilityService {
         }
         averageQuitTime /= mQuitTimes.size();
 
-        //保存测试结果
-        CacheUtil.put(CacheConst.KEY_START_SUCCESS_RATE, startSuccessRate);
-        CacheUtil.put(CacheConst.KEY_AVERAGE_START_TIME, averageStartTime);
-        CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
-
-        if(TestMode.TestMode==2){//当仅仅测试稳定性时，不需要后续在云端apk测试便直接返回到测试结果activity
-            Intent resultIntent = new Intent(this, CePingActivity.class);
-            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            Log.e("QT", "startSuccessRate:" + startSuccessRate +
-                    " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
-            startActivity(resultIntent);
-            if(Looper.myLooper()==null){
-                Looper.prepare();
-            }
-            Toast.makeText(getApplicationContext(),"稳定性测试结束！",Toast.LENGTH_SHORT).show();
-            Looper.loop();
-
-        }else if(TestMode.TestMode==3){//后续测试需要在对应apk进行,打开相应云手机平台apk
-
-            if(Looper.myLooper()==null){
-                Looper.prepare();
-            }
-            Toast.makeText(getApplicationContext(),"稳定性测试结束,继续在云手机上完成后续测试！",Toast.LENGTH_SHORT).show();
-            Looper.loop();
+        ScoreUtil.calcAndSaveStabilityScores(startSuccessRate, averageStartTime, averageQuitTime);
+        Log.e("QT", "startSuccessRate:" + startSuccessRate +
+                " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
+        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, true);
+        if (isHaveOtherPerformance) {
+            mHandler.sendEmptyMessage(MSG_CONTINUE_MONITOR);
+            ServiceUtil.startFxService(this, resultCode, data);
+        } else {
+            mHandler.sendEmptyMessage(MSG_MONITOR_OVER);
+            ServiceUtil.backToCePingActivity(this);
         }
+    }
 
-        Log.e("QT", "Over");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            disableSelf();
-        }
-        stopSelf();
+    private boolean isBitmapBlackOrWhite(Bitmap bitmap) {
+        Palette palette = Palette.from(bitmap).generate();
+        int domainColor = palette.getDominantColor(Color.BLACK);
+//        Log.e("QT-Color", domainColor + "");
+        if (domainColor == Color.BLACK || domainColor == Color.WHITE)
+            Log.e("QT-Color", "True");
+        return domainColor == Color.BLACK || domainColor == Color.WHITE;
     }
 
     private boolean isBitmapInvalid(Bitmap bitmap) {
