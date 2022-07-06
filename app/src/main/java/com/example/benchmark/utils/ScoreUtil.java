@@ -13,7 +13,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_CPU_NAME, cpuName);
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
         // 计算CPU分数
-        float cpuCoresScore = cpuCores <= 8 ? 100f * 8 / (9 * cpuCores) : 100f / 9;
+        float cpuCoresScore = cpuCores <= 8 ? 100f * cpuCores / (9 * 8) : 100f / 9;
         int cpuScore = (int) (cpuCoresScore);
         // 保存CPU分数
         CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
@@ -49,7 +49,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVAILABLE_RAM, availableRAM);
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
         // 计算RAM分数
-        float totalRAMScore = totalRAM <= 1024 ? 100f * 1024 / (9 * totalRAM) : 100f / 9;
+        float totalRAMScore = totalRAM <= 16 ? 100f * totalRAM / (9 * 16) : 100f / 9;
         int ramScore = (int) (totalRAMScore);
         // 保存RAM分数
         CacheUtil.put(CacheConst.KEY_RAM_SCORE, ramScore);
@@ -67,7 +67,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
         // 计算ROM分数
-        float totalROMScore = totalROM <= 16 ? 100f * 16 / (9 * totalROM) : 100f / 9;
+        float totalROMScore = totalROM <= 16 ? 100f * totalROM / (9 * 16) : 100f / 9;
         int romScore = (int) (totalROMScore);
         // 保存ROM分数
         CacheUtil.put(CacheConst.KEY_ROM_SCORE, romScore);
@@ -97,7 +97,7 @@ public class ScoreUtil {
         lowFrameRate /= 100;
         stutterRate /= 100;
         float averFpsScore = averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6;
-        float frameShakeScore = frameShakeRate < 10 ? 100f / 6 : 100f * averageFPS / (6 * 10);
+        float frameShakeScore = frameShakeRate < 10 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate);
         float lowFrameScore = 100f * (1 - lowFrameRate) / 6;
         float frameIntervalScore = frameInterval < 50 ? 100f / 6 : 100f * 50 / (6 * frameInterval);
         float jankCountScore = 100f / (6 * (1 + jankCount));
@@ -181,6 +181,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, responseTime);
         CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
         // 计算触控体验分数
+        averageAccuracy /= 100;
         float averAccuracyScore = 100f * averageAccuracy / 2;
         float responseTimeScore = responseTime < 50 ? 50 : 100f * 50 / (2 * responseTime);
         int touchScore = (int) (averAccuracyScore + responseTimeScore);
