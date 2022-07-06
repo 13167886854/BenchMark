@@ -17,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.JutiAdapter;
 import com.example.benchmark.Data.JuTiData;
-import com.example.benchmark.Data.MobileCloud;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.ScoreUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,461 +86,62 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         juti_phone_name.setText(select_plat+"·"+select_item);
         juti_grade.setText(String.valueOf(grade));
 
-
-        out:switch (select_plat) {
-            /**
-             * 红手指云手机
-             */
-            case "红手指云手机": {
-                in:switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break ;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break ;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "256G"));
-                        break ;
-                    }
-                }
+        switch (select_item) {
+            case CacheConst.KEY_FLUENCY_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("平均帧率", ScoreUtil.getAverageFPS() + "fps"));
+                data.add(new JuTiData("抖动帧率(方差)", ScoreUtil.getFrameShakeRate() + "%"));
+                data.add(new JuTiData("低帧率", ScoreUtil.getLowFrameRate() + "%"));
+                data.add(new JuTiData("帧间隔", ScoreUtil.getFrameInterval() + "ms"));
+                data.add(new JuTiData("jank", ScoreUtil.getJankCount() + "次"));
+                data.add(new JuTiData("卡顿时长占比", ScoreUtil.getStutterRate() + "%"));
+                break ;
+            }
+            case CacheConst.KEY_STABILITY_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("启动成功率", ScoreUtil.getStartSuccessRate() + "%"));
+                data.add(new JuTiData("平均启动时长", ScoreUtil.getAverageStartTime() + "ms"));
+                data.add(new JuTiData("平均退出时长", ScoreUtil.getAverageQuitTime() + "ms"));
+                break ;
+            }
+            case CacheConst.KEY_TOUCH_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("平均正确率", ScoreUtil.getAverageAccuracy() + "%"));
+                data.add(new JuTiData("平均响应时间", ScoreUtil.getResponseTime() + "ms"));
+                data.add(new JuTiData("单点平均响应时间", ScoreUtil.getAverageResponseTime() + "ms"));
+                break ;
+            }
+            case CacheConst.KEY_SOUND_FRAME_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
+                data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "ms"));
+                break ;
+            }
+            case CacheConst.KEY_CPU_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("cpu名称", CacheUtil.getString(CacheConst.KEY_CPU_NAME)));
+                data.add(new JuTiData("cpu核数",CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
+                break ;
+            }
+            case CacheConst.KEY_GPU_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("gpu供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
+                data.add(new JuTiData("gpu渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
+                data.add(new JuTiData("gpu版本", CacheUtil.getString(CacheConst.KEY_GPU_VERSION)));
+                break;
+            }
+            case CacheConst.KEY_ROM_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("可用内存",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_STORAGE) + "GB"));
+                data.add(new JuTiData("总内存",CacheUtil.getFloat(CacheConst.KEY_TOTAL_STORAGE) + "GB"));
                 break ;
 
             }
-
-
-
-
-            case "移动云手机": {
-               in: switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break ;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break ;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "128G"));
-                        break ;
-                    }
-                }
+            case CacheConst.KEY_RAM_INFO: {
+                data = new ArrayList<>();
+                data.add(new JuTiData("可用硬盘",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_RAM) + "GB"));
+                data.add(new JuTiData("总硬盘",CacheUtil.getFloat(CacheConst.KEY_TOTAL_RAM) + "GB"));
                 break ;
-
-            }
-
-
-            /**
-             * 鲲鹏云手机
-             */
-            case "鲲鹏云手机": {
-                in:switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break ;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break ;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "64G"));
-                        break ;
-                    }
-                }
-                break ;
-
-
-
-            }
-
-            /**
-             * 网易云手机
-             */
-            case "网易云手机": {
-                in:switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break ;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break ;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "32G"));
-                        break ;
-                    }
-                }
-                break ;
-
-
-            }
-
-
-            case "腾讯先锋": {
-               in:switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break ;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break ;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "33G"));
-                        break ;
-                    }
-                }
-                break ;
-
-
-
-            }
-
-            case "咪咕快游": {
-                in:switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break ;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break ;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break ;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break ;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break ;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break ;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "16G"));
-                        break ;
-                    }
-                }
-                break ;
-
-
-            }
-
-
-            case "网易云游戏": {
-                switch (select_item) {
-                    case "流畅性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("平均帧率(fps)", "29.7"));
-                        data.add(new JuTiData("抖动帧率(方差)", "1.06"));
-                        data.add(new JuTiData("低帧率(%)", "6.63%"));
-                        data.add(new JuTiData("帧间隔(ms)", "22.93"));
-                        data.add(new JuTiData("jank(卡顿次数/10min)", "0.18"));
-                        data.add(new JuTiData("卡顿市场占比(%)", "0.76"));
-                        break;
-                    }
-                    case "稳定性": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("启动成功率(%)", CacheUtil.getFloat(CacheConst.KEY_START_SUCCESS_RATE) + "%"));
-                        data.add(new JuTiData("平均启动时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_START_TIME) + "ms"));
-                        data.add(new JuTiData("平均退出时长(ms)", CacheUtil.getFloat(CacheConst.KEY_AVERAGE_QUIT_TIME) + "ms"));
-                        break;
-                    }
-                    case "触控体验": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("点击灵敏度", "98%"));
-                        data.add(new JuTiData("具体响应时延", "21ms"));
-                        break;
-                    }
-                    case "音画质量": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("分辨率(px)", "1080x2440"));
-                        data.add(new JuTiData("音画同步差(ms)", "100ms"));
-                        data.add(new JuTiData("画面质量PSNR/SSIM(%)", "39%"));
-                        data.add(new JuTiData("音频质量PESQ", "1ms"));
-                        break;
-                    }
-                    case "cpu": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("cpuName", "麒麟9000"));
-                        data.add(new JuTiData("cpu型号", "麒麟9000"));
-                        data.add(new JuTiData("cpu最大利用率", "3.2GHz"));
-                        data.add(new JuTiData("cpu核心数", MobileCloud.cpuCoreNum));
-                        break;
-                    }
-                    case "gpu": {
-                        data = new ArrayList<>();
-                        break;
-                    }
-                    case "内存": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("内存", "12GG"));
-                        data.add(new JuTiData("读写速率", "500MB/S"));
-                        break;
-
-                    }
-                    case "硬盘": {
-                        data = new ArrayList<>();
-                        data.add(new JuTiData("硬盘", "8G"));
-                        break ;
-                    }
-                }
-                break ;
-
             }
         }
     }

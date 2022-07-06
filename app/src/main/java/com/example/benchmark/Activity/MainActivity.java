@@ -1,21 +1,32 @@
 package com.example.benchmark.Activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.benchmark.Fragment.SettingFragment;
 import com.example.benchmark.Fragment.TishiFragment;
 import com.example.benchmark.Fragment.ZhuyeFragment;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.FxService;
+import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
@@ -40,27 +51,14 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         CacheUtil.put(CacheConst.KEY_SCREEN_WIDTH, dm.widthPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_HEIGHT, dm.heightPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_DPI, dm.densityDpi);
+
     }
 
     private   void init(){
         main_menu=findViewById(R.id.main_select_menu);
         menu=findViewById(R.id.menu);
         qr_code=findViewById(R.id.qr_code);
-
-
     }
-
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Intent intent = getIntent();
-        overridePendingTransition(0, 0);
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(intent);
-    }
-
 
     @Override
     protected void onPause() {
@@ -97,4 +95,5 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
         fragmentTransaction.commit();
     }
+
 }

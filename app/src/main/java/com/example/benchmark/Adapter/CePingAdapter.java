@@ -21,13 +21,11 @@ import java.util.List;
 
 //个题recycleview配置数据源
 public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
     private List<CepingData> data;
 
     private OnBenchmarkResultItemClickListener onClickListener;
 
-    public CePingAdapter(Context context,List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener){
-        this.context=context;
+    public CePingAdapter(List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener){
         this.data=data;
         this.onClickListener = onClickListener;
     }
@@ -42,15 +40,10 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final RecyclerViewHolder recyclerViewHolder= (RecyclerViewHolder) holder;
         CepingData cepingData = data.get(position);
-        if (!cepingData.getCheaked()){
-            recyclerViewHolder.relativeLayout.setVisibility(View.GONE);
-        }else {
-
-            recyclerViewHolder.ceping_image.setImageResource(cepingData.getCepingImage());
-            recyclerViewHolder.ceping_item.setText(cepingData.getCepingItem());
-            recyclerViewHolder.ceping_text.setText(cepingData.getCepingText());
-            recyclerViewHolder.ceping_grade.setText(String.valueOf(cepingData.getGrade()));
-        }
+        recyclerViewHolder.ceping_image.setImageResource(cepingData.getCepingImage());
+        recyclerViewHolder.ceping_item.setText(cepingData.getCepingItem());
+        recyclerViewHolder.ceping_text.setText(cepingData.getCepingText());
+        recyclerViewHolder.ceping_grade.setText(String.valueOf(cepingData.getGrade()));
 
         //点击事件
         CePingActivity cePingActivity = new CePingActivity();

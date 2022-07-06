@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.example.benchmark"
         minSdk 23
-        targetSdk 31
+        targetSdk 27
         versionCode 1
         versionName "1.0"
 
@@ -35,6 +35,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // Palette调色板
+    implementation 'androidx.palette:palette:1.0.0'
+    //阿里json处理
+    implementation 'com.alibaba:fastjson:1.2.56'
+    //zxing二维码
+    implementation 'com.google.zxing:core:3.5.0'
     // 移动云jar包
     implementation files('libs/ecloud-java-sdk-core-2.0.1.jar')
     // https://mvnrepository.com/artifact/cn.hutool/hutool-all

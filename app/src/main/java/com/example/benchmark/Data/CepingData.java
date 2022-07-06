@@ -4,51 +4,35 @@ import java.io.Serializable;
 
 public class CepingData implements Serializable {
     //测评的分数
-    private Integer grade;
+    private int grade;
 //    //测评模块得图片
-    private Integer CepingImage;
+    private int CepingImage;
     //测评的模块
     private String CepingItem;
     //测评得说明信息
     private String CepingText;
-    //是否选中
-    private Boolean isCheaked;
 
-    public CepingData(Integer grade, Integer cepingImage, String cepingItem, String cepingText, Boolean isCheaked) {
+    public CepingData(int grade, int cepingImage, String cepingItem, String cepingText) {
         this.grade = grade;
         CepingImage = cepingImage;
         CepingItem = cepingItem;
         CepingText = cepingText;
-        this.isCheaked = isCheaked;
     }
 
-    public Integer getGrade() {
+    public int getGrade() {
         return grade;
     }
 
-    public void setGrade(Integer grade) {
+    public void setGrade(int grade) {
         this.grade = grade;
     }
 
-    public Integer getCepingImage() {
+    public int getCepingImage() {
         return CepingImage;
     }
 
-    public void setCepingImage(Integer cepingImage) {
+    public void setCepingImage(int cepingImage) {
         CepingImage = cepingImage;
-    }
-
-    public CepingData(Integer cepingImage, String cepingItem, String cepingText, Boolean isCheaked) {
-        CepingImage = cepingImage;
-        CepingItem = cepingItem;
-        CepingText = cepingText;
-        this.isCheaked = isCheaked;
-    }
-
-    public CepingData(String cepingItem, String cepingText, Boolean isCheaked) {
-        CepingItem = cepingItem;
-        CepingText = cepingText;
-        this.isCheaked = isCheaked;
     }
 
     public String getCepingItem() {
@@ -65,14 +49,6 @@ public class CepingData implements Serializable {
 
     public void setCepingText(String cepingText) {
         CepingText = cepingText;
-    }
-
-    public Boolean getCheaked() {
-        return isCheaked;
-    }
-
-    public void setCheaked(Boolean cheaked) {
-        isCheaked = cheaked;
     }
 
     public CepingData() {

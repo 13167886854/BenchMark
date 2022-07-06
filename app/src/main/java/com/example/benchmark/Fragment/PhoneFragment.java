@@ -28,13 +28,14 @@ import com.example.benchmark.BaseApp;
 import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
+import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ServiceUtil;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class PhoneFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {
+public class PhoneFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     private Button blue_liuchang, blue_wending, blue_chukong, blue_yinhua;
 
     private List<CepingData> data;
@@ -58,11 +59,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
 
-    private static HashMap<String, String> cheak_phone_map;
+    private final HashMap<String, String> check_phone_map = new HashMap<>();
 
-    static {
-        cheak_phone_map = new HashMap<>();
-    }
+    private final int ALL_CHECK_COUNTS = 8;
+    private int mCheckCounts = ALL_CHECK_COUNTS;
 
     @Nullable
     @Override
@@ -78,31 +78,37 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
         blue_gpu.setOnClickListener(this::onClick);
         blue_ram.setOnClickListener(this::onClick);
         blue_rom.setOnClickListener(this::onClick);
-        phone_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
+        phone_select_all.setOnClickListener(this::onClick);
+//        phone_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
 
         radioGroup.setOnCheckedChangeListener(this::onCheckedChanged);
         phone_start_ceping.setOnClickListener(v -> {
-            if (cheak_phone_map.get("cheaked_phone") == null) {
+            if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
+            if(blue_wending_cheak.isChecked()){
+                if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
-                popDiaLog.show();
-                return;
+                        || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
+                    popDiaLog.show();
+                    return;
+                }
             }
+            CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
+            CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
             Intent intent = new Intent(getActivity(), CePingActivity.class);
             //传入cheakbox是否被选中
-            intent.putExtra("blue_liuchang_cheak", blue_liuchang_cheak.isChecked());
-            intent.putExtra("blue_wending_cheak", blue_wending_cheak.isChecked());
-            intent.putExtra("blue_chukong_cheak", blue_chukong_cheak.isChecked());
-            intent.putExtra("blue_yinhua_cheak", blue_yinhua_cheak.isChecked());
-            intent.putExtra("blue_cpu_cheak", blue_cpu_cheak.isChecked());
-            intent.putExtra("blue_gpu_cheak", blue_gpu_cheak.isChecked());
-            intent.putExtra("blue_ram_cheak", blue_ram_cheak.isChecked());
-            intent.putExtra("blue_rom_cheak", blue_rom_cheak.isChecked());
-            intent.putExtra("cheaked_plat", cheak_phone_map.get("cheaked_phone"));
+            intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
+            intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blue_liuchang_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_STABILITY_INFO, blue_wending_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_TOUCH_INFO, blue_chukong_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blue_yinhua_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_CPU_INFO, blue_cpu_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_GPU_INFO, blue_gpu_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_ROM_INFO, blue_rom_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_RAM_INFO, blue_ram_cheak.isChecked());
+            intent.putExtra(CacheConst.KEY_PLATFORM_NAME, check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
             startActivity(intent);
         });
         return view;
@@ -156,9 +162,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     blue_liuchang_cheak.setVisibility(View.INVISIBLE);
                     blue_liuchang_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_liuchang_cheak.setChecked(true);
                     blue_liuchang_cheak.setVisibility(View.VISIBLE);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
 
@@ -169,11 +180,15 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                 if (checked) {
                     blue_wending_cheak.setVisibility(View.INVISIBLE);
                     blue_wending_cheak.setChecked(false);
-                    phone_select_all.setChecked(false
-                    );
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_wending_cheak.setVisibility(View.VISIBLE);
                     blue_wending_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -184,9 +199,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     blue_chukong_cheak.setVisibility(View.INVISIBLE);
                     blue_chukong_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_chukong_cheak.setVisibility(View.VISIBLE);
                     blue_chukong_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -197,10 +217,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     blue_yinhua_cheak.setVisibility(View.INVISIBLE);
                     blue_yinhua_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_yinhua_cheak.setVisibility(View.VISIBLE);
                     blue_yinhua_cheak.setChecked(true);
-
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -211,9 +235,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     blue_cpu_cheak.setVisibility(View.INVISIBLE);
                     blue_cpu_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_cpu_cheak.setVisibility(View.VISIBLE);
                     blue_cpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -224,9 +253,14 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     blue_gpu_cheak.setVisibility(View.INVISIBLE);
                     blue_gpu_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
                 } else {
                     blue_gpu_cheak.setVisibility(View.VISIBLE);
                     blue_gpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -240,6 +274,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                 } else {
                     blue_ram_cheak.setVisibility(View.VISIBLE);
                     blue_ram_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
@@ -253,11 +291,69 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                 } else {
                     blue_rom_cheak.setVisibility(View.VISIBLE);
                     blue_rom_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
                 }
                 break;
             }
+            case R.id.phone_select_all: {
+                boolean isCheckedAll = phone_select_all.isChecked();
+                if (isCheckedAll) {
+                    blue_liuchang_cheak.setChecked(true);
+                    blue_liuchang_cheak.setVisibility(View.VISIBLE);
 
 
+                    blue_wending_cheak.setVisibility(View.VISIBLE);
+                    blue_wending_cheak.setChecked(true);
+
+                    blue_chukong_cheak.setVisibility(View.VISIBLE);
+                    blue_chukong_cheak.setChecked(true);
+
+                    blue_yinhua_cheak.setVisibility(View.VISIBLE);
+                    blue_yinhua_cheak.setChecked(true);
+
+                    blue_cpu_cheak.setVisibility(View.VISIBLE);
+                    blue_cpu_cheak.setChecked(true);
+
+
+                    blue_gpu_cheak.setVisibility(View.VISIBLE);
+                    blue_gpu_cheak.setChecked(true);
+
+                    blue_ram_cheak.setVisibility(View.VISIBLE);
+                    blue_ram_cheak.setChecked(true);
+
+                    blue_rom_cheak.setVisibility(View.VISIBLE);
+                    blue_rom_cheak.setChecked(true);
+                } else {
+                    blue_liuchang_cheak.setChecked(false);
+                    blue_liuchang_cheak.setVisibility(View.INVISIBLE);
+
+                    blue_wending_cheak.setChecked(false);
+                    blue_wending_cheak.setVisibility(View.INVISIBLE);
+
+
+                    blue_chukong_cheak.setChecked(false);
+                    blue_chukong_cheak.setVisibility(View.INVISIBLE);
+
+
+                    blue_yinhua_cheak.setVisibility(View.INVISIBLE);
+                    blue_yinhua_cheak.setChecked(false);
+
+                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_cpu_cheak.setChecked(false);
+
+                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_gpu_cheak.setChecked(false);
+
+                    blue_ram_cheak.setVisibility(View.INVISIBLE);
+                    blue_ram_cheak.setChecked(false);
+
+                    blue_rom_cheak.setVisibility(View.INVISIBLE);
+                    blue_rom_cheak.setChecked(false);
+                }
+            }
         }
     }
 
@@ -271,7 +367,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                 if (!kunpeng_phone.isChecked()) {
                     kunpeng_phone.setTextColor(R.color.select);
                 }
-                cheak_phone_map.put("cheaked_phone", CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
                 break;
             }
             case R.id.redfigure_phone: {
@@ -279,83 +375,24 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     redfingure_phone.setTextColor(R.color.select);
                 }
 
-                cheak_phone_map.put("cheaked_phone", CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
                 break;
             }
             case R.id.yidong_phone: {
                 if (!yiodng_phone.isChecked()) {
                     yiodng_phone.setTextColor(R.color.select);
                 }
-                cheak_phone_map.put("cheaked_phone", CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
                 break;
             }
             case R.id.wangyiyun_phone: {
                 if (!wangyiyun_phone.isChecked()) {
                     wangyiyun_phone.setTextColor(R.color.select);
                 }
-                cheak_phone_map.put("cheaked_phone", CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
                 break;
             }
         }
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-        if (isChecked) {
-            blue_liuchang_cheak.setChecked(true);
-            blue_liuchang_cheak.setVisibility(View.VISIBLE);
-
-
-            blue_wending_cheak.setVisibility(View.VISIBLE);
-            blue_wending_cheak.setChecked(true);
-
-            blue_chukong_cheak.setVisibility(View.VISIBLE);
-            blue_chukong_cheak.setChecked(true);
-
-            blue_yinhua_cheak.setVisibility(View.VISIBLE);
-            blue_yinhua_cheak.setChecked(true);
-
-            blue_cpu_cheak.setVisibility(View.VISIBLE);
-            blue_cpu_cheak.setChecked(true);
-
-
-            blue_gpu_cheak.setVisibility(View.VISIBLE);
-            blue_gpu_cheak.setChecked(true);
-
-            blue_ram_cheak.setVisibility(View.VISIBLE);
-            blue_ram_cheak.setChecked(true);
-
-            blue_rom_cheak.setVisibility(View.VISIBLE);
-            blue_rom_cheak.setChecked(true);
-        } else {
-            blue_liuchang_cheak.setChecked(false);
-            blue_liuchang_cheak.setVisibility(View.INVISIBLE);
-
-            blue_wending_cheak.setChecked(false);
-            blue_wending_cheak.setVisibility(View.INVISIBLE);
-
-
-            blue_chukong_cheak.setChecked(false);
-            blue_chukong_cheak.setVisibility(View.INVISIBLE);
-
-
-            blue_yinhua_cheak.setVisibility(View.INVISIBLE);
-            blue_yinhua_cheak.setChecked(false);
-
-            blue_cpu_cheak.setVisibility(View.INVISIBLE);
-            blue_cpu_cheak.setChecked(false);
-
-            blue_gpu_cheak.setVisibility(View.INVISIBLE);
-            blue_gpu_cheak.setChecked(false);
-
-            blue_ram_cheak.setVisibility(View.INVISIBLE);
-            blue_ram_cheak.setChecked(false);
-
-            blue_rom_cheak.setVisibility(View.INVISIBLE);
-            blue_rom_cheak.setChecked(false);
-        }
-
-
-    }
 }
