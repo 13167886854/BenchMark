@@ -1,6 +1,5 @@
 package com.example.benchmark.utils;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +10,6 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-
-import com.example.benchmark.Service.AblService;
 
 import java.util.List;
 
