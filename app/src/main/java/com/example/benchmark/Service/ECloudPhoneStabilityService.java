@@ -121,12 +121,7 @@ public class ECloudPhoneStabilityService implements IStabilityService{
     }
 
     @Override
-    public float getStartSuccessRate() {
-        return mCurrentMonitorNum / (float) mWholeMonitorNum * 100;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return mCurrentMonitorNum == mWholeMonitorNum;
+    public int getCurrentMonitorNum() {
+        return mCurrentMonitorNum;
     }
 }
