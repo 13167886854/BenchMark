@@ -15,6 +15,7 @@
         <package android:name="com.chinamobile.cmss.saas.cloundphone" />
         <package android:name="com.huawei.instructionstream.appui" />
         <package android:name="com.netease.android.cloudgame" />
+        <package android:name="com.tencent.gamereva" />
     </queries>
     <application
         android:name=".BaseApp"

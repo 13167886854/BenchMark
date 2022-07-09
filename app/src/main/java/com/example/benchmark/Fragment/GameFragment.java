@@ -17,11 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.benchmark.Activity.CePingActivity;
+import com.example.benchmark.BaseApp;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.AccessUtils;
+import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.ServiceUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,41 +85,36 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         game_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
         select_game.setOnCheckedChangeListener(this::onCheckedChanged);
 
-            red_start_test.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!(accessUtils.isIgnoringBatteryOptimizations() && accessUtils.isAccessibilityServiceOpen())){
+        red_start_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (cheak_game_map.get("cheaked_game") == null) {
+                    Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(red_wending_cheak.isChecked()){
+                    if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
+                            || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
                         popDiaLog.show();
-                    }else
-                    if (cheak_game_map.get("cheaked_game") == null) {
-                        Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
-                    } else {
-                        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
-                        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
-                        Intent intent = new Intent(getActivity(), CePingActivity.class);
-                        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_GAME);
-                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, red_liuchang_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, red_wending_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, red_chukong_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, red_yinhua_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_CPU_INFO, red_cpu_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_GPU_INFO, red_gpu_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_ROM_INFO, red_ram_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_RAM_INFO, red_rom_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME, cheak_game_map.get(CacheConst.KEY_PLATFORM_NAME));
-//                        intent.putExtra("red_liuchang_cheak", red_liuchang_cheak.isChecked());
-//                        intent.putExtra("red_wending_cheak", red_wending_cheak.isChecked());
-//                        intent.putExtra("red_chukong_cheak", red_chukong_cheak.isChecked());
-//                        intent.putExtra("red_yinhua_cheak", red_yinhua_cheak.isChecked());
-//                        intent.putExtra("red_cpu_cheak", red_cpu_cheak.isChecked());
-//                        intent.putExtra("red_gpu_cheak", red_gpu_cheak.isChecked());
-//                        intent.putExtra("red_ram_cheak", red_ram_cheak.isChecked());
-//                        intent.putExtra("red_rom_cheak", red_rom_cheak.isChecked());
-//                        intent.putExtra("cheaked_plat",cheak_game_map.get("cheaked_game"));
-                        startActivity(intent);
+                        return;
                     }
                 }
-            });
+                CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
+                CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
+                Intent intent = new Intent(getActivity(), CePingActivity.class);
+                intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_GAME);
+                intent.putExtra(CacheConst.KEY_FLUENCY_INFO, red_liuchang_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_STABILITY_INFO, red_wending_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_TOUCH_INFO, red_chukong_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, red_yinhua_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_CPU_INFO, red_cpu_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_GPU_INFO, red_gpu_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_ROM_INFO, red_ram_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_RAM_INFO, red_rom_cheak.isChecked());
+                intent.putExtra(CacheConst.KEY_PLATFORM_NAME, cheak_game_map.get("cheaked_game"));
+                startActivity(intent);
+            }
+        });
 
 
 
