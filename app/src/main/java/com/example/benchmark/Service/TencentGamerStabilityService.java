@@ -1,7 +1,6 @@
 package com.example.benchmark.Service;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityCallback;
@@ -56,7 +55,7 @@ public class TencentGamerStabilityService implements IStabilityService {
     @Override
     public void onMonitor() {
         if (!isClickHome) {
-            AccessibilityNodeInfo tabHomeNode = AccessibilityUtil.FindNodeByClassName(
+            AccessibilityNodeInfo tabHomeNode = AccessibilityUtil.findNodeByClassName(
                     service, NODE_CLASS_PARENT_TAB_HOME, nodeInfo -> {
                         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
                             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
@@ -78,7 +77,7 @@ public class TencentGamerStabilityService implements IStabilityService {
             }
         }
         if (!isClickRank && isClickHome) {
-            AccessibilityNodeInfo tabRankNode = AccessibilityUtil.FindNodeByClassName(
+            AccessibilityNodeInfo tabRankNode = AccessibilityUtil.findNodeByClassName(
                     service, NODE_CLASS_PARENT_TAB_RANK, nodeInfo -> {
                         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
                             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
