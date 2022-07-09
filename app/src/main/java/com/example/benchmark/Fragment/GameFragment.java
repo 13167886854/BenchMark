@@ -282,15 +282,15 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
             case R.id.tengxun_game:{
-                cheak_game_map.put("cheaked_game","腾讯先锋");
+                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_Tencent_GAME);
                 break;
             }
             case R.id.migu_game:{
-                cheak_game_map.put("cheaked_game","咪咕快游");
+                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_MI_GU_GAME);
                 break;
             }
             case R.id.wangyi_game:{
-                cheak_game_map.put("cheaked_game","网易云游戏");
+                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME);
                 break;
             }
         }

@@ -129,6 +129,9 @@ public class StabilityMonitorService extends AccessibilityService {
         } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
             service = new TencentGamerStabilityService(this);
+        } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(platformName)) {
+            ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+            service = new MiGuPlayStabilityService(this);
         }
         if (!mCaptureScreenThread.isAlive() && (
                 CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)

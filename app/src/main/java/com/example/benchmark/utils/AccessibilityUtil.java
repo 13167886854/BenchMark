@@ -136,7 +136,6 @@ public class AccessibilityUtil {
     ) {
         if (parent == null) return false;
         if (parent.getText() != null && parent.getText().toString().equals(text)) {
-            Log.e("QT-Accessibility", "class:"+parent.getClassName().toString());
             return true;
         }
         for (int i = 0; i < parent.getChildCount(); i++) {
@@ -151,6 +150,28 @@ public class AccessibilityUtil {
             String text
     ) {
         return findIsExistText(service.getRootInActiveWindow(), text);
+    }
+
+    public static boolean findIsContainText(
+            AccessibilityService service,
+            String text
+    ) {
+        return findIsContainText(service.getRootInActiveWindow(), text);
+    }
+
+    public static boolean findIsContainText(
+            AccessibilityNodeInfo parent,
+            String text
+    ) {
+        if (parent == null) return false;
+        if (parent.getText() != null && parent.getText().toString().contains(text)) {
+            return true;
+        }
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            if (findIsContainText(parent.getChild(i), text))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -217,15 +238,15 @@ public class AccessibilityUtil {
         }, null);
     }
 
-    public static AccessibilityNodeInfo FindNodeByClassName(
+    public static AccessibilityNodeInfo findNodeByClassName(
             AccessibilityService service,
             String className,
             AccessibilityClassFindCallback callback
     ) {
-        return FindNodeByClassName(service.getRootInActiveWindow(), className, callback);
+        return findNodeByClassName(service.getRootInActiveWindow(), className, callback);
     }
 
-    public static AccessibilityNodeInfo FindNodeByClassName(
+    public static AccessibilityNodeInfo findNodeByClassName(
             AccessibilityNodeInfo rootInfo,
             String className,
             AccessibilityClassFindCallback callback
@@ -235,10 +256,25 @@ public class AccessibilityUtil {
             return rootInfo;
         }
         for (int i = 0; i < rootInfo.getChildCount(); i++) {
-            AccessibilityNodeInfo findNode = FindNodeByClassName(rootInfo.getChild(i), className, callback);
+            AccessibilityNodeInfo findNode = findNodeByClassName(rootInfo.getChild(i), className, callback);
             if (findNode != null) return findNode;
         }
         return null;
+    }
+
+    public static void logAllChildNodesClass(AccessibilityService service, int index) {
+        logAllChildNodesClass(service.getRootInActiveWindow(), index);
+    }
+
+    public static void logAllChildNodesClass(AccessibilityNodeInfo nodeInfo, int index) {
+        if (nodeInfo == null) return;
+        Log.e("AccessibilityUtil", index + ":" + nodeInfo.getClassName().toString());
+        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
+            AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
+            if (childNode == null) continue;
+            index++;
+            logAllChildNodesClass(childNode, index);
+        }
     }
 
     /**
