@@ -98,14 +98,16 @@ public class StabilityMonitorService extends AccessibilityService {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
-        resultCode = intent.getIntExtra("resultCode", 0);
+        resultCode = intent.getIntExtra("resultCode", Integer.MAX_VALUE);
         data = intent.getParcelableExtra("data");
-        MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)
-                getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        mProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
-        mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
-        mDisplay = mProjection.createVirtualDisplay("ScreenShot", screenWidth, screenHeight, screenDpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
+        if (resultCode != Integer.MAX_VALUE && data != null) {
+            MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)
+                    getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+            mProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
+            mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2);
+            mDisplay = mProjection.createVirtualDisplay("ScreenShot", screenWidth, screenHeight, screenDpi,
+                    DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
+        }
         isHaveOtherPerformance = intent.getBooleanExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, false);
         String platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
 //        platformName = CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME;
@@ -124,11 +126,15 @@ public class StabilityMonitorService extends AccessibilityService {
         } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             service = new NetEaseCloudPhoneStabilityService(this);
+        } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(platformName)) {
+            ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+            service = new TencentGamerStabilityService(this);
         }
-        if (!mCaptureScreenThread.isAlive()
-                && !CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(platformName)
-                && !CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(platformName))
-            mCaptureScreenThread.start();
+        if (!mCaptureScreenThread.isAlive() && (
+                CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)
+                        || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(platformName)
+                        || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(platformName)
+        )) mCaptureScreenThread.start();
         return START_NOT_STICKY;
     }
 
@@ -172,7 +178,7 @@ public class StabilityMonitorService extends AccessibilityService {
                     && (bitmapWithTime = mBitmapWithTime.poll()) != null) {
                 if (!isBlackOrWhiteExist && isBitmapBlackOrWhite(bitmapWithTime.first)) {
                     isBlackOrWhiteExist = true;
-                }else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
+                } else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
                     isBlackOrWhiteExist = false;
                     mOpenTime.add(bitmapWithTime.second - mStartTimes.get(mOpenTime.size()));
                 }

@@ -7,16 +7,13 @@ import android.content.Intent;
 import android.graphics.Path;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.TextView;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.RequiresApi;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -81,6 +78,22 @@ public class AccessibilityUtil {
         if (text == null || text.isEmpty()) return nodeInfoList.get(0);
         for (AccessibilityNodeInfo node : nodeInfoList) {
             if (text.equals(node.getText().toString()))
+                return node;
+        }
+        return null;
+    }
+
+    public static AccessibilityNodeInfo findNodeInfoByIdAndClass(
+            AccessibilityService service,
+            String className,
+            String id
+    ) {
+        AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
+        if (rootInfo == null) return null;
+        List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByViewId(id);
+        if (nodeInfoList.isEmpty()) return null;
+        for (AccessibilityNodeInfo node : nodeInfoList) {
+            if (className.equals(node.getClassName().toString()))
                 return node;
         }
         return null;
@@ -202,6 +215,30 @@ public class AccessibilityUtil {
                 callback.onFailure();
             }
         }, null);
+    }
+
+    public static AccessibilityNodeInfo FindNodeByClassName(
+            AccessibilityService service,
+            String className,
+            AccessibilityClassFindCallback callback
+    ) {
+        return FindNodeByClassName(service.getRootInActiveWindow(), className, callback);
+    }
+
+    public static AccessibilityNodeInfo FindNodeByClassName(
+            AccessibilityNodeInfo rootInfo,
+            String className,
+            AccessibilityClassFindCallback callback
+    ) {
+        if (rootInfo == null || TextUtils.isEmpty(rootInfo.getClassName())) return null;
+        if (className.equals(rootInfo.getClassName().toString()) && callback.caterTo(rootInfo)) {
+            return rootInfo;
+        }
+        for (int i = 0; i < rootInfo.getChildCount(); i++) {
+            AccessibilityNodeInfo findNode = FindNodeByClassName(rootInfo.getChild(i), className, callback);
+            if (findNode != null) return findNode;
+        }
+        return null;
     }
 
     /**
