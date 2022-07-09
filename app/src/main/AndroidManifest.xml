@@ -16,6 +16,7 @@
         <package android:name="com.huawei.instructionstream.appui" />
         <package android:name="com.netease.android.cloudgame" />
         <package android:name="com.tencent.gamereva" />
+        <package android:name="cn.emagsoftware.gamehall" />
     </queries>
     <application
         android:name=".BaseApp"

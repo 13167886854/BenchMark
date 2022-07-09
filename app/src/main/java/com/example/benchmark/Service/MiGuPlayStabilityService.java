@@ -1,6 +1,9 @@
 package com.example.benchmark.Service;
 
 public class MiGuPlayStabilityService implements IStabilityService{
+
+    private int mCurrentMonitorNum = 0;
+
     @Override
     public void onMonitor() {
 
@@ -17,12 +20,7 @@ public class MiGuPlayStabilityService implements IStabilityService{
     }
 
     @Override
-    public float getStartSuccessRate() {
-        return 0;
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
+    public int getCurrentMonitorNum() {
+        return mCurrentMonitorNum;
     }
 }

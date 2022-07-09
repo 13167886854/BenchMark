@@ -119,7 +119,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     }
 
     @Override
-    public boolean isFinished() {
-        return mCurrentMonitorNum == mWholeMonitorNum;
+    public int getCurrentMonitorNum() {
+        return mCurrentMonitorNum;
     }
 }

@@ -10,8 +10,14 @@ public interface IStabilityService {
 
     void startQuitCloudPhone();
 
-    float getStartSuccessRate();
+    int getCurrentMonitorNum();
 
-    boolean isFinished();
+    default float getStartSuccessRate() {
+        return getCurrentMonitorNum() / (float) mWholeMonitorNum * 100;
+    }
+
+    default boolean isFinished() {
+        return getCurrentMonitorNum() == mWholeMonitorNum;
+    }
 
 }
