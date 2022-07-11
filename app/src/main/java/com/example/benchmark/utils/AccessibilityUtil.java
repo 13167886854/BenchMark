@@ -164,6 +164,7 @@ public class AccessibilityUtil {
             String text
     ) {
         if (parent == null) return false;
+        if (parent.getText() != null) Log.e("QT", parent.getText().toString());
         if (parent.getText() != null && parent.getText().toString().contains(text)) {
             return true;
         }

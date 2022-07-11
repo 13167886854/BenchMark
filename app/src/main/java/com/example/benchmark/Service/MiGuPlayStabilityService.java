@@ -39,10 +39,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
 
     private final StabilityMonitorService service;
 
-    private boolean isEnterGameView = false;
-    private boolean isClickTabHome = false;
-    private boolean isClickTabRecommend = false;
-    private boolean isClickHotWeek = false;
+    private boolean isClickInstantPlay = false;
 
     public MiGuPlayStabilityService(StabilityMonitorService service) {
         this.service = service;
@@ -50,13 +47,10 @@ public class MiGuPlayStabilityService implements IStabilityService {
 
     @Override
     public void onMonitor() {
-        if (!isEnterGameView) enterGameView();
-        if (isEnterGameView) {
-            AccessibilityNodeInfo instantPlay = null;
-            while (instantPlay == null) {
-                instantPlay = AccessibilityUtil.findNodeInfo(service,
-                        NODE_ID_INSTANT_PLAY, NODE_TEXT_INSTANT_PLAY);
-            }
+        if (!isClickInstantPlay) {
+            AccessibilityNodeInfo instantPlay = AccessibilityUtil.findNodeInfo(service,
+                    NODE_ID_INSTANT_PLAY, NODE_TEXT_INSTANT_PLAY);
+            if (instantPlay == null) return;
             AccessibilityUtil.performClick(instantPlay);
             startControlCloudPhone();
             startQuitCloudPhone();
@@ -87,7 +81,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
             AccessibilityUtil.performClick(continueGameNode);
         }
         AccessibilityNodeInfo enterGameNode = null;
-        while (enterGameNode == null || AccessibilityUtil.findIsContainText(service, NODE_TEXT_ENTER_GAME_NORMAL)) {
+        while (enterGameNode == null && !AccessibilityUtil.findIsContainText(service, NODE_TEXT_ENTER_GAME_NORMAL)) {
             enterGameNode = AccessibilityUtil.findNodeInfo(
                     service, NODE_ID_ENTER_GAME_VIP, NODE_TEXT_ENTER_GAME_VIP);
         }
@@ -127,70 +121,8 @@ public class MiGuPlayStabilityService implements IStabilityService {
         }
         service.mQuitTimes.add(System.currentTimeMillis() - quitTime);
         if (isCancelNode) AccessibilityUtil.performClick(gameViewNode);
+        isClickInstantPlay = false;
         mCurrentMonitorNum++;
-    }
-
-    private void enterGameView() {
-        AccessibilityNodeInfo instantPlay = AccessibilityUtil.findNodeInfo(service,
-                NODE_ID_INSTANT_PLAY, NODE_TEXT_INSTANT_PLAY);
-        if (instantPlay != null) {
-            isEnterGameView = true;
-            return;
-        }
-        if (!isClickTabHome) {
-            AccessibilityNodeInfo tabHomeNode = AccessibilityUtil.findNodeByClassName(
-                    service, NODE_CLASS_PARENT_TAB_HOME, nodeInfo -> {
-                        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
-                            AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
-                            if (childNode != null
-                                    && NODE_CLASS_TAB_HOME.equals(childNode.getClassName().toString())
-                                    && NODE_TEXT_TAB_HOME.equals(childNode.getText().toString())) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    });
-            if (tabHomeNode == null) return;
-            AccessibilityUtil.performClick(tabHomeNode);
-            isClickTabHome = true;
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!isClickTabRecommend) {
-            AccessibilityNodeInfo tabRecommendNode = AccessibilityUtil.findNodeByClassName(
-                    service, NODE_CLASS_PARENT_TAB_RECOMMEND, nodeInfo -> {
-                        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
-                            AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
-                            if (childNode != null
-                                    && NODE_CLASS_TAB_RECOMMEND.equals(childNode.getClassName().toString())
-                                    && NODE_TEXT_TAB_RECOMMEND.equals(childNode.getText().toString())) {
-                                return true;
-                            }
-                        }
-                        return false;
-                    });
-            if (tabRecommendNode == null) return;
-            AccessibilityUtil.performClick(tabRecommendNode);
-            isClickTabRecommend = true;
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!isClickHotWeek) {
-            AccessibilityNodeInfo hotWeek = AccessibilityUtil
-                    .findNodeInfoByIdAndClass(service, NODE_CLASS_HOT_WEEK, NODE_ID_HOT_WEEK);
-            if (hotWeek == null || hotWeek.getChildCount() <= 0) return;
-            AccessibilityNodeInfo gameNode = hotWeek.getChild(0);
-            if (gameNode == null) return;
-            AccessibilityUtil.performClick(gameNode);
-            isClickHotWeek = true;
-        }
-        isEnterGameView = true;
     }
 
     @Override

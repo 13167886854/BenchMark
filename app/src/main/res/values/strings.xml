@@ -8,6 +8,8 @@
     <string name="main_tishi">提示</string>
     <string name="main_setting">设置</string>
     <string name="kunpeng_phone">鲲鹏云手机</string>
+    <string name="huawei_instrument_phone">华为指令流</string>
+    <string name="huawei_data_phone">华为数据流</string>
     <string name="redfingure_phone">红手指云手机</string>
     <string name="yidongphone">移动云手机</string>
     <string name="wangyiyunphone">网易云手机</string>
