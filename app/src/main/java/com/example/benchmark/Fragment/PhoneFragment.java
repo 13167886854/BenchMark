@@ -143,6 +143,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
         radioGroup = view.findViewById(R.id.select_phone);
 
         kunpeng_phone = view.findViewById(R.id.kunpeng_phone);
+        huawei_data_phone = view.findViewById(R.id.kunpeng_data_phone);
         redfingure_phone = view.findViewById(R.id.redfigure_phone);
         yiodng_phone = view.findViewById(R.id.yidong_phone);
         wangyiyun_phone = view.findViewById(R.id.wangyiyun_phone);
@@ -357,7 +358,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
         }
     }
 
-    private RadioButton kunpeng_phone, redfingure_phone, yiodng_phone, wangyiyun_phone;
+    private RadioButton kunpeng_phone, huawei_data_phone, redfingure_phone, yiodng_phone, wangyiyun_phone;
 
     @SuppressLint({"NonConstantResourceId", "ResourceAsColor"})
     @Override
@@ -368,6 +369,13 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
                     kunpeng_phone.setTextColor(R.color.select);
                 }
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+                break;
+            }
+            case R.id.kunpeng_data_phone: {
+                if (!huawei_data_phone.isChecked()) {
+                    huawei_data_phone.setTextColor(R.color.select);
+                }
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
                 break;
             }
             case R.id.redfigure_phone: {

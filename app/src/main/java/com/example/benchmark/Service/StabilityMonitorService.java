@@ -132,6 +132,11 @@ public class StabilityMonitorService extends AccessibilityService {
         } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(platformName)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
             service = new MiGuPlayStabilityService(this);
+        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(platformName)) {
+            ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+            service = new NetEaseCloudGameStabilityService(this);
+        } else {
+            service = new DefaultStabilityService();
         }
         if (!mCaptureScreenThread.isAlive() && (
                 CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)

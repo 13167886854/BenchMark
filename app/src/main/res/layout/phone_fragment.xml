@@ -20,57 +20,73 @@
                     android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-                <RadioGroup
-                    android:id="@+id/select_phone"
-                    android:background="@color/white"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="5dp"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
                     android:layout_height="wrap_content">
+                    <RadioGroup
+                        android:id="@+id/select_phone"
+                        android:background="@color/white"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="5dp"
+                        android:layout_width="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
 
-                    <RadioButton
-                        android:id="@+id/kunpeng_phone"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:button="@null"
-                        android:drawableTop="@drawable/kunpeng_phone"
-                        android:gravity="center"
-                        android:text="@string/kunpeng_phone"
-                        android:textSize="12sp" />
+                        <RadioButton
+                            android:id="@+id/kunpeng_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:drawableTop="@drawable/kunpeng_phone"
+                            android:gravity="center"
+                            android:text="@string/huawei_instrument_phone"
+                            android:textSize="12sp"
+                            android:layout_marginStart="20dp"/>
 
-                    <RadioButton
-                        android:id="@+id/redfigure_phone"
-                        android:drawableTop="@drawable/redfingure"
-                        android:layout_width="0dp"
-                        android:text="@string/redfingure_phone"
-                        android:button="@null"
-                        android:textSize="12sp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"/>
-                    <RadioButton
-                        android:id="@+id/yidong_phone"
-                        android:drawableTop="@drawable/yidong_phone"
-                        android:layout_width="0dp"
-                        android:text="@string/yidongphone"
-                        android:button="@null"
-                        android:textSize="12sp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"/>
-                    <RadioButton
-                        android:id="@+id/wangyiyun_phone"
-                        android:textSize="12sp"
-                        android:drawableTop="@drawable/wangyi_phone"
-                        android:layout_width="0dp"
-                        android:text="@string/wangyiyunphone"
-                        android:button="@null"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"/>
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/kunpeng_data_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:drawableTop="@drawable/kunpeng_phone"
+                            android:gravity="center"
+                            android:text="@string/huawei_data_phone"
+                            android:textSize="12sp"
+                            android:layout_marginStart="25dp"/>
+
+                        <RadioButton
+                            android:id="@+id/redfigure_phone"
+                            android:drawableTop="@drawable/redfingure"
+                            android:layout_width="wrap_content"
+                            android:text="@string/redfingure_phone"
+                            android:button="@null"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"/>
+                        <RadioButton
+                            android:id="@+id/yidong_phone"
+                            android:drawableTop="@drawable/yidong_phone"
+                            android:layout_width="wrap_content"
+                            android:text="@string/yidongphone"
+                            android:button="@null"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"/>
+                        <RadioButton
+                            android:id="@+id/wangyiyun_phone"
+                            android:textSize="12sp"
+                            android:drawableTop="@drawable/wangyi_phone"
+                            android:layout_width="wrap_content"
+                            android:text="@string/wangyiyunphone"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="25dp"
+                            android:layout_marginEnd="20dp"/>
+                    </RadioGroup>
+                </HorizontalScrollView>
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
