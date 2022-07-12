@@ -22,7 +22,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
     private final String NODE_ID_INSTANT_PLAY = "cn.emagsoftware.gamehall:id/detail_gameInfo_play_icon";
     private final String NODE_TEXT_INSTANT_PLAY = "秒 玩";
     private final String NODE_ID_SELF_PLAY = "cn.emagsoftware.gamehall:id/play_self_img";
-    private final String NODE_ID_CONTINUE_GAME = "cn.emagsoftware.gamehall:id/dialog_button1_id";
+    private final String NODE_ID_CONTINUE_GAME = "cn.emagsoftware.gamehall:id/dialog_button2_id";
     private final String NODE_TEXT_CONTINUE_GAME = "继续游戏";
     private final String NODE_ID_ENTER_GAME_VIP = "cn.emagsoftware.gamehall:id/vip_tip_content";
     private final String NODE_TEXT_ENTER_GAME_VIP = "你已进入会员专属通道，排队快人一步";
@@ -80,11 +80,14 @@ public class MiGuPlayStabilityService implements IStabilityService {
         if (continueGameNode != null) {
             AccessibilityUtil.performClick(continueGameNode);
         }
-        AccessibilityNodeInfo enterGameNode = null;
-        while (enterGameNode == null && !AccessibilityUtil.findIsContainText(service, NODE_TEXT_ENTER_GAME_NORMAL)) {
-            enterGameNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_ENTER_GAME_VIP, NODE_TEXT_ENTER_GAME_VIP);
-        }
+        while (!AccessibilityUtil.findIsContainText(service, "100%")
+                || !AccessibilityUtil.findIsContainText(service, "启动完成"));
+//        AccessibilityNodeInfo enterGameNode = null;
+//        while (enterGameNode == null && !AccessibilityUtil.findIsContainText(service, NODE_TEXT_ENTER_GAME_NORMAL)) {
+//            AccessibilityUtil.logAllChildNodesText(service, 0);
+//            enterGameNode = AccessibilityUtil.findNodeInfo(
+//                    service, NODE_ID_ENTER_GAME_VIP, NODE_TEXT_ENTER_GAME_VIP);
+//        }
         Log.e("QT", "openTime:" + (System.currentTimeMillis() - startTime));
         service.mOpenTime.add(System.currentTimeMillis() - startTime);
     }

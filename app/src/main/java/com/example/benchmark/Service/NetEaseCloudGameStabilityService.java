@@ -9,7 +9,7 @@ import com.example.benchmark.utils.AccessibilityUtil;
 public class NetEaseCloudGameStabilityService implements IStabilityService {
 
     // 超过一定时间仍未进入游戏则表示加载失败
-    private final long MONITOR_FAIL_TIME = 5000L;
+    private final long MONITOR_FAIL_TIME = 8000L;
     private final String NODE_ID_INSTANT_PLAY = "com.netease.android.cloudgame:id/start_game_btn";
     private final String NODE_TEXT_INSTANT_PLAY = "秒玩";
     private final String NODE_ID_ENTER_GAME = "com.netease.android.cloudgame:id/btn_enter_game";

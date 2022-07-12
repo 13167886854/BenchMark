@@ -1,9 +1,11 @@
 package com.example.benchmark.Service;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityCallback;
+import com.example.benchmark.utils.AccessibilityClassFindCallback;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
@@ -15,7 +17,6 @@ public class TencentGamerStabilityService implements IStabilityService {
 
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
-    private final String TARGET_GAME_NAME = "王者荣耀";
     private final String NODE_CLASS_PARENT_TAB_HOME = "android.widget.RelativeLayout";
     private final String NODE_CLASS_TAB_HOME = "android.widget.TextView";
     private final String NODE_TEXT_TAB_HOME = "首页";
@@ -30,6 +31,8 @@ public class TencentGamerStabilityService implements IStabilityService {
     private final String NODE_ID_INSTANT_PLAY = "com.tencent.gamereva:id/game_play";
     private final String NODE_ID_DETAIL_INSTANT_PLAY = "com.tencent.gamereva:id/banner_game_play";
     private final String NODE_TEXT_DETAIL_INSTANT_PLAY = "秒玩";
+    private final String NODE_ID_CONTINUE_GAME = "com.tencent.gamereva:id/sub_button";
+    private final String NODE_TEXT_CONTINUE_GAME = "继续游戏";
     private final String NODE_CLASS_LOADING_GAME = "android.widget.ProgressBar";
     private final String NODE_ID_LOADING_GAME = "com.tencent.gamereva:id/loading_view";
     private final String NODE_TEXT_QUIT_GAME = "退出游戏";
@@ -67,6 +70,17 @@ public class TencentGamerStabilityService implements IStabilityService {
     public void startControlCloudPhone() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
         long startTime = System.currentTimeMillis();
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        AccessibilityNodeInfo continueGameNode = AccessibilityUtil.findNodeInfo(
+                service, NODE_ID_CONTINUE_GAME, NODE_TEXT_CONTINUE_GAME);
+        if (continueGameNode != null) {
+            AccessibilityUtil.performClick(continueGameNode);
+            startTime = System.currentTimeMillis();
+        }
         boolean isStartSuccess = false;
         long startTapTime = System.currentTimeMillis();
         while (!isStartSuccess) {
@@ -78,11 +92,11 @@ public class TencentGamerStabilityService implements IStabilityService {
                 isStartSuccess = true;
                 startQuitCloudPhone();
             }
-            if (System.currentTimeMillis() - startTapTime < 500L) continue;
+            if (System.currentTimeMillis() - startTapTime < 1000L) continue;
             startTapTime = System.currentTimeMillis();
             AccessibilityUtil.tap(
                     service,
-                    StatusBarUtil.getStatusBarHeight(service) + 10,
+                    StatusBarUtil.getStatusBarHeight(service) + 8,
                     screenWidth / 3,
                     new AccessibilityCallback() {
                         @Override

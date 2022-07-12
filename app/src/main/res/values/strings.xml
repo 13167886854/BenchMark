@@ -64,7 +64,8 @@
     <string name="pkg_name_net_ease_cloud_phone">com.netease.android.cloudgame</string>
     <string name="pkg_name_tencent_gamer">com.tencent.gamereva</string>
     <string name="pkg_name_mi_gu_play">cn.emagsoftware.gamehall</string>
-    <string name="pkg_names_accessibility_service">com.redfinger.app, com.huawei.cloudphonedaily, com.chinamobile.cmss.saas.cloundphone, com.huawei.instructionstream.appui, com.netease.android.cloudgame, com.tencent.gamereva, cn.emagsoftware.gamehall</string>
+    <string name="pkg_name_mi_gu_play2">com.migu.miguplay</string>
+    <string name="pkg_names_accessibility_service">com.redfinger.app, com.huawei.cloudphonedaily, com.chinamobile.cmss.saas.cloundphone, com.huawei.instructionstream.appui, com.netease.android.cloudgame, com.tencent.gamereva, cn.emagsoftware.gamehall, com.migu.miguplay</string>
     <string name="benchmark_stability_monitor_description">Benchmark稳定性测试</string>
 
     <string name="stability_info_description">通过后台持续启动、关闭云手机，分析启动成功率、启动时长、退出时长，测评稳定性性能</string>

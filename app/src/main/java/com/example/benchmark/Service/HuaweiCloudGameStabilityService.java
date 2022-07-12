@@ -65,6 +65,17 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     public void startControlCloudPhone() {
         mStartTime = System.currentTimeMillis();
         clickContinueGameIfExist();
+        AccessibilityNodeInfo nodeBtnStartGame = AccessibilityUtil.findNodeInfo(
+                service, NODE_ID_BTN_START_GAME, "");
+        AccessibilityNodeInfo nodeBtnContinueGame = AccessibilityUtil.findNodeInfo(
+                service, NODE_ID_BTN_CONTINUE_GAME, "");
+        while (nodeBtnStartGame != null || nodeBtnContinueGame != null) {
+            nodeBtnStartGame = AccessibilityUtil.findNodeInfo(
+                    service, NODE_ID_BTN_START_GAME, "");
+            nodeBtnContinueGame = AccessibilityUtil.findNodeInfo(
+                    service, NODE_ID_BTN_CONTINUE_GAME, "");
+        }
+        service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
         try {
             // wait cloud phone loading
             Thread.sleep(6000L);
