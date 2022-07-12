@@ -185,27 +185,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     }
 
     private void startStabilityMonitorService() {
-        if (
-                CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checked_plat)
-                        || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checked_plat)
-                        || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checked_plat)
-        ) {
-            // 需要申请录屏权限
-            MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
-                    this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            if (mMediaProjectionManager != null) {
-                this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_STABILITY);
-            }
-        } else {
-            // 无需申请录屏权限，直接启动服务
-            Intent service = new Intent(this, StabilityMonitorService.class)
-                    .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
-                    .putExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, isHaveOtherPerformance);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(service);
-            } else {
-                startService(service);
-            }
+        // 需要申请录屏权限
+        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
+                this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        if (mMediaProjectionManager != null) {
+            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_STABILITY);
         }
     }
 
