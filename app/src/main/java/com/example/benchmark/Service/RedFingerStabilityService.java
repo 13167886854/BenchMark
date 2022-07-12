@@ -29,11 +29,13 @@ public class RedFingerStabilityService implements IStabilityService {
     private int mCurrentMonitorNum = 0;
     private long mStartTime = 0L;
     private long mQuitTime = 0L;
+    private long mLastTapTime = 0L;
 
-    private boolean isTapping;
     private boolean isClickStartControl = false;
     private boolean isClickContinueControl = false;
     private boolean isClickQuitNotice = false;
+    private boolean isConnectSuccess = false;
+    private boolean isTapSuccess = false;
 
     public RedFingerStabilityService(StabilityMonitorService service) {
         this.service = service;
@@ -42,28 +44,31 @@ public class RedFingerStabilityService implements IStabilityService {
     @Override
     public void onMonitor() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
-        isTapping = false;
-        while (!isTapping) {
-            if (AccessibilityUtil.findNodeInfo(service, NODE_ID_CLICK_VIEW, "") == null
-                    || isTapping) continue;
-//            Log.e("qt", "===TAP TAP===");
-            isTapping = true;
+        if (isTapSuccess) {
+            isConnectSuccess = true;
+            startControlCloudPhone();
+            startQuitCloudPhone();
+            mCurrentMonitorNum++;
+            isTapSuccess = false;
+            isConnectSuccess = false;
+            return;
+        }
+        if (!isConnectSuccess) {
+            AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
+                    service, NODE_ID_CLICK_VIEW, "");
+            if (clickNode == null) return;
+            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1000L) return;
+            mLastTapTime = System.currentTimeMillis();
             service.startCaptureScreen();
             AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
                     new AccessibilityCallback() {
                         @Override
                         public void onSuccess() {
-                            Log.e("qt", "TAP SUCCESS");
-                            startControlCloudPhone();
-                            startQuitCloudPhone();
-                            mCurrentMonitorNum++;
-                            isTapping = false;
+                            isTapSuccess = true;
                         }
-
                         @Override
                         public void onFailure() {
-//                            Log.e("qt", "TAP FAILURE");
-                            isTapping = false;
+                            isTapSuccess = true;
                         }
                     });
         }
@@ -73,6 +78,21 @@ public class RedFingerStabilityService implements IStabilityService {
     public void startControlCloudPhone() {
         mStartTime = System.currentTimeMillis();
         closeDialogIfExistWhenStart();
+        AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
+                service, NODE_ID_CLICK_VIEW, "");
+        AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,
+                NODE_ID_START_CONTROL, NODE_TEXT_START_CONTROL);
+        AccessibilityNodeInfo continueControlNode = AccessibilityUtil.findNodeInfo(service,
+                NODE_ID_CONTINUE_CONTROL, NODE_TEXT_CONTINUE_CONTROL);
+        while (clickNode != null || startControlNode != null || continueControlNode != null) {
+            clickNode = AccessibilityUtil.findNodeInfo(
+                    service, NODE_ID_CLICK_VIEW, "");
+            startControlNode = AccessibilityUtil.findNodeInfo(service,
+                    NODE_ID_START_CONTROL, NODE_TEXT_START_CONTROL);
+            continueControlNode = AccessibilityUtil.findNodeInfo(service,
+                    NODE_ID_CONTINUE_CONTROL, NODE_TEXT_CONTINUE_CONTROL);
+        }
+        service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
         try {
             // wait cloud phone loading
             Thread.sleep(3000L);
@@ -80,7 +100,6 @@ public class RedFingerStabilityService implements IStabilityService {
             e.printStackTrace();
         }
         service.mStartTimes.add(mStartTime);
-        Log.e("QT", "mStartTimes:" + service.mStartTimes);
     }
 
     @Override
@@ -113,7 +132,6 @@ public class RedFingerStabilityService implements IStabilityService {
         if (isClickStartControl || isClickContinueControl) return;
         new Thread(() -> {
             try {
-//                Log.e("QT", "closeDialogIfExist");
                 if (!isClickStartControl) {
                     Thread.sleep(1000L);
                     AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,

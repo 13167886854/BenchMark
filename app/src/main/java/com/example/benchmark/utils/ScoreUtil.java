@@ -147,9 +147,9 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
         // 计算稳定性分数
         startSuccessRate /= 100;
-        float startSuccessScore = 100 * startSuccessRate / 3;
-        float averageStartScore = averageStartTime < 50 ? 100 : 100 * (50 / averageStartTime) / 3;
-        float averageQuitScore = averageQuitTime < 50 ? 100 : 100 * (50 / averageQuitTime) / 3;
+        float startSuccessScore = 100f * startSuccessRate / 3;
+        float averageStartScore = averageStartTime < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3;
+        float averageQuitScore = averageQuitTime < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3;
         int stabilityScores = (int) (startSuccessScore + averageStartScore + averageQuitScore);
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);

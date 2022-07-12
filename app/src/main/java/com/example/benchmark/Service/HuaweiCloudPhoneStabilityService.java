@@ -8,6 +8,7 @@ import com.example.benchmark.utils.AccessibilityCallback;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.StatusBarUtil;
 
 public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
@@ -66,7 +67,6 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
     @Override
     public void startControlCloudPhone() {
-        Log.e("QT", "startControlCloudPhone");
         mStartTime = System.currentTimeMillis();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
         isConnectSuccess = false;
@@ -90,12 +90,16 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
             }
             if (System.currentTimeMillis() - startTime < 800L) continue;
             startTime = System.currentTimeMillis();
-            AccessibilityUtil.tap(service, screenWidth - 50, screenHeight / 2 + 150,
+            AccessibilityUtil.tap(
+                    service,
+                    screenWidth - 25,
+                    screenHeight / 2 + StatusBarUtil.getStatusBarHeight(service) - 25,
                     new AccessibilityCallback() {
                         @Override
                         public void onSuccess() {
                             Log.e("qt", "TAP SUCCESS");
                         }
+
                         @Override
                         public void onFailure() {
                         }

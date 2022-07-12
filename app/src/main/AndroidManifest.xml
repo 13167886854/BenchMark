@@ -17,6 +17,7 @@
         <package android:name="com.netease.android.cloudgame" />
         <package android:name="com.tencent.gamereva" />
         <package android:name="cn.emagsoftware.gamehall" />
+        <package android:name="com.migu.miguplay" />
     </queries>
     <application
         android:name=".BaseApp"

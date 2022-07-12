@@ -164,12 +164,33 @@ public class AccessibilityUtil {
             String text
     ) {
         if (parent == null) return false;
-        if (parent.getText() != null) Log.e("QT", parent.getText().toString());
         if (parent.getText() != null && parent.getText().toString().contains(text)) {
             return true;
         }
         for (int i = 0; i < parent.getChildCount(); i++) {
             if (findIsContainText(parent.getChild(i), text))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean findIsExistClass(
+            AccessibilityService service,
+            String className
+    ) {
+        return findIsExistClass(service.getRootInActiveWindow(), className);
+    }
+
+    public static boolean findIsExistClass(
+            AccessibilityNodeInfo parent,
+            String className
+    ) {
+        if (parent == null) return false;
+        if (parent.getClassName() != null && className.equals(parent.getClassName().toString())) {
+            return true;
+        }
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            if (findIsContainText(parent.getChild(i), className))
                 return true;
         }
         return false;
@@ -222,7 +243,7 @@ public class AccessibilityUtil {
         GestureDescription.Builder builder = new GestureDescription.Builder();
         Path p = new Path();
         p.moveTo(x, y);
-        builder.addStroke(new GestureDescription.StrokeDescription(p, 0L, 500L));
+        builder.addStroke(new GestureDescription.StrokeDescription(p, 0L, 10L));
         GestureDescription gesture = builder.build();
         service.dispatchGesture(gesture, new AccessibilityService.GestureResultCallback() {
             @Override
@@ -273,8 +294,22 @@ public class AccessibilityUtil {
         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
             if (childNode == null) continue;
-            index++;
-            logAllChildNodesClass(childNode, index);
+            logAllChildNodesClass(childNode, index + 1);
+        }
+    }
+
+    public static void logAllChildNodesText(AccessibilityService service, int index) {
+        logAllChildNodesText(service.getRootInActiveWindow(), index);
+    }
+
+    public static void logAllChildNodesText(AccessibilityNodeInfo nodeInfo, int index) {
+        if (nodeInfo == null) return;
+        if (nodeInfo.getText() != null)
+            Log.e("AccessibilityUtil", index + ":" + nodeInfo.getText().toString());
+        for (int i = 0; i < nodeInfo.getChildCount(); i++) {
+            AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
+            if (childNode == null) continue;
+            logAllChildNodesText(childNode, index + 1);
         }
     }
 

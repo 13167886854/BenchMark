@@ -80,19 +80,21 @@ public class StabilityMonitorService extends AccessibilityService {
     private boolean isDealResult = false;
     private boolean isHaveOtherPerformance = false;
 
-    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
+    private final Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == MSG_CONTINUE_MONITOR) {
+        public boolean handleMessage(@NonNull Message message) {
+            if (message.what == MSG_CONTINUE_MONITOR) {
                 Toast.makeText(StabilityMonitorService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-            } else if (msg.what == MSG_MONITOR_OVER) {
+                ServiceUtil.startFxService(StabilityMonitorService.this, resultCode, data);
+            } else if (message.what == MSG_MONITOR_OVER) {
                 Toast.makeText(StabilityMonitorService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
+                ServiceUtil.backToCePingActivity(StabilityMonitorService.this);
             }
+            return true;
         }
-    };
+    });
 
     @SuppressLint("WrongConstant")
     @Override
@@ -138,11 +140,14 @@ public class StabilityMonitorService extends AccessibilityService {
         } else {
             service = new DefaultStabilityService();
         }
-        if (!mCaptureScreenThread.isAlive() && (
+        if (!mCaptureScreenThread.isAlive() && !mDealBitmapThread.isAlive() && (
                 CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)
                         || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(platformName)
                         || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(platformName)
-        )) mCaptureScreenThread.start();
+        )) {
+            mCaptureScreenThread.start();
+            mDealBitmapThread.start();
+        }
         return START_NOT_STICKY;
     }
 
@@ -169,7 +174,7 @@ public class StabilityMonitorService extends AccessibilityService {
                             screenHeight, Bitmap.Config.ARGB_8888);
                     bitmap.copyPixelsFromBuffer(buffer);
                     mBitmapWithTime.offer(new Pair<>(bitmap, System.currentTimeMillis()));
-                    if (!mDealBitmapThread.isAlive()) mDealBitmapThread.start();
+//                    if (!mDealBitmapThread.isAlive()) mDealBitmapThread.start();
                     startDealBitmap();
                     image.close();
                 }
@@ -178,17 +183,23 @@ public class StabilityMonitorService extends AccessibilityService {
     }
 
     private void dealWithBitmap() {
-        while (!service.isFinished()) {
-//            if (!isStartDealBitmap || mBitmapWithTime.size() < 40) continue;
+        while (!service.isFinished() || mBitmapWithTime.size() > 0) {
             Pair<Bitmap, Long> bitmapWithTime;
+            int dealIndex = 0;
             boolean isBlackOrWhiteExist = false;
-            while (mStartTimes.size() > mOpenTime.size()
-                    && (bitmapWithTime = mBitmapWithTime.poll()) != null) {
-                if (!isBlackOrWhiteExist && isBitmapBlackOrWhite(bitmapWithTime.first)) {
-                    isBlackOrWhiteExist = true;
-                } else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
-                    isBlackOrWhiteExist = false;
-                    mOpenTime.add(bitmapWithTime.second - mStartTimes.get(mOpenTime.size()));
+            while (dealIndex < mStartTimes.size()) {
+                bitmapWithTime = mBitmapWithTime.poll();
+                if (bitmapWithTime == null) break;
+                long startTime = mStartTimes.get(dealIndex);
+                if (Math.abs(startTime - bitmapWithTime.second) < 1000L) {
+                    if (!isBlackOrWhiteExist && isBitmapBlackOrWhite(bitmapWithTime.first)) {
+                        isBlackOrWhiteExist = true;
+                    } else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
+                        isBlackOrWhiteExist = false;
+                        mOpenTime.set(dealIndex, mOpenTime.get(dealIndex) +
+                                bitmapWithTime.second - mStartTimes.get(dealIndex));
+                        dealIndex++;
+                    }
                 }
             }
 //            for (long startGameTime : mStartTimes) {
@@ -211,7 +222,7 @@ public class StabilityMonitorService extends AccessibilityService {
 //        mProjection.stop();
 //        mImageReader.close();
 //        mDisplay.release();
-        dealWithResult();
+//        dealWithResult();
     }
 
     private void dealWithResult() {
@@ -236,19 +247,16 @@ public class StabilityMonitorService extends AccessibilityService {
         CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, true);
         if (isHaveOtherPerformance) {
             mHandler.sendEmptyMessage(MSG_CONTINUE_MONITOR);
-            ServiceUtil.startFxService(this, resultCode, data);
         } else {
             mHandler.sendEmptyMessage(MSG_MONITOR_OVER);
-            ServiceUtil.backToCePingActivity(this);
         }
     }
 
     private boolean isBitmapBlackOrWhite(Bitmap bitmap) {
-        Palette palette = Palette.from(bitmap).generate();
+        Palette palette = Palette.from(bitmap).clearFilters().generate();
         int domainColor = palette.getDominantColor(Color.BLACK);
-//        Log.e("QT-Color", domainColor + "");
-        if (domainColor == Color.BLACK || domainColor == Color.WHITE)
-            Log.e("QT-Color", "True");
+//        if (domainColor == Color.BLACK || domainColor == Color.WHITE)
+//            Log.e("QT-Color", "True");
         return domainColor == Color.BLACK || domainColor == Color.WHITE;
     }
 
