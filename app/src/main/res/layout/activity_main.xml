@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="#EBF0FF"
     tools:context=".Activity.MainActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:padding="10dp"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         >
 
         <ImageButton
@@ -68,7 +69,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_weight="7"
         />
 
 
@@ -77,7 +78,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@drawable/bg_bottom_nav">
-        >
         <RadioGroup
             android:id="@+id/main_select_menu"
             android:orientation="horizontal"
@@ -90,6 +90,8 @@
                 android:checked="true"
                 android:text="@string/main_zhuye"
                 android:textColor="@color/white"
+                android:drawablePadding="4dp"
+                android:textSize="11sp"
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"
@@ -100,6 +102,8 @@
                 android:drawableTop="@drawable/selector_main_radio_btn_notify"
                 android:text="@string/main_tishi"
                 android:textColor="@color/white"
+                android:drawablePadding="4dp"
+                android:textSize="11sp"
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"
@@ -110,6 +114,8 @@
                 android:drawableTop="@drawable/selector_main_radio_btn_setting"
                 android:text="@string/main_setting"
                 android:textColor="@color/white"
+                android:drawablePadding="4dp"
+                android:textSize="11sp"
                 android:gravity="center"
                 android:button="@null"
                 android:layout_width="0dp"

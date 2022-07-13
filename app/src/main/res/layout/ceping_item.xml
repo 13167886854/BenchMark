@@ -31,7 +31,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="@string/cepingfenshu"
             android:textColor="#356EDC"
             android:textSize="18sp"
             android:textStyle="bold" />

@@ -13,8 +13,8 @@ public class CacheConst {
     public static final String KEY_PERFORMANCE_IS_MONITORED = "流畅性、触控体验和音画质量是否已经测试结束";
     public static final String KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR = "是否还有流畅性、触控体验和音画质量的测试";
     public static final String PLATFORM_NAME_RED_FINGER_CLOUD_PHONE = "红手指云手机";
-    public static final String PLATFORM_NAME_HUAWEI_CLOUD_PHONE = "鲲鹏云手机";
-    public static final String PLATFORM_NAME_HUAWEI_CLOUD_GAME = "华为云游戏";
+    public static final String PLATFORM_NAME_HUAWEI_CLOUD_PHONE = "华为指令流";
+    public static final String PLATFORM_NAME_HUAWEI_CLOUD_GAME = "华为视频流";
     public static final String PLATFORM_NAME_E_CLOUD_PHONE = "移动云手机";
     public static final String PLATFORM_NAME_NET_EASE_CLOUD_PHONE = "网易云手机";
     public static final String PLATFORM_NAME_NET_EASE_CLOUD_GAME = "网易云游戏";

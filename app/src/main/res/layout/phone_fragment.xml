@@ -1,374 +1,432 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
     android:padding="10dp">
-    <ScrollView
+
+    <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:text="@string/select_phone"
-                    android:textColor="@color/black"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <RadioGroup
-                        android:id="@+id/select_phone"
-                        android:background="@color/white"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="5dp"
-                        android:layout_width="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_height="wrap_content">
-
-                        <RadioButton
-                            android:id="@+id/kunpeng_phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:button="@null"
-                            android:drawableTop="@drawable/kunpeng_phone"
-                            android:gravity="center"
-                            android:text="@string/huawei_instrument_phone"
-                            android:textSize="12sp"
-                            android:layout_marginStart="20dp"/>
-
-                        <RadioButton
-                            android:id="@+id/kunpeng_data_phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:button="@null"
-                            android:drawableTop="@drawable/kunpeng_phone"
-                            android:gravity="center"
-                            android:text="@string/huawei_data_phone"
-                            android:textSize="12sp"
-                            android:layout_marginStart="25dp"/>
-
-                        <RadioButton
-                            android:id="@+id/redfigure_phone"
-                            android:drawableTop="@drawable/redfingure"
-                            android:layout_width="wrap_content"
-                            android:text="@string/redfingure_phone"
-                            android:button="@null"
-                            android:textSize="12sp"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"/>
-                        <RadioButton
-                            android:id="@+id/yidong_phone"
-                            android:drawableTop="@drawable/yidong_phone"
-                            android:layout_width="wrap_content"
-                            android:text="@string/yidongphone"
-                            android:button="@null"
-                            android:textSize="12sp"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"/>
-                        <RadioButton
-                            android:id="@+id/wangyiyun_phone"
-                            android:textSize="12sp"
-                            android:drawableTop="@drawable/wangyi_phone"
-                            android:layout_width="wrap_content"
-                            android:text="@string/wangyiyunphone"
-                            android:button="@null"
-                            android:gravity="center"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="25dp"
-                            android:layout_marginEnd="20dp"/>
-                    </RadioGroup>
-                </HorizontalScrollView>
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:textColor="@color/black"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16sp"
-                    android:layout_marginStart="5dp"
-                    android:text="@string/base_xinneng"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <CheckBox
-                    android:id="@+id/phone_select_all"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:checked="true"
-                    android:paddingEnd="10dp"
-                    android:text="@string/quanxuan" />
-            </RelativeLayout>
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="2"
+            android:elevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:elevation="2dp">
 
             <LinearLayout
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                >
+                android:layout_gravity="center">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <Button
-                        android:id="@+id/bule_liuchangxing"
-                        android:drawableTop="@drawable/blue_liuchang"
-                        android:text="@string/liuchangxing"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        />
 
                     <Button
-                        android:id="@+id/bule_wendinxing"
-                        android:drawableTop="@drawable/blue_wending"
-                        android:text="@string/wendingxing"
-                        android:textColor="@color/black"
-                        android:gravity="center"
+                        android:id="@+id/kunpeng_phone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        />
+                        android:drawableTop="@drawable/kunpeng_phone"
+                        android:gravity="center"
+                        android:text="@string/huawei_instrument_phone"
+                        android:textSize="12sp" />
+
                     <Button
-                        android:id="@+id/bule_chukong"
-                        android:drawableTop="@drawable/blue_chukong"
-                        android:text="@string/chukongtiyan"
-                        android:textColor="@color/black"
-                        android:gravity="center"
+                        android:id="@+id/kunpeng_data_phone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        />
+                        android:button="@null"
+                        android:drawableTop="@drawable/kunpeng_phone"
+                        android:gravity="center"
+                        android:text="@string/huawei_data_phone"
+                        android:textSize="12sp" />
+
                     <Button
-                        android:id="@+id/bule_yinhua"
-                        android:drawableTop="@drawable/blue_yinhua"
-                        android:text="@string/yinhuazhiliang"
-                        android:textColor="@color/black"
-                        android:gravity="center"
+                        android:id="@+id/redfigure_phone"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        />
+                        android:button="@null"
+                        android:drawableTop="@drawable/redfingure"
+                        android:gravity="center"
+                        android:text="@string/redfingure_phone"
+                        android:textSize="12sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/yidong_phone"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
                         android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
-                        <CheckBox
-                            android:checked="true"
-                            android:clickable="false"
-                            android:id="@+id/blue_liuchang_cheak"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:drawableTop="@drawable/yidong_phone"
                         android:gravity="center"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_wending_cheak"
-                            android:checked="true"
-                            android:clickable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
+                        android:text="@string/yidongphone"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/wangyiyun_phone"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="25dp"
+                        android:layout_marginEnd="20dp"
                         android:layout_weight="1"
+                        android:background="@null"
+                        android:button="@null"
+                        android:drawableTop="@drawable/wangyi_phone"
                         android:gravity="center"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_chukong_cheak"
-                            android:checked="true"
-                            android:clickable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_yinhua_cheak"
-                            android:checked="true"
-                            android:clickable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
+                        android:text="@string/wangyiyunphone"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
-            <TextView
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:layout_marginStart="10dp"
-                android:text="@string/base_guige"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="3"
+            android:elevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:contentPaddingLeft="8dp"
+            app:contentPaddingRight="8dp"
+            app:elevation="2dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                >
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical">
 
-                    <Button
-                        android:id="@+id/bule_cpu"
-                        android:drawableTop="@drawable/blue_cpu"
-                        android:text="@string/cpu"
-                        android:textColor="@color/black"
-                        android:gravity="center"
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@null"
-                        />
+                        android:layout_marginStart="5dp"
+                        android:text="@string/base_xinneng"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/bule_gpu"
-                        android:drawableTop="@drawable/blue_gpu"
-                        android:text="@string/gpu"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:layout_width="0dp"
+                    <CheckBox
+                        android:id="@+id/phone_select_all"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        />
-                    <Button
-                        android:id="@+id/bule_ram"
-                        android:drawableTop="@drawable/blue_ram"
-                        android:text="@string/ram"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        />
-                    <Button
-                        android:id="@+id/bule_rom"
-                        android:drawableTop="@drawable/blue_rom"
-                        android:text="@string/rom"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        />
+                        android:checked="true"
+                        android:layout_marginEnd="10dp"
+                        android:text="@string/quanxuan" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
-                        <CheckBox
-                            android:clickable="false"
-                            android:checked="true"
-                            android:id="@+id/blue_cpu_cheak"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_gpu_cheak"
-                            android:checked="true"
-                            android:clickable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_ram_cheak"
-                            android:checked="true"
-                            android:clickable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:gravity="center"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <CheckBox
-                            android:id="@+id/blue_rom_cheak"
-                            android:checked="true"
-                            android:clickable="false"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/bule_liuchangxing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_liuchang"
+                            android:gravity="center"
+                            android:text="@string/liuchangxing"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_wendinxing"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_wending"
+                            android:gravity="center"
+                            android:text="@string/wendingxing"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_chukong"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_chukong"
+                            android:gravity="center"
+                            android:text="@string/chukongtiyan"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_yinhua"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_yinhua"
+                            android:gravity="center"
+                            android:text="@string/yinhuazhiliang"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_liuchang_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_wending_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_chukong_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_yinhua_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/base_guige"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/bule_cpu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_cpu"
+                            android:gravity="center"
+                            android:text="@string/cpu"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_gpu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_gpu"
+                            android:gravity="center"
+                            android:text="@string/gpu"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_ram"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_ram"
+                            android:gravity="center"
+                            android:text="@string/ram"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/bule_rom"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_rom"
+                            android:gravity="center"
+                            android:text="@string/rom"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_cpu_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_gpu_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_ram_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/blue_rom_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
-
             </LinearLayout>
 
-        </LinearLayout>
-    </ScrollView>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="40dp"
-        >
-        <Button
-            android:id="@+id/blue_start_test"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/button_bac"
-            android:text="@string/starttest"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            />
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/blue_start_test"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_bac"
+        android:text="@string/starttest"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
