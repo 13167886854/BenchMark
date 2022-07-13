@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -33,6 +34,8 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
 
     private ImageView juti_img;
     private TextView juti_text,juti_item;
+
+    private LinearLayout mHeadScore;
 
     private FragmentManager fragmentManager;
 
@@ -63,6 +66,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         back_ceping=findViewById(R.id.juti_back_ceping);
         next_zhibiao=findViewById(R.id.juti_next_ceping);
 
+        mHeadScore = findViewById(R.id.detail_monitor_head_score);
 
         juti_img=findViewById(R.id.juti_image);
         juti_item=findViewById(R.id.juti_item);
@@ -118,12 +122,14 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 break ;
             }
             case CacheConst.KEY_CPU_INFO: {
+                mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 data.add(new JuTiData("cpu名称", CacheUtil.getString(CacheConst.KEY_CPU_NAME)));
                 data.add(new JuTiData("cpu核数",CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
                 break ;
             }
             case CacheConst.KEY_GPU_INFO: {
+                mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 data.add(new JuTiData("gpu供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
                 data.add(new JuTiData("gpu渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
@@ -131,6 +137,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 break;
             }
             case CacheConst.KEY_ROM_INFO: {
+                mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 data.add(new JuTiData("可用内存",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_STORAGE) + "GB"));
                 data.add(new JuTiData("总内存",CacheUtil.getFloat(CacheConst.KEY_TOTAL_STORAGE) + "GB"));
@@ -138,6 +145,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
 
             }
             case CacheConst.KEY_RAM_INFO: {
+                mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 data.add(new JuTiData("可用硬盘",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_RAM) + "GB"));
                 data.add(new JuTiData("总硬盘",CacheUtil.getFloat(CacheConst.KEY_TOTAL_RAM) + "GB"));

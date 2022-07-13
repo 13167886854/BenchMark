@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class PhoneFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
+public class PhoneFragment extends Fragment implements View.OnClickListener {
     private Button blue_liuchang, blue_wending, blue_chukong, blue_yinhua;
 
     private List<CepingData> data;
@@ -55,7 +55,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
 
     private Button phone_start_ceping;
 
-    private RadioGroup radioGroup;
+    private Button kunpeng_phone, huawei_data_phone, redfingure_phone, yiodng_phone, wangyiyun_phone;
+
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
 
@@ -69,6 +70,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_fragment, container, false);
         initview(view);
+        kunpeng_phone.setOnClickListener(this);
+        huawei_data_phone.setOnClickListener(this);
+        redfingure_phone.setOnClickListener(this);
+        yiodng_phone.setOnClickListener(this);
+        wangyiyun_phone.setOnClickListener(this);
         blue_liuchang.setOnClickListener(this::onClick);
         blue_wending.setOnClickListener(this::onClick);
         blue_chukong.setOnClickListener(this::onClick);
@@ -81,7 +87,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
         phone_select_all.setOnClickListener(this::onClick);
 //        phone_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
 
-        radioGroup.setOnCheckedChangeListener(this::onCheckedChanged);
         phone_start_ceping.setOnClickListener(v -> {
             if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
@@ -140,7 +145,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
 
         phone_start_ceping = view.findViewById(R.id.blue_start_test);
 
-        radioGroup = view.findViewById(R.id.select_phone);
 
         kunpeng_phone = view.findViewById(R.id.kunpeng_phone);
         huawei_data_phone = view.findViewById(R.id.kunpeng_data_phone);
@@ -156,6 +160,26 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.kunpeng_phone: {
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+                break;
+            }
+            case R.id.kunpeng_data_phone: {
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
+                break;
+            }
+            case R.id.redfigure_phone: {
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
+                break;
+            }
+            case R.id.yidong_phone: {
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
+                break;
+            }
+            case R.id.wangyiyun_phone: {
+                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
+                break;
+            }
             case R.id.bule_liuchangxing: {
 
                 boolean checked = blue_liuchang_cheak.isChecked();
@@ -358,49 +382,5 @@ public class PhoneFragment extends Fragment implements View.OnClickListener, Rad
         }
     }
 
-    private RadioButton kunpeng_phone, huawei_data_phone, redfingure_phone, yiodng_phone, wangyiyun_phone;
-
-    @SuppressLint({"NonConstantResourceId", "ResourceAsColor"})
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.kunpeng_phone: {
-                if (!kunpeng_phone.isChecked()) {
-                    kunpeng_phone.setTextColor(R.color.select);
-                }
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
-                break;
-            }
-            case R.id.kunpeng_data_phone: {
-                if (!huawei_data_phone.isChecked()) {
-                    huawei_data_phone.setTextColor(R.color.select);
-                }
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
-                break;
-            }
-            case R.id.redfigure_phone: {
-                if (!redfingure_phone.isChecked()) {
-                    redfingure_phone.setTextColor(R.color.select);
-                }
-
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
-                break;
-            }
-            case R.id.yidong_phone: {
-                if (!yiodng_phone.isChecked()) {
-                    yiodng_phone.setTextColor(R.color.select);
-                }
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
-                break;
-            }
-            case R.id.wangyiyun_phone: {
-                if (!wangyiyun_phone.isChecked()) {
-                    wangyiyun_phone.setTextColor(R.color.select);
-                }
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
-                break;
-            }
-        }
-    }
 
 }

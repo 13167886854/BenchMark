@@ -3,21 +3,28 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/background_select.xml" value="0.1935" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/button_bac.xml" value="0.1885" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/ic_main_cloud_game.xml" value="0.176" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/ic_main_cloud_game_normal.xml" value="0.1935" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/ic_main_cloud_game_selected.xml" value="0.1935" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/ic_main_cloud_phone.xml" value="0.1935" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/ic_main_cloud_phone_normal.xml" value="0.1935" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/selector_main_radio_btn_home.xml" value="0.1885" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/selector_main_radio_btn_notify.xml" value="0.1885" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/drawable/selector_main_radio_btn_setting.xml" value="0.1885" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/access_popwindow.xml" value="0.264" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/activity_ceping.xml" value="0.4" />
-        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/activity_start.xml" value="0.2006340579710145" />
-        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/ceping_item.xml" value="0.4" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/ceping_item.xml" value="0.264" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/ceping_xiangxi.xml" value="0.2006340579710145" />
-        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/game_fragment.xml" value="0.2006340579710145" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/game_fragment.xml" value="0.264" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/juti_item.xml" value="0.4088541666666667" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/juti_neicun_fragment.xml" value="0.2006340579710145" />
-        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/phone_fragment.xml" value="0.2006340579710145" />
-        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/zhuye_fragment.xml" value="0.2" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/juti_yingpan_fragment.xml" value="0.4088541666666667" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/phone_fragment.xml" value="0.264" />
+        <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/layout/zhuye_fragment.xml" value="0.264" />
         <entry key="..\:/Android/AndroidJavaProjects/BenchMark2/app/src/main/res/xml/accessible_service_redfinger_config.xml" value="0.4088541666666667" />
         <entry key="..\:/BenchMark2/app/src/main/res/drawable/background_select.xml" value="0.136" />
         <entry key="..\:/BenchMark2/app/src/main/res/drawable/button_bac.xml" value="0.152" />

@@ -16,6 +16,7 @@ import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.JutiZhibiaoActivity;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
+import com.example.benchmark.utils.CacheConst;
 
 import java.util.List;
 
@@ -43,10 +44,11 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         recyclerViewHolder.ceping_image.setImageResource(cepingData.getCepingImage());
         recyclerViewHolder.ceping_item.setText(cepingData.getCepingItem());
         recyclerViewHolder.ceping_text.setText(cepingData.getCepingText());
-        recyclerViewHolder.ceping_grade.setText(String.valueOf(cepingData.getGrade()));
-
-        //点击事件
-        CePingActivity cePingActivity = new CePingActivity();
+        if (!CacheConst.KEY_CPU_INFO.equals(cepingData.getCepingItem())
+                && !CacheConst.KEY_GPU_INFO.equals(cepingData.getCepingItem())
+                && !CacheConst.KEY_RAM_INFO.equals(cepingData.getCepingItem())
+                && !CacheConst.KEY_ROM_INFO.equals(cepingData.getCepingItem()))
+            recyclerViewHolder.ceping_grade.setText(String.valueOf(cepingData.getGrade()));
 
         recyclerViewHolder.itemView.setOnClickListener(v -> {
             int p= recyclerViewHolder.getAdapterPosition();
