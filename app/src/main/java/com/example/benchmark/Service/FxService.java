@@ -154,13 +154,14 @@ public class FxService extends Service {
                     //点击按钮进行截屏bitmap形式
                     Bitmap bitmap = screenShot();
                     String result = CodeUtils.parseCode(bitmap);
+                    Log.e("QT-1", result);
                     if ("{}".equals(result)) {
                         // 空数据，点击无效
                         return true;
                     }
                     JSONObject JsonData = JSON.parseObject(result);
                     // 信息获取
-                    Log.e("QT", JsonData.toJSONString());
+                    Log.e("QT-2", JsonData.toJSONString());
                     ScoreUtil.calcAndSaveCPUScores(
                             (String)JsonData.get("cpuName"),
                             getIntDataFromJson(JsonData, "cpuCores")
@@ -191,10 +192,12 @@ public class FxService extends Service {
                             getFloatDataFromJson(JsonData, "responseTime"),
                             getFloatDataFromJson(JsonData, "averageResponseTime")
                     );
-                    ScoreUtil.calcAndSaveSoundFrameScores(
-                            (String)JsonData.get("resolution"),
-                            getFloatDataFromJson(JsonData, "maxdifferencevalue")
-                    );
+                    if (JsonData.get("resolution") != null) {
+                        ScoreUtil.calcAndSaveSoundFrameScores(
+                                (String)JsonData.get("resolution"),
+                                getFloatDataFromJson(JsonData, "maxdifferencevalue")
+                        );
+                    }
                     CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, true);
                     Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
                     ServiceUtil.backToCePingActivity(FxService.this);
@@ -282,7 +285,7 @@ public class FxService extends Service {
     private float getFloatDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         if (target == null) return 0F;
-        else return Float.parseFloat(target.toString());
+        else return Float.parseFloat(target.toString().split("吉")[0]);
     }
 
     private int getIntDataFromJson(JSONObject jsonObject, String name) {

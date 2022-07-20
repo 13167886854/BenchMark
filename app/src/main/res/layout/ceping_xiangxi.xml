@@ -32,12 +32,12 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/detail_monitor_head_score"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
         android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/detail_monitor_head_score"
         android:padding="15dp"
         android:layout_width="match_parent"
         android:gravity="center"
