@@ -35,6 +35,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private ImageButton ceshi_fanhui;
     private RecyclerView recyclerView;
     private TextView cepingtv, ceping_phone_name;
+    private TextView mMonitorProgress;
     private List<CepingData> ceping_data = new ArrayList<>();
     private CePingAdapter adapter;
     private String checked_plat;
@@ -68,6 +69,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         recyclerView = findViewById(R.id.ceping_rv);
         cepingtv = findViewById(R.id.ceping_tv);
         ceping_phone_name = findViewById(R.id.ceping_phone_name);
+        mMonitorProgress = findViewById(R.id.ceping_jindu);
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -93,7 +95,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isCheckGPU = intent.getBooleanExtra(CacheConst.KEY_GPU_INFO, false);
         isCheckRAM = intent.getBooleanExtra(CacheConst.KEY_RAM_INFO, false);
         isCheckROM = intent.getBooleanExtra(CacheConst.KEY_ROM_INFO, false);
-        isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame;
+        isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         updateListData();
 
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {

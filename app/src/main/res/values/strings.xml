@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">云手机BenchMark</string>
+    <string name="app_name">云手机测评</string>
     <string name="ceping">云平台测评</string>
     <string name="version_1_0">Version 1.0</string>
     <string name="yunshouji">云手机</string>
@@ -34,11 +34,11 @@
     <string name="yonghuxieyi">用户协议</string>
     <string name="yijianfankui">意见反馈</string>
     <string name="cepingxinix">测评中. . .</string>
-    <string name="jindu">98</string>
+    <string name="jindu">100</string>
     <string name="tingzhiceshi">停止测试</string>
     <string name="yunshoujipingtai">云手机平台</string>
     <string name="percetn">%</string>
-    <string name="now_ceping">正在测评该信息,请稍等。。。</string>
+    <string name="now_ceping">已完成测评该信息</string>
     <string name="xiangxixinxi">通过多个不同分辨率的视频，测试出平均帧率，帧抖动率，Jank等参数评估流畅性性能</string>
     <string name="cepingfenshu">98</string>
     <string name="jutizhibiao">具体指标测试结果</string>

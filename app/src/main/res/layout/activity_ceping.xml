@@ -83,12 +83,12 @@
 
             <TextView
                 android:id="@+id/now_ceping"
-                android:gravity="center"
-                android:layout_below="@+id/layout_jindu"
-                android:text="@string/now_ceping"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_jindu"
+                android:gravity="center"
+                android:text="@string/now_ceping"
+                android:textColor="@color/black" />
         </RelativeLayout>
 
     </LinearLayout>
