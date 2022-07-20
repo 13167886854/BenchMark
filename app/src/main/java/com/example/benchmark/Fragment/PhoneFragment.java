@@ -2,6 +2,7 @@ package com.example.benchmark.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,28 +157,82 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    public void initPhoneBtn(){
+        Drawable drawable;
+        Button btn;
+        //移动云
+        btn = (Button) getActivity().findViewById(R.id.yidong_phone);
+        drawable = getResources().getDrawable(R.drawable.yidong_phone_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        //网易
+        btn = (Button) getActivity().findViewById(R.id.wangyiyun_phone);
+        drawable = getResources().getDrawable(R.drawable.wangyi_phone_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        //华为
+        btn = (Button) getActivity().findViewById(R.id.kunpeng_phone);
+        drawable = getResources().getDrawable(R.drawable.kunpeng_phone_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        btn = (Button) getActivity().findViewById(R.id.kunpeng_data_phone);
+        drawable = getResources().getDrawable(R.drawable.kunpeng_phone_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        //红手指
+        btn = (Button) getActivity().findViewById(R.id.redfigure_phone);
+        drawable = getResources().getDrawable(R.drawable.redfingure_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.kunpeng_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+                initPhoneBtn();
+                Button btn = (Button) v;
+                Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.kunpeng_data_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
+                initPhoneBtn();
+                Button btn = (Button) v;
+                Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.redfigure_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
+                initPhoneBtn();
+                Button btn = (Button) v;
+                Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.yidong_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
+                initPhoneBtn();
+                Button btn = (Button) v;
+                Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.wangyiyun_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
+                initPhoneBtn();
+                Button btn = (Button) v;
+                Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.bule_liuchangxing: {
@@ -381,6 +436,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
 
 
 }

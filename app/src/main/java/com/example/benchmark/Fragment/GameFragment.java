@@ -2,6 +2,7 @@ package com.example.benchmark.Fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,6 +157,27 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
     }
 
+
+    public void initGameBtn(){
+        Drawable drawable;
+        Button btn;
+        //腾讯
+        btn = (Button) getActivity().findViewById(R.id.tengxun_game);
+        drawable = getResources().getDrawable(R.drawable.tengxunxianfeng_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        //咪咕
+        btn = (Button) getActivity().findViewById(R.id.migu_game);
+        drawable = getResources().getDrawable(R.drawable.migukuaiyou_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        //网易
+        btn = (Button) getActivity().findViewById(R.id.wangyi_game);
+        drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi_dark);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
@@ -283,14 +305,29 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         switch (checkedId){
             case R.id.tengxun_game:{
                 cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_Tencent_GAME);
+                initGameBtn();
+                Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
+                Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.migu_game:{
                 cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_MI_GU_GAME);
+                initGameBtn();
+                Button btn = (Button) getActivity().findViewById(R.id.migu_game);
+                Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
             case R.id.wangyi_game:{
                 cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME);
+                initGameBtn();
+                Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
+                Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
         }

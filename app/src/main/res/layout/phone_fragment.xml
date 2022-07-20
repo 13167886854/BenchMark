@@ -44,7 +44,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:drawableTop="@drawable/kunpeng_phone"
+                        android:drawableTop="@drawable/kunpeng_phone_dark"
                         android:gravity="center"
                         android:text="@string/huawei_instrument_phone"
                         android:textSize="12sp" />
@@ -57,7 +57,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:button="@null"
-                        android:drawableTop="@drawable/kunpeng_phone"
+                        android:drawableTop="@drawable/kunpeng_phone_dark"
                         android:gravity="center"
                         android:text="@string/huawei_data_phone"
                         android:textSize="12sp" />
@@ -70,7 +70,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:button="@null"
-                        android:drawableTop="@drawable/redfingure"
+                        android:drawableTop="@drawable/redfingure_dark"
                         android:gravity="center"
                         android:text="@string/redfingure_phone"
                         android:textSize="12sp" />
@@ -90,7 +90,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:button="@null"
-                        android:drawableTop="@drawable/yidong_phone"
+                        android:drawableTop="@drawable/yidong_phone_dark"
                         android:gravity="center"
                         android:text="@string/yidongphone"
                         android:textSize="12sp" />
@@ -104,7 +104,7 @@
                         android:layout_weight="1"
                         android:background="@null"
                         android:button="@null"
-                        android:drawableTop="@drawable/wangyi_phone"
+                        android:drawableTop="@drawable/wangyi_phone_dark"
                         android:gravity="center"
                         android:text="@string/wangyiyunphone"
                         android:textSize="12sp" />
