@@ -1,23 +1,37 @@
 package com.example.benchmark.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.provider.Settings;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.GameSmoothTestService;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.Service.StabilityMonitorService;
@@ -39,9 +53,19 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private List<CepingData> ceping_data = new ArrayList<>();
     private CePingAdapter adapter;
     private String checked_plat;
+    private String platform_kind;
 
     private boolean isCheckStability, isCheckFluency, isCheckTouch, isCheckSoundFrame,
             isCheckCPU, isCheckGPU, isCheckROM, isCheckRAM, isHaveOtherPerformance;
+
+
+    private ServiceConnection connection;
+    private MediaProjectionManager projectionManager;
+    private MediaProjection mediaProjection;
+    private GameSmoothTestService gameSmoothService;
+    private static final int RECORD_REQUEST_CODE = 101;
+    private static final int STORAGE_REQUEST_CODE = 102;
+    private static final int AUDIO_REQUEST_CODE = 103;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +74,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
         initView();
         initData();
+
         ceshi_fanhui.setOnClickListener(this::onClick);
         adapter = new CePingAdapter(ceping_data, (data) -> {
             Intent intent = new Intent(this, JutiZhibiaoActivity.class);
@@ -86,6 +111,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         Intent intent = getIntent();
         checked_plat = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         ceping_phone_name.setText(checked_plat);
+        platform_kind = intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND);
 
         isCheckStability = intent.getBooleanExtra(CacheConst.KEY_STABILITY_INFO, false);
         isCheckFluency = intent.getBooleanExtra(CacheConst.KEY_FLUENCY_INFO, false);
@@ -98,11 +124,43 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         updateListData();
 
+        Log.d("TWT", "platform_kind: "+platform_kind);
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {
             startStabilityMonitorService();
         }
-        if (!isCheckStability && isHaveOtherPerformance) {
+        if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
             startFxService();
+        }
+        //云游戏流畅性测试
+        if(platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckFluency
+            //&& isFluencyUntested
+        ){
+            //Toast.makeText(this,"准备测试云游戏流畅性！",Toast.LENGTH_SHORT).show();
+            //开启流畅性测试悬浮窗
+            if(!Settings.canDrawOverlays(CePingActivity.this)){
+                Toast.makeText(CePingActivity.this, "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
+                Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+                Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getPackageName()));
+                //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                this.startActivity(intentToFloatPermission);
+                //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
+            }else{
+                startGameSmoothService();
+                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+                    Log.d("TWT", "TEST: "+getString(R.string.pkg_name_tencent_gamer));
+                    //ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+                }
+
+
+//                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+//                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+//                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+//                }
+            }
+
         }
     }
 
@@ -186,6 +244,46 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (adapter != null) adapter.notifyItemRangeChanged(0, ceping_data.size());
     }
 
+    private void startGameSmoothService() {
+//        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
+//                this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+//        if (mMediaProjectionManager != null) {
+//            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_GAME_SMOOTH);
+//        }
+        Log.d("TWT", "startGameSmoothService: sssss");
+        connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName className, IBinder service) {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                GameSmoothTestService.GameSmoothBinder binder = (GameSmoothTestService.GameSmoothBinder) service;
+                gameSmoothService = binder.getGameSmoothService();
+                gameSmoothService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+                //start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName arg0) {
+            }
+        };
+        //录屏权限申请
+        if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_REQUEST_CODE);
+        }
+        Intent intent = new Intent(this, GameSmoothTestService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
+
+        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        Intent captureIntent = projectionManager.createScreenCaptureIntent();
+        startActivityForResult(captureIntent, RECORD_REQUEST_CODE);
+    }
+
     private void startStabilityMonitorService() {
         // 需要申请录屏权限
         MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
@@ -230,6 +328,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checked_plat)) {
                 ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             }
+        }else if (requestCode == RECORD_REQUEST_CODE && resultCode == RESULT_OK) {
+            mediaProjection = projectionManager.getMediaProjection(resultCode, data);
+            gameSmoothService.setMediaProject(mediaProjection);
         }
     }
 

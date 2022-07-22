@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <permission-group android:name="${applicationId}.andpermission" />
     <queries>
@@ -59,6 +62,9 @@
             android:name=".Activity.MainActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".Activity.TestSMActivity"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".Activity.CePingActivity"
             android:launchMode="singleTask" />
         <activity
@@ -66,6 +72,11 @@
             android:launchMode="singleTask" />
         <service
             android:name=".Service.FxService"
+            android:foregroundServiceType="mediaProjection"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".Service.GameSmoothTestService"
             android:foregroundServiceType="mediaProjection"
             android:enabled="true"
             android:exported="true" />

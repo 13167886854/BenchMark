@@ -24,6 +24,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,10 @@ public class FxService extends Service {
     WindowManager mWindowManager;
     private Context mContext;
     TextView mFloatView;
+    LinearLayout btnMenu;
+    Button btnToPrCode;
+    Button btnToTap;
+    Button btnToBack;
     private long startTime;
     private long endTime;
     private int statusBarHeight;
@@ -109,6 +114,9 @@ public class FxService extends Service {
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
+        //LinearLayout btnMenu = (LinearLayout) inflater.inflate(R.id.btnMenu,null);
+        btnMenu = mFloatLayout.findViewById(R.id.btnMenu);
+        btnMenu.setVisibility(View.GONE);
         mFloatView = (TextView)mFloatLayout.findViewById(R.id.textinfo);
         mWindowManager.addView(mFloatLayout, wmParams);
 
@@ -121,7 +129,6 @@ public class FxService extends Service {
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        //设置监听浮动窗口的触摸移动
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -150,62 +157,16 @@ public class FxService extends Service {
                 }
                 //响应点击事件
                 if (isclick) {
+                    mFloatView.setVisibility(View.GONE);
+                    btnMenu.setVisibility(View.VISIBLE);
                     //Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                     //点击按钮进行截屏bitmap形式
-                    Bitmap bitmap = screenShot();
-                    String result = CodeUtils.parseCode(bitmap);
-                    Log.e("QT-1", result);
-                    if ("{}".equals(result)) {
-                        // 空数据，点击无效
-                        return true;
-                    }
-                    JSONObject JsonData = JSON.parseObject(result);
-                    // 信息获取
-                    Log.e("QT-2", JsonData.toJSONString());
-                    ScoreUtil.calcAndSaveCPUScores(
-                            (String)JsonData.get("cpuName"),
-                            getIntDataFromJson(JsonData, "cpuCores")
-                    );
-                    ScoreUtil.calcAndSaveGPUScores(
-                            (String)JsonData.get("gpuVendor"),
-                            (String)JsonData.get("gpuRenderer"),
-                            (String)JsonData.get("gpuVersion")
-                    );
-                    ScoreUtil.calcAndSaveRAMScores(
-                            getFloatDataFromJson(JsonData, "availRam"),
-                            getFloatDataFromJson(JsonData, "totalRam")
-                    );
-                    ScoreUtil.calcAndSaveROMScores(
-                            getFloatDataFromJson(JsonData, "availStorage"),
-                            getFloatDataFromJson(JsonData, "totalStorage")
-                    );
-                    ScoreUtil.calcAndSaveFluencyScores(
-                            getFloatDataFromJson(JsonData, "avergeFPS"),
-                            getFloatDataFromJson(JsonData, "frameShakingRate"),
-                            getFloatDataFromJson(JsonData, "lowFrameRate"),
-                            getFloatDataFromJson(JsonData, "frameInterval"),
-                            getFloatDataFromJson(JsonData, "jankCount"),
-                            getFloatDataFromJson(JsonData, "stutterRate")
-                    );
-                    ScoreUtil.calcAndSaveTouchScores(
-                            getFloatDataFromJson(JsonData, "averageAccuracy"),
-                            getFloatDataFromJson(JsonData, "responseTime"),
-                            getFloatDataFromJson(JsonData, "averageResponseTime")
-                    );
-                    if (JsonData.get("resolution") != null) {
-                        ScoreUtil.calcAndSaveSoundFrameScores(
-                                (String)JsonData.get("resolution"),
-                                getFloatDataFromJson(JsonData, "maxdifferencevalue")
-                        );
-                    }
-                    CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, true);
-                    Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
-                    ServiceUtil.backToCePingActivity(FxService.this);
-                    stopSelf();
+
                 }
                 return true;
             }
-        });
+        });//设置监听浮动窗口的触摸移动
+
 
         mFloatView.setOnClickListener(new OnClickListener()
         {
@@ -216,6 +177,122 @@ public class FxService extends Service {
                 //Toast.makeText(FxService.this, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
+        btnToPrCode.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isclick=false;
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        startTime=System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        wmParams.x = (int) event.getRawX() - btnToPrCode.getMeasuredWidth()/2;
+                        wmParams.y = (int) event.getRawY() - btnToPrCode.getMeasuredHeight()-statusBarHeight;
+                        //Log.d("TWT", "onTouch: "+MainActivity.);
+                        //刷新
+                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        endTime=System.currentTimeMillis();
+                        //小于0.2秒被判断为点击
+                        if ((endTime - startTime) > 200) {
+                            isclick = false;
+                        } else {
+                            isclick = true;
+                        }
+                        break;
+                }
+                //响应点击事件
+                if (isclick) {
+                    //mFloatView.setVisibility(View.GONE);
+                    //btnMenu.setVisibility(View.VISIBLE);
+                    toCatchScreen();
+                    //点击按钮进行截屏bitmap形式
+                }
+                return true;
+            }
+        });//设置监听浮动窗口的触摸移动
+
+
+
+
+        btnToTap = btnMenu.findViewById(R.id.btnToTap);
+        btnToTap.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isclick=false;
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        startTime=System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        wmParams.x = (int) event.getRawX() - btnToTap.getMeasuredWidth()/2;
+                        wmParams.y = (int) event.getRawY() - btnToTap.getMeasuredHeight()-statusBarHeight;
+                        //Log.d("TWT", "onTouch: "+MainActivity.);
+                        //刷新
+                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        endTime=System.currentTimeMillis();
+                        //小于0.2秒被判断为点击
+                        if ((endTime - startTime) > 200) {
+                            isclick = false;
+                        } else {
+                            isclick = true;
+                        }
+                        break;
+                }
+                //响应点击事件
+                if (isclick) {
+                    //这里写开启触控服务
+                    Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        });//设置监听浮动窗口的触摸移动
+
+        btnToBack = btnMenu.findViewById(R.id.btnToBack);
+        btnToBack.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isclick=false;
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        startTime=System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth()/2;
+                        wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight()-statusBarHeight;
+                        //Log.d("TWT", "onTouch: "+MainActivity.);
+                        //刷新
+                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        endTime=System.currentTimeMillis();
+                        //小于0.2秒被判断为点击
+                        if ((endTime - startTime) > 200) {
+                            isclick = false;
+                        } else {
+                            isclick = true;
+                        }
+                        break;
+                }
+                //响应点击事件
+                if (isclick) {
+                    //这里写开启触控服务
+                    //Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
+                    btnMenu.setVisibility(View.GONE);
+                    mFloatView.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });//设置监听浮动窗口的触摸移动
     }
 
     @Override
@@ -292,6 +369,59 @@ public class FxService extends Service {
         Object target = jsonObject.getString(name);
         if (target == null) return 0;
         else return Integer.parseInt(target.toString());
+    }
+
+    private void toCatchScreen(){
+        Bitmap bitmap = screenShot();
+        String result = CodeUtils.parseCode(bitmap);
+        //Log.e("QT-1", result);
+        if ("{}".equals(result)) {
+            // 空数据，点击无效
+            return;
+        }
+        JSONObject JsonData = JSON.parseObject(result);
+        // 信息获取
+        Log.e("QT-2", JsonData.toJSONString());
+        ScoreUtil.calcAndSaveCPUScores(
+                (String)JsonData.get("cpuName"),
+                getIntDataFromJson(JsonData, "cpuCores")
+        );
+        ScoreUtil.calcAndSaveGPUScores(
+                (String)JsonData.get("gpuVendor"),
+                (String)JsonData.get("gpuRenderer"),
+                (String)JsonData.get("gpuVersion")
+        );
+        ScoreUtil.calcAndSaveRAMScores(
+                getFloatDataFromJson(JsonData, "availRam"),
+                getFloatDataFromJson(JsonData, "totalRam")
+        );
+        ScoreUtil.calcAndSaveROMScores(
+                getFloatDataFromJson(JsonData, "availStorage"),
+                getFloatDataFromJson(JsonData, "totalStorage")
+        );
+        ScoreUtil.calcAndSaveFluencyScores(
+                getFloatDataFromJson(JsonData, "avergeFPS"),
+                getFloatDataFromJson(JsonData, "frameShakingRate"),
+                getFloatDataFromJson(JsonData, "lowFrameRate"),
+                getFloatDataFromJson(JsonData, "frameInterval"),
+                getFloatDataFromJson(JsonData, "jankCount"),
+                getFloatDataFromJson(JsonData, "stutterRate")
+        );
+        ScoreUtil.calcAndSaveTouchScores(
+                getFloatDataFromJson(JsonData, "averageAccuracy"),
+                getFloatDataFromJson(JsonData, "responseTime"),
+                getFloatDataFromJson(JsonData, "averageResponseTime")
+        );
+        if (JsonData.get("resolution") != null) {
+            ScoreUtil.calcAndSaveSoundFrameScores(
+                    (String)JsonData.get("resolution"),
+                    getFloatDataFromJson(JsonData, "maxdifferencevalue")
+            );
+        }
+        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, true);
+        Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
+        ServiceUtil.backToCePingActivity(FxService.this);
+        stopSelf();
     }
 
 }
