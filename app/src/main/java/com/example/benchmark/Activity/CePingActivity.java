@@ -309,14 +309,15 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
                     .putExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, isHaveOtherPerformance)
                     .putExtra("resultCode", resultCode)
-                    .putExtra("data", data);
+                    .putExtra("data", data)
+                    .putExtra("isCheckTouch", isCheckTouch);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(service);
             } else {
                 startService(service);
             }
         } else if (requestCode == REQUEST_FX && resultCode == RESULT_OK) {
-            ServiceUtil.startFxService(this, resultCode, data);
+            ServiceUtil.startFxService(this, checked_plat, resultCode, data, isCheckTouch);
             if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checked_plat)) {
                 ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
             } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checked_plat)) {

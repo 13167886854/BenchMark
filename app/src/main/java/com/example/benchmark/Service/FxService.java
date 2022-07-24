@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.R;
-import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.CodeUtils;
@@ -49,6 +48,10 @@ public class FxService extends Service {
 
     private MediaProjectionManager mMediaProjectionManager;
     private MediaProjection mediaProjection;
+    private int resultCode;
+    private Intent data;
+    private Boolean isCheckTouch;
+    private String checkPlatform;
 
 
     private
@@ -74,7 +77,6 @@ public class FxService extends Service {
     {
         super.onCreate();
         mContext=FxService.this;
-        createFloatView();
 
     }
     @Override
@@ -250,11 +252,13 @@ public class FxService extends Service {
                 //响应点击事件
                 if (isclick) {
                     //这里写开启触控服务
-                    Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
+                    startAutoTapService();
+//                    Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
         });//设置监听浮动窗口的触摸移动
+        btnToTap.setVisibility(isCheckTouch ? View.VISIBLE : View.GONE);
 
         btnToBack = btnMenu.findViewById(R.id.btnToBack);
         btnToBack.setOnTouchListener(new OnTouchListener() {
@@ -309,14 +313,17 @@ public class FxService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int resultCode = intent.getIntExtra("code", -1);
-        Intent data = intent.getParcelableExtra("data");
+        resultCode = intent.getIntExtra("code", -1);
+        data = intent.getParcelableExtra("data");
+        isCheckTouch = intent.getBooleanExtra("isCheckTouch", false);
+        checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         mediaProjection = mMediaProjectionManager.getMediaProjection(resultCode, data);
         if (mediaProjection == null) {
             Log.e(TAG, "media projection is null");
         }
         //Bitmap bitmap = screenShot(mediaProjection);
+        createFloatView();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -407,11 +414,11 @@ public class FxService extends Service {
                 getFloatDataFromJson(JsonData, "jankCount"),
                 getFloatDataFromJson(JsonData, "stutterRate")
         );
-        ScoreUtil.calcAndSaveTouchScores(
-                getFloatDataFromJson(JsonData, "averageAccuracy"),
-                getFloatDataFromJson(JsonData, "responseTime"),
-                getFloatDataFromJson(JsonData, "averageResponseTime")
-        );
+//        ScoreUtil.calcAndSaveTouchScores(
+//                getFloatDataFromJson(JsonData, "averageAccuracy"),
+//                getFloatDataFromJson(JsonData, "responseTime"),
+//                getFloatDataFromJson(JsonData, "averageResponseTime")
+//        );
         if (JsonData.get("resolution") != null) {
             ScoreUtil.calcAndSaveSoundFrameScores(
                     (String)JsonData.get("resolution"),
@@ -422,6 +429,20 @@ public class FxService extends Service {
         Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
         ServiceUtil.backToCePingActivity(FxService.this);
         stopSelf();
+    }
+
+    private void startAutoTapService() {
+        CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, true);
+        Intent service = new Intent(this, StabilityMonitorService.class)
+                .putExtra(CacheConst.KEY_PLATFORM_NAME, checkPlatform)
+                .putExtra("resultCode", resultCode)
+                .putExtra("data", data)
+                .putExtra("isCheckTouch", isCheckTouch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(service);
+        } else {
+            startService(service);
+        }
     }
 
 }

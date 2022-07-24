@@ -65,6 +65,8 @@ public class CacheConst {
     public static final String KEY_AVERAGE_ACCURACY = "averageAccuracy";
     public static final String KEY_RESPONSE_TIME = "responseTime";
     public static final String KEY_AVERAGE_RESPONSE_TIME = "averageResponseTime";
+    public static final String KEY_AUTO_TAP_TIMES = "autoTapTimes";
+    public static final String KEY_IS_AUTO_TAP = "isAutoTap";
     // 音画质量信息
     public static final String KEY_SOUND_FRAME_INFO = "音画质量信息";
     public static final String KEY_SOUND_FRAME_SCORE = "音画质量分数";

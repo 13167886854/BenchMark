@@ -111,8 +111,8 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             case CacheConst.KEY_TOUCH_INFO: {
                 data = new ArrayList<>();
                 data.add(new JuTiData("平均正确率", ScoreUtil.getAverageAccuracy() + "%"));
-                data.add(new JuTiData("平均响应时间", ScoreUtil.getResponseTime() + "ms"));
-                data.add(new JuTiData("单点平均响应时间", ScoreUtil.getAverageResponseTime() + "ms"));
+                data.add(new JuTiData("触屏响应时延", ScoreUtil.getResponseTime() + "ms"));
+//                data.add(new JuTiData("单点平均响应时间", ScoreUtil.getAverageResponseTime() + "ms"));
                 break ;
             }
             case CacheConst.KEY_SOUND_FRAME_INFO: {
