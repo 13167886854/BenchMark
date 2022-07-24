@@ -1,5 +1,9 @@
 package com.example.benchmark.utils;
 
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * 计算分数
  */
@@ -172,14 +176,24 @@ public class ScoreUtil {
     }
 
     public static void calcAndSaveTouchScores(
-            float averageAccuracy,
-            float responseTime,
-            float averageResponseTime
+            ArrayList<Long> cloudTapTimes
     ) {
+        TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
+        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
+        float responseTime = 0f;
+        int index = 0;
+        for (String localTapTimeStr : localTapTimes) {
+            if (index < cloudTapTimes.size()) {
+                long localTapTime = Long.parseLong(localTapTimeStr);
+                responseTime += cloudTapTimes.get(index) - localTapTime;
+                index++;
+            }
+        }
+        if (cloudTapTimes.size() != 0) responseTime /= cloudTapTimes.size();
         // 保存触控体验结果
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, responseTime);
-        CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
+//        CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
         // 计算触控体验分数
         averageAccuracy /= 100;
         float averAccuracyScore = 100f * averageAccuracy / 2;
@@ -197,9 +211,9 @@ public class ScoreUtil {
         return CacheUtil.getFloat(CacheConst.KEY_RESPONSE_TIME);
     }
 
-    public static float getAverageResponseTime() {
-        return CacheUtil.getFloat(CacheConst.KEY_AVERAGE_RESPONSE_TIME);
-    }
+//    public static float getAverageResponseTime() {
+//        return CacheUtil.getFloat(CacheConst.KEY_AVERAGE_RESPONSE_TIME);
+//    }
 
     public static int getTouchScore() {
         return CacheUtil.getInt(CacheConst.KEY_TOUCH_SCORE);

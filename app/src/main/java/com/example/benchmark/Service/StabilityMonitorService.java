@@ -18,12 +18,9 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityEvent;
@@ -32,10 +29,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
 
-import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.MainActivity;
-import com.example.benchmark.Data.TestMode;
-import com.example.benchmark.Data.WenDingData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheConst;
@@ -49,6 +43,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class StabilityMonitorService extends AccessibilityService {
@@ -61,6 +57,8 @@ public class StabilityMonitorService extends AccessibilityService {
 
     private int resultCode;
     private Intent data;
+    private Boolean isCheckTouch;
+    private String checkPlatform;
 
     private IStabilityService service;
 
@@ -68,6 +66,7 @@ public class StabilityMonitorService extends AccessibilityService {
     private ImageReader mImageReader;
     private VirtualDisplay mDisplay;
     private final Queue<Pair<Bitmap, Long>> mBitmapWithTime = new LinkedList<>();
+    public final Set<String> mTapStartTimes = new TreeSet<>();
     public final ArrayList<Long> mOpenTime = new ArrayList<>();
     public final List<Long> mStartTimes = new CopyOnWriteArrayList<>();
     public final ArrayList<Long> mQuitTimes = new ArrayList<>();
@@ -86,7 +85,7 @@ public class StabilityMonitorService extends AccessibilityService {
             if (message.what == MSG_CONTINUE_MONITOR) {
                 Toast.makeText(StabilityMonitorService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-                ServiceUtil.startFxService(StabilityMonitorService.this, resultCode, data);
+                ServiceUtil.startFxService(StabilityMonitorService.this, checkPlatform, resultCode, data, isCheckTouch);
             } else if (message.what == MSG_MONITOR_OVER) {
                 Toast.makeText(StabilityMonitorService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
@@ -102,6 +101,8 @@ public class StabilityMonitorService extends AccessibilityService {
         createNotificationChannel();
         resultCode = intent.getIntExtra("resultCode", Integer.MAX_VALUE);
         data = intent.getParcelableExtra("data");
+        isCheckTouch = intent.getBooleanExtra("isCheckTouch", false);
+        checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         if (resultCode != Integer.MAX_VALUE && data != null) {
             MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)
                     getSystemService(Context.MEDIA_PROJECTION_SERVICE);
@@ -111,39 +112,37 @@ public class StabilityMonitorService extends AccessibilityService {
                     DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mImageReader.getSurface(), null, null);
         }
         isHaveOtherPerformance = intent.getBooleanExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, false);
-        String platformName = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
-//        platformName = CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME;
-        if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)) {
+        if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
             service = new RedFingerStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_game));
             service = new HuaweiCloudGameStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_e_cloud_phone));
             service = new ECloudPhoneStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
             service = new HuaweiCloudPhoneStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             service = new NetEaseCloudPhoneStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
             service = new TencentGamerStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
             service = new MiGuPlayStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(platformName)) {
+        } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             service = new NetEaseCloudGameStabilityService(this);
         } else {
             service = new DefaultStabilityService();
         }
         if (!mCaptureScreenThread.isAlive() && !mDealBitmapThread.isAlive() && (
-                CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(platformName)
-                        || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(platformName)
-                        || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(platformName)
+                CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checkPlatform)
+                        || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
+                        || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform)
         )) {
             mCaptureScreenThread.start();
             mDealBitmapThread.start();
@@ -153,6 +152,11 @@ public class StabilityMonitorService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (service == null) return;
+        if (CacheUtil.getBoolean(CacheConst.KEY_IS_AUTO_TAP)) {
+            service = new AutoTapAccessibilityService(this);
+            CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, false);
+        }
         if (service.isFinished()) {
             if (!isDealResult) dealWithResult();
             return;
@@ -227,6 +231,10 @@ public class StabilityMonitorService extends AccessibilityService {
 
     private void dealWithResult() {
         isDealResult = true;
+        if (CacheUtil.getBoolean(CacheConst.KEY_IS_AUTO_TAP)) {
+            CacheUtil.put(CacheConst.KEY_AUTO_TAP_TIMES, mTapStartTimes);
+            return;
+        }
         stopCaptureScreen();
         stopDealBitmap();
         float startSuccessRate = service.getStartSuccessRate();

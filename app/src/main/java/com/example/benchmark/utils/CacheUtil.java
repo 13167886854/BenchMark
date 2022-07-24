@@ -3,6 +3,9 @@ package com.example.benchmark.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 public class CacheUtil {
     private static SharedPreferences mSp;
     private static SharedPreferences.Editor mEditor;
@@ -26,6 +29,10 @@ public class CacheUtil {
 
     public static void put(String key, boolean value) {
         mEditor.putBoolean(key, value).apply();
+    }
+
+    public static void put(String key, Set<String> value) {
+        mEditor.putStringSet(key, value).apply();
     }
 
     public static String getString(String key, String defValue) {
@@ -58,6 +65,10 @@ public class CacheUtil {
 
     public static boolean getBoolean(String key) {
         return mSp.getBoolean(key, false);
+    }
+
+    public static Set<String> getSet(String key) {
+        return mSp.getStringSet(key, new TreeSet<>());
     }
 
 }

@@ -93,7 +93,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
-            if(blue_wending_cheak.isChecked()){
+            if(blue_wending_cheak.isChecked() || blue_chukong_cheak.isChecked()) {
                 if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
                         || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
