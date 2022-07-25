@@ -31,9 +31,9 @@ public class AutoTapAccessibilityService implements IStabilityService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
         if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 2000L) return;
         mLastTapTime = System.currentTimeMillis();
-        //AccessibilityUtil.tap(service, screenWidth / 2 - 100, screenHeight / 2 - 100,
+        AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
         // 515  783
-        AccessibilityUtil.tap(service, 475, 1278,
+        //AccessibilityUtil.tap(service, 475, 1278,
         //AccessibilityUtil.tap(service, 514, 782,
                 new AccessibilityCallback() {
                     @Override

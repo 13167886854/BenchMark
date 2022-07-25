@@ -157,10 +157,10 @@ public class StabilityMonitorService extends AccessibilityService {
             service = new AutoTapAccessibilityService(this);
             CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, false);
         }
-        if (service.isFinished()) {
-            if (!isDealResult) dealWithResult();
-            return;
-        }
+//        if (service.isFinished()) {
+//            if (!isDealResult) dealWithResult();
+//            return;
+//        }
         service.onMonitor();
     }
 

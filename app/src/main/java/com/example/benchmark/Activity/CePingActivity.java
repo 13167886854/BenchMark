@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.ECloudPhoneStabilityService;
 import com.example.benchmark.Service.GameSmoothTestService;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheUtil;
@@ -315,29 +316,36 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }
         } else if (requestCode == REQUEST_FX && resultCode == RESULT_OK) {
             ServiceUtil.startFxService(this, checked_plat, resultCode, data, isCheckTouch);
-            if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
-            } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_game));
-            } else if (CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_e_cloud_phone));
-            } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
-            } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+            try{
+                if (CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_red_finger_game));
+                } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_game));
+                } else if (CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_e_cloud_phone));
+                } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
+                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+                }
+            }catch (Exception e){
+                Log.e("TWT", "ERROR:"+e.toString() );
             }
         }else if (requestCode == RECORD_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.e("TWT", "onActivityResult: 123111111111111111111" );
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameSmoothService.setMediaProject(mediaProjection);
-            if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
-            } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
-            } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
-                ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+            try{
+                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+                }
+            }catch (Exception e){
+                Log.e("TWT", "ERROR:"+e.toString() );
             }
-
         }
     }
 
