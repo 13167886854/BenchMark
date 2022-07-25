@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
@@ -73,29 +74,27 @@ public class FxService extends Service {
     private static final String TAG = "FxService";
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
-        mContext=FxService.this;
+        mContext = FxService.this;
 
     }
+
     @Override
-    public IBinder onBind(Intent intent)
-    {
+    public IBinder onBind(Intent intent) {
         return null;
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void createFloatView()
-    {
+    private void createFloatView() {
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         //设置window type
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
-        }else{
-            wmParams.type= LayoutParams.TYPE_TOAST;
+        } else {
+            wmParams.type = LayoutParams.TYPE_TOAST;
         }
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
@@ -119,7 +118,7 @@ public class FxService extends Service {
         //LinearLayout btnMenu = (LinearLayout) inflater.inflate(R.id.btnMenu,null);
         btnMenu = mFloatLayout.findViewById(R.id.btnMenu);
         btnMenu.setVisibility(View.GONE);
-        mFloatView = (TextView)mFloatLayout.findViewById(R.id.textinfo);
+        mFloatView = (TextView) mFloatLayout.findViewById(R.id.textinfo);
         mWindowManager.addView(mFloatLayout, wmParams);
 
         //获取状态栏的高度
@@ -134,21 +133,21 @@ public class FxService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight()/2-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -170,12 +169,10 @@ public class FxService extends Service {
         });//设置监听浮动窗口的触摸移动
 
 
-        mFloatView.setOnClickListener(new OnClickListener()
-        {
+        mFloatView.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 //Toast.makeText(FxService.this, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
@@ -185,21 +182,21 @@ public class FxService extends Service {
         btnToPrCode.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - btnToPrCode.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - btnToPrCode.getMeasuredHeight()-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - btnToPrCode.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - btnToPrCode.getMeasuredHeight() - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -220,27 +217,25 @@ public class FxService extends Service {
         });//设置监听浮动窗口的触摸移动
 
 
-
-
         btnToTap = btnMenu.findViewById(R.id.btnToTap);
         btnToTap.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - btnToTap.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - btnToTap.getMeasuredHeight()-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - btnToTap.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - btnToTap.getMeasuredHeight() - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -264,21 +259,21 @@ public class FxService extends Service {
         btnToBack.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight()-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight() - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -300,11 +295,9 @@ public class FxService extends Service {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-        if(mFloatLayout != null)
-        {
+        if (mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
         }
         mediaProjection.stop();
@@ -327,11 +320,11 @@ public class FxService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public Bitmap screenShot(){
+    public Bitmap screenShot() {
         Objects.requireNonNull(mediaProjection);
         @SuppressLint("WrongConstant")
         ImageReader imageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 60);
-        VirtualDisplay virtualDisplay = mediaProjection.createVirtualDisplay("screen", screenWidth, screenHeight, 1, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,imageReader.getSurface(), null, null);
+        VirtualDisplay virtualDisplay = mediaProjection.createVirtualDisplay("screen", screenWidth, screenHeight, 1, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, imageReader.getSurface(), null, null);
         SystemClock.sleep(1000);
         //取最新的图片
         Image image = imageReader.acquireLatestImage();
@@ -353,7 +346,7 @@ public class FxService extends Service {
         int pixelStride = planes[0].getPixelStride();
         int rowStride = planes[0].getRowStride();
         int rowPadding = rowStride - pixelStride * width;
-        Bitmap bitmap = Bitmap.createBitmap(width+ rowPadding / pixelStride , height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
         //截取图片
         // Bitmap cutBitmap = Bitmap.createBitmap(bitmap,0,0,width/2,height/2);
@@ -378,7 +371,15 @@ public class FxService extends Service {
         else return Integer.parseInt(target.toString());
     }
 
-    private void toCatchScreen(){
+    private JSONArray getListFromJson(JSONObject jsonObject, String name) {
+        Object target = jsonObject.getString(name);
+        Log.d("getIntDataFromJson", "getIntDataFromJson: ==>" + target);
+        Log.d("getIntDataFromJson", "getIntDataFromJson: ==>" + jsonObject.get("endTimeList"));
+        if (target == null) return null;
+        else return JSON.parseArray(String.valueOf(target));
+    }
+
+    private void toCatchScreen() {
         Bitmap bitmap = screenShot();
         String result = CodeUtils.parseCode(bitmap);
         //Log.e("QT-1", result);
@@ -390,13 +391,13 @@ public class FxService extends Service {
         // 信息获取
         Log.e("QT-2", JsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
-                (String)JsonData.get("cpuName"),
+                (String) JsonData.get("cpuName"),
                 getIntDataFromJson(JsonData, "cpuCores")
         );
         ScoreUtil.calcAndSaveGPUScores(
-                (String)JsonData.get("gpuVendor"),
-                (String)JsonData.get("gpuRenderer"),
-                (String)JsonData.get("gpuVersion")
+                (String) JsonData.get("gpuVendor"),
+                (String) JsonData.get("gpuRenderer"),
+                (String) JsonData.get("gpuVersion")
         );
         ScoreUtil.calcAndSaveRAMScores(
                 getFloatDataFromJson(JsonData, "availRam"),
@@ -414,14 +415,21 @@ public class FxService extends Service {
                 getFloatDataFromJson(JsonData, "jankCount"),
                 getFloatDataFromJson(JsonData, "stutterRate")
         );
-//        ScoreUtil.calcAndSaveTouchScores(
-//                getFloatDataFromJson(JsonData, "averageAccuracy"),
-//                getFloatDataFromJson(JsonData, "responseTime"),
-//                getFloatDataFromJson(JsonData, "averageResponseTime")
-//        );
+
+        //ScoreUtil.calcAndSaveTouchScores(
+        //getFloatDataFromJson(JsonData, "averageAccuracy"),
+        //getFloatDataFromJson(JsonData, "responseTime"),
+        //getFloatDataFromJson(JsonData, "averageResponseTime")
+        //);
+
+        getListFromJson(JsonData, "cloudTapTimes1");
+
+
+
+
         if (JsonData.get("resolution") != null) {
             ScoreUtil.calcAndSaveSoundFrameScores(
-                    (String)JsonData.get("resolution"),
+                    (String) JsonData.get("resolution"),
                     getFloatDataFromJson(JsonData, "maxdifferencevalue")
             );
         }
