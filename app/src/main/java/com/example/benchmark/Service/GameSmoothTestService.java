@@ -32,6 +32,8 @@ import androidx.annotation.NonNull;
 
 import com.example.benchmark.Activity.TestSMActivity;
 import com.example.benchmark.R;
+import com.example.benchmark.utils.CacheConst;
+import com.example.benchmark.utils.CacheUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +41,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameSmoothTestService extends Service {
-    private int count = 10;
     //
+    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
+    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -133,8 +136,8 @@ public class GameSmoothTestService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = 99999;
-        wmParams.y =99999;
+        wmParams.x = screenWidth - 50;
+        wmParams.y = screenHeight / 2;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;

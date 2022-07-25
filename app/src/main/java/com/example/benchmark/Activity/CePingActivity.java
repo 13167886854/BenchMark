@@ -150,8 +150,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     Log.d("TWT", "TEST: "+getString(R.string.pkg_name_tencent_gamer));
                     //ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 }
-
-
 //                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
 //                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
 //                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
@@ -250,7 +248,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 //        if (mMediaProjectionManager != null) {
 //            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_GAME_SMOOTH);
 //        }
-        Log.d("TWT", "startGameSmoothService: sssss");
+        //Log.d("TWT", "startGameSmoothService: sssss");
         connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
@@ -278,7 +276,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
         Intent intent = new Intent(this, GameSmoothTestService.class);
         bindService(intent, connection, BIND_AUTO_CREATE);
-
         projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         Intent captureIntent = projectionManager.createScreenCaptureIntent();
         startActivityForResult(captureIntent, RECORD_REQUEST_CODE);
@@ -330,8 +327,17 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                 ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             }
         }else if (requestCode == RECORD_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.e("TWT", "onActivityResult: 123111111111111111111" );
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameSmoothService.setMediaProject(mediaProjection);
+            if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+                ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+            } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+                ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+            } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
+                ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+            }
+
         }
     }
 
