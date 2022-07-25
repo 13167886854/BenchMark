@@ -40,7 +40,8 @@ public class AutoTapAccessibilityService implements IStabilityService {
                     public void onSuccess() {
                         mCurrentTapNum++;
                         service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
-                        Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
+                        CacheUtil.put(("tapTimeOnLocal"+(mCurrentTapNum-1)),System.currentTimeMillis());
+                        //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
                     }
 
                     @Override

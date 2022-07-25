@@ -23,6 +23,10 @@ public class CacheUtil {
         mEditor.putInt(key, value).apply();
     }
 
+    public static void put(String key, long value) {
+        mEditor.putLong(key, value).apply();
+    }
+
     public static void put(String key, float value) {
         mEditor.putFloat(key, value).apply();
     }
@@ -49,6 +53,14 @@ public class CacheUtil {
 
     public static int getInt(String key) {
         return mSp.getInt(key, 0);
+    }
+
+    public static long getLong(String key, long defValue) {
+        return mSp.getLong(key, defValue);
+    }
+
+    public static long getLong(String key) {
+        return mSp.getLong(key, 0);
     }
 
     public static float getFloat(String key, float defValue) {

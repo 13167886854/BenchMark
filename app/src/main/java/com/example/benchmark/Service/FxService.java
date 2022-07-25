@@ -416,6 +416,14 @@ public class FxService extends Service {
                 getFloatDataFromJson(JsonData, "stutterRate")
         );
 
+        ScoreUtil.calcAndSaveTouchScores(
+                JsonData.getLong("tapTimeOnCloud0"),
+                JsonData.getLong("tapTimeOnCloud1"),
+                JsonData.getLong("tapTimeOnCloud2"),
+                JsonData.getLong("tapTimeOnCloud3"),
+                JsonData.getLong("tapTimeOnCloud4")
+        );
+
 
         Log.d("TWT", "json: "+JsonData);
         //ScoreUtil.calcAndSaveTouchScores(

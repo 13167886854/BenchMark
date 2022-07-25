@@ -1,5 +1,7 @@
 package com.example.benchmark.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -176,31 +178,45 @@ public class ScoreUtil {
     }
 
     public static void calcAndSaveTouchScores(
-            ArrayList<Long> cloudTapTimes
+            long time0,long time1,long time2,long time3,long time4
     ) {
+
         TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
-        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
-        float responseTime = 0f;
-        int index = 0;
-        for (String localTapTimeStr : localTapTimes) {
-            if (index < cloudTapTimes.size()) {
-                long localTapTime = Long.parseLong(localTapTimeStr);
-                responseTime += cloudTapTimes.get(index) - localTapTime;
-                index++;
-            }
-        }
-        if (cloudTapTimes.size() != 0) responseTime /= cloudTapTimes.size();
-        // 保存触控体验结果
-        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
-        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, responseTime);
-//        CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
-        // 计算触控体验分数
-        averageAccuracy /= 100;
-        float averAccuracyScore = 100f * averageAccuracy / 2;
-        float responseTimeScore = responseTime < 50 ? 50 : 100f * 50 / (2 * responseTime);
-        int touchScore = (int) (averAccuracyScore + responseTimeScore);
-        // 保存触控体验分数
-        CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
+        Log.d("TWT", "localTapTimes: "+localTapTimes);
+
+        long ResponseTime0 = time0 - CacheUtil.getLong("tapTimeOnLocal0");
+        long ResponseTime1 = time1 - CacheUtil.getLong("tapTimeOnLocal1");
+        long ResponseTime2 = time2 - CacheUtil.getLong("tapTimeOnLocal2");
+        long ResponseTime3 = time3 - CacheUtil.getLong("tapTimeOnLocal3");
+        long ResponseTime4 = time4 - CacheUtil.getLong("tapTimeOnLocal4");
+
+        Log.d("TWT", "ResponseTime0: "+ResponseTime0);
+        Log.d("TWT", "ResponseTime1: "+ResponseTime1);
+        Log.d("TWT", "ResponseTime2: "+ResponseTime2);
+        Log.d("TWT", "ResponseTime3: "+ResponseTime3);
+        Log.d("TWT", "ResponseTime4: "+ResponseTime4);
+//        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
+//        float responseTime = 0f;
+//        int index = 0;
+//        for (String localTapTimeStr : localTapTimes) {
+//            if (index < cloudTapTimes.size()) {
+//                long localTapTime = Long.parseLong(localTapTimeStr);
+//                responseTime += cloudTapTimes.get(index) - localTapTime;
+//                index++;
+//            }
+//        }
+//        if (cloudTapTimes.size() != 0) responseTime /= cloudTapTimes.size();
+//        // 保存触控体验结果
+//        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
+//        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, responseTime);
+////        CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
+//        // 计算触控体验分数
+//        averageAccuracy /= 100;
+//        float averAccuracyScore = 100f * averageAccuracy / 2;
+//        float responseTimeScore = responseTime < 50 ? 50 : 100f * 50 / (2 * responseTime);
+//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+//        // 保存触控体验分数
+//        CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
     }
 
     public static float getAverageAccuracy() {
