@@ -208,11 +208,15 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
 
     private void updateProjection(int videoWidth, int videoHeight) {
         float screenRatio = (float) screenWidth / screenHeight;
-        float videoRatio = (float) videoWidth / videoHeight;
+        //float screenRatio = (float)  screenHeight/ screenWidth;
+        //float videoRatio = (float) videoWidth / videoHeight;
+        float videoRatio = (float) videoHeight / videoWidth;
         if (videoRatio > screenRatio) {
-            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -0.3f, 0.3f, -1f, 1f);
         } else
-            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio, screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+            //Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio, screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -0.8f, 0.8f, -1f, 1f);
+            //Matrix.orthoM(projectionMatrix, 0, -0.4f, 0.4f, -1f, 1f, -1f, 1f);
     }
 
     public MediaPlayer getMediaPlayer() {
