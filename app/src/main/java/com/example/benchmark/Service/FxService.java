@@ -244,11 +244,12 @@ public class FxService extends Service {
                         }
                         break;
                 }
-                //响应点击事件
+                //响应触控点击事件
                 if (isclick) {
                     //这里写开启触控服务
+                    Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "onTouch: 点击了开启触控服务");
                     startAutoTapService();
-//                    Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -282,10 +283,8 @@ public class FxService extends Service {
                         }
                         break;
                 }
-                //响应点击事件
+                //响应返回点击事件
                 if (isclick) {
-                    //这里写开启触控服务
-                    //Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
                 }
@@ -465,11 +464,12 @@ public class FxService extends Service {
                 .putExtra("isCheckTouch", isCheckTouch);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(service);
+            Log.d(TAG, "startForegroundService: ");
         } else {
             startService(service);
+            Log.d(TAG, "startService: ");
         }
     }
-
 }
 
 

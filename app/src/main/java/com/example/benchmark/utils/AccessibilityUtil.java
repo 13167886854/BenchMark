@@ -249,7 +249,7 @@ public class AccessibilityUtil {
             @Override
             public void onCompleted(GestureDescription gestureDescription) {
                 super.onCompleted(gestureDescription);
-                Log.d("Auto", "onCompleted: " + x + "---" + y);
+                //Log.d("Auto", "onCompleted: " + x + "---" + y);
                 callback.onSuccess();
             }
 

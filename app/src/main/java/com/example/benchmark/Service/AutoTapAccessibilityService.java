@@ -29,18 +29,18 @@ public class AutoTapAccessibilityService implements IStabilityService {
     @Override
     public void onMonitor() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
-        if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 2000L) return;
+        if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 1500L) return;
         mLastTapTime = System.currentTimeMillis();
         AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
-        // 515  783
-        //AccessibilityUtil.tap(service, 475, 1278,
-        //AccessibilityUtil.tap(service, 514, 782,
+                // 515  783
+                //AccessibilityUtil.tap(service, 475, 1278,
+                //AccessibilityUtil.tap(service, 514, 782,
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
                         mCurrentTapNum++;
                         service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
-                        CacheUtil.put(("tapTimeOnLocal"+(mCurrentTapNum-1)),System.currentTimeMillis());
+                        CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum - 1)), System.currentTimeMillis());
                         //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
                     }
 
