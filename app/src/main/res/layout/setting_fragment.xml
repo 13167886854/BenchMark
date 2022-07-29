@@ -11,6 +11,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,69 +30,6 @@
 
     </RelativeLayout>
     <LinearLayout
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:background="@color/black"
-        />
-    <RelativeLayout
-        android:id="@+id/set_yinsizhengce"
-        android:padding="10dp"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/yinsizhengce"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/jiantoujinru"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-    <LinearLayout
-
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:background="@color/black"
-        />
-    <RelativeLayout
-        android:id="@+id/set_yonghuxieyi"
-        android:padding="10dp"
-        android:background="@color/white"
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/yonghuxieyi"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/jiantoujinru"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
-    <LinearLayout
-
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:layout_width="match_parent"
@@ -130,4 +68,28 @@
         android:layout_height="0.3dp"
         android:background="@color/black"
         />
+    <RelativeLayout
+        android:id="@+id/set_system_update"
+        android:padding="10dp"
+        android:background="@color/white"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_text_system_update"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/jiantoujinru"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
 </LinearLayout>
