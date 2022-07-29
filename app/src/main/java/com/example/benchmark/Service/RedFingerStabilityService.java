@@ -57,7 +57,7 @@ public class RedFingerStabilityService implements IStabilityService {
             AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
                     service, NODE_ID_CLICK_VIEW, "");
             if (clickNode == null) return;
-            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1000L) return;
+            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1500L) return;
             mLastTapTime = System.currentTimeMillis();
             service.startCaptureScreen();
             AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,

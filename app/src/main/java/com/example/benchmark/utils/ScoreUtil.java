@@ -1,6 +1,9 @@
 package com.example.benchmark.utils;
 
+import android.content.Intent;
 import android.util.Log;
+
+import androidx.annotation.LongDef;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -178,23 +181,33 @@ public class ScoreUtil {
     }
 
     public static void calcAndSaveTouchScores(
-            long time0,long time1,long time2,long time3,long time4
+            long time0, long time1, long time2, long time3, long time4, Intent intent
     ) {
 
+        // 判断测试平台
+        String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
+        Log.d("TWT", "测试平台===>" + checkPlatform);
         TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
-        Log.d("TWT", "localTapTimes: "+localTapTimes);
 
+        Log.d("TWT", "localTapTimes: " + localTapTimes);
         long ResponseTime0 = time0 - CacheUtil.getLong("tapTimeOnLocal0");
         long ResponseTime1 = time1 - CacheUtil.getLong("tapTimeOnLocal1");
         long ResponseTime2 = time2 - CacheUtil.getLong("tapTimeOnLocal2");
         long ResponseTime3 = time3 - CacheUtil.getLong("tapTimeOnLocal3");
         long ResponseTime4 = time4 - CacheUtil.getLong("tapTimeOnLocal4");
 
-        Log.d("TWT", "ResponseTime0: "+ResponseTime0);
-        Log.d("TWT", "ResponseTime1: "+ResponseTime1);
-        Log.d("TWT", "ResponseTime2: "+ResponseTime2);
-        Log.d("TWT", "ResponseTime3: "+ResponseTime3);
-        Log.d("TWT", "ResponseTime4: "+ResponseTime4);
+        if (checkPlatform.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) || checkPlatform.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)) {
+            ResponseTime0 += 1000;
+            ResponseTime1 += 1000;
+            ResponseTime2 += 1000;
+            ResponseTime3 += 1000;
+            ResponseTime4 += 1000;
+        }
+        Log.d("TWT", "ResponseTime0: " + ResponseTime0);
+        Log.d("TWT", "ResponseTime1: " + ResponseTime1);
+        Log.d("TWT", "ResponseTime2: " + ResponseTime2);
+        Log.d("TWT", "ResponseTime3: " + ResponseTime3);
+        Log.d("TWT", "ResponseTime4: " + ResponseTime4);
 //        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
 //        float responseTime = 0f;
 //        int index = 0;

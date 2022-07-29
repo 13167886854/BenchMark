@@ -67,6 +67,8 @@
         <entry key="..\:/BenchMark2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.24814814814814815" />
         <entry key="..\:/BenchMark2/app/src/main/res/xml/access_service.xml" value="0.24947916666666667" />
         <entry key="..\:/BenchMark2/app/src/main/res/xml/service_xml.xml" value="0.24947916666666667" />
+        <entry key="app/src/main/res/layout/access_popwindow.xml" value="0.2861111111111111" />
+        <entry key="app/src/main/res/layout/activity_ceping.xml" value="0.3707692307692308" />
       </map>
     </option>
   </component>

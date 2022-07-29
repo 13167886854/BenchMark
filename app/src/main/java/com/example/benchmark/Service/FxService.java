@@ -53,7 +53,7 @@ public class FxService extends Service {
     private Intent data;
     private Boolean isCheckTouch;
     private String checkPlatform;
-
+    private Intent intent;
 
     private
     //定义浮动窗口布局
@@ -420,27 +420,26 @@ public class FxService extends Service {
                 JsonData.getLong("tapTimeOnCloud1"),
                 JsonData.getLong("tapTimeOnCloud2"),
                 JsonData.getLong("tapTimeOnCloud3"),
-                JsonData.getLong("tapTimeOnCloud4")
+                JsonData.getLong("tapTimeOnCloud4"),
+                intent
         );
 
 
-        Log.d("TWT", "json: "+JsonData);
+        Log.d("TWT", "json: " + JsonData);
         //ScoreUtil.calcAndSaveTouchScores(
         //getFloatDataFromJson(JsonData, "averageAccuracy"),
         //getFloatDataFromJson(JsonData, "responseTime"),
         //getFloatDataFromJson(JsonData, "averageResponseTime")
         //);
 
-        for(int i=0;i<5;i++){
+        for (int i = 0; i < 5; i++) {
             //Log.d(TAG, "toCatchScreen: ");
             //Log.d("TWT", "tapTimeOnCloud"+i+":"+JsonData.getInteger("tapTimeOnCloud"+i));
-            Log.d("TWT", "tapTimeOnCloud"+i+":"+JsonData.getLong("tapTimeOnCloud"+i));
+            Log.d("TWT", "tapTimeOnCloud" + i + ":" + JsonData.getLong("tapTimeOnCloud" + i));
         }
         //JsonData.getInteger("tapTimeOnCloud"+i);
 
         getListFromJson(JsonData, "cloudTapTimes1");
-
-
 
 
         if (JsonData.get("resolution") != null) {

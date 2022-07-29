@@ -8,6 +8,8 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
+import java.util.Date;
+
 public class AutoTapAccessibilityService implements IStabilityService {
 
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
@@ -29,7 +31,7 @@ public class AutoTapAccessibilityService implements IStabilityService {
     @Override
     public void onMonitor() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
-        if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 1500L) return;
+        if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 1500) return;
         mLastTapTime = System.currentTimeMillis();
         AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
                 // 515  783
@@ -38,6 +40,8 @@ public class AutoTapAccessibilityService implements IStabilityService {
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + System.currentTimeMillis());
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
                         mCurrentTapNum++;
                         service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
                         CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum - 1)), System.currentTimeMillis());

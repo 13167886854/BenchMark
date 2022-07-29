@@ -112,6 +112,8 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         Intent intent = getIntent();
         checked_plat = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         ceping_phone_name.setText(checked_plat);
+
+        CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checked_plat);
         platform_kind = intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND);
 
         isCheckStability = intent.getBooleanExtra(CacheConst.KEY_STABILITY_INFO, false);
