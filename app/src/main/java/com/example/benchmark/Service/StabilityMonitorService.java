@@ -152,17 +152,18 @@ public class StabilityMonitorService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        Log.e("QT", "onAccessibilityEvent");
         if (service == null){
             return;
         }
         if (CacheUtil.getBoolean(CacheConst.KEY_IS_AUTO_TAP)) {
-            service = new AutoTapAccessibilityService(this);
+            service = new AutoTapAccessibilityService(this, isGamePlatform());
             CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, false);
         }
-        //if (service.isFinished()) {
-        //    if (!isDealResult && !isCheckTouch) dealWithResult();
-        //    return;
-        //}
+        if (service.isFinished()) {
+            if (!isDealResult && !isCheckTouch) dealWithResult();
+            return;
+        }
         service.onMonitor();
     }
 
@@ -312,6 +313,12 @@ public class StabilityMonitorService extends AccessibilityService {
         Notification notification = builder.build(); // 获取构建好的Notification
         notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
         startForeground(110, notification);
+    }
+
+    private boolean isGamePlatform() {
+        return CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkPlatform)
+                || CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)
+                || CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checkPlatform);
     }
 
     public void startCaptureScreen() {

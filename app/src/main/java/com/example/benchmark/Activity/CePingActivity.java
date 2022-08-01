@@ -33,6 +33,9 @@ import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.ECloudPhoneStabilityService;
 import com.example.benchmark.Service.GameSmoothTestService;
+import com.example.benchmark.Service.MiGuPlayStabilityService;
+import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
+import com.example.benchmark.Service.TencentGamerStabilityService;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.Service.StabilityMonitorService;
@@ -131,7 +134,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {
             startStabilityMonitorService();
         }
-        if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
+        if (!isCheckStability && isHaveOtherPerformance) {
             startFxService();
         }
         //云游戏流畅性测试
@@ -328,6 +331,12 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                 } else if (CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE.equals(checked_plat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
                 } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+                } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
                 }
             }catch (Exception e){
