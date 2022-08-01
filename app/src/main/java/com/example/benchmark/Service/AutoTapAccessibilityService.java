@@ -24,15 +24,47 @@ public class AutoTapAccessibilityService implements IStabilityService {
 
     private long mLastTapTime = 0L;
 
-    public AutoTapAccessibilityService(StabilityMonitorService service) {
+    private boolean isGamePlatform;
+
+    private boolean mTapFlag = false;
+
+    public AutoTapAccessibilityService(StabilityMonitorService service, boolean isGamePlatform) {
         this.service = service;
+        this.isGamePlatform = isGamePlatform;
     }
 
     @Override
     public void onMonitor() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
+        if (isFinished()) return;
+        Log.e("QT", "Auto Tap Monitor");
         if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime <= 1500) return;
         mLastTapTime = System.currentTimeMillis();
+        if (isGamePlatform) gameAutoTap();
+        else phoneAutoTap();
+    }
+
+    private void gameAutoTap() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+        AccessibilityUtil.tap(service, 300, mTapFlag ? 200 : 300,
+                new AccessibilityCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + System.currentTimeMillis());
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
+                        mCurrentTapNum++;
+                        service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
+                        CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum - 1)), System.currentTimeMillis());
+                        mTapFlag = !mTapFlag;
+                    }
+
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+    }
+
+    private void phoneAutoTap() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
         AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
                 // 515  783
                 //AccessibilityUtil.tap(service, 475, 1278,
