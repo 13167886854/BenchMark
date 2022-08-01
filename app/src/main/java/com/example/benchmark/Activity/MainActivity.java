@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         CacheUtil.put(CacheConst.KEY_SCREEN_HEIGHT, dm.heightPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_DPI, dm.densityDpi);
 
+
     }
 
     private   void init(){

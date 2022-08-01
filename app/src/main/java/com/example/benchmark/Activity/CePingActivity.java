@@ -33,6 +33,10 @@ import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.ECloudPhoneStabilityService;
 import com.example.benchmark.Service.GameSmoothTestService;
+import com.example.benchmark.Service.RecordService;
+import com.example.benchmark.Service.MiGuPlayStabilityService;
+import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
+import com.example.benchmark.Service.TencentGamerStabilityService;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.Service.StabilityMonitorService;
@@ -60,11 +64,14 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             isCheckCPU, isCheckGPU, isCheckROM, isCheckRAM, isHaveOtherPerformance;
 
 
-    private ServiceConnection connection;
+    private ServiceConnection sm_connection;
+    private ServiceConnection touch_connection;
     private MediaProjectionManager projectionManager;
     private MediaProjection mediaProjection;
     private GameSmoothTestService gameSmoothService;
-    private static final int RECORD_REQUEST_CODE = 101;
+    private RecordService recordService;
+    private static final int RECORD_SM_REQUEST_CODE = 104;
+    private static final int RECORD_TOUCH_REQUEST_CODE = 105;
     private static final int STORAGE_REQUEST_CODE = 102;
     private static final int AUDIO_REQUEST_CODE = 103;
 
@@ -131,7 +138,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {
             startStabilityMonitorService();
         }
-        if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
+        if (!isCheckStability && isHaveOtherPerformance) {
             startFxService();
         }
         //云游戏流畅性测试
@@ -162,6 +169,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 //                }
             }
 
+        }else if(platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckTouch){
+            //开始云游戏触控体验测试。。。
+            //Log.d("TWT", "开始云游戏触控体验测试");
+            startGameTouchService();
         }
     }
 
@@ -245,14 +256,43 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (adapter != null) adapter.notifyItemRangeChanged(0, ceping_data.size());
     }
 
+
+    private void startGameTouchService(){
+        touch_connection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName className, IBinder service) {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                RecordService.RecordBinder binder = (RecordService.RecordBinder) service;
+                recordService = binder.getRecordService();
+                recordService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+                //start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName arg0) {
+            }
+        };
+        //录屏权限申请
+        if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_REQUEST_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_REQUEST_CODE);
+        }
+        Intent intent = new Intent(this, RecordService.class);
+        bindService(intent, touch_connection, BIND_AUTO_CREATE);
+        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        Intent captureIntent = projectionManager.createScreenCaptureIntent();
+        startActivityForResult(captureIntent, RECORD_TOUCH_REQUEST_CODE);
+    }
+
+
     private void startGameSmoothService() {
-//        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
-//                this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-//        if (mMediaProjectionManager != null) {
-//            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_GAME_SMOOTH);
-//        }
-        //Log.d("TWT", "startGameSmoothService: sssss");
-        connection = new ServiceConnection() {
+        sm_connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
                 DisplayMetrics metrics = new DisplayMetrics();
@@ -278,10 +318,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_REQUEST_CODE);
         }
         Intent intent = new Intent(this, GameSmoothTestService.class);
-        bindService(intent, connection, BIND_AUTO_CREATE);
+        bindService(intent, sm_connection, BIND_AUTO_CREATE);
         projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         Intent captureIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, RECORD_REQUEST_CODE);
+        startActivityForResult(captureIntent, RECORD_SM_REQUEST_CODE);
     }
 
     private void startStabilityMonitorService() {
@@ -329,11 +369,17 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
                 } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checked_plat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+                } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
+                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
                 }
             }catch (Exception e){
                 Log.e("TWT", "ERROR:"+e.toString() );
             }
-        }else if (requestCode == RECORD_REQUEST_CODE && resultCode == RESULT_OK) {
+        }else if (requestCode == RECORD_SM_REQUEST_CODE && resultCode == RESULT_OK) {
             Log.e("TWT", "onActivityResult: 123111111111111111111" );
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameSmoothService.setMediaProject(mediaProjection);
@@ -348,6 +394,22 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }catch (Exception e){
                 Log.e("TWT", "ERROR:"+e.toString() );
             }
+        }
+        else if (requestCode == RECORD_TOUCH_REQUEST_CODE && resultCode == RESULT_OK) {
+            Log.e("TWT", "onActivityResult: 123111111111111111111" );
+            mediaProjection = projectionManager.getMediaProjection(resultCode, data);
+            recordService.setMediaProject(mediaProjection);
+//            try{
+//                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
+//                } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+//                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
+//                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
+//                }
+//            }catch (Exception e){
+//                Log.e("TWT", "ERROR:"+e.toString() );
+//            }
         }
     }
 

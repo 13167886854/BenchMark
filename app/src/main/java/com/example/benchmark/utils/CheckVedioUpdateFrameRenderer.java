@@ -8,8 +8,12 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
+
+import androidx.annotation.NonNull;
 
 import com.example.benchmark.R;
 
@@ -20,13 +24,32 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class GLVideoRenderer implements GLSurfaceView.Renderer
+public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
         , SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
 
-
-    private FpsUtils fpsUtils = FpsUtils.getFpsUtils();
-
     private static final String TAG = "GLRenderer";
+
+    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
+
+    private final int TIMER_RELAX = 1;
+    private final int TIMER_WORK = 2;
+    private boolean isTimerRelaxing=false;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case TIMER_RELAX:
+                    isTimerRelaxing = true;
+                    handler.sendEmptyMessageDelayed(TIMER_WORK,800);
+                    break;
+                case TIMER_WORK:
+                    isTimerRelaxing = false;
+            }
+            super.handleMessage(msg);
+        }
+    };
+
     private Context context;
     private int aPositionLocation;
     private int programId;
@@ -60,7 +83,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
     private boolean updateSurface;
     private int screenWidth, screenHeight;
 
-    public GLVideoRenderer(Context context) {
+    public CheckVedioUpdateFrameRenderer(Context context) {
         this.context = context;
         synchronized (this) {
             updateSurface = false;
@@ -117,17 +140,6 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
 
     private void initMediaPlayer() {
         mediaPlayer = new MediaPlayer();
-//        try {
-//            AssetFileDescriptor afd = context.getAssets().openFd("big_buck_bunny.mp4");
-//            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//            String path = "http://192.168.1.254:8192";
-//            mediaPlayer.setDataSource(path);
-//            mediaPlayer.setDataSource(TextureViewMediaActivity.videoPath);
-//            mediaPlayer.setDataSource(context, Uri.parse("android.resource://"+context.getPackageName()+"/"+R.raw.video720p));
-//            //mediaPlayer.setDataSource(context, Uri.parse("android.resource://"+context.getPackageName()+"/"+R.raw.video4k));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setLooping(false);
         mediaPlayer.setOnVideoSizeChangedListener(this);
@@ -163,8 +175,15 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
                 surfaceTexture.getTransformMatrix(mSTMatrix);//让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
                 updateSurface = false;
                 //编写测试FPS代码
-                Log.d("TWT", "UpdateTime:"+System.currentTimeMillis());
-                fpsUtils.addFrame();
+                if(!isTimerRelaxing){
+                    //Log.d("TWT", "UpdateTime:"+System.currentTimeMillis());
+                    handler.sendEmptyMessage(TIMER_RELAX);
+                    gameTouchUtil.getUpdateTime(System.currentTimeMillis());
+                }
+
+                //gameTouchUtil.print();
+
+
 
 
             }
@@ -189,10 +208,6 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
         GLES20.glViewport(0, 0, screenWidth, screenHeight);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
-
-//        if((TotalCount%30)==0){
-//            Log.e("TWT", "TotalCount="+TotalCount);
-//        }
 
     }
 

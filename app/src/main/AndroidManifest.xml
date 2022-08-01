@@ -33,9 +33,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BenchMark">
         <activity
-            android:name=".TouchTestActivity"
+            android:name=".Activity.CheckFrameUpateActivity"
             android:exported="false" />
-
         <service
             android:name=".Service.StabilityMonitorService"
             android:exported="false"
@@ -68,11 +67,15 @@
             android:name=".Activity.TestSMActivity"
             android:launchMode="singleTask" />
         <activity
+            android:name=".Activity.CheckFrameUpateActivity"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".Activity.CePingActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".Activity.JutiZhibiaoActivity"
             android:launchMode="singleTask" />
+
         <service
             android:name=".Service.FxService"
             android:enabled="true"
@@ -80,6 +83,11 @@
             android:foregroundServiceType="mediaProjection" />
         <service
             android:name=".Service.GameSmoothTestService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="mediaProjection" />
+        <service
+            android:name=".Service.RecordService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />

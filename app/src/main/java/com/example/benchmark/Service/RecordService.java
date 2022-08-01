@@ -3,6 +3,7 @@ package com.example.benchmark.Service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -16,6 +17,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,34 +29,38 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.benchmark.Activity.CheckFrameUpateActivity;
 import com.example.benchmark.Activity.TestSMActivity;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.GameTouchUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class GameSmoothTestService extends Service {
-    //
+public class RecordService extends Service {
+    private static final int START_RECORD = 1;
+    private static final int STOP_RECORD = 2;
+
+    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
-
+    private String path = "";
     private boolean running;
     private int width = 720;
     private int height = 1080;
     private int dpi;
-
-    private String path = "";
     //
+
+
     private boolean isAble=true;
     //定义浮动窗口布局
     LinearLayout mFloatLayout;
@@ -69,53 +75,57 @@ public class GameSmoothTestService extends Service {
     private boolean isRecording=false;
     private int statusBarHeight;
 
-    private int timeCount = 15; //录屏时间
-    private Handler handler = new Handler() {
+    //private Messenger mMessenger;
+
+    private static final String TAG = "RecordService";
+    Handler handler=new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
+            switch (msg.what){
+                case START_RECORD:
+                    //mFloatView.setText("停止");
+                    startRecord();
+                    break;
+                case STOP_RECORD:
+                    //mFloatView.setText("开始");
+                    stopRecord();
+            }
             super.handleMessage(msg);
-            Log.d(TAG, "handleMessage: 123123");
-            mFloatView.setText(String.valueOf(timeCount));
         }
     };
 
-    private Messenger mMessenger;
-
-    private static final String TAG = "TWT";
 
     @Override
     public void onCreate()
     {
+
         super.onCreate();
-        HandlerThread serviceThread = new HandlerThread("service_thread",
-                android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        serviceThread.start();
+        mContext=RecordService.this;
+//        HandlerThread serviceThread = new HandlerThread("service_thread",
+//                android.os.Process.THREAD_PRIORITY_BACKGROUND);
+//        serviceThread.start();
         running = false;
         mediaRecorder = new MediaRecorder();
 
-        mContext=GameSmoothTestService.this;
         createFloatView();
 
     }
-//    @Override
-//    public IBinder onBind(Intent intent)
-//    {
-//        return null;
-//    }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
-        return new GameSmoothBinder();
+        return new RecordBinder();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
+    public void setConfig(int width, int height, int dpi) {
+        this.width = width;
+        this.height = height;
+        this.dpi = dpi;
     }
 
     private void createFloatView()
     {
-        Log.d("TWT", "createFloatView:gamesmoothTest ");
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
         mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
@@ -136,15 +146,15 @@ public class GameSmoothTestService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = screenWidth - 50;
-        wmParams.y = screenHeight / 2;
+        wmParams.x = 99999;
+        wmParams.y =99999;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.game_smooth_float, null);
-        mFloatView = (TextView)mFloatLayout.findViewById(R.id.textinfo);
+        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
+        mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText);
         mWindowManager.addView(mFloatLayout, wmParams);
 
         //获取状态栏的高度
@@ -185,27 +195,44 @@ public class GameSmoothTestService extends Service {
                 }
                 //响应点击事件
                 if (isclick&&isAble) {
-                    isAble = false;
-                    //Toast.makeText(mContext, "准备录屏进行测试", Toast.LENGTH_SHORT).show();
-                    //count = 10;
-                    startRecord();
-                    //mFloatView.setText(String.valueOf(count));
-                    Timer timer=new Timer();
-                    TimerTask task = new TimerTask() {
-                        @Override
-                        public void run() {
-                            Message a = new Message();
-                            handler.sendMessage(a);
-                            if(timeCount==0){
-                                timer.cancel();
-                                Log.d(TAG, "run: stop");
-                                stopRecord();
-                            }
-                            timeCount--;
+                    if(!isRecording){
+                        //mFloatView.setText("停止");
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
+                        isRecording=!isRecording;
+                        //开始录制
+                        Message message = new Message();
+                        message.what = START_RECORD;
+                        handler.sendMessage(message);
+                        //mFloatView.setBackgroundColor(Color.RED);
+                    }else{
+                        //mFloatView.setText("开始");
 
-                        }
-                    };
-                    timer.schedule(task,0,1000);
+                        //停止录制
+                        Message message = new Message();
+                        message.what = STOP_RECORD;
+                        //handler.sendMessage(message);
+                        handler.sendEmptyMessageDelayed(STOP_RECORD,500);
+                        //mFloatView.setBackgroundColor(Color.GREEN);
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),null,null,null);
+                        mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
+                        isRecording=!isRecording;
+                        //点击结束录制后休息1s后才能继续录制
+                        isAble = false;
+
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (handler != null) {
+                                    isAble=true;
+                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_start),null,null,null);
+                                    mFloatView.setTextColor(Color.parseColor("#000000"));
+                                }
+                            }
+                        };
+                        //主线程中调用：
+                        handler.postDelayed(r, 1000);//延时1000毫秒
+                    }
+                    //Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
@@ -217,44 +244,13 @@ public class GameSmoothTestService extends Service {
             @Override
             public void onClick(View v)
             {
-                //Toast.makeText(FxService.this, "onClick", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RecordService.this, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-//        if(mFloatLayout != null)
-//
-//        {
-//            mWindowManager.removeView(mFloatLayout);
-//        }
-    }
-
-//    @Override
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        if(mMessenger==null){
-//            mMessenger = (Messenger) intent.getExtras().get("messenger");
-//        }
-//        return super.onStartCommand(intent, flags, startId);
-//    }
-
-
-    //
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setConfig(int width, int height, int dpi) {
-        this.width = width;
-        this.height = height;
-        this.dpi = dpi;
     }
 
     public boolean startRecord() {
@@ -281,7 +277,7 @@ public class GameSmoothTestService extends Service {
         Log.d(TAG, "begin:结束录制 ");
 
         //录制结束对录制视频进行测试
-        TestSMActivity.start(this,path);
+        CheckFrameUpateActivity.start(this,path);
         stopSelf();
         if(mFloatLayout != null)
         {
@@ -304,9 +300,9 @@ public class GameSmoothTestService extends Service {
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mediaRecorder.setOutputFile(path);
             mediaRecorder.setVideoSize(width, height);
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
-            mediaRecorder.setVideoFrameRate(30);
+            mediaRecorder.setVideoFrameRate(60);
 
         }catch (Exception e){
             Log.e("TWT", "initRecorder: "+e.toString() );
@@ -336,12 +332,33 @@ public class GameSmoothTestService extends Service {
         }
     }
 
-    public class GameSmoothBinder extends Binder {
-        public GameSmoothTestService getGameSmoothService() {
-            return GameSmoothTestService.this;
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(mFloatLayout != null)
+
+        {
+            mWindowManager.removeView(mFloatLayout);
         }
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+//    public class RecordBinder extends Binder {
+//        public RecordService getRecordService() {
+//            return RecordService.this;
+//        }
+//    }
+
+    public class RecordBinder extends Binder {
+        public RecordService getRecordService() {
+            return RecordService.this;
+        }
+    }
 }
 
 
