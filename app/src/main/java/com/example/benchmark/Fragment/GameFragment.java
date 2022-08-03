@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.BaseApp;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
+import com.example.benchmark.Service.AutoTapService;
 import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.AccessibilityUtil;
@@ -93,12 +96,20 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                     Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(red_wending_cheak.isChecked() || red_chukong_cheak.isChecked()){
+                if(red_wending_cheak.isChecked() ){
                     if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
                             || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
                         popDiaLog.show();
                         return;
                     }
+                }else if(red_chukong_cheak.isChecked()){
+                    if(!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName())){
+                        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return;
+                    }
+                    //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
                 }
                 CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
                 CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);

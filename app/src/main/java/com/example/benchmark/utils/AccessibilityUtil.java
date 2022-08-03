@@ -240,6 +240,7 @@ public class AccessibilityUtil {
             int y,
             AccessibilityCallback callback
     ) {
+        Log.d("TWT", "tap:1212123 ");
         GestureDescription.Builder builder = new GestureDescription.Builder();
         Path p = new Path();
         p.moveTo(x, y);

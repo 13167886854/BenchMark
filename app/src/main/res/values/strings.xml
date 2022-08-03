@@ -77,4 +77,6 @@
     <string name="gpu_info_description">通过后台对云手机数据信息的读取，测试出GPU型号及性能，得出测评结果</string>
     <string name="ram_info_description">通过读写速度，随机/顺序读写等方式，评价设备的RAM性能</string>
     <string name="rom_info_description">通过后台对云手机数据信息的读取，测试出硬盘大小及性能，得出测评结果</string>
+
+    <string name="auto_tap_description">无障碍自动点击</string>
 </resources>

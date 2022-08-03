@@ -33,6 +33,9 @@ import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.ECloudPhoneStabilityService;
 import com.example.benchmark.Service.GameSmoothTestService;
+import com.example.benchmark.Service.MiGuPlayStabilityService;
+import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
+import com.example.benchmark.Service.TencentGamerStabilityService;
 import com.example.benchmark.Service.RecordService;
 import com.example.benchmark.Service.MiGuPlayStabilityService;
 import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
@@ -135,9 +138,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         updateListData();
 
         Log.d("TWT", "platform_kind: "+platform_kind);
-        if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {
+        if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)&& platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
             startStabilityMonitorService();
         }
+        //if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
         if (!isCheckStability && isHaveOtherPerformance) {
             startFxService();
         }
@@ -172,7 +176,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }else if(platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckTouch){
             //开始云游戏触控体验测试。。。
             //Log.d("TWT", "开始云游戏触控体验测试");
-            startGameTouchService();
+            //startGameTouchService();
         }
     }
 
@@ -396,7 +400,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }
         }
         else if (requestCode == RECORD_TOUCH_REQUEST_CODE && resultCode == RESULT_OK) {
-            Log.e("TWT", "onActivityResult: 123111111111111111111" );
+        //    Log.e("TWT", "onActivityResult: 123111111111111111111" );
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             recordService.setMediaProject(mediaProjection);
 //            try{

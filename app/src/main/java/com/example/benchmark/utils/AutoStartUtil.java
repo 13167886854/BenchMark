@@ -45,7 +45,8 @@ public class AutoStartUtil {
                 componentName = new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.SoftwareManagerActivity");
             }
             intent.setComponent(componentName);
-        }else if(RomUtil.isFlyme()){//魅族
+        }else if(RomUtil.isFlyme()){
+            //魅族
             // 通过测试，发现魅族是真恶心，也是够了，之前版本还能查看到关于设置自启动这一界面，
             // 系统更新之后，完全找不到了，心里默默Fuck！
             // 针对魅族，我们只能通过魅族内置手机管家去设置自启动，

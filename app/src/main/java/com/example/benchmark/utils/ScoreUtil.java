@@ -5,6 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.LongDef;
 
+import com.example.benchmark.Service.AutoTapAccessibilityService;
+
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -181,33 +183,97 @@ public class ScoreUtil {
     }
 
     public static void calcAndSaveTouchScores(
-            long time0, long time1, long time2, long time3, long time4, Intent intent
+            Long cloudSpendTime0, Long cloudSpendTime1, Long cloudSpendTime2, Long cloudSpendTime3, Long cloudSpendTime4,
+            Long cloudSpendTime5, Long cloudSpendTime6, Long cloudSpendTime7, Long cloudSpendTime8, Long cloudSpendTime9,
+            Long cloudSpendTime10, Long cloudSpendTime11,
+            long time0, long time1, long time2, long time3, long time4, long time5,
+            long time6, long time7, long time8, long time9, long time10, long time11
     ) {
+        Log.d("zzl", "cloudSpendTime0: ");
 
         // 判断测试平台
         String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
-        Log.d("TWT", "测试平台===>" + checkPlatform);
+        Log.d("zzl", "测试平台===>" + checkPlatform);
         TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
+        Log.d("zzl", "localTapTimes: " + localTapTimes);
+        // 响应次数
+        int responseNum = 0;
+        long ResponseTime0 = time0 - CacheUtil.getLong("tapTimeOnLocal0") + cloudSpendTime0;
+        long ResponseTime1 = time1 - CacheUtil.getLong("tapTimeOnLocal1") + cloudSpendTime1;
+        long ResponseTime2 = time2 - CacheUtil.getLong("tapTimeOnLocal2") + cloudSpendTime2;
+        long ResponseTime3 = time3 - CacheUtil.getLong("tapTimeOnLocal3") + cloudSpendTime3;
+        long ResponseTime4 = time4 - CacheUtil.getLong("tapTimeOnLocal4") + cloudSpendTime4;
+        long ResponseTime5 = time5 - CacheUtil.getLong("tapTimeOnLocal5") + cloudSpendTime5;
+        long ResponseTime6 = time6 - CacheUtil.getLong("tapTimeOnLocal6") + cloudSpendTime6;
+        long ResponseTime7 = time7 - CacheUtil.getLong("tapTimeOnLocal7") + cloudSpendTime7;
+        long ResponseTime8 = time8 - CacheUtil.getLong("tapTimeOnLocal8") + cloudSpendTime8;
+        long ResponseTime9 = time9 - CacheUtil.getLong("tapTimeOnLocal9") + cloudSpendTime9;
+        long ResponseTime10 = time10 - CacheUtil.getLong("tapTimeOnLocal10") + cloudSpendTime10;
+        long ResponseTime11 = time11 - CacheUtil.getLong("tapTimeOnLocal11") + cloudSpendTime11;
 
-        Log.d("TWT", "localTapTimes: " + localTapTimes);
-        long ResponseTime0 = time0 - CacheUtil.getLong("tapTimeOnLocal0");
-        long ResponseTime1 = time1 - CacheUtil.getLong("tapTimeOnLocal1");
-        long ResponseTime2 = time2 - CacheUtil.getLong("tapTimeOnLocal2");
-        long ResponseTime3 = time3 - CacheUtil.getLong("tapTimeOnLocal3");
-        long ResponseTime4 = time4 - CacheUtil.getLong("tapTimeOnLocal4");
-
-        if (checkPlatform.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) || checkPlatform.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)) {
-            ResponseTime0 += 1000;
-            ResponseTime1 += 1000;
-            ResponseTime2 += 1000;
-            ResponseTime3 += 1000;
-            ResponseTime4 += 1000;
+        //if (ResponseTime0 != 0L) {
+        //    responseNum++;
+        //}
+        if (ResponseTime1 != 0L) {
+            responseNum++;
         }
-        Log.d("TWT", "ResponseTime0: " + ResponseTime0);
-        Log.d("TWT", "ResponseTime1: " + ResponseTime1);
-        Log.d("TWT", "ResponseTime2: " + ResponseTime2);
-        Log.d("TWT", "ResponseTime3: " + ResponseTime3);
-        Log.d("TWT", "ResponseTime4: " + ResponseTime4);
+        if (ResponseTime2 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime3 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime4 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime5 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime6 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime7 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime8 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime9 != 0L) {
+            responseNum++;
+        }
+        if (ResponseTime10 != 0L) {
+            responseNum++;
+        }
+        // 平均触控时延
+        long avgResponseTime = (ResponseTime10 + ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
+                ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9) / 10;
+
+        // 正确率
+        float averageAccuracy = (float) responseNum / 10;
+
+        //if (checkPlatform.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) || checkPlatform.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)) {
+        //    ResponseTime0 += 1000;
+        //    ResponseTime1 += 1000;
+        //    ResponseTime2 += 1000;
+        //    ResponseTime3 += 1000;
+        //    ResponseTime4 += 1000;
+        //}
+        Log.d("zzl", "ResponseTime0: " + ResponseTime0);
+        Log.d("zzl", "ResponseTime1: " + ResponseTime1);
+        Log.d("zzl", "ResponseTime2: " + ResponseTime2);
+        Log.d("zzl", "ResponseTime3: " + ResponseTime3);
+        Log.d("zzl", "ResponseTime4: " + ResponseTime4);
+        Log.d("zzl", "ResponseTime5: " + ResponseTime5);
+        Log.d("zzl", "ResponseTime6: " + ResponseTime6);
+        Log.d("zzl", "ResponseTime7: " + ResponseTime7);
+        Log.d("zzl", "ResponseTime8: " + ResponseTime8);
+        Log.d("zzl", "ResponseTime9: " + ResponseTime9);
+        Log.d("zzl", "ResponseTime10: " + ResponseTime10);
+        Log.d("zzl", "ResponseTime11: " + ResponseTime11);
+        Log.d("zzl", "avgResponseTime: " + avgResponseTime);
+        Log.d("zzl", "averageAccuracy: " + averageAccuracy);
+
+
 //        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
 //        float responseTime = 0f;
 //        int index = 0;
@@ -220,16 +286,16 @@ public class ScoreUtil {
 //        }
 //        if (cloudTapTimes.size() != 0) responseTime /= cloudTapTimes.size();
 //        // 保存触控体验结果
-//        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
-//        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, responseTime);
-////        CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, averageResponseTime);
+        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
+        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, avgResponseTime);
+        //CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, avgResponseTime);
 //        // 计算触控体验分数
 //        averageAccuracy /= 100;
-//        float averAccuracyScore = 100f * averageAccuracy / 2;
-//        float responseTimeScore = responseTime < 50 ? 50 : 100f * 50 / (2 * responseTime);
-//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+        float averAccuracyScore = 100f * averageAccuracy / 2;
+        float responseTimeScore = avgResponseTime < 50 ? 50 : 100f * 50 / (2 * avgResponseTime);
+        int touchScore = (int) (averAccuracyScore + responseTimeScore);
 //        // 保存触控体验分数
-//        CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
+        CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
     }
 
     public static float getAverageAccuracy() {
@@ -237,7 +303,7 @@ public class ScoreUtil {
     }
 
     public static float getResponseTime() {
-        return CacheUtil.getFloat(CacheConst.KEY_RESPONSE_TIME);
+        return CacheUtil.getLong(CacheConst.KEY_RESPONSE_TIME);
     }
 
 //    public static float getAverageResponseTime() {

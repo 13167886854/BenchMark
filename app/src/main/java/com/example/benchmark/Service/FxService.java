@@ -1,5 +1,6 @@
 package com.example.benchmark.Service;
 
+import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
@@ -33,11 +34,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.R;
+import com.example.benchmark.utils.AccessibilityCallback;
+import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.CodeUtils;
 import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
+import com.example.benchmark.utils.TapUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -54,6 +58,9 @@ public class FxService extends Service {
     private Boolean isCheckTouch;
     private String checkPlatform;
     private Intent intent;
+    private FxService service;
+
+    private TapUtil tapUtil;
 
     private
     //定义浮动窗口布局
@@ -77,6 +84,8 @@ public class FxService extends Service {
     public void onCreate() {
         super.onCreate();
         mContext = FxService.this;
+        service = this.service;
+        tapUtil = TapUtil.getUtil();
 
     }
 
@@ -108,7 +117,7 @@ public class FxService extends Service {
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
         wmParams.x = screenWidth - 50;
-        wmParams.y = screenHeight / 2;
+        wmParams.y = screenHeight / 4  * 3;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -287,6 +296,21 @@ public class FxService extends Service {
                 if (isclick) {
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
+                    tapUtil.tap(1000,1000);
+
+
+                    //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return true;
+//                    AccessibilityUtil.tap(service, 500, 500,
+//                            new AccessibilityCallback() {
+//                                @Override
+//                                public void onSuccess() {
+//                                    Log.e("TWT", "do tap when time is "+System.currentTimeMillis());
+//                                }
+//
+//                                @Override
+//                                public void onFailure() {
+//                                }
+//                            });
                 }
                 return true;
             }
@@ -416,12 +440,31 @@ public class FxService extends Service {
         );
 
         ScoreUtil.calcAndSaveTouchScores(
+                JsonData.getLong("cloudSpendTime0"),
+                JsonData.getLong("cloudSpendTime1"),
+                JsonData.getLong("cloudSpendTime2"),
+                JsonData.getLong("cloudSpendTime3"),
+                JsonData.getLong("cloudSpendTime4"),
+                JsonData.getLong("cloudSpendTime5"),
+                JsonData.getLong("cloudSpendTime6"),
+                JsonData.getLong("cloudSpendTime7"),
+                JsonData.getLong("cloudSpendTime8"),
+                JsonData.getLong("cloudSpendTime9"),
+                JsonData.getLong("cloudSpendTime10"),
+                JsonData.getLong("cloudSpendTime11"),
+
                 JsonData.getLong("tapTimeOnCloud0"),
                 JsonData.getLong("tapTimeOnCloud1"),
                 JsonData.getLong("tapTimeOnCloud2"),
                 JsonData.getLong("tapTimeOnCloud3"),
                 JsonData.getLong("tapTimeOnCloud4"),
-                intent
+                JsonData.getLong("tapTimeOnCloud5"),
+                JsonData.getLong("tapTimeOnCloud6"),
+                JsonData.getLong("tapTimeOnCloud7"),
+                JsonData.getLong("tapTimeOnCloud8"),
+                JsonData.getLong("tapTimeOnCloud9"),
+                JsonData.getLong("tapTimeOnCloud10"),
+                JsonData.getLong("tapTimeOnCloud11")
         );
 
 

@@ -46,6 +46,7 @@ import java.io.IOException;
 public class RecordService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
+    private static final int START_AUTO_TAP = 3;
 
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
@@ -59,6 +60,11 @@ public class RecordService extends Service {
     private int height = 1080;
     private int dpi;
     //
+
+    private int resultCode;
+    private Intent data;
+    private Boolean isCheckTouch;
+    private String checkPlatform;
 
 
     private boolean isAble=true;
@@ -89,6 +95,11 @@ public class RecordService extends Service {
                 case STOP_RECORD:
                     //mFloatView.setText("开始");
                     stopRecord();
+                    break;
+                case START_AUTO_TAP:
+                    startAutoTapService();
+                    break;
+
             }
             super.handleMessage(msg);
         }
@@ -203,6 +214,7 @@ public class RecordService extends Service {
                         Message message = new Message();
                         message.what = START_RECORD;
                         handler.sendMessage(message);
+                        handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
                         //mFloatView.setBackgroundColor(Color.RED);
                     }else{
                         //mFloatView.setText("开始");
@@ -336,15 +348,18 @@ public class RecordService extends Service {
     public void onDestroy()
     {
         super.onDestroy();
-        if(mFloatLayout != null)
-
-        {
-            mWindowManager.removeView(mFloatLayout);
-        }
+//        if(mFloatLayout != null)
+//        {
+//            mWindowManager.removeView(mFloatLayout);
+//        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        resultCode = intent.getIntExtra("code", -1);
+        data = intent.getParcelableExtra("data");
+        isCheckTouch = intent.getBooleanExtra("isCheckTouch", false);
+        checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -357,6 +372,22 @@ public class RecordService extends Service {
     public class RecordBinder extends Binder {
         public RecordService getRecordService() {
             return RecordService.this;
+        }
+    }
+
+    private void startAutoTapService() {
+        CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, true);
+        Intent service = new Intent(this, StabilityMonitorService.class)
+                .putExtra(CacheConst.KEY_PLATFORM_NAME, checkPlatform)
+                .putExtra("resultCode", resultCode)
+                .putExtra("data", data)
+                .putExtra("isCheckTouch", isCheckTouch);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(service);
+            Log.d(TAG, "startForegroundService: ");
+        } else {
+            startService(service);
+            Log.d(TAG, "startService: ");
         }
     }
 }

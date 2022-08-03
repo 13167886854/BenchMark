@@ -120,7 +120,9 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
 
-        gameTouchUtil.print();
+        gameTouchUtil.printFrameUpdateTime();
+        gameTouchUtil.printAutoTapTime();
+        gameTouchUtil.clear();
 
         Intent intent = new Intent(CheckFrameUpateActivity.this,CePingActivity.class);
         intent.putExtra("isFluencyUntested",false);

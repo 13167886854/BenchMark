@@ -41,10 +41,11 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
             switch (msg.what){
                 case TIMER_RELAX:
                     isTimerRelaxing = true;
-                    handler.sendEmptyMessageDelayed(TIMER_WORK,800);
+                    handler.sendEmptyMessageDelayed(TIMER_WORK,1000);
                     break;
                 case TIMER_WORK:
                     isTimerRelaxing = false;
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -174,10 +175,12 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
                 surfaceTexture.updateTexImage();//获取新数据
                 surfaceTexture.getTransformMatrix(mSTMatrix);//让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
                 updateSurface = false;
+                Log.d("TWT", "onDrawFrame: 画面更新！");
                 //编写测试FPS代码
                 if(!isTimerRelaxing){
+                    //Log.d("TWT", "检测到1s内画面更新");
                     //Log.d("TWT", "UpdateTime:"+System.currentTimeMillis());
-                    handler.sendEmptyMessage(TIMER_RELAX);
+                    //handler.sendEmptyMessage(TIMER_RELAX);
                     gameTouchUtil.getUpdateTime(System.currentTimeMillis());
                 }
 
