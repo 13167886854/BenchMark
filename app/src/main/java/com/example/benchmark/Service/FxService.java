@@ -108,7 +108,7 @@ public class FxService extends Service {
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
         wmParams.x = screenWidth - 50;
-        wmParams.y = screenHeight / 2;
+        wmParams.y = screenHeight / 4  * 3;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -416,12 +416,31 @@ public class FxService extends Service {
         );
 
         ScoreUtil.calcAndSaveTouchScores(
+                JsonData.getLong("cloudSpendTime0"),
+                JsonData.getLong("cloudSpendTime1"),
+                JsonData.getLong("cloudSpendTime2"),
+                JsonData.getLong("cloudSpendTime3"),
+                JsonData.getLong("cloudSpendTime4"),
+                JsonData.getLong("cloudSpendTime5"),
+                JsonData.getLong("cloudSpendTime6"),
+                JsonData.getLong("cloudSpendTime7"),
+                JsonData.getLong("cloudSpendTime8"),
+                JsonData.getLong("cloudSpendTime9"),
+                JsonData.getLong("cloudSpendTime10"),
+                JsonData.getLong("cloudSpendTime11"),
+
                 JsonData.getLong("tapTimeOnCloud0"),
                 JsonData.getLong("tapTimeOnCloud1"),
                 JsonData.getLong("tapTimeOnCloud2"),
                 JsonData.getLong("tapTimeOnCloud3"),
                 JsonData.getLong("tapTimeOnCloud4"),
-                intent
+                JsonData.getLong("tapTimeOnCloud5"),
+                JsonData.getLong("tapTimeOnCloud6"),
+                JsonData.getLong("tapTimeOnCloud7"),
+                JsonData.getLong("tapTimeOnCloud8"),
+                JsonData.getLong("tapTimeOnCloud9"),
+                JsonData.getLong("tapTimeOnCloud10"),
+                JsonData.getLong("tapTimeOnCloud11")
         );
 
 
