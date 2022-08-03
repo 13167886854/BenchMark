@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Date;
 
+import okhttp3.OkHttpClient;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -46,29 +48,24 @@ public class AutoTapAccessibilityService implements IStabilityService {
     private long endTime = 0L;
     private long responseTime = 0L;
 
-    public AutoTapAccessibilityService(StabilityMonitorService service) {
+    private boolean isGamePlatform;
+
+    private boolean mTapFlag = false;
+
+    public AutoTapAccessibilityService(StabilityMonitorService service, boolean isGamePlatform) {
         this.service = service;
+        this.isGamePlatform = isGamePlatform;
     }
 
-    //private static  Handler mHandler = new Handler() {
-    //    @Override
-    //    public void handleMessage(@NonNull Message msg) {
-    //        super.handleMessage(msg);
-    //        switch (msg.what) {
-    //            case 1:
-    //                String result = (String) msg.obj;
-    //                Log.d("zzl", "handleMessage: result" + result);
-    //                //mLastTapTime = Long.valueOf(result);
-    //                break;
-    //        }
-    //    }
-    //};
     @Override
     public void onMonitor() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
         //mLastTapTime = System.currentTimeMillis();
         if (mLastTapTime != 0L && System.currentTimeMillis() - endTime <= 1500L) return;
         //mLastTapTime = System.currentTimeMillis();
+        if (isGamePlatform) gameAutoTap();
+        //else phoneAutoTap();
+
         // 判断测试平台，如果是云手机测试平台
         String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
         if (checkPlatform.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
@@ -145,7 +142,48 @@ public class AutoTapAccessibilityService implements IStabilityService {
             Log.d("zzl", "onMonitor: AutoTapAccessibilityService==>不是云手机测试平台");
         }
     }
+    private void gameAutoTap() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+        AccessibilityUtil.tap(service, 300, mTapFlag ? 200 : 300,
+                new AccessibilityCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + System.currentTimeMillis());
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
+                        mCurrentTapNum++;
+                        service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
+                        CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum - 1)), System.currentTimeMillis());
+                        mTapFlag = !mTapFlag;
+                    }
 
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+    }
+
+    private void phoneAutoTap() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
+        AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
+                // 515  783
+                //AccessibilityUtil.tap(service, 475, 1278,
+                //AccessibilityUtil.tap(service, 514, 782,
+                new AccessibilityCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + System.currentTimeMillis());
+                        Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
+                        mCurrentTapNum++;
+                        service.mTapStartTimes.add(String.valueOf(System.currentTimeMillis()));
+                        CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum - 1)), System.currentTimeMillis());
+                        //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
+                    }
+
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+    }
     @Override
     public void startControlCloudPhone() {
 
@@ -166,4 +204,3 @@ public class AutoTapAccessibilityService implements IStabilityService {
         return mCurrentTapNum == TOTAL_TAP_NUM;
     }
 }
-
