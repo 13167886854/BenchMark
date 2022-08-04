@@ -1,22 +1,52 @@
 package com.example.benchmark.utils;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.Service.AutoTapService;
+import com.example.benchmark.Service.StabilityMonitorService;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 public class TapUtil {
+    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
+    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     //单例模式
     private AutoTapService service;
     private static TapUtil util = new TapUtil();
-//    public  Handler handler = new Handler(){
+
+    private int phoneCurrentTapNum = 0;
+    // 触控测试模拟点击次数
+    public static final int TOTAL_TAP_NUM = 12;
+
+    private final OkHttpClient client = new OkHttpClient();
+
+    private int mCurrentTapNum = 0;
+
+    private long mLastTapTime = 0L;
+    //private long mCurrentTime = 0;
+
+    private long startTime = 0L;
+    private long endTime = 0L;
+    private long responseTime = 0L;
+
+    //    public  Handler handler = new Handler(){
 //        @Override
 //        public void handleMessage(@NonNull Message msg) {
 //            switch (msg.what){
@@ -27,9 +57,11 @@ public class TapUtil {
 //            super.handleMessage(msg);
 //        }
 //    };
-    private TapUtil(){}
-    public static TapUtil getUtil(){
-        if(util==null){
+    private TapUtil() {
+    }
+
+    public static TapUtil getUtil() {
+        if (util == null) {
             util = new TapUtil();
             //util.tap();
         }
@@ -40,51 +72,145 @@ public class TapUtil {
     private int turn = 0;
 
 
-    public void setService(AutoTapService service){
+    public void setService(AutoTapService service) {
         this.service = service;
     }
 
-    public void tap(int x,int y){
-        if(service==null){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void tap(int x, int y) {
+        if (service == null) {
             Log.e("TWT", "service is not initial yet");
         }
-        AccessibilityUtil.tap(service,x,y,
+        AccessibilityUtil.tap(service, x, y,
                 new AccessibilityCallback() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.d("TWT", "do tap when time is "+System.currentTimeMillis());
-                                }
+                    @Override
+                    public void onSuccess() {
+                        Log.d("TWT", "do tap when time is " + System.currentTimeMillis());
+                    }
 
-                                @Override
-                                public void onFailure() {
-                                    Log.e("TWT", "tap failure");
-                                }}
+                    @Override
+                    public void onFailure() {
+                        Log.e("TWT", "tap failure");
+                    }
+                }
         );
 
     }
 
-    public void GameTouchTap(){
+    // 云手机触控体验
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void cloudPhoneTap(int x, int y) {
+        if (service == null) {
+            Log.e("TWT", "service is not initial yet");
+        }
+        AccessibilityUtil.tap(service, x, y,
+                new AccessibilityCallback() {
+                    @Override
+                    public void onSuccess() {
+                        /**
+                         * 模拟点击成功，记录每次点击的时间戳
+                         * 使用okhttp3发送 GET 请求，获取一个标准的时间戳
+                         */
+                        // 记录发送请求时的系统时间戳
+                        startTime = System.currentTimeMillis();
+
+                        Request request = new Request.Builder()
+                                .get()
+                                .url(CacheConst.WEB_TIME_URL)
+                                .build();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                client.newCall(request)
+                                        .enqueue(new Callback() {
+                                            @Override
+                                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                                e.printStackTrace();
+                                                Log.d("zzl", "onFailure: call===>" + e.toString());
+                                            }
+
+                                            @Override
+                                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                                // 获取成功响应的系统时间戳
+                                                endTime = System.currentTimeMillis();
+                                                responseTime = endTime - startTime;
+
+                                                String result = response.body().string();
+                                                String res = result.substring(81, 94);
+                                                Log.d("zzl", "onResponse: result===>" + result);
+                                                Log.d("zzl", "onResponse: res===>" + res);
+                                                //Log.d("zzl", "onResponse: response===>" + response);
+                                                // 获取到的时间戳，应该减去响应时延
+                                                mLastTapTime = Long.valueOf(res) - responseTime;
+
+                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + mLastTapTime);
+                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + "System.currentTimeMillis(): " + System.currentTimeMillis());
+                                                //Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
+                                                //service.mTapStartTimes.add(String.valueOf(mLastTapTime));
+                                                CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
+                                                mCurrentTapNum++;
+                                                //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
+                                                //Message msg = Message.obtain();
+                                                //msg.what = 1;
+                                                //msg.obj = result;
+                                                //mHandler.sendMessage(msg);
+                                            }
+                                        });
+                            }
+                        }).start();
+                    }
+
+
+                    @Override
+                    public void onFailure() {
+                        Log.e("TWT", "tap failure");
+                    }
+                }
+        );
+
+    }
+
+    public void GameTouchTap() {
         TimerTask task = new TimerTask() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
-                Log.d("TWT", "turn = "+turn);
+                Log.d("TWT", "turn = " + turn);
                 turn++;
-                if(turn%2==1){
-                    tap(2165,860); //点击设置按钮
+                if (turn % 2 == 1) {
+                    tap(2165, 860); //点击设置按钮
 
-                }else {
-                    tap(1000,830);  //点击取消按钮
+                } else {
+                    tap(1000, 830);  //点击取消按钮
                 }
-                if(turn==10){
+                if (turn == 10) {
                     Log.d("TWT", "run: stop");
                     cancel();
                 }
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task,3000,1000);
+        timer.schedule(task, 3000, 1000);
     }
 
+    public void PhoneTouchTap() {
+        TimerTask task = new TimerTask() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void run() {
+                Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);
+                phoneCurrentTapNum++;
+                cloudPhoneTap(screenWidth / 2, screenHeight / 2); //点击设置按钮
+
+                if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
+                    Log.d("zzl", "run: stop");
+                    cancel();
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 1000, 1500);
+    }
 
 
 }

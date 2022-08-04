@@ -30,6 +30,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -258,7 +260,8 @@ public class FxService extends Service {
                     //这里写开启触控服务
                     Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onTouch: 点击了开启触控服务");
-                    startAutoTapService();
+                    //startAutoTapService();
+                    tapUtil.PhoneTouchTap();
                 }
                 return true;
             }
@@ -267,6 +270,7 @@ public class FxService extends Service {
 
         btnToBack = btnMenu.findViewById(R.id.btnToBack);
         btnToBack.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 boolean isclick = false;
@@ -388,6 +392,12 @@ public class FxService extends Service {
         else return Float.parseFloat(target.toString().split("吉")[0]);
     }
 
+    private long getLongDataFromJson(JSONObject jsonObject, String name) {
+        Object target = jsonObject.getString(name);
+        if (target == null) return 0;
+        else return Long.parseLong(target.toString());
+    }
+
     private int getIntDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         if (target == null) return 0;
@@ -412,7 +422,7 @@ public class FxService extends Service {
         }
         JSONObject JsonData = JSON.parseObject(result);
         // 信息获取
-        Log.e("QT-2", JsonData.toJSONString());
+        //Log.e("QT-2", JsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
                 (String) JsonData.get("cpuName"),
                 getIntDataFromJson(JsonData, "cpuCores")
@@ -440,31 +450,32 @@ public class FxService extends Service {
         );
 
         ScoreUtil.calcAndSaveTouchScores(
-                JsonData.getLong("cloudSpendTime0"),
-                JsonData.getLong("cloudSpendTime1"),
-                JsonData.getLong("cloudSpendTime2"),
-                JsonData.getLong("cloudSpendTime3"),
-                JsonData.getLong("cloudSpendTime4"),
-                JsonData.getLong("cloudSpendTime5"),
-                JsonData.getLong("cloudSpendTime6"),
-                JsonData.getLong("cloudSpendTime7"),
-                JsonData.getLong("cloudSpendTime8"),
-                JsonData.getLong("cloudSpendTime9"),
-                JsonData.getLong("cloudSpendTime10"),
-                JsonData.getLong("cloudSpendTime11"),
+                //JsonData.getLong("cloudSpendTime0"),
+                //JsonData.getLong("cloudSpendTime1"),
+                //JsonData.getLong("cloudSpendTime2"),
+                //JsonData.getLong("cloudSpendTime3"),
+                //JsonData.getLong("cloudSpendTime4"),
+                //JsonData.getLong("cloudSpendTime5"),
+                //JsonData.getLong("cloudSpendTime6"),
+                //JsonData.getLong("cloudSpendTime7"),
+                //JsonData.getLong("cloudSpendTime8"),
+                //JsonData.getLong("cloudSpendTime9"),
+                //JsonData.getLong("cloudSpendTime10"),
+                //JsonData.getLong("cloudSpendTime11"),
 
-                JsonData.getLong("tapTimeOnCloud0"),
-                JsonData.getLong("tapTimeOnCloud1"),
-                JsonData.getLong("tapTimeOnCloud2"),
-                JsonData.getLong("tapTimeOnCloud3"),
-                JsonData.getLong("tapTimeOnCloud4"),
-                JsonData.getLong("tapTimeOnCloud5"),
-                JsonData.getLong("tapTimeOnCloud6"),
-                JsonData.getLong("tapTimeOnCloud7"),
-                JsonData.getLong("tapTimeOnCloud8"),
-                JsonData.getLong("tapTimeOnCloud9"),
-                JsonData.getLong("tapTimeOnCloud10"),
-                JsonData.getLong("tapTimeOnCloud11")
+
+                getLongDataFromJson(JsonData,"tapTimeOnCloud0"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud1"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud2"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud3"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud4"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud5"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud6"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud7"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud8"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud9"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud10"),
+                getLongDataFromJson(JsonData,"tapTimeOnCloud11")
         );
 
 
