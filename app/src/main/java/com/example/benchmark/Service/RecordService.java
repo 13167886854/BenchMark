@@ -39,6 +39,7 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.GameTouchUtil;
+import com.example.benchmark.utils.TapUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,8 +47,8 @@ import java.io.IOException;
 public class RecordService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
-    private static final int START_AUTO_TAP = 3;
 
+    private TapUtil tapUtil = TapUtil.getUtil();
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
@@ -95,9 +96,6 @@ public class RecordService extends Service {
                 case STOP_RECORD:
                     //mFloatView.setText("开始");
                     stopRecord();
-                    break;
-                case START_AUTO_TAP:
-                    startAutoTapService();
                     break;
 
             }
@@ -157,8 +155,8 @@ public class RecordService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = 99999;
-        wmParams.y =99999;
+        wmParams.x = screenWidth/2;
+        wmParams.y =screenHeight;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -207,22 +205,18 @@ public class RecordService extends Service {
                 //响应点击事件
                 if (isclick&&isAble) {
                     if(!isRecording){
-                        //mFloatView.setText("停止");
+                        mFloatView.setText("停止");
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
                         isRecording=!isRecording;
                         //开始录制
-                        Message message = new Message();
-                        message.what = START_RECORD;
-                        handler.sendMessage(message);
-                        handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
+                        handler.sendEmptyMessage(START_RECORD);
+                        tapUtil.GameTouchTap();
+                        //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
                         //mFloatView.setBackgroundColor(Color.RED);
                     }else{
                         //mFloatView.setText("开始");
 
                         //停止录制
-                        Message message = new Message();
-                        message.what = STOP_RECORD;
-                        //handler.sendMessage(message);
                         handler.sendEmptyMessageDelayed(STOP_RECORD,500);
                         //mFloatView.setBackgroundColor(Color.GREEN);
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),null,null,null);
@@ -311,7 +305,8 @@ public class RecordService extends Service {
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(width, height);
+            //mediaRecorder.setVideoSize(width, height);
+            mediaRecorder.setVideoSize(width, height);//横向录屏
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
@@ -375,21 +370,6 @@ public class RecordService extends Service {
         }
     }
 
-    private void startAutoTapService() {
-        CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, true);
-        Intent service = new Intent(this, StabilityMonitorService.class)
-                .putExtra(CacheConst.KEY_PLATFORM_NAME, checkPlatform)
-                .putExtra("resultCode", resultCode)
-                .putExtra("data", data)
-                .putExtra("isCheckTouch", isCheckTouch);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(service);
-            Log.d(TAG, "startForegroundService: ");
-        } else {
-            startService(service);
-            Log.d(TAG, "startService: ");
-        }
-    }
 }
 
 

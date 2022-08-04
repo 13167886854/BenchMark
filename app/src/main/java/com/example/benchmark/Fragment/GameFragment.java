@@ -103,6 +103,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                         return;
                     }
                 }else if(red_chukong_cheak.isChecked()){
+                    Log.d("TWT", "isOK: "+!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName()));
                     if(!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName())){
                         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

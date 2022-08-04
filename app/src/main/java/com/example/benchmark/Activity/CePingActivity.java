@@ -141,8 +141,8 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)&& platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
             startStabilityMonitorService();
         }
-        //if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
-        if (!isCheckStability && isHaveOtherPerformance) {
+        if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
+//        if (!isCheckStability && isHaveOtherPerformance) {
             startFxService();
         }
         //云游戏流畅性测试
@@ -176,7 +176,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }else if(platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckTouch){
             //开始云游戏触控体验测试。。。
             //Log.d("TWT", "开始云游戏触控体验测试");
-            //startGameTouchService();
+            startGameTouchService();
         }
     }
 
