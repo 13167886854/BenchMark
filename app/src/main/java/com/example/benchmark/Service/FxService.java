@@ -46,6 +46,8 @@ import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class FxService extends Service {
@@ -412,6 +414,15 @@ public class FxService extends Service {
         else return JSON.parseArray(String.valueOf(target));
     }
 
+    private String getCloudListDataFromJson(JSONObject jsonObject, String name) {
+        Object target = jsonObject.getString(name);
+        //Log.d("zzl", "getCloudListDataFromJson: JSONObject===>" +jsonObject);
+        //Log.d("zzl", "getCloudListDataFromJson: target==>" + target);
+
+        if (target == null) return null;
+        else return (String) target;
+    }
+
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
         String result = CodeUtils.parseCode(bitmap);
@@ -422,7 +433,7 @@ public class FxService extends Service {
         }
         JSONObject JsonData = JSON.parseObject(result);
         // 信息获取
-        //Log.e("QT-2", JsonData.toJSONString());
+        Log.e("QT-2", JsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
                 (String) JsonData.get("cpuName"),
                 getIntDataFromJson(JsonData, "cpuCores")
@@ -463,19 +474,21 @@ public class FxService extends Service {
                 //JsonData.getLong("cloudSpendTime10"),
                 //JsonData.getLong("cloudSpendTime11"),
 
+                getCloudListDataFromJson(JsonData, "cloudDownTimeList"),
+                getCloudListDataFromJson(JsonData, "cloudSpendTimeList")
 
-                getLongDataFromJson(JsonData,"tapTimeOnCloud0"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud1"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud2"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud3"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud4"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud5"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud6"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud7"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud8"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud9"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud10"),
-                getLongDataFromJson(JsonData,"tapTimeOnCloud11")
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud0"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud1"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud2"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud3"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud4"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud5"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud6"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud7"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud8"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud9"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud10"),
+                //getLongDataFromJson(JsonData, "tapTimeOnCloud11")
         );
 
 

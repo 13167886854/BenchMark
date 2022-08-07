@@ -149,6 +149,11 @@ public class TapUtil {
                                                 //service.mTapStartTimes.add(String.valueOf(mLastTapTime));
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
                                                 mCurrentTapNum++;
+
+                                                //
+                                                if (mCurrentTapNum == TOTAL_TAP_NUM) {
+                                                    mCurrentTapNum = 0;
+                                                }
                                                 //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
                                                 //Message msg = Message.obtain();
                                                 //msg.what = 1;
@@ -185,6 +190,7 @@ public class TapUtil {
                 }
                 if (turn == 10) {
                     Log.d("TWT", "run: stop");
+                    turn = 0;
                     cancel();
                 }
             }
@@ -204,6 +210,8 @@ public class TapUtil {
 
                 if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
                     Log.d("zzl", "run: stop");
+                    phoneCurrentTapNum = 0;
+
                     cancel();
                 }
             }
