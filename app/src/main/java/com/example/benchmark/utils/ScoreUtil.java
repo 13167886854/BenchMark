@@ -5,11 +5,15 @@ import android.util.Log;
 
 import androidx.annotation.LongDef;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.Service.AutoTapAccessibilityService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
+
+import cn.hutool.json.JSON;
 
 /**
  * 计算分数
@@ -186,34 +190,60 @@ public class ScoreUtil {
             //Long cloudSpendTime0, Long cloudSpendTime1, Long cloudSpendTime2, Long cloudSpendTime3, Long cloudSpendTime4,
             //Long cloudSpendTime5, Long cloudSpendTime6, Long cloudSpendTime7, Long cloudSpendTime8, Long cloudSpendTime9,
             //Long cloudSpendTime10, Long cloudSpendTime11,
-            long time0, long time1, long time2, long time3, long time4, long time5,
-            long time6, long time7, long time8, long time9, long time10, long time11
-    ) {
-        Log.d("zzl", "cloudSpendTime0: ");
+            //long time0, long time1, long time2, long time3, long time4, long time5,
+            //long time6, long time7, long time8, long time9, long time10, long time11
+            String cloudDownTimeList, String cloudSpendTimeList) {
+        //Log.d("zzl", "cloudSpendTime0: ");
+        String cloudDownTimeListSub = cloudDownTimeList.substring(1, cloudDownTimeList.length() - 1);
+        String cloudSpendTimeListSub = cloudSpendTimeList.substring(1, cloudSpendTimeList.length() - 1);
+        String[] cloudDownTimeListArr = cloudDownTimeListSub.split(",");
+        String[] cloudSpendTimeListArr = cloudSpendTimeListSub.split(",");
 
+        Log.d("zzl", "calcAndSaveTouchScores: cloudDownTimeListArr==>" + Arrays.toString(cloudDownTimeListArr));
+        Log.d("zzl", "calcAndSaveTouchScores: cloudSpendTimeListArr==>" + Arrays.toString(cloudSpendTimeListArr));
+
+        for (int i = 0; i < cloudDownTimeListArr.length; i++) {
+            cloudDownTimeListArr[i] = cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
+            //if (i == cloudDownTimeListArr.length - 1) {
+            //    cloudDownTimeListArr[i] = cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
+            //}
+            Log.d("zzll", "calcAndSaveTouchScores: --" + cloudDownTimeListArr[i]);
+        }
+
+        for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
+            cloudSpendTimeListArr[i] = cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
+            //if (i == cloudSpendTimeListArr.length - 1) {
+            //    cloudSpendTimeListArr[i] = cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
+            //}
+            Log.d("zzll", "calcAndSaveTouchScores: --" + cloudSpendTimeListArr[i]);
+        }
+
+        //Log.d("zzl", "calcAndSaveTouchScores: "+cloudDownTimeList.getClass());
+        //Log.d("zzl", "calcAndSaveTouchScores: "+cloudSpendTimeList.getClass());
         // 判断测试平台
         String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
         Log.d("zzl", "测试平台===>" + checkPlatform);
         TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
         Log.d("zzl", "localTapTimes: " + localTapTimes);
+
         // 响应次数
         int responseNum = 0;
-        long ResponseTime0 = time0 - CacheUtil.getLong("tapTimeOnLocal0");
-        long ResponseTime1 = time1 - CacheUtil.getLong("tapTimeOnLocal1");
-        long ResponseTime2 = time2 - CacheUtil.getLong("tapTimeOnLocal2");
-        long ResponseTime3 = time3 - CacheUtil.getLong("tapTimeOnLocal3");
-        long ResponseTime4 = time4 - CacheUtil.getLong("tapTimeOnLocal4");
-        long ResponseTime5 = time5 - CacheUtil.getLong("tapTimeOnLocal5");
-        long ResponseTime6 = time6 - CacheUtil.getLong("tapTimeOnLocal6");
-        long ResponseTime7 = time7 - CacheUtil.getLong("tapTimeOnLocal7");
-        long ResponseTime8 = time8 - CacheUtil.getLong("tapTimeOnLocal8");
-        long ResponseTime9 = time9 - CacheUtil.getLong("tapTimeOnLocal9");
-        long ResponseTime10 = time10 - CacheUtil.getLong("tapTimeOnLocal10");
-        long ResponseTime11 = time11 - CacheUtil.getLong("tapTimeOnLocal11");
+        long ResponseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal0") + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
+        long ResponseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal1") + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
+        long ResponseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal2") + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
+        long ResponseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal3") + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
+        long ResponseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal4") + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
+        long ResponseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal5") + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
+        long ResponseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal6") + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
+        long ResponseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal7") + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
+        long ResponseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal8") + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
+        long ResponseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal9") + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
+        long ResponseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal10") + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
 
-        if (ResponseTime0 != 0L) {
-            responseNum++;
-        }
+
+        //if (ResponseTime0 != 0L) {
+        //    responseNum++;
+        //}
         if (ResponseTime1 != 0L) {
             responseNum++;
         }
@@ -241,18 +271,18 @@ public class ScoreUtil {
         if (ResponseTime9 != 0L) {
             responseNum++;
         }
-        if (ResponseTime10 != 0L) {
-            responseNum++;
-        }
-        if (ResponseTime11 != 0L) {
-            responseNum++;
-        }
+        //if (ResponseTime10 != 0L) {
+        //    responseNum++;
+        //}
+        //if (ResponseTime11 != 0L) {
+        //    responseNum++;
+        //}
         // 平均触控时延
-        long avgResponseTime = (ResponseTime0 + ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
-                ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9 + ResponseTime10 + ResponseTime11) / 12;
+        long avgResponseTime = ( ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
+                ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9 ) / 9;
 
         // 正确率
-        float averageAccuracy = (float) responseNum / 12;
+        float averageAccuracy = (float) responseNum / 9;
 
         Log.d("zzl", "ResponseTime0: " + ResponseTime0);
         Log.d("zzl", "ResponseTime1: " + ResponseTime1);
@@ -265,7 +295,7 @@ public class ScoreUtil {
         Log.d("zzl", "ResponseTime8: " + ResponseTime8);
         Log.d("zzl", "ResponseTime9: " + ResponseTime9);
         Log.d("zzl", "ResponseTime10: " + ResponseTime10);
-        Log.d("zzl", "ResponseTime11: " + ResponseTime11);
+        //Log.d("zzl", "ResponseTime11: " + ResponseTime11);
         Log.d("zzl", "avgResponseTime: " + avgResponseTime);
         Log.d("zzl", "averageAccuracy: " + averageAccuracy);
 
