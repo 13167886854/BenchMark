@@ -1,19 +1,9 @@
 package com.example.benchmark.utils;
 
-import android.content.Intent;
 import android.util.Log;
 
-import androidx.annotation.LongDef;
-
-import com.alibaba.fastjson.JSONObject;
-import com.example.benchmark.Service.AutoTapAccessibilityService;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.TreeSet;
-
-import cn.hutool.json.JSON;
 
 /**
  * 计算分数
