@@ -3,7 +3,6 @@ package com.example.benchmark.Service;
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityCallback;
@@ -24,7 +23,7 @@ public class RedFingerStabilityService implements IStabilityService {
     private final String NODE_ID_QUIT_PHONE = "com.redfinger.app:id/tv_ok";
     private final String NODE_TEXT_QUIT_PHONE = "确定";
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private int mCurrentMonitorNum = 0;
     private long mStartTime = 0L;
@@ -37,7 +36,7 @@ public class RedFingerStabilityService implements IStabilityService {
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
 
-    public RedFingerStabilityService(StabilityMonitorService service) {
+    public RedFingerStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

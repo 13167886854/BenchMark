@@ -26,13 +26,13 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
     private int mCurrentMonitorNum = 0;
     private int mFailMonitorNum = 0;
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private boolean isEnterGame = false;
 
     private long mStartTime;
 
-    public NetEaseCloudGameStabilityService(StabilityMonitorService service) {
+    public NetEaseCloudGameStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

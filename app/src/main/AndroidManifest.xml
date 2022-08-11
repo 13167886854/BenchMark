@@ -25,6 +25,7 @@
     </queries>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".BaseApp"
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -32,11 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BenchMark">
+        <activity
+            android:name=".Activity.TestGameTouchActivity"
+            android:exported="false" />
         <service
-            android:name=".Service.StabilityMonitorService"
-            android:exported="false"
+            android:name=".Service.MyAccessibilityService"
+            android:exported="true"
             android:foregroundServiceType="mediaProjection"
-            android:label="@string/benchmark_stability_monitor_description"
+            android:label="@string/accessibility_description"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -45,22 +49,6 @@
             <meta-data
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessible_service_config" />
-        </service>
-
-        <service
-            android:name=".Service.AutoTapService"
-            android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="location"
-            android:label="无障碍辅助功能名称"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_config" />
         </service>
 
 

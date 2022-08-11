@@ -20,7 +20,7 @@ public class ECloudPhoneStabilityService implements IStabilityService{
     private final String NODE_TEXT_QUIT_PHONE = "确认";
     private final String NODE_ID_NO_NOTICE = "com.chinamobile.cmss.saas.cloundphone:id/netwrok_check";
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private int mCurrentMonitorNum = 0;
     private long mQuitTime = 0L;
@@ -30,7 +30,7 @@ public class ECloudPhoneStabilityService implements IStabilityService{
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
 
-    public ECloudPhoneStabilityService(StabilityMonitorService service) {
+    public ECloudPhoneStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

@@ -3,15 +3,15 @@ package com.example.benchmark.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,12 +22,11 @@ import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
-import com.example.benchmark.Service.AutoTapService;
 import com.example.benchmark.utils.AccessUtils;
 
 
 import com.example.benchmark.BaseApp;
-import com.example.benchmark.Service.StabilityMonitorService;
+import com.example.benchmark.Service.MyAccessibilityService;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
@@ -39,7 +38,6 @@ import java.util.Objects;
 
 public class PhoneFragment extends Fragment implements View.OnClickListener {
     private Button blue_liuchang, blue_wending, blue_chukong, blue_yinhua;
-
     private List<CepingData> data;
 
     private CheckBox blue_liuchang_cheak;
@@ -97,16 +95,25 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             if(blue_wending_cheak.isChecked()) {
                 if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
-                        || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
+                        || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                     popDiaLog.show();
                     return;
                 }
             }
             if(blue_chukong_cheak.isChecked()) {
-                if (!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName())) {
+                if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                     popDiaLog.show();
                     return;
                 }
+            }
+            if(!Settings.canDrawOverlays(getContext())){
+                Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
+                Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
+                Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
+                //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                this.startActivity(intentToFloatPermission);
+                //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
+                return;
             }
             CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
             CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);

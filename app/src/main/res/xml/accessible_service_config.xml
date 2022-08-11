@@ -2,7 +2,7 @@
 <accessibility-service
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityEventTypes="typeAllMask"
-    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFeedbackType="feedbackAllMask"
     android:accessibilityFlags="flagReportViewIds"
     android:canRetrieveWindowContent="true"
     android:canPerformGestures="true"
@@ -10,5 +10,7 @@
     android:canRequestTouchExplorationMode = "true"
     android:canRequestFingerprintGestures="true"
     android:notificationTimeout="100"
-    android:description="@string/benchmark_stability_monitor_description"
-    android:packageNames="@string/pkg_names_accessibility_service"/>
+    android:description="@string/accessibility_description"
+    />
+    <!--    android:packageNames="@string/pkg_names_accessibility_service-->
+<!--    android:accessibilityFeedbackType="feedbackGeneric"-->

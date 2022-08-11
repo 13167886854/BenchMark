@@ -1,5 +1,9 @@
 package com.example.benchmark.Service;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +38,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.benchmark.Activity.CheckFrameUpateActivity;
+import com.example.benchmark.Activity.TestGameTouchActivity;
 import com.example.benchmark.Activity.TestSMActivity;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
@@ -84,18 +89,30 @@ public class RecordService extends Service {
 
     //private Messenger mMessenger;
 
-    private static final String TAG = "RecordService";
+    private static final String TAG = "TWT";
     Handler handler=new Handler(){
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what){
                 case START_RECORD:
                     //mFloatView.setText("停止");
+                    isRecording=!isRecording;
                     startRecord();
+
                     break;
                 case STOP_RECORD:
+                    isRecording=!isRecording;
+                    //点击结束录制后休息1s后才能继续录制
+                    isAble = false;
                     //mFloatView.setText("开始");
+                    //gameTouchUtil.setVideoEndTime(System.currentTimeMillis());
                     stopRecord();
+
+                    Intent intent = new Intent(mContext, TestGameTouchActivity.class);
+                    intent.putExtra("path",path);
+                    intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     break;
 
             }
@@ -107,7 +124,7 @@ public class RecordService extends Service {
     @Override
     public void onCreate()
     {
-
+        Log.d(TAG, "onCreate: 121212");
         super.onCreate();
         mContext=RecordService.this;
 //        HandlerThread serviceThread = new HandlerThread("service_thread",
@@ -115,7 +132,6 @@ public class RecordService extends Service {
 //        serviceThread.start();
         running = false;
         mediaRecorder = new MediaRecorder();
-
         createFloatView();
 
     }
@@ -124,6 +140,7 @@ public class RecordService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG, "onBind:12132 ");
         return new RecordBinder();
     }
 
@@ -135,6 +152,7 @@ public class RecordService extends Service {
 
     private void createFloatView()
     {
+        Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
         mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
@@ -207,23 +225,19 @@ public class RecordService extends Service {
                     if(!isRecording){
                         mFloatView.setText("停止");
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
-                        isRecording=!isRecording;
+
                         //开始录制
                         handler.sendEmptyMessage(START_RECORD);
-                        tapUtil.GameTouchTap();
                         //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
                         //mFloatView.setBackgroundColor(Color.RED);
                     }else{
                         //mFloatView.setText("开始");
-
                         //停止录制
-                        handler.sendEmptyMessageDelayed(STOP_RECORD,500);
+                        //handler.sendEmptyMessageDelayed(STOP_RECORD,500);
                         //mFloatView.setBackgroundColor(Color.GREEN);
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),null,null,null);
                         mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
-                        isRecording=!isRecording;
-                        //点击结束录制后休息1s后才能继续录制
-                        isAble = false;
+
 
                         Runnable r = new Runnable() {
                             @Override
@@ -266,25 +280,33 @@ public class RecordService extends Service {
         initRecorder();
         createVirtualDisplay();
         mediaRecorder.start();
+        gameTouchUtil.setVideoStartTime(System.currentTimeMillis());
+        tapUtil.GameTouchTap(RecordService.this);
         running = true;
         Log.d(TAG, "begin:开始录制 ");
         return true;
+    }
+
+
+    public void sendStopMsg(){
+        handler.sendEmptyMessageDelayed(STOP_RECORD,1000);
     }
 
     public boolean stopRecord() {
         if (!running) {
             return false;
         }
+
         running = false;
         mediaRecorder.stop();
         mediaRecorder.reset();
         virtualDisplay.release();
         //mediaProjection.stop();
         Log.d(TAG, "begin:结束录制 ");
-
-        //录制结束对录制视频进行测试
-        CheckFrameUpateActivity.start(this,path);
+        gameTouchUtil.setVideoEndTime(System.currentTimeMillis());
         stopSelf();
+
+
         if(mFloatLayout != null)
         {
             mWindowManager.removeView(mFloatLayout);

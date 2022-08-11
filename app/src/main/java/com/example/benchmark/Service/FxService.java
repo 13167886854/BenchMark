@@ -1,6 +1,5 @@
 package com.example.benchmark.Service;
 
-import android.accessibilityservice.AccessibilityService;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
@@ -36,8 +35,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.R;
-import com.example.benchmark.utils.AccessibilityCallback;
-import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.CodeUtils;
@@ -510,7 +507,7 @@ public class FxService extends Service {
 
     private void startAutoTapService() {
         CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, true);
-        Intent service = new Intent(this, StabilityMonitorService.class)
+        Intent service = new Intent(this, MyAccessibilityService.class)
                 .putExtra(CacheConst.KEY_PLATFORM_NAME, checkPlatform)
                 .putExtra("resultCode", resultCode)
                 .putExtra("data", data)

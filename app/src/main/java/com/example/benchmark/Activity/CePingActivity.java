@@ -10,17 +10,14 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -31,18 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.R;
-import com.example.benchmark.Service.ECloudPhoneStabilityService;
 import com.example.benchmark.Service.GameSmoothTestService;
-import com.example.benchmark.Service.MiGuPlayStabilityService;
-import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
-import com.example.benchmark.Service.TencentGamerStabilityService;
 import com.example.benchmark.Service.RecordService;
-import com.example.benchmark.Service.MiGuPlayStabilityService;
-import com.example.benchmark.Service.NetEaseCloudGameStabilityService;
-import com.example.benchmark.Service.TencentGamerStabilityService;
 import com.example.benchmark.utils.ApkUtil;
 import com.example.benchmark.utils.CacheUtil;
-import com.example.benchmark.Service.StabilityMonitorService;
+import com.example.benchmark.Service.MyAccessibilityService;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
@@ -151,18 +141,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         ){
             //Toast.makeText(this,"准备测试云游戏流畅性！",Toast.LENGTH_SHORT).show();
             //开启流畅性测试悬浮窗
-            if(!Settings.canDrawOverlays(CePingActivity.this)){
-                Toast.makeText(CePingActivity.this, "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
-                Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
-                Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getPackageName()));
-                //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                this.startActivity(intentToFloatPermission);
-                //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
-            }else{
                 startGameSmoothService();
                 if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
                     Log.d("TWT", "TEST: "+getString(R.string.pkg_name_tencent_gamer));
-                    //ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 }
 //                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checked_plat)) {
 //                    ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
@@ -171,7 +152,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 //                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
 //                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
 //                }
-            }
 
         }else if(platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckTouch){
             //开始云游戏触控体验测试。。。
@@ -262,6 +242,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
 
     private void startGameTouchService(){
+        Log.d("TWT", "startGameTouchService: 123");
         touch_connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
@@ -349,7 +330,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_STABILITY && resultCode == RESULT_OK) {
-            Intent service = new Intent(this, StabilityMonitorService.class)
+            Intent service = new Intent(this, MyAccessibilityService.class)
                     .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
                     .putExtra(CacheConst.KEY_IS_HAVING_OTHER_PERFORMANCE_MONITOR, isHaveOtherPerformance)
                     .putExtra("resultCode", resultCode)
@@ -417,4 +398,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        //unbindService(sm_connection);
+        //unbindService(touch_connection);
+        super.onDestroy();
+    }
 }

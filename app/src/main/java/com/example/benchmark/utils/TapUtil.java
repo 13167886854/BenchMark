@@ -1,15 +1,12 @@
 package com.example.benchmark.utils;
 
 import android.os.Build;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.example.benchmark.Service.AutoTapService;
-import com.example.benchmark.Service.StabilityMonitorService;
+import com.example.benchmark.Service.MyAccessibilityService;
+import com.example.benchmark.Service.RecordService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -28,8 +25,10 @@ public class TapUtil {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     //单例模式
-    private AutoTapService service;
+    private MyAccessibilityService service;
+    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
     private static TapUtil util = new TapUtil();
+
 
     private int phoneCurrentTapNum = 0;
     // 触控测试模拟点击次数
@@ -68,11 +67,10 @@ public class TapUtil {
         return util;
     }
 
-    private Timer timer = new Timer();
     private int turn = 0;
 
 
-    public void setService(AutoTapService service) {
+    public void setService(MyAccessibilityService service) {
         this.service = service;
     }
 
@@ -85,7 +83,7 @@ public class TapUtil {
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
-                        Log.d("TWT", "do tap when time is " + System.currentTimeMillis());
+                        //Log.d("TWT", "do tap when time is " + System.currentTimeMillis());
                     }
 
                     @Override
@@ -170,27 +168,32 @@ public class TapUtil {
 
     }
 
-    public void GameTouchTap() {
+    public void GameTouchTap(RecordService service) {
+        turn = 0;
+        gameTouchUtil.clear();
+
         TimerTask task = new TimerTask() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void run() {
                 Log.d("TWT", "turn = " + turn);
                 turn++;
                 if (turn % 2 == 1) {
                     tap(2165, 860); //点击设置按钮
-
+//                    tap(2165, 630); //点击设置按钮
                 } else {
                     tap(1000, 830);  //点击取消按钮
+                    gameTouchUtil.getTapTime(System.currentTimeMillis());
                 }
-                if (turn == 10) {
+                if (turn == 20) {
                     Log.d("TWT", "run: stop");
+                    service.sendStopMsg();
                     cancel();
                 }
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task, 3000, 1000);
+        gameTouchUtil.readyToTapTime = System.currentTimeMillis();
+        timer.schedule(task, 1500, 750);
     }
 
     public void PhoneTouchTap() {

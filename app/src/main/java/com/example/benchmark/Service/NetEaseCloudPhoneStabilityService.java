@@ -2,14 +2,9 @@ package com.example.benchmark.Service;
 
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
 
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.TextView;
 
 import com.example.benchmark.utils.AccessibilityUtil;
-
-import java.util.List;
 
 public class NetEaseCloudPhoneStabilityService implements IStabilityService {
 
@@ -29,7 +24,7 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
     private final String NODE_TEXT_CONTINUE_WAIT = "继续等待";
     private final String NODE_ID_CONTINUE_WAIT = "com.netease.android.cloudgame:id/vip_continue_wait_btn";
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private int mCurrentMonitorNum = 0;
 
@@ -39,7 +34,7 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
 
     private long mStartTime;
 
-    public NetEaseCloudPhoneStabilityService(StabilityMonitorService service) {
+    public NetEaseCloudPhoneStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

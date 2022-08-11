@@ -3,6 +3,7 @@ package com.example.benchmark.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -23,8 +24,7 @@ import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.BaseApp;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
-import com.example.benchmark.Service.AutoTapService;
-import com.example.benchmark.Service.StabilityMonitorService;
+import com.example.benchmark.Service.MyAccessibilityService;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
@@ -98,19 +98,33 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 }
                 if(red_wending_cheak.isChecked() ){
                     if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
-                            || !ServiceUtil.isServiceRunning(BaseApp.context, StabilityMonitorService.class.getName())) {
+                            || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         popDiaLog.show();
                         return;
                     }
                 }else if(red_chukong_cheak.isChecked()){
-                    Log.d("TWT", "isOK: "+!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName()));
-                    if(!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName())){
+                    //Log.d("TWT", "isOK: "+!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName()));
+                    //检查是否开启无障碍服务。。。。
+                    if(!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())){
                         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         return;
                     }
+
+
                     //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
+                }
+                if(!Settings.canDrawOverlays(getContext())){
+                    Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
+                    Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
+                    Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
+                    //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                    startActivity(intentToFloatPermission);
+                    //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
+                    return;
+                }else{
+                    Toast.makeText(getContext(),"can draw floatWindow",Toast.LENGTH_SHORT);
                 }
                 CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
                 CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);

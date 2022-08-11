@@ -13,7 +13,7 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     private final String NODE_ID_BTN_CONTINUE_GAME = "android:id/button1";
     private final String NODE_ID_BTN_QUIT_CLOUD_PHONE = "com.huawei.cloudphonedaily:id/tv_positive";
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private int mCurrentMonitorNum = 0;
     private long mStartTime = 0L;
@@ -21,7 +21,7 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     private boolean isClickTestBtn = false;
     private boolean isClickStartGameBtn = false;
 
-    public HuaweiCloudGameStabilityService(StabilityMonitorService service) {
+    public HuaweiCloudGameStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

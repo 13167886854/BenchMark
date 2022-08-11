@@ -1,32 +1,20 @@
 package com.example.benchmark.Activity;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.example.benchmark.Fragment.SettingFragment;
 import com.example.benchmark.Fragment.TishiFragment;
 import com.example.benchmark.Fragment.ZhuyeFragment;
 import com.example.benchmark.R;
-import com.example.benchmark.Service.FxService;
-import com.example.benchmark.Service.StabilityMonitorService;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 

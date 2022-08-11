@@ -1,17 +1,13 @@
 package com.example.benchmark.Service;
 
 import android.os.Build;
-import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityCallback;
-import com.example.benchmark.utils.AccessibilityClassFindCallback;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.StatusBarUtil;
-
-import java.util.List;
 
 public class TencentGamerStabilityService implements IStabilityService {
 
@@ -44,13 +40,13 @@ public class TencentGamerStabilityService implements IStabilityService {
 
     private int mCurrentMonitorNum = 0;
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private boolean isClickHome = false;
     private boolean isClickRank = false;
     private boolean isClickInstantPlay = false;
 
-    public TencentGamerStabilityService(StabilityMonitorService service) {
+    public TencentGamerStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

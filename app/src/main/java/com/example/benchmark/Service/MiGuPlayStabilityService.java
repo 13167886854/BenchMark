@@ -37,11 +37,11 @@ public class MiGuPlayStabilityService implements IStabilityService {
     private int mCurrentMonitorNum = 0;
     private int mFailMonitorNum = 0;
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private boolean isClickInstantPlay = false;
 
-    public MiGuPlayStabilityService(StabilityMonitorService service) {
+    public MiGuPlayStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 

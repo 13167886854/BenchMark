@@ -23,7 +23,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     private final String NODE_ID_RECONNECT = "android:id/button2";
     private final String NODE_TEXT_RECONNECT = "重连云手机";
 
-    private final StabilityMonitorService service;
+    private final MyAccessibilityService service;
 
     private int mCurrentMonitorNum = 0;
     private int mFailMonitorNum = 0;
@@ -35,7 +35,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     private boolean isTapping = false;
     private boolean isClickStartConnectBtn = false;
 
-    public HuaweiCloudPhoneStabilityService(StabilityMonitorService service) {
+    public HuaweiCloudPhoneStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 
