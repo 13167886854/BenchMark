@@ -14,6 +14,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.example.benchmark.Activity.AudioVideoActivity;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.SpeedManager;
 
@@ -118,7 +119,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             mMediaExtractor.selectTrack(mVideoTrackIndex);
             SpeedManager mSpeedManager = new SpeedManager();//音视频同步器
-            while (sampleSize != -1 && AudioDecodeThread.ok==1) {
+            while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
                 //填充要解码的数据
                 if (sampleSize != -1) {

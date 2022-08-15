@@ -13,6 +13,7 @@ import android.media.MediaFormat;
 import android.os.Build;
 import android.util.Log;
 
+import com.example.benchmark.Activity.AudioVideoActivity;
 import com.example.benchmark.R;
 
 import java.io.IOException;
@@ -24,8 +25,6 @@ public class AudioDecodeThread extends Thread implements Runnable {
     private MediaExtractor mMediaExtractor;
     private int mAudioTrackIndex = -1;
     private MediaCodec mAudioDecoder;
-
-    public static int ok = 1;
 
     private String mMp4FilePath;
 
@@ -152,9 +151,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             ByteBuffer byteBuffer = ByteBuffer.allocate(minBufferSize);
             int sampleSize = 0;
-            Log.e("TWT", "outrun: OK"+ok);
-            while (sampleSize != -1 && ok==1) {
-                Log.e("TWT", "intrun: OK"+ok);
+            while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
                 //填充要解码的数据
                 if (sampleSize != -1) {

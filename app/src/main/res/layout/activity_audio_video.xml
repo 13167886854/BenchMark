@@ -14,20 +14,17 @@
         android:layout_height="200dp" />
 
     <LinearLayout
-        android:layout_marginTop="250dp"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent">
-        <Button
-            android:id="@+id/play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="解码" />
         <TextView
             android:id="@+id/yinhua_item"
             android:text="音视频信息"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="#80ffffff"
+
+            />
     </LinearLayout>
 
 
