@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.Service.MyAccessibilityService;
-import com.example.benchmark.Service.RecordService;
+import com.example.benchmark.Service.GameTouchTestService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -168,7 +168,7 @@ public class TapUtil {
 
     }
 
-    public void GameTouchTap(RecordService service) {
+    public void GameTouchTap(GameTouchTestService service) {
         turn = 0;
         gameTouchUtil.clear();
 

@@ -299,21 +299,6 @@ public class FxService extends Service {
                 if (isclick) {
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
-                    tapUtil.tap(1000,1000);
-
-
-                    //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return true;
-//                    AccessibilityUtil.tap(service, 500, 500,
-//                            new AccessibilityCallback() {
-//                                @Override
-//                                public void onSuccess() {
-//                                    Log.e("TWT", "do tap when time is "+System.currentTimeMillis());
-//                                }
-//
-//                                @Override
-//                                public void onFailure() {
-//                                }
-//                            });
                 }
                 return true;
             }
@@ -422,6 +407,7 @@ public class FxService extends Service {
 
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
+        Log.d(TAG, "bitmap getWidth: "+bitmap.getWidth());
         String result = CodeUtils.parseCode(bitmap);
         //Log.e("QT-1", result);
         if ("{}".equals(result)) {
@@ -458,34 +444,8 @@ public class FxService extends Service {
         );
 
         ScoreUtil.calcAndSaveTouchScores(
-                //JsonData.getLong("cloudSpendTime0"),
-                //JsonData.getLong("cloudSpendTime1"),
-                //JsonData.getLong("cloudSpendTime2"),
-                //JsonData.getLong("cloudSpendTime3"),
-                //JsonData.getLong("cloudSpendTime4"),
-                //JsonData.getLong("cloudSpendTime5"),
-                //JsonData.getLong("cloudSpendTime6"),
-                //JsonData.getLong("cloudSpendTime7"),
-                //JsonData.getLong("cloudSpendTime8"),
-                //JsonData.getLong("cloudSpendTime9"),
-                //JsonData.getLong("cloudSpendTime10"),
-                //JsonData.getLong("cloudSpendTime11"),
-
                 getCloudListDataFromJson(JsonData, "cloudDownTimeList"),
                 getCloudListDataFromJson(JsonData, "cloudSpendTimeList")
-
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud0"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud1"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud2"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud3"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud4"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud5"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud6"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud7"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud8"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud9"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud10"),
-                //getLongDataFromJson(JsonData, "tapTimeOnCloud11")
         );
 
 

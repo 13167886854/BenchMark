@@ -11,7 +11,7 @@
         android:layout_x="0dp"
         android:layout_y="0dp"
         android:clickable="true"
-        android:drawableStart="@drawable/ic_notify_normal"
+        android:drawableStart="@drawable/ic_float"
         android:textAlignment="center"
         android:textSize="13dp" />
 

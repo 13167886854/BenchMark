@@ -6,23 +6,17 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CheckVedioUpdateFrameRenderer;
-import com.example.benchmark.utils.FpsUtils;
-import com.example.benchmark.utils.GLVideoRenderer;
 import com.example.benchmark.utils.GameTouchUtil;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class CheckFrameUpateActivity extends AppCompatActivity {

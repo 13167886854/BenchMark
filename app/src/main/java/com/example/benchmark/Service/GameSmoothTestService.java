@@ -16,6 +16,7 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,11 +43,15 @@ import java.util.TimerTask;
 
 public class GameSmoothTestService extends Service {
     //
-    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
-    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
+//    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
+//    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
+
+    private int screenWidth;
+    private int screenHeight;
+    private int screenDensity;
 
     private boolean running;
     private int width = 720;
@@ -136,8 +141,8 @@ public class GameSmoothTestService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = screenWidth - 50;
-        wmParams.y = screenHeight / 2;
+        wmParams.x = width - 50;
+        wmParams.y = height / 2;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -261,6 +266,10 @@ public class GameSmoothTestService extends Service {
         if (mediaProjection == null || running) {
             return false;
         }
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+        screenDensity = metrics.densityDpi;
         initRecorder();
         createVirtualDisplay();
         mediaRecorder.start();
@@ -291,7 +300,11 @@ public class GameSmoothTestService extends Service {
     }
 
     private void createVirtualDisplay() {
-        virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
+//        DisplayMetrics metrics = getResources().getDisplayMetrics();
+//        int screenWidth = metrics.widthPixels;
+//        int screenHeight = metrics.heightPixels;
+//        int screenDensity = metrics.densityDpi;
+        virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", screenWidth, screenHeight, screenDensity,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
     }
 
@@ -303,7 +316,7 @@ public class GameSmoothTestService extends Service {
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(width, height);
+            mediaRecorder.setVideoSize(screenWidth, screenHeight);
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(30);

@@ -1,5 +1,7 @@
 package com.example.benchmark.Activity;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -14,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.benchmark.R;
 import com.example.benchmark.utils.FpsUtils;
-import com.example.benchmark.utils.GLVideoRenderer;
+import com.example.benchmark.render.GLVideoRenderer;
 import com.example.benchmark.utils.ScoreUtil;
 
 import java.io.IOException;
@@ -50,6 +52,7 @@ public class TestSMActivity extends AppCompatActivity {
     public static void start(Context context, String path){
         Intent intent = new Intent(context,TestSMActivity.class);
         intent.putExtra("path",path);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -169,13 +172,13 @@ public class TestSMActivity extends AppCompatActivity {
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
 
-//        ScoreUtil.calcAndSaveFluencyScores(
-//                getRoundNumber((float)fpsUtil.getAvergeFps()),
-//                getRoundNumber((float)fpsUtil.getFrameShakingRate()),
-//                getRoundNumber((float)fpsUtil.getLowFrameRate()*100),
-//                getRoundNumber((float)fpsUtil.getFrameIntervalTime()),
-//                fpsUtil.getJankCount(),
-//                getRoundNumber((float)fpsUtil.getShtutterRate())*100);
+        ScoreUtil.calcAndSaveFluencyScores(
+                getRoundNumber((float)fpsUtil.getAvergeFps()),
+                getRoundNumber((float)fpsUtil.getFrameShakingRate()),
+                getRoundNumber((float)fpsUtil.getLowFrameRate()*100),
+                getRoundNumber((float)fpsUtil.getFrameIntervalTime()),
+                fpsUtil.getJankCount(),
+                getRoundNumber((float)fpsUtil.getShtutterRate())*100);
         Intent intent = new Intent(TestSMActivity.this,CePingActivity.class);
         intent.putExtra("isFluencyUntested",false);
         startActivity(intent);
