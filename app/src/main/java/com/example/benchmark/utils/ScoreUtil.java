@@ -1,9 +1,22 @@
 package com.example.benchmark.utils;
 
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.LongDef;
+import androidx.annotation.RequiresApi;
+
+import com.alibaba.fastjson.JSONObject;
+import com.example.benchmark.Service.AutoTapAccessibilityService;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
+
+import cn.hutool.json.JSON;
 
 /**
  * 计算分数
@@ -11,11 +24,11 @@ import java.util.TreeSet;
 public class ScoreUtil {
 
     public static void calcAndSaveCPUScores(
-            String cpuName,
+            //String cpuName,
             int cpuCores
     ) {
         // 保存CPU结果
-        CacheUtil.put(CacheConst.KEY_CPU_NAME, cpuName);
+        //CacheUtil.put(CacheConst.KEY_CPU_NAME, cpuName);
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
         // 计算CPU分数
         float cpuCoresScore = cpuCores <= 8 ? 100f * cpuCores / (9 * 8) : 100f / 9;
@@ -24,9 +37,9 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
     }
 
-    public static int getCPUScore() {
-        return CacheUtil.getInt(CacheConst.KEY_CPU_SCORE);
-    }
+    //public static int getCPUScore() {
+    //    return CacheUtil.getInt(CacheConst.KEY_CPU_SCORE);
+    //}
 
     public static void calcAndSaveGPUScores(
             String gpuVendor,
@@ -39,48 +52,48 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
         // 计算GPU分数
         // 保存GPU分数
-        CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
+        //CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
     }
 
-    public static int getGPUScore() {
-        return CacheUtil.getInt(CacheConst.KEY_GPU_SCORE);
-    }
-
+    //public static int getGPUScore() {
+    //    return CacheUtil.getInt(CacheConst.KEY_GPU_SCORE);
+    //}
+    //
     public static void calcAndSaveRAMScores(
-            float availableRAM,
-            float totalRAM
+            String availableRAM,
+            String totalRAM
     ) {
         // 保存RAM结果
         CacheUtil.put(CacheConst.KEY_AVAILABLE_RAM, availableRAM);
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
         // 计算RAM分数
-        float totalRAMScore = totalRAM <= 16 ? 100f * totalRAM / (9 * 16) : 100f / 9;
-        int ramScore = (int) (totalRAMScore);
+        //float totalRAMScore = totalRAM <= 16 ? 100f * totalRAM / (9 * 16) : 100f / 9;
+        //int ramScore = (int) (totalRAMScore);
         // 保存RAM分数
-        CacheUtil.put(CacheConst.KEY_RAM_SCORE, ramScore);
+        //CacheUtil.put(CacheConst.KEY_RAM_SCORE, ramScore);
     }
 
-    public static int getRAMScore() {
-        return CacheUtil.getInt(CacheConst.KEY_RAM_SCORE);
-    }
+    //public static int getRAMScore() {
+    //    return CacheUtil.getInt(CacheConst.KEY_RAM_SCORE);
+    //}
 
     public static void calcAndSaveROMScores(
-            float availableROM,
-            float totalROM
+            String availableROM,
+            String totalROM
     ) {
         // 保存ROM结果
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
         // 计算ROM分数
-        float totalROMScore = totalROM <= 16 ? 100f * totalROM / (9 * 16) : 100f / 9;
-        int romScore = (int) (totalROMScore);
+        //float totalROMScore = totalROM <= 16 ? 100f * totalROM / (9 * 16) : 100f / 9;
+        //int romScore = (int) (totalROMScore);
         // 保存ROM分数
-        CacheUtil.put(CacheConst.KEY_ROM_SCORE, romScore);
+        //CacheUtil.put(CacheConst.KEY_ROM_SCORE, romScore);
     }
 
-    public static int getROMScore() {
-        return CacheUtil.getInt(CacheConst.KEY_ROM_SCORE);
-    }
+    //public static int getROMScore() {
+    //    return CacheUtil.getInt(CacheConst.KEY_ROM_SCORE);
+    //}
 
     public static void calcAndSaveFluencyScores(
             float averageFPS,
@@ -176,6 +189,7 @@ public class ScoreUtil {
         return CacheUtil.getInt(CacheConst.KEY_STABILITY_SCORE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void calcAndSaveTouchScores(
             //Long cloudSpendTime0, Long cloudSpendTime1, Long cloudSpendTime2, Long cloudSpendTime3, Long cloudSpendTime4,
             //Long cloudSpendTime5, Long cloudSpendTime6, Long cloudSpendTime7, Long cloudSpendTime8, Long cloudSpendTime9,
@@ -235,48 +249,87 @@ public class ScoreUtil {
         long ResponseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal10") + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
 
 
-        //if (ResponseTime0 != 0L) {
-        //    responseNum++;
-        //}
+        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal10") - CacheUtil.getLong("tapTimeOnLocal0")));
+        ArrayList<Long> longs = new ArrayList<>();
+
+        if (ResponseTime0 != 0L) {
+            responseNum++;
+            longs.add(ResponseTime0);
+
+        }
+
         if (ResponseTime1 != 0L) {
             responseNum++;
+            longs.add(ResponseTime1);
+
         }
         if (ResponseTime2 != 0L) {
+
             responseNum++;
+            longs.add(ResponseTime2);
+
         }
         if (ResponseTime3 != 0L) {
             responseNum++;
+            longs.add(ResponseTime3);
+
         }
         if (ResponseTime4 != 0L) {
             responseNum++;
+            longs.add(ResponseTime4);
+
         }
         if (ResponseTime5 != 0L) {
             responseNum++;
+            longs.add(ResponseTime5);
+
         }
         if (ResponseTime6 != 0L) {
             responseNum++;
+            longs.add(ResponseTime6);
+
         }
         if (ResponseTime7 != 0L) {
             responseNum++;
+            longs.add(ResponseTime7);
+
         }
         if (ResponseTime8 != 0L) {
             responseNum++;
+            longs.add(ResponseTime8);
+
         }
         if (ResponseTime9 != 0L) {
             responseNum++;
+            longs.add(ResponseTime9);
+
         }
-        //if (ResponseTime10 != 0L) {
-        //    responseNum++;
-        //}
-        //if (ResponseTime11 != 0L) {
-        //    responseNum++;
-        //}
+        if (ResponseTime10 != 0L) {
+            responseNum++;
+            longs.add(ResponseTime10);
+
+        }
+
+        longs.sort(Long::compareTo);
+        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+        // 去掉两个最高延时，去掉两个最低延时，然后求平均值
+        longs.remove(longs.size() - 1);
+        longs.remove(longs.size() - 1);
+        longs.remove(0);
+        longs.remove(0);
+        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+
         // 平均触控时延
-        long avgResponseTime = ( ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
-                ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9 ) / 9;
+        long allResponseTime = 0;
+        for (Long aLong : longs) {
+            allResponseTime += aLong;
+        }
+        long avgResponseTime = allResponseTime / longs.size();
+        //long avgResponseTime = (ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
+        //        ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9) / 9;
 
         // 正确率
-        float averageAccuracy = (float) responseNum / 9;
+        float averageAccuracy = (float) (responseNum - 4) / longs.size();
 
         Log.d("zzl", "ResponseTime0: " + ResponseTime0);
         Log.d("zzl", "ResponseTime1: " + ResponseTime1);

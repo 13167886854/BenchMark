@@ -211,42 +211,42 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     getString(R.string.sound_frame_info_description)
             ));
         }
-        if (isCheckCPU) {
-            ceping_data.add(new CepingData(
-                    ScoreUtil.getCPUScore(),
-                    isCloudPhone ? R.drawable.blue_cpu : R.drawable.red_cpu,
-                    CacheConst.KEY_CPU_INFO,
-                    getString(R.string.cpu_info_description)
-            ));
+        //if (isCheckCPU) {
+        //    ceping_data.add(new CepingData(
+        //            //ScoreUtil.getCPUScore(),
+        //            isCloudPhone ? R.drawable.blue_cpu : R.drawable.red_cpu,
+        //            CacheConst.KEY_CPU_INFO,
+        //            getString(R.string.cpu_info_description)
+        //    ));
         }
-        if (isCheckGPU) {
-            ceping_data.add(new CepingData(
-                    ScoreUtil.getGPUScore(),
-                    isCloudPhone ? R.drawable.blue_gpu : R.drawable.red_gpu,
-                    CacheConst.KEY_GPU_INFO,
-                    getString(R.string.gpu_info_description)
-            ));
+        //if (isCheckGPU) {
+        //    ceping_data.add(new CepingData(
+        //            //ScoreUtil.getGPUScore(),
+        //            isCloudPhone ? R.drawable.blue_gpu : R.drawable.red_gpu,
+        //            CacheConst.KEY_GPU_INFO,
+        //            getString(R.string.gpu_info_description)
+        //    ));
 
-        }
-        if (isCheckRAM) {
-            ceping_data.add(new CepingData(
-                    ScoreUtil.getRAMScore(),
-                    isCloudPhone ? R.drawable.blue_ram : R.drawable.red_ram,
-                    CacheConst.KEY_RAM_INFO,
-                    getString(R.string.ram_info_description)
-            ));
-
-        }
-        if (isCheckROM) {
-            ceping_data.add(new CepingData(
-                    ScoreUtil.getROMScore(),
-                    isCloudPhone ? R.drawable.blue_rom : R.drawable.red_rom,
-                    CacheConst.KEY_ROM_INFO,
-                    getString(R.string.rom_info_description)
-            ));
-        }
-        if (adapter != null) adapter.notifyItemRangeChanged(0, ceping_data.size());
-    }
+        //}
+        //if (isCheckRAM) {
+        //    ceping_data.add(new CepingData(
+        //            ScoreUtil.getRAMScore(),
+        //            isCloudPhone ? R.drawable.blue_ram : R.drawable.red_ram,
+        //            CacheConst.KEY_RAM_INFO,
+        //            getString(R.string.ram_info_description)
+        //    ));
+        //
+        //}
+        //if (isCheckROM) {
+        //    ceping_data.add(new CepingData(
+        //            ScoreUtil.getROMScore(),
+        //            isCloudPhone ? R.drawable.blue_rom : R.drawable.red_rom,
+        //            CacheConst.KEY_ROM_INFO,
+        //            getString(R.string.rom_info_description)
+        //    ));
+        //}
+        //if (adapter != null) adapter.notifyItemRangeChanged(0, ceping_data.size());
+    //}
 
 
     private void startRecordService(){

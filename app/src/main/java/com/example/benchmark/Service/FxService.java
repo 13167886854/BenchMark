@@ -1,6 +1,7 @@
 package com.example.benchmark.Service;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -190,6 +191,7 @@ public class FxService extends Service {
 
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
         btnToPrCode.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 boolean isclick = false;
@@ -405,6 +407,7 @@ public class FxService extends Service {
         else return (String) target;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
         Log.d(TAG, "bitmap getWidth: "+bitmap.getWidth());
@@ -418,7 +421,7 @@ public class FxService extends Service {
         // 信息获取
         Log.e("QT-2", JsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
-                (String) JsonData.get("cpuName"),
+                //(String) JsonData.get("cpuName"),
                 getIntDataFromJson(JsonData, "cpuCores")
         );
         ScoreUtil.calcAndSaveGPUScores(
@@ -427,13 +430,18 @@ public class FxService extends Service {
                 (String) JsonData.get("gpuVersion")
         );
         ScoreUtil.calcAndSaveRAMScores(
-                getFloatDataFromJson(JsonData, "availRam"),
-                getFloatDataFromJson(JsonData, "totalRam")
+                //getString(JsonData, "availRam"),
+                //getString(JsonData, "totalRam")
+                (String) JsonData.get("availRam"),
+                (String)  JsonData.get("totalRam")
         );
         ScoreUtil.calcAndSaveROMScores(
-                getFloatDataFromJson(JsonData, "availStorage"),
-                getFloatDataFromJson(JsonData, "totalStorage")
-        );
+                //getString(JsonData, "availStorage"),
+                //getString(JsonData, "totalStorage")
+                (String) JsonData.get("availStorage"),
+                (String)  JsonData.get("totalStorage")
+
+                );
         ScoreUtil.calcAndSaveFluencyScores(
                 getFloatDataFromJson(JsonData, "avergeFPS"),
                 getFloatDataFromJson(JsonData, "frameShakingRate"),
