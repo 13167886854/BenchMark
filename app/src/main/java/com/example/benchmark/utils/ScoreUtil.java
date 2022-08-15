@@ -184,6 +184,10 @@ public class ScoreUtil {
             //long time6, long time7, long time8, long time9, long time10, long time11
             String cloudDownTimeList, String cloudSpendTimeList) {
         //Log.d("zzl", "cloudSpendTime0: ");
+        //没有进行触控测试 没有数据时 直接返回
+        if(cloudDownTimeList==null || cloudSpendTimeList ==null){
+            return;
+        }
         String cloudDownTimeListSub = cloudDownTimeList.substring(1, cloudDownTimeList.length() - 1);
         String cloudSpendTimeListSub = cloudSpendTimeList.substring(1, cloudSpendTimeList.length() - 1);
         String[] cloudDownTimeListArr = cloudDownTimeListSub.split(",");
