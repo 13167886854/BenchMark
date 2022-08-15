@@ -94,6 +94,10 @@
         <entry key="..\:/BenchMark2/app/src/main/res/xml/service_xml.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/layout/access_popwindow.xml" value="0.2861111111111111" />
         <entry key="app/src/main/res/layout/activity_ceping.xml" value="0.3707692307692308" />
+        <entry key="app/src/main/res/layout/juti_cpu_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/juti_gpu_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/juti_neicun_fragment.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/juti_yingpan_fragment.xml" value="0.33" />
       </map>
     </option>
   </component>

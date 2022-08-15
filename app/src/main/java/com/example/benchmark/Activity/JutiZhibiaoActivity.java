@@ -124,31 +124,31 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             case CacheConst.KEY_CPU_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("cpu名称", CacheUtil.getString(CacheConst.KEY_CPU_NAME)));
-                data.add(new JuTiData("cpu核数",CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
+                //data.add(new JuTiData("cpu名称", CacheUtil.getString(CacheConst.KEY_CPU_NAME)));
+                data.add(new JuTiData("CPU核数",CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
                 break ;
             }
             case CacheConst.KEY_GPU_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("gpu供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
-                data.add(new JuTiData("gpu渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
-                data.add(new JuTiData("gpu版本", CacheUtil.getString(CacheConst.KEY_GPU_VERSION)));
+                data.add(new JuTiData("GPU供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
+                data.add(new JuTiData("GPU渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
+                data.add(new JuTiData("GPU版本", CacheUtil.getString(CacheConst.KEY_GPU_VERSION)));
                 break;
             }
             case CacheConst.KEY_ROM_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("可用内存",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_STORAGE) + "GB"));
-                data.add(new JuTiData("总内存",CacheUtil.getFloat(CacheConst.KEY_TOTAL_STORAGE) + "GB"));
+                data.add(new JuTiData("可用RAM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
+                data.add(new JuTiData("总共RAM",CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
                 break ;
 
             }
             case CacheConst.KEY_RAM_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("可用硬盘",CacheUtil.getFloat(CacheConst.KEY_AVAILABLE_RAM) + "GB"));
-                data.add(new JuTiData("总硬盘",CacheUtil.getFloat(CacheConst.KEY_TOTAL_RAM) + "GB"));
+                data.add(new JuTiData("可用ROM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
+                data.add(new JuTiData("总共ROM",CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
                 break ;
             }
         }
