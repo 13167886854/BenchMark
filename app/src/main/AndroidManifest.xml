@@ -34,10 +34,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BenchMark">
         <activity
-            android:name=".Activity.TestActivity"
-            android:exported="true" >
-        </activity>
-        <activity
             android:name=".Activity.TestGameTouchActivity"
             android:exported="false" />
 
