@@ -130,7 +130,6 @@ public class VideoRecordService extends Service {
 
     private void createFloatView()
     {
-        Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
         mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);

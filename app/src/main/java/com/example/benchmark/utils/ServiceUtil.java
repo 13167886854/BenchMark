@@ -37,7 +37,7 @@ public class ServiceUtil {
         service.stopSelf();
     }
 
-    public static void startFxService(Context context, String checked_plat, int resultCode, Intent data, boolean isCheckTouch) {
+    public static void startFxService(Context context, String checked_plat, int resultCode, Intent data, boolean isCheckTouch,boolean isCheckSoundFrame) {
         if (!Settings.canDrawOverlays(context)) {
             toFloatGetPermission(context);
         }else{
@@ -45,7 +45,8 @@ public class ServiceUtil {
                     .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
                     .putExtra("resultCode", resultCode)
                     .putExtra("data", data)
-                    .putExtra("isCheckTouch", isCheckTouch);
+                    .putExtra("isCheckTouch", isCheckTouch)
+                    .putExtra("isCheckSoundFrame", isCheckSoundFrame);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startService(fxService);
             } else {

@@ -62,6 +62,7 @@ public class MyAccessibilityService extends AccessibilityService {
     private int resultCode;
     private Intent data;
     private Boolean isCheckTouch;
+    private Boolean isCheckSoundFrame;
     private Boolean isCheckStability = false;
     private String checkPlatform;
 
@@ -90,7 +91,7 @@ public class MyAccessibilityService extends AccessibilityService {
             if (message.what == MSG_CONTINUE_MONITOR) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-                ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch);
+                ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch,isCheckSoundFrame);
             } else if (message.what == MSG_MONITOR_OVER) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
@@ -157,6 +158,7 @@ public class MyAccessibilityService extends AccessibilityService {
         resultCode = intent.getIntExtra("resultCode", Integer.MAX_VALUE);
         data = intent.getParcelableExtra("data");
         isCheckTouch = intent.getBooleanExtra("isCheckTouch", false);
+        isCheckSoundFrame = intent.getBooleanExtra("isCheckSoundFrame", false);
         checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
         if (resultCode != Integer.MAX_VALUE && data != null) {
             MediaProjectionManager mediaProjectionManager = (MediaProjectionManager)

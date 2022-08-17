@@ -8,7 +8,6 @@ import androidx.annotation.LongDef;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.benchmark.Service.AutoTapAccessibilityService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -106,6 +106,12 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
             }
+            if(blue_yinhua_cheak.isChecked()) {
+                if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+                    popDiaLog.show();
+                    return;
+                }
+            }
             if(!Settings.canDrawOverlays(getContext())){
                 Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
                 Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));

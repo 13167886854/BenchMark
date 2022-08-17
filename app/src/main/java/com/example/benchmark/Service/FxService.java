@@ -2,6 +2,8 @@ package com.example.benchmark.Service;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +13,18 @@ import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
+import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.os.Binder;
 import android.os.Build;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.SystemClock;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSON;
@@ -39,30 +49,50 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.CodeUtils;
+import com.example.benchmark.utils.Recorder;
 import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class FxService extends Service {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
 
+    private final int STOP_RECORD = 111;
+
     private MediaProjectionManager mMediaProjectionManager;
     private MediaProjection mediaProjection;
     private int resultCode;
     private Intent data;
     private Boolean isCheckTouch;
+    private Boolean isCheckSoundFrame;
     private String checkPlatform;
     private Intent intent;
     private FxService service;
 
     private TapUtil tapUtil;
+
+
+    //视频音频录制变量初始化
+    private Recorder mRecorder;
+
+    private boolean running;
+    public static String path = "";
+    private int width;
+    private int height;
+    private int dpi;
+    private VirtualDisplay virtualDisplay;
+    private MediaRecorder mediaRecorder;
 
     private
     //定义浮动窗口布局
@@ -76,11 +106,30 @@ public class FxService extends Service {
     Button btnToPrCode;
     Button btnToTap;
     Button btnToBack;
+    Button btnToRecord;
     private long startTime;
     private long endTime;
     private int statusBarHeight;
 
     private static final String TAG = "FxService";
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case STOP_RECORD:
+                    btnToRecord.setClickable(false);
+                    btnMenu.setVisibility(View.VISIBLE);
+                    Toast.makeText(mContext,"录制结束",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public void setPara(boolean isCheckTouch, boolean isCheckSoundFrame) {
+        this.isCheckTouch = isCheckTouch;
+        this.isCheckSoundFrame = isCheckTouch;
+    }
 
     @Override
     public void onCreate() {
@@ -89,11 +138,34 @@ public class FxService extends Service {
         service = this.service;
         tapUtil = TapUtil.getUtil();
 
+        HandlerThread serviceThread = new HandlerThread("service_thread",
+                android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        serviceThread.start();
+        running = false;
+        mediaRecorder = new MediaRecorder();
+
+        //resultCode = intent.getIntExtra("code", -1);
+        //data = intent.getParcelableExtra("data");
+        //checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
+        //mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        //mediaProjection = mMediaProjectionManager.getMediaProjection(resultCode, data);
+//        if (mediaProjection == null) {`
+//            Log.e(TAG, "media projection is null");
+//        }
+        //Bitmap bitmap = screenShot(mediaProjection);
+
+
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+    void createNotificationChannel(){
+        NotificationChannel channel = new NotificationChannel("Benchmark 悬浮窗",
+                "Benchmark 悬浮窗",
+                NotificationManager.IMPORTANCE_DEFAULT);
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(channel);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -267,6 +339,7 @@ public class FxService extends Service {
                 return true;
             }
         });//设置监听浮动窗口的触摸移动
+
         btnToTap.setVisibility(isCheckTouch ? View.VISIBLE : View.GONE);
 
         btnToBack = btnMenu.findViewById(R.id.btnToBack);
@@ -305,6 +378,59 @@ public class FxService extends Service {
                 return true;
             }
         });//设置监听浮动窗口的触摸移动
+
+
+        btnToRecord = btnMenu.findViewById(R.id.btnToRecord);
+        btnToRecord.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isclick = false;
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startTime = System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight() - statusBarHeight;
+                        //Log.d("TWT", "onTouch: "+MainActivity.);
+                        //刷新
+                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        endTime = System.currentTimeMillis();
+                        //小于0.2秒被判断为点击
+                        if ((endTime - startTime) > 200) {
+                            isclick = false;
+                        } else {
+                            isclick = true;
+                        }
+                        break;
+                }
+                //响应返回点击事件
+                if (isclick) {
+                    btnMenu.setVisibility(View.GONE);
+                    tapUtil.tap(screenWidth/2,screenHeight/2);
+                    startAudioRecord();
+                    startVideoRecord();
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            stopAudioRecord();
+                            stopVideoRecord();
+                            handler.sendEmptyMessage(STOP_RECORD);
+                        }
+                    };
+                    timer.schedule(task,45000);
+                }
+                return true;
+            }
+        });//设置监听浮动窗口的触摸移动
+        btnToRecord.setVisibility(isCheckSoundFrame? View.VISIBLE : View.GONE);
+
+
     }
 
     @Override
@@ -319,19 +445,10 @@ public class FxService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        resultCode = intent.getIntExtra("code", -1);
-        data = intent.getParcelableExtra("data");
-        isCheckTouch = intent.getBooleanExtra("isCheckTouch", false);
-        checkPlatform = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
-        mMediaProjectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        mediaProjection = mMediaProjectionManager.getMediaProjection(resultCode, data);
-        if (mediaProjection == null) {
-            Log.e(TAG, "media projection is null");
-        }
-        //Bitmap bitmap = screenShot(mediaProjection);
-        createFloatView();
         return super.onStartCommand(intent, flags, startId);
     }
+
+
 
     public Bitmap screenShot() {
         Objects.requireNonNull(mediaProjection);
@@ -486,19 +603,126 @@ public class FxService extends Service {
         stopSelf();
     }
 
-    private void startAutoTapService() {
-        CacheUtil.put(CacheConst.KEY_IS_AUTO_TAP, true);
-        Intent service = new Intent(this, MyAccessibilityService.class)
-                .putExtra(CacheConst.KEY_PLATFORM_NAME, checkPlatform)
-                .putExtra("resultCode", resultCode)
-                .putExtra("data", data)
-                .putExtra("isCheckTouch", isCheckTouch);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(service);
-            Log.d(TAG, "startForegroundService: ");
+    public void setMediaProject(MediaProjection project) {
+        mediaProjection = project;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    void record(){
+        boolean isSupported;
+        mRecorder = new Recorder();
+        isSupported = mRecorder.start(this, mediaProjection);
+        if(!isSupported){
+            mediaProjection.stop();
+            stopSelf();
+        }
+    }
+
+
+
+    public void startVideoRecord(){
+        if (mediaProjection == null || running) {
+            Log.d("TWT", "startRecord: mediaProjection == null");
+            return;
+        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+        dpi = metrics.densityDpi;
+
+        Log.d("TWT", "startRecord: start");
+
+        initRecorder();
+        createVirtualDisplay();
+        mediaRecorder.start();
+
+        running = true;
+        return;
+    }
+
+    public void stopVideoRecord(){
+        if (!running) {
+            return;
+        }
+        Log.d("TWT", "startRecord: stop");
+        running = false;
+        mediaRecorder.stop();
+        mediaRecorder.reset();
+        virtualDisplay.release();
+        //mediaProjection.stop();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void startAudioRecord(){
+        record();
+    }
+
+    public void stopAudioRecord(){
+        if(mRecorder != null){
+            try {
+                mRecorder.startProcessing();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //stopSelf();
+    }
+
+    private void createVirtualDisplay() {
+        virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
+    }
+
+    private void initRecorder() {
+        try{
+            //mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
+            mediaRecorder.setOutputFile(path);
+            mediaRecorder.setVideoSize(width, height);
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+            mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+            mediaRecorder.setVideoFrameRate(60);
+        }catch (Exception e){
+            Log.e("TWT", "initRecorder: "+e.toString() );
+        }
+        try {
+            mediaRecorder.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getsaveDirectory() {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            File file = new File(rootDir);
+            if (!file.exists()) {
+                if (!file.mkdirs()) {
+                    return null;
+                }
+            }
+            return rootDir;
         } else {
-            startService(service);
-            Log.d(TAG, "startService: ");
+            return null;
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        this.isCheckTouch = intent.getBooleanExtra("isCheckTouch",false);
+        this.isCheckSoundFrame = intent.getBooleanExtra("isCheckSoundFrame",false);
+        createFloatView();
+        return new RecordBinder();
+    }
+
+    public class RecordBinder extends Binder {
+        public FxService getRecordService() {
+            return FxService.this;
         }
     }
 }

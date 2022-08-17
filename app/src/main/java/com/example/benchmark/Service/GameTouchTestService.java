@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -264,6 +265,12 @@ public class GameTouchTestService extends Service {
         if (mediaProjection == null || running) {
             return false;
         }
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+        dpi = metrics.densityDpi;
         initRecorder();
         createVirtualDisplay();
         mediaRecorder.start();

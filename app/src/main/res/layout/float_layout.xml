@@ -42,6 +42,15 @@
 
         <Button
             android:layout_marginTop="-8dp"
+            android:id="@+id/btnToRecord"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:textSize="11sp"
+            android:text="开始音画录制" />
+
+
+        <Button
+            android:layout_marginTop="-8dp"
             android:layout_marginBottom="-4dp"
             android:id="@+id/btnToBack"
             android:layout_width="100dp"
