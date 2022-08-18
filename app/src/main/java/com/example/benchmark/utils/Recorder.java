@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.benchmark.Data.YinHuaData;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -50,8 +52,21 @@ public class Recorder {
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
+        // 判断平台
+        String platformKind = YinHuaData.platform_type;
         //file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
-        file = "audio_record";
+
+        //如果是云手机平台
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+
+            file = CacheConst.AUDIO_PHONE_NAME;
+        } else {
+            file = CacheConst.AUDIO_GAME_NAME;
+        }
 
         if (mRecorder == null) {
             AudioPlaybackCaptureConfiguration config;
@@ -71,7 +86,6 @@ public class Recorder {
                     .setSampleRate(RECORDER_SAMPLERATE)
                     .setChannelMask(RECORDER_CHANNELS)
                     .build();
-
 
 
             mRecorder = new AudioRecord.Builder()
@@ -98,36 +112,38 @@ public class Recorder {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    void createAudioFile(Context context){
+    void createAudioFile(Context context) {
         //root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "/Audio Capture");
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
         CacheConst.AUDIO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
+        //Log.d("zzl", "createAudioFile: CacheConst.AUDIO_PATH" + CacheConst.AUDIO_PATH);
         //root = new File("/sdcard/Music", "/Audio Capture");
         //Log.e(TAG, "Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
-        Log.e(TAG, "root: "+root);
-        cache = new File(context.getCacheDir().getAbsolutePath(),"/RawData");
-        if(!root.exists()) {
+        Log.e(TAG, "root: " + root);
+        cache = new File(context.getCacheDir().getAbsolutePath(), "/RawData");
+        if (!root.exists()) {
             root.mkdir();
             root.setWritable(true);
         }
-        if(!cache.exists()) {
+        if (!cache.exists()) {
             cache.mkdir();
             cache.setWritable(true);
             cache.setReadable(true);
         }
 
-        rawOutput = new File(root,CacheConst.AUDIO_NAME);
+        rawOutput = new File(root, file);
         rawOutput.setWritable(true);
         rawOutput.setReadable(true);
 
         try {
             rawOutput.createNewFile();
         } catch (IOException e) {
-            Log.e(TAG, "createAudioFile: "+e.toString());
+            Log.e(TAG, "createAudioFile: " + e.toString());
             e.printStackTrace();
         }
 
     }
+
     private void rawToWave(final File rawFile, final File waveFile) throws IOException {
 
         byte[] rawData = new byte[(int) rawFile.length()];
@@ -179,7 +195,7 @@ public class Recorder {
         int size = (int) f.length();
         byte bytes[] = new byte[size];
         byte tmpBuff[] = new byte[size];
-        FileInputStream fis= new FileInputStream(f);
+        FileInputStream fis = new FileInputStream(f);
         try {
 
             int read = fis.read(bytes, 0, size);
@@ -191,7 +207,7 @@ public class Recorder {
                     remain -= read;
                 }
             }
-        }  catch (IOException e){
+        } catch (IOException e) {
             throw e;
         } finally {
             fis.close();
@@ -229,16 +245,16 @@ public class Recorder {
         return bytes;
     }
 
-    void writeAudioFile(){
+    void writeAudioFile() {
         try {
             FileOutputStream outputStream = new FileOutputStream(rawOutput.getAbsolutePath());
             short data[] = new short[bufferElements2Rec];
 
-            while(isRecording){
+            while (isRecording) {
                 mRecorder.read(data, 0, bufferElements2Rec);
 
-                Log.d(TAG, "AUDIO: writeAudioFile: "+data.toString());
-                ByteBuffer buffer = ByteBuffer.allocate(8*1024);
+                Log.d(TAG, "AUDIO: writeAudioFile: " + data.toString());
+                ByteBuffer buffer = ByteBuffer.allocate(8 * 1024);
 
                 outputStream.write(shortToByte(data),
                         0,
@@ -249,10 +265,10 @@ public class Recorder {
             outputStream.close();
 
         } catch (FileNotFoundException e) {
-            Log.e(TAG, "File Not Found: "+e.toString());
+            Log.e(TAG, "File Not Found: " + e.toString());
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e(TAG, "IO Exception: "+e.toString());
+            Log.e(TAG, "IO Exception: " + e.toString());
             e.printStackTrace();
         }
     }
@@ -264,26 +280,26 @@ public class Recorder {
         //String file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
         String fileName = file + ".mp3";
         //Convert To mp3 from raw data i.e pcm
-        File output = new File(root,fileName);
+        File output = new File(root, fileName);
         try {
             output.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG, "startProcessing: "+e);
+            Log.e(TAG, "startProcessing: " + e);
         }
 
         try {
-            rawToWave(rawOutput,output);
+            rawToWave(rawOutput, output);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            //Log.e("TWT", "copyFile: " +root+file+".pcm");
+            Log.e("TWT", "copyFile: " + root + file + ".pcm");
             //rawOutput.delete();
         }
     }
 
-    void stop(){
-        if(mRecorder != null){
+    void stop() {
+        if (mRecorder != null) {
             mRecorder = null;
             recordingThread = null;
         }

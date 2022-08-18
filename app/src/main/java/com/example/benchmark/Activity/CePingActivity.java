@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.CepingData;
+import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.BothRecordService;
 import com.example.benchmark.Service.FxService;
@@ -130,6 +131,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     void initData() {
         Intent intent = getIntent();
         checked_plat = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
+        YinHuaData.platform_type = checked_plat;
         ceping_phone_name.setText(checked_plat);
         CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checked_plat);
         platform_kind = intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND);
