@@ -50,7 +50,8 @@ public class Recorder {
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
-        file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
+        //file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
+        file = "audio_record";
 
         if (mRecorder == null) {
             AudioPlaybackCaptureConfiguration config;
@@ -100,6 +101,7 @@ public class Recorder {
     void createAudioFile(Context context){
         //root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "/Audio Capture");
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
+        CacheConst.AUDIO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
         //root = new File("/sdcard/Music", "/Audio Capture");
         //Log.e(TAG, "Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
         Log.e(TAG, "root: "+root);
@@ -114,7 +116,7 @@ public class Recorder {
             cache.setReadable(true);
         }
 
-        rawOutput = new File(root,file+".pcm");
+        rawOutput = new File(root,CacheConst.AUDIO_NAME);
         rawOutput.setWritable(true);
         rawOutput.setReadable(true);
 
@@ -275,7 +277,7 @@ public class Recorder {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Log.e("TWT", "copyFile: " +root+file+".pcm");
+            //Log.e("TWT", "copyFile: " +root+file+".pcm");
             //rawOutput.delete();
         }
     }

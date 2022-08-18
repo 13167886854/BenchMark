@@ -25,6 +25,7 @@
     </queries>
 
     <application
+        android:usesCleartextTraffic="true"
         android:name=".BaseApp"
         android:allowBackup="true"
         android:icon="@drawable/icon"

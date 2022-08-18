@@ -73,5 +73,9 @@ public class CacheConst {
     public static final String KEY_SOUND_FRAME_SCORE = "音画质量分数";
     public static final String KEY_RESOLUTION = "resolution";
     public static final String KEY_MAX_DIFF_VALUE = "maxdifferencevalue";
+    public static String AUDIO_PATH = "";
+    public static final String AUDIO_NAME = "audio_record.pcm";
+    public static String VIDEO_PATH = "";
+    public static final String VIDEO_NAME = "video_record.mp3";
 }
 

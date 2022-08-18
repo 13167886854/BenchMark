@@ -54,6 +54,7 @@ import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -62,6 +63,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FxService extends Service {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
@@ -659,16 +670,58 @@ public class FxService extends Service {
         record();
     }
 
-    public void stopAudioRecord(){
-        if(mRecorder != null){
+    public void stopAudioRecord() {
+        if (mRecorder != null) {
             try {
                 mRecorder.startProcessing();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        //stopSelf();
+//        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                .build();
+        MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+        // file是要上传的文件 File()
+        File file = new File(CacheConst.AUDIO_PATH+"/"+CacheConst.AUDIO_NAME);
+        //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+        //Log.d(TAG, "onClick: " + file.exists());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                //.addFormDataPart("AudioRecord",file.getName(),requestBody)
+                .addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                .build();
+
+        Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH" + CacheConst.AUDIO_PATH);
+        Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME" + CacheConst.AUDIO_NAME);
+        Request request = new Request.Builder()
+                .url("http://34b81a2.r3.cpolar.top/AudioVideo/AudioRecord")
+                .post(multipartBody)
+                .build();
+        //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                    }
+                });
+
     }
+        //stopSelf();
 
     private void createVirtualDisplay() {
         virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
@@ -700,6 +753,7 @@ public class FxService extends Service {
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            CacheConst.VIDEO_PATH = rootDir;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
