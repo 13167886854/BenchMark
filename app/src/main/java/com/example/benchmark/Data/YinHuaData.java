@@ -12,5 +12,4 @@ public  class YinHuaData {
     public static  String SSIM;
     public static  String PSNR;
 
-
 }

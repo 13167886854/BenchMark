@@ -658,6 +658,9 @@ public class FxService extends Service {
         return;
     }
 
+    /**
+     * 停止视频录制
+     */
     public void stopVideoRecord() {
         if (!running) {
             return;
@@ -668,6 +671,70 @@ public class FxService extends Service {
         mediaRecorder.reset();
         virtualDisplay.release();
         //mediaProjection.stop();
+
+        // 平台类型
+        String platformKind = YinHuaData.platform_type;
+        Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+        // 如果是云手机
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            //OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_PHONE_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            String[] resArr = res.split("=");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PESQ = resArr[resArr.length - 1];
+                            //Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            //handler.sendEmptyMessage(COMPUTE_PESQ);
+
+                        }
+                    });
+        } else {
+            Log.d(TAG, "stopAudioRecord: 不是云手机平台==》" + platformKind);
+            Toast.makeText(service, platformKind, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -717,7 +784,7 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url("http://34b81a2.r3.cpolar.top/AudioVideo/AudioRecord")
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -764,7 +831,20 @@ public class FxService extends Service {
             //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
+            // 平台类型
+            String platformKind = YinHuaData.platform_type;
+            Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+            // 如果是云手机
+            if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+                path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
+            } else {
+                path = getsaveDirectory() + CacheConst.VIDEO_GAME_NAME;
+            }
+
             mediaRecorder.setOutputFile(path);
             mediaRecorder.setVideoSize(width, height);
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
@@ -783,6 +863,7 @@ public class FxService extends Service {
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            //CacheConst.VIDEO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
             CacheConst.VIDEO_PATH = rootDir;
             File file = new File(rootDir);
             if (!file.exists()) {

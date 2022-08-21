@@ -77,8 +77,10 @@ public class CacheConst {
     public static final String AUDIO_PHONE_NAME = "phone_audio_record.pcm";
     public static final String AUDIO_GAME_NAME = "game_audio_record.cpm";
     public static String VIDEO_PATH = "";
-    public static final String VIDEO_PHONE_NAME = "phone_video_record.mp3";
-    public static final String VIDEO_GAME_NAME = "game_video_record.mp3";
+    public static final String VIDEO_PHONE_NAME = "phone_video_record.mp4";
+    public static final String VIDEO_GAME_NAME = "game_video_record.mp4";
 
+    // 全局IP地址
+    public static final String GLOBAL_IP = "http://7582c602.cpolar.cn";
 }
 
