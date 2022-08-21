@@ -683,9 +683,9 @@ public class FxService extends Service {
                 platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             //OkHttpClient client = new OkHttpClient();
             OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
@@ -764,9 +764,9 @@ public class FxService extends Service {
                 platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             //OkHttpClient client = new OkHttpClient();
             OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
