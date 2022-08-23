@@ -591,21 +591,21 @@ public class FxService extends Service {
         );
 
 
-        Log.d("TWT", "json: " + JsonData);
+        Log.d("TWT", "云端测试数据JSON: " + JsonData);
         //ScoreUtil.calcAndSaveTouchScores(
         //getFloatDataFromJson(JsonData, "averageAccuracy"),
         //getFloatDataFromJson(JsonData, "responseTime"),
         //getFloatDataFromJson(JsonData, "averageResponseTime")
         //);
 
-        for (int i = 0; i < 5; i++) {
-            //Log.d(TAG, "toCatchScreen: ");
-            //Log.d("TWT", "tapTimeOnCloud"+i+":"+JsonData.getInteger("tapTimeOnCloud"+i));
-            Log.d("TWT", "tapTimeOnCloud" + i + ":" + JsonData.getLong("tapTimeOnCloud" + i));
-        }
+        //for (int i = 0; i < 5; i++) {
+        //    //Log.d(TAG, "toCatchScreen: ");
+        //    //Log.d("TWT", "tapTimeOnCloud"+i+":"+JsonData.getInteger("tapTimeOnCloud"+i));
+        //    Log.d("TWT", "tapTimeOnCloud" + i + ":" + JsonData.getLong("tapTimeOnCloud" + i));
+        //}
         //JsonData.getInteger("tapTimeOnCloud"+i);
 
-        getListFromJson(JsonData, "cloudTapTimes1");
+        //getListFromJson(JsonData, "cloudTapTimes1");
 
 
         if (JsonData.get("resolution") != null) {

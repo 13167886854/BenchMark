@@ -24,15 +24,15 @@ public class CacheConst {
     // 硬件信息
     public static final String KEY_HARDWARE_INFO = "硬件信息";
     // RAM
-    public static final String KEY_RAM_INFO = "硬件硬盘信息";
+    public static final String KEY_RAM_INFO = "硬件RAM信息";
     public static final String KEY_RAM_SCORE = "RAM分数";
-    public static final String KEY_AVAILABLE_RAM = "可用硬盘";
-    public static final String KEY_TOTAL_RAM = "总硬盘";
+    public static final String KEY_AVAILABLE_RAM = "可用RAM";
+    public static final String KEY_TOTAL_RAM = "总RAM";
     // ROM
-    public static final String KEY_ROM_INFO = "硬件内存信息";
+    public static final String KEY_ROM_INFO = "硬件ROM信息";
     public static final String KEY_ROM_SCORE = "ROM分数";
-    public static final String KEY_AVAILABLE_STORAGE = "可用内存";
-    public static final String KEY_TOTAL_STORAGE = "总内存";
+    public static final String KEY_AVAILABLE_STORAGE = "可用ROM";
+    public static final String KEY_TOTAL_STORAGE = "总ROM";
     // CPU
     public static final String KEY_CPU_INFO = "硬件CPU信息";
     public static final String KEY_CPU_SCORE = "CPU分数";

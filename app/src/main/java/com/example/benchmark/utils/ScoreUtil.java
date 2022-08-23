@@ -22,6 +22,8 @@ import cn.hutool.json.JSON;
  */
 public class ScoreUtil {
 
+    private static final String TAG = "ScoreUtil";
+
     public static void calcAndSaveCPUScores(
             //String cpuName,
             int cpuCores
@@ -29,11 +31,13 @@ public class ScoreUtil {
         // 保存CPU结果
         //CacheUtil.put(CacheConst.KEY_CPU_NAME, cpuName);
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
-        // 计算CPU分数
+        //Log.d("zzl", "calcAndSaveCPUScores: CacheConst.KEY_CPU_CORES--" + CacheConst.KEY_CPU_CORES + cpuCores);
+
+/*        // 计算CPU分数
         float cpuCoresScore = cpuCores <= 8 ? 100f * cpuCores / (9 * 8) : 100f / 9;
         int cpuScore = (int) (cpuCoresScore);
         // 保存CPU分数
-        CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
+        CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);*/
     }
 
     //public static int getCPUScore() {
@@ -48,7 +52,21 @@ public class ScoreUtil {
         // 保存GPU结果
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
-        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+        String res = "";
+        String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
+        Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
+        if (select_plat.startsWith("红手指")) {
+            String[] strings = gpuVersion.split(" ");
+            for (int i = 0; i < strings.length - 1; i++) {
+                res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
+            }
+        }
+        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
+
+        //Log.d("zzl", "calcAndSaveCPUScores: CacheConst.KEY_CPU_CORES--" + CacheConst.KEY_GPU_VENDOR + gpuVendor);
+        //Log.d("zzl", "calcAndSaveCPUScores: CacheConst.KEY_CPU_CORES--" + CacheConst.KEY_GPU_RENDER + gpuRender);
+        //Log.d("zzl", "calcAndSaveCPUScores: CacheConst.KEY_CPU_CORES--" + CacheConst.KEY_GPU_VERSION + gpuVersion);
+
         // 计算GPU分数
         // 保存GPU分数
         //CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
@@ -198,7 +216,7 @@ public class ScoreUtil {
             String cloudDownTimeList, String cloudSpendTimeList) {
         //Log.d("zzl", "cloudSpendTime0: ");
         //没有进行触控测试 没有数据时 直接返回
-        if(cloudDownTimeList==null || cloudSpendTimeList ==null){
+        if (cloudDownTimeList == null || cloudSpendTimeList == null) {
             return;
         }
         String cloudDownTimeListSub = cloudDownTimeList.substring(1, cloudDownTimeList.length() - 1);
