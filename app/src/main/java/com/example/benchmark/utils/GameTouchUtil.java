@@ -2,10 +2,14 @@ package com.example.benchmark.utils;
 
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.benchmark.Activity.TestGameTouchActivity;
 
 import java.util.ArrayList;
 
 public class GameTouchUtil {
+    public static int testNum = 10;
     //private int count = 0;
     public long readyToTapTime = 0;
     private long videoStartTime = 0;
@@ -108,10 +112,21 @@ public class GameTouchUtil {
     public float getAvgTime(int TestNum){
         long sum = 0;
         for(int i=0;i<autoTapTime.size();i++){
-            sum += (frameUpdateTime.get(i)-autoTapTime.get(i));
+            try{
+                sum += (frameUpdateTime.get(i)-autoTapTime.get(i));
+            }catch (Exception e){
+                //Log.e("TWT", "error:"+e.toString() );
+            }
         }
         float avgtime = (float)sum / TestNum;
+        Log.e("TWT", "getAvgTime:+frameUpdateTime.size "+frameUpdateTime.size() );
+        Log.e("TWT", "getAvgTime:+autoTapTime.size "+autoTapTime.size() );
         return avgtime;
     }
+
+    public int getDetectNum(){
+        return frameUpdateTime.size();
+    }
+
 
 }

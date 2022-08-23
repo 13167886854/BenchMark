@@ -176,7 +176,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
                         outputBuffer.position(0);
                         outputBuffer.get(bytes);
                         outputBuffer.clear();
-                        Log.d(TAG, "播放音频 run: " + Arrays.toString(bytes));
+                        //Log.d(TAG, "播放音频 run: " + Arrays.toString(bytes));
 
                         audioTrack.write(bytes, 0, bufferInfo.size);
 

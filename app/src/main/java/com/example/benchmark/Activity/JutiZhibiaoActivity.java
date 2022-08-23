@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.JutiAdapter;
 import com.example.benchmark.Data.JuTiData;
+import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
@@ -94,7 +95,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             case CacheConst.KEY_FLUENCY_INFO: {
                 data = new ArrayList<>();
                 data.add(new JuTiData("平均帧率", ScoreUtil.getAverageFPS() + "fps"));
-                data.add(new JuTiData("抖动帧率(方差)", ScoreUtil.getFrameShakeRate() + "%"));
+                data.add(new JuTiData("抖动帧率(方差)", ScoreUtil.getFrameShakeRate()+""));
                 data.add(new JuTiData("低帧率", ScoreUtil.getLowFrameRate() + "%"));
                 data.add(new JuTiData("帧间隔", ScoreUtil.getFrameInterval() + "ms"));
                 data.add(new JuTiData("jank", ScoreUtil.getJankCount() + "次"));
@@ -119,6 +120,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 data = new ArrayList<>();
                 data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
                 data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "ms"));
+                data.add(new JuTiData("PSNR", YinHuaData.PSNR));
+                data.add(new JuTiData("SSIM", YinHuaData.SSIM));
+                data.add(new JuTiData("PESQ", YinHuaData.PESQ));
                 break ;
             }
             case CacheConst.KEY_CPU_INFO: {

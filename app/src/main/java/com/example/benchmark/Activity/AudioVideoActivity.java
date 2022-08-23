@@ -73,8 +73,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         "\n" + "最大音画同步差" + maxDifferenceValue);
                 ScoreUtil.calcAndSaveSoundFrameScores("0X0", maxDifferenceValue);
                 isTestOver = true;
-                Intent intent = new Intent(AudioVideoActivity.this, CePingActivity.class);
-                startActivity(intent);
+
                 return;
             }
 

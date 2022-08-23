@@ -293,7 +293,6 @@ public class Recorder {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            Log.e("TWT", "copyFile: " + root + file + ".pcm");
             //rawOutput.delete();
         }
     }

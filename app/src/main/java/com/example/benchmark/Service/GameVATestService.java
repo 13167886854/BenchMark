@@ -3,6 +3,7 @@ package com.example.benchmark.Service;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,21 +32,44 @@ import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.Activity.AudioVideoActivity;
+import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Activity.TestGameTouchActivity;
+import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.Recorder;
+import com.example.benchmark.utils.TapUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class GameVATestService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
+
+    private final int STOP_RECORD2 = 111;
+    private final int COMPUTE_PESQ = 222;
+
 
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
@@ -57,6 +82,11 @@ public class GameVATestService extends Service {
     private int height = screenHeight;
     private int dpi;
 
+    private TapUtil tapUtil;
+
+    //视频音频录制变量初始化
+    private Recorder mRecorder;
+
 
     private boolean isAble=true;
     //定义浮动窗口布局
@@ -66,11 +96,16 @@ public class GameVATestService extends Service {
     WindowManager mWindowManager;
     private Context mContext;
     TextView mFloatView;
+    TextView mFloatView2;
     private long startTime;
     private long endTime;
     //private boolean isColor=true;
     private boolean isRecording=false;
     private int statusBarHeight;
+
+    private LinearLayout menu2;
+
+    private GameVATestService service;
 
     //private Messenger mMessenger;
 
@@ -97,7 +132,16 @@ public class GameVATestService extends Service {
                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     break;
-
+//                case STOP_RECORD2:
+//                    //btnToRecord.setClickable(false);
+//                    menu2.setVisibility(View.VISIBLE);
+//                    Toast.makeText(mContext, "录制结束，请耐心等待音频质量计算结果~", Toast.LENGTH_SHORT).show();
+//                    break;
+                case COMPUTE_PESQ:
+                    if (YinHuaData.PESQ != null) {
+                        Toast.makeText(mContext, (YinHuaData.platform_type + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
+                    }
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -107,8 +151,9 @@ public class GameVATestService extends Service {
     @Override
     public void onCreate()
     {
-        Log.d(TAG, "onCreate: 121212");
         super.onCreate();
+        service = GameVATestService.this;
+        tapUtil = TapUtil.getUtil();
         mContext= GameVATestService.this;
         running = false;
         mediaRecorder = new MediaRecorder();
@@ -162,7 +207,9 @@ public class GameVATestService extends Service {
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
+        menu2 = (LinearLayout) mFloatLayout.findViewById(R.id.menu2);
         mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText);
+        //mFloatView2 = (TextView)mFloatLayout.findViewById(R.id.recordText2);
         mWindowManager.addView(mFloatLayout, wmParams);
 
         //获取状态栏的高度
@@ -176,6 +223,7 @@ public class GameVATestService extends Service {
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         //设置监听浮动窗口的触摸移动
         mFloatView.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 boolean isclick=false;
@@ -203,40 +251,60 @@ public class GameVATestService extends Service {
                 }
                 //响应点击事件
                 if (isclick&&isAble) {
-                    if(!isRecording){
-                        mFloatView.setText("停止");
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
-
-                        //开始录制
-                        handler.sendEmptyMessage(START_RECORD);
-                        //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
-                        //mFloatView.setBackgroundColor(Color.RED);
-                    }else{
-                        //mFloatView.setText("开始");
-                        //停止录制
-                        handler.sendEmptyMessage(STOP_RECORD);
-                        //mFloatView.setBackgroundColor(Color.GREEN);
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),null,null,null);
-                        mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
-
-                        Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (handler != null) {
-                                    isAble=true;
-                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_start),null,null,null);
-                                    mFloatView.setTextColor(Color.parseColor("#000000"));
-                                }
-                            }
-                        };
-                        //主线程中调用：
-                        handler.postDelayed(r, 1000);//延时1000毫秒
-                    }
+                    Log.d(TAG, "screenWidth: "+screenWidth+" screenWidth"+screenWidth);
+                    tapUtil.tap(500, 500);
+                    menu2.setVisibility(View.GONE);
+                    startAudioRecord();
+                    startVideoRecord();
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            stopAudioRecord();
+                            stopVideoRecord();
+                            handler.sendEmptyMessage(STOP_RECORD);
+                        }
+                    };
+                    timer.schedule(task, 45000);
                     //Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
         });
+//        mFloatView2.setOnTouchListener(new OnTouchListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.Q)
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                boolean isclick=false;
+//                switch (event.getAction()){
+//                    case MotionEvent.ACTION_DOWN:
+//                        startTime=System.currentTimeMillis();
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+//                        wmParams.x = (int) event.getRawX() - mFloatView2.getMeasuredWidth()/2;
+//                        wmParams.y = (int) event.getRawY() - mFloatView2.getMeasuredHeight()/2-statusBarHeight;
+//                        //Log.d("TWT", "onTouch: "+MainActivity.);
+//                        //刷新
+//                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        endTime=System.currentTimeMillis();
+//                        //小于0.2秒被判断为点击
+//                        if ((endTime - startTime) > 200) {
+//                            isclick = false;
+//                        } else {
+//                            isclick = true;
+//                        }
+//                        break;
+//                }
+//                //响应点击事件
+//                if (isclick&&isAble) {
+//
+//                }
+//                return true;
+//            }
+//        });
 
         mFloatView.setOnClickListener(new OnClickListener()
         {
@@ -252,6 +320,9 @@ public class GameVATestService extends Service {
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
+
+
+
 
     public boolean startRecord() {
         if (mediaProjection == null || running) {
@@ -296,24 +367,191 @@ public class GameVATestService extends Service {
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
     }
 
+
+    public void startVideoRecord() {
+        if (mediaProjection == null || running) {
+            Log.d("TWT", "startRecord: mediaProjection == null");
+            return;
+        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+        dpi = metrics.densityDpi;
+
+        Log.d("TWT", "startRecord: start");
+
+        initRecorder();
+        createVirtualDisplay();
+        mediaRecorder.start();
+
+        running = true;
+        return;
+    }
+
+    /**
+     * 停止视频录制
+     */
+    public void stopVideoRecord() {
+        if (!running) {
+            return;
+        }
+        Log.d("TWT", "startRecord: stop");
+        running = false;
+        mediaRecorder.stop();
+        mediaRecorder.reset();
+        virtualDisplay.release();
+        //mediaProjection.stop();
+
+        // 平台类型
+        String platformKind = YinHuaData.platform_type;
+        Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+        // 如果是云手机
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            //OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_PHONE_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            Log.d(TAG, "onResponse:" + res);
+                            String[] resArr = res.split("=");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PSNR = resArr[1];
+                            YinHuaData.SSIM = resArr[3];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            //handler.sendEmptyMessage(COMPUTE_PESQ);
+
+
+                        }
+                    });
+        } else {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_GAME_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("VideoRecord", CacheConst.VIDEO_GAME_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.VIDEO_GAME_NAME--" + CacheConst.VIDEO_GAME_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            String[] resArr = res.split("=");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PSNR = resArr[1];
+                            YinHuaData.SSIM = resArr[3];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            //Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            //handler.sendEmptyMessage(COMPUTE_PESQ);
+                            Intent intent = new Intent(getApplicationContext(), CePingActivity.class);
+                            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+
+                        }
+                    });
+        }
+
+    }
+
     private void initRecorder() {
-        try{
-            //不录制音频
+        try {
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setOutputFile(path);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            // 平台类型
+            String platformKind = YinHuaData.platform_type;
+            Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+            // 如果是云手机
+            if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+                path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
+            } else {
+                path = getsaveDirectory() + CacheConst.VIDEO_GAME_NAME;
+            }
 
-            mediaRecorder.setVideoSize(width,height);
+            mediaRecorder.setOutputFile(path);
+            mediaRecorder.setVideoSize(width, height);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
-
-        }catch (Exception e){
-            Log.e("TWT", "initRecorder: "+e.toString() );
+        } catch (Exception e) {
+            Log.e("TWT", "initRecorder: " + e.toString());
         }
         try {
             mediaRecorder.prepare();
@@ -325,19 +563,162 @@ public class GameVATestService extends Service {
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            //CacheConst.VIDEO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            CacheConst.VIDEO_PATH = rootDir;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
                     return null;
                 }
             }
-
-
             return rootDir;
         } else {
             return null;
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    void record() {
+        boolean isSupported;
+        mRecorder = new Recorder();
+        isSupported = mRecorder.start(this, mediaProjection);
+        if (!isSupported) {
+            mediaProjection.stop();
+            stopSelf();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    public void startAudioRecord() {
+        record();
+    }
+
+    /**
+     * 停止录音
+     */
+    public void stopAudioRecord() {
+        if (mRecorder != null) {
+            try {
+                mRecorder.startProcessing();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        // 平台类型
+        String platformKind = YinHuaData.platform_type;
+        Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+        // 如果是云手机
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            //OkHttpClient client = new OkHttpClient();
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.AUDIO_PATH + "/" + CacheConst.AUDIO_PHONE_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            String[] resArr = res.split(" ");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PESQ = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            handler.sendEmptyMessage(COMPUTE_PESQ);
+//                            Looper.prepare();
+//                            Toast.makeText(service,"音频测试结束",Toast.LENGTH_SHORT);
+//                            Looper.loop();
+
+                        }
+                    });
+        } else {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.AUDIO_PATH + "/" + CacheConst.AUDIO_GAME_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("AudioRecord", CacheConst.AUDIO_GAME_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            String[] resArr = res.split(" ");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PESQ = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            handler.sendEmptyMessage(COMPUTE_PESQ);
+
+                        }
+                    });
+        }
+
+
+    }
+
 
     @Override
     public void onDestroy()

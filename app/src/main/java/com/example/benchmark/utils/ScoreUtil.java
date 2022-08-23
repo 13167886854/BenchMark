@@ -8,19 +8,26 @@ import androidx.annotation.LongDef;
 import androidx.annotation.RequiresApi;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.benchmark.Activity.AudioVideoActivity;
+import com.example.benchmark.Activity.CePingActivity;
+import com.example.benchmark.Data.YinHuaData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 
 import cn.hutool.json.JSON;
+import okhttp3.Cache;
 
 /**
  * 计算分数
  */
 public class ScoreUtil {
+
 
     public static void calcAndSaveCPUScores(
             //String cpuName,
@@ -188,6 +195,31 @@ public class ScoreUtil {
         return CacheUtil.getInt(CacheConst.KEY_STABILITY_SCORE);
     }
 
+
+
+
+    public static void calaAndSaveGameTouchScores(int testNum,float time){
+        // 正确率
+        float averageAccuracy = (float) (testNum) / GameTouchUtil.testNum;
+        Log.e("TWT", "GameTouchUtil.testNum: "+GameTouchUtil.testNum );
+        Log.e("TWT", "testNum: "+testNum );
+        Log.e("TWT", "time: "+time );
+
+        float averAccuracyScore = 100f * averageAccuracy / 2;
+        float responseTimeScore = time < 50 ? 50 : 100f * 50 / (2 * time);
+        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+//        // 保存触控体验分数
+        CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
+
+        averageAccuracy *= 100;
+        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
+        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, time);
+        Log.e("TWT", "KEY_AVERAGE_ACCURACY: "+averageAccuracy);
+        Log.e("TWT", "KEY_RESPONSE_TIME: "+time);
+
+        return;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void calcAndSaveTouchScores(
             //Long cloudSpendTime0, Long cloudSpendTime1, Long cloudSpendTime2, Long cloudSpendTime3, Long cloudSpendTime4,
@@ -330,22 +362,20 @@ public class ScoreUtil {
         // 正确率
         float averageAccuracy = (float) (responseNum - 4) / longs.size();
 
-        Log.d("zzl", "ResponseTime0: " + ResponseTime0);
-        Log.d("zzl", "ResponseTime1: " + ResponseTime1);
-        Log.d("zzl", "ResponseTime2: " + ResponseTime2);
-        Log.d("zzl", "ResponseTime3: " + ResponseTime3);
-        Log.d("zzl", "ResponseTime4: " + ResponseTime4);
-        Log.d("zzl", "ResponseTime5: " + ResponseTime5);
-        Log.d("zzl", "ResponseTime6: " + ResponseTime6);
-        Log.d("zzl", "ResponseTime7: " + ResponseTime7);
-        Log.d("zzl", "ResponseTime8: " + ResponseTime8);
-        Log.d("zzl", "ResponseTime9: " + ResponseTime9);
-        Log.d("zzl", "ResponseTime10: " + ResponseTime10);
-        //Log.d("zzl", "ResponseTime11: " + ResponseTime11);
-        Log.d("zzl", "avgResponseTime: " + avgResponseTime);
-        Log.d("zzl", "averageAccuracy: " + averageAccuracy);
-
-
+//        Log.d("zzl", "ResponseTime0: " + ResponseTime0);
+//        Log.d("zzl", "ResponseTime1: " + ResponseTime1);
+//        Log.d("zzl", "ResponseTime2: " + ResponseTime2);
+//        Log.d("zzl", "ResponseTime3: " + ResponseTime3);
+//        Log.d("zzl", "ResponseTime4: " + ResponseTime4);
+//        Log.d("zzl", "ResponseTime5: " + ResponseTime5);
+//        Log.d("zzl", "ResponseTime6: " + ResponseTime6);
+//        Log.d("zzl", "ResponseTime7: " + ResponseTime7);
+//        Log.d("zzl", "ResponseTime8: " + ResponseTime8);
+//        Log.d("zzl", "ResponseTime9: " + ResponseTime9);
+//        Log.d("zzl", "ResponseTime10: " + ResponseTime10);
+//        //Log.d("zzl", "ResponseTime11: " + ResponseTime11);
+//        Log.d("zzl", "avgResponseTime: " + avgResponseTime);
+//        Log.d("zzl", "averageAccuracy: " + averageAccuracy);
 //        float averageAccuracy = cloudTapTimes.size() / (float) localTapTimes.size();
 //        float responseTime = 0f;
 //        int index = 0;
@@ -358,7 +388,6 @@ public class ScoreUtil {
 //        }
 //        if (cloudTapTimes.size() != 0) responseTime /= cloudTapTimes.size();
 //        // 保存触控体验结果
-
         //CacheUtil.put(CacheConst.KEY_AVERAGE_RESPONSE_TIME, avgResponseTime);
 //        // 计算触控体验分数
 //        averageAccuracy *= 100;
@@ -379,7 +408,7 @@ public class ScoreUtil {
     }
 
     public static float getResponseTime() {
-        return CacheUtil.getLong(CacheConst.KEY_RESPONSE_TIME);
+        return CacheUtil.getFloat(CacheConst.KEY_RESPONSE_TIME);
     }
 
 //    public static float getAverageResponseTime() {
@@ -394,15 +423,37 @@ public class ScoreUtil {
             String resolution,
             float maxDiffValue
     ) {
+        if(YinHuaData.PESQ==null || YinHuaData.SSIM==null || YinHuaData.PSNR ==null){
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    calcAndSaveSoundFrameScores(resolution,maxDiffValue);
+                    timer.cancel();
+                }
+            };
+            timer.schedule(task,5000);
+            return;
+        }
+        float PSNR = Float.parseFloat(YinHuaData.PSNR);
+        float SSIM = Float.parseFloat(YinHuaData.SSIM);
+        float PESQ = Float.parseFloat(YinHuaData.PESQ);
         // 保存音画质量结果
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
+        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.PESQ);
+        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.PSNR);
+        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.SSIM);
+
         // 计算音画质量分数
         String[] resolutionArray = resolution.split("X");
         float resolutionValue = Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]);
-        float resolutionScore = 100f * resolutionValue / (2 * 1920 * 1080);
-        float maxDiffValueScore = maxDiffValue < 50 ? 50 : 100f * 50 / (2 * maxDiffValue);
-        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore);
+        float resolutionScore = 100f * resolutionValue / (4 * 1920 * 1080);
+        float maxDiffValueScore = maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue);
+        PSNR = PSNR>40 ? 40:PSNR;
+        float D3 = (100 * ((PSNR/40)+SSIM)) / 8;
+        float D4 = (float) ((100 * PESQ) / (4.5 *4));
+        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + D3+ D4 );
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
     }

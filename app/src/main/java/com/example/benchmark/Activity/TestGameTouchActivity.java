@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
@@ -12,20 +13,24 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.benchmark.R;
+import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.GameTouchUtil;
+import com.example.benchmark.utils.ScoreUtil;
 
 public class TestGameTouchActivity extends AppCompatActivity {
     private static final String TAG = "TWT";
     //private RetrieverUtil util = RetrieverUtil.getUtil();
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
 
-    private final int HANDLING_FRAME = 0;
-    private final int TEST_COMPLETED = 1;
+    private final int HANDLING_FRAME = 111;
+    private final int TEST_COMPLETED = 222;
 
     private int last_rgb = 0,this_rgb = 0;
     private long count = 0,duration = 0;
+    private Bitmap bitmap;
 
     private String path;
 
@@ -40,7 +45,22 @@ public class TestGameTouchActivity extends AppCompatActivity {
                     handling_tv.setText("测试中----("+msg.arg1+"/"+count+")");
                     break;
                 case TEST_COMPLETED:
-                    handling_tv.setText(gameTouchUtil.getDelayTime()+"\navgTime:"+gameTouchUtil.getAvgTime(10));
+                    try{
+                        float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.testNum);
+                        handling_tv.setText(gameTouchUtil.getDelayTime()+"\navgTime:"+delayTime);
+
+                        ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(),delayTime);
+                        Log.d(TAG, "gameTouchUtil.getDetectNum(): "+gameTouchUtil.getDetectNum());
+                        Log.d(TAG, "delayTime): "+delayTime);
+                    }catch (Exception e){
+                        Log.d(TAG, "Error:"+e.toString());
+                        Toast.makeText(TestGameTouchActivity.this,"检测到游戏中点击次数少于测试次数.",Toast.LENGTH_SHORT).show();
+                    }
+
+                    Intent intent = new Intent(TestGameTouchActivity.this,CePingActivity.class);
+                    intent.putExtra("isGameTouchTested",true);
+                    startActivity(intent);
+
             }
         }
     };
@@ -60,8 +80,6 @@ public class TestGameTouchActivity extends AppCompatActivity {
         }
 
 
-
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -77,58 +95,51 @@ public class TestGameTouchActivity extends AppCompatActivity {
                 float frameTime = (float)duration  / count;
 
                 Bitmap bitmap1 = retriever.getFrameAtIndex(0);
-                this_rgb = bitmap1.getPixel(420,1255);
-                last_rgb = this_rgb;
-
-                for(int i=1;i<count;i++){
-                    Bitmap bitmap = retriever.getFrameAtIndex(i);
-                    this_rgb = bitmap.getPixel(420,1255);
-                    Log.d(TAG, "Image: <"+i+"> :"+this_rgb);
-                    Message m = new Message();
-                    m.arg1 = (i+1);
-                    m.what = HANDLING_FRAME;
-                    handler.sendMessage(m);
-
-
-                    if(Math.abs(this_rgb-last_rgb)>10000000){
-                        Log.e(TAG, "rgb changed!!! : " +i);
-                        gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()+(long)(duration*((float)(i)/count)));
-                        gameTouchUtil.getTestTime((long)(duration*((float)(i)/count)));
-                    }
+                if(bitmap1.getWidth()>bitmap1.getHeight()){
+                    this_rgb = bitmap1.getPixel(1060,830);
                     last_rgb = this_rgb;
+                    for(int i=1;i<count;i++){
+                        bitmap = retriever.getFrameAtIndex(i);
+                        this_rgb = bitmap.getPixel(1060,830);
+                        Log.d(TAG, "Image: <"+i+"> :"+this_rgb);
+                        Message m = new Message();
+                        m.arg1 = (i+1);
+                        m.what = HANDLING_FRAME;
+                        handler.sendMessage(m);
+
+                        if(Math.abs(this_rgb-last_rgb)>10000000){
+                            Log.e(TAG, "rgb changed!!! : " +i);
+                            gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()+(long)(duration*((float)(i)/count)));
+                            gameTouchUtil.getTestTime((long)(duration*((float)(i)/count)));
+                        }
+                        last_rgb = this_rgb;
+                    }
+                }else{
+                    this_rgb = bitmap1.getPixel(1060,830);
+                    last_rgb = this_rgb;
+                    for(int i=1;i<count;i++){
+                        bitmap = retriever.getFrameAtIndex(i);
+                        this_rgb = bitmap.getPixel(1060,830);
+                        Log.d(TAG, "Image: <"+i+"> :"+this_rgb);
+                        Message m = new Message();
+                        m.arg1 = (i+1);
+                        m.what = HANDLING_FRAME;
+                        handler.sendMessage(m);
+
+                        if(Math.abs(this_rgb-last_rgb)>10000000){
+                            Log.e(TAG, "rgb changed!!! : " +i);
+                            gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()+(long)(duration*((float)(i)/count)));
+                            gameTouchUtil.getTestTime((long)(duration*((float)(i)/count)));
+                        }
+                        last_rgb = this_rgb;
+                    }
                 }
 
-
-//                for(int i=0;i<count;i++){
-//                    Bitmap bitmap = retriever.getFrameAtIndex(i);
-//                    this_rgb = bitmap.getPixel(420,1255);
-//                    Log.d(TAG, "Image: <"+i+"> :"+this_rgb);
-//                    Message m = new Message();
-//                    m.arg1 = (i+1);
-//                    m.what = HANDLING_FRAME;
-//                    handler.sendMessage(m);
-//
-//                    if(Math.abs(this_rgb-last_rgb)>10000000){
-//                        //Log.d(TAG, "rgb changed!!! :" +i);
-//                        Log.e(TAG, "RGB BIG-changed when TIME is:" +frameTime*(i+1));
-//                        //gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()+(long)(duration*((float)(i)/count)));
-//                        gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime() + (long)(frameTime*(i+1)));
-//                    }
-//                    last_rgb = this_rgb;
-//                }
-
-
-//                gameTouchUtil.printFrameUpdateTime();
-//                gameTouchUtil.printAutoTapTime();
-//
-//                gameTouchUtil.printDelayTime();
-//                gameTouchUtil.printAvgTime(20);
                 gameTouchUtil.printTestTime();
 
                 handler.sendEmptyMessage(TEST_COMPLETED);
 
-                Log.d(TAG, "gameTouchUtil.readyToTapTime:"+ gameTouchUtil.readyToTapTime);
-                Log.d(TAG, "gameTouchUtil.vedioStartTime:"+ gameTouchUtil.getVideoStartTime());
+
 
 
             }

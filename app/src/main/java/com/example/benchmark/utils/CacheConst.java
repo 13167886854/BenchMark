@@ -73,14 +73,17 @@ public class CacheConst {
     public static final String KEY_SOUND_FRAME_SCORE = "音画质量分数";
     public static final String KEY_RESOLUTION = "resolution";
     public static final String KEY_MAX_DIFF_VALUE = "maxdifferencevalue";
+    public static final String KEY_PESQ = "PESQ";
+    public static final String KEY_PSNR = "PSNR";
+    public static final String KEY_SSIM = "SSIM";
     public static String AUDIO_PATH = "";
     public static final String AUDIO_PHONE_NAME = "phone_audio_record.pcm";
-    public static final String AUDIO_GAME_NAME = "game_audio_record.cpm";
+    public static final String AUDIO_GAME_NAME = "game_audio_record.pcm";
     public static String VIDEO_PATH = "";
     public static final String VIDEO_PHONE_NAME = "phone_video_record.mp4";
     public static final String VIDEO_GAME_NAME = "game_video_record.mp4";
 
     // 全局IP地址
-    public static final String GLOBAL_IP = "http://4c2e3fb7.cpolar.top";
+    public static final String GLOBAL_IP = "http://134f2ad7.cpolar.top";
 }
 

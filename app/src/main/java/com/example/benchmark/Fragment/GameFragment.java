@@ -96,7 +96,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                     Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(red_wending_cheak.isChecked() ){
+                if(red_wending_cheak.isChecked()||red_yinhua_cheak.isChecked() ){
                     if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
                             || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         popDiaLog.show();
@@ -111,8 +111,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                         startActivity(intent);
                         return;
                     }
-
-
                     //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
                 }
                 if(!Settings.canDrawOverlays(getContext())){
