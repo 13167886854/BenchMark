@@ -93,6 +93,8 @@ public class FxService extends Service {
     private Intent intent;
     private FxService service;
 
+    private boolean codeTouchAble = true;
+
     private TapUtil tapUtil;
 
 
@@ -155,6 +157,16 @@ public class FxService extends Service {
         mContext = FxService.this;
         service = this.service;
         tapUtil = TapUtil.getUtil();
+
+        try{
+            Log.e("TWT", "1.PESQ:"+YinHuaData.PESQ);
+            //Log.e("TWT", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
+            //Log.e("TWT", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
+            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.PESQ==null));
+        }catch (Exception e){
+            Log.e("TWT", "error: "+e.toString());
+        }
+
 
         HandlerThread serviceThread = new HandlerThread("service_thread",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -280,6 +292,10 @@ public class FxService extends Service {
 
 
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
+        if(this.isCheckSoundFrame){
+            btnToPrCode.setTextColor(0xFFCCCCCC);
+            codeTouchAble = false;
+        }
         btnToPrCode.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -309,9 +325,11 @@ public class FxService extends Service {
                 }
                 //响应点击事件
                 if (isclick) {
+                    if(codeTouchAble){
+                        toCatchScreen();
+                    }
                     //mFloatView.setVisibility(View.GONE);
                     //btnMenu.setVisibility(View.VISIBLE);
-                    toCatchScreen();
                     //点击按钮进行截屏bitmap形式
                 }
                 return true;
@@ -731,6 +749,13 @@ public class FxService extends Service {
                             YinHuaData.SSIM = resArr[3];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            if( YinHuaData.PSNR !=null &&
+                                    YinHuaData.SSIM != null &&
+                                    YinHuaData.PESQ !=null){
+                                codeTouchAble = true;
+                                btnToPrCode.setTextColor(0xff000000);
+                            }
+
                         }
                     });
         } else {
@@ -811,6 +836,17 @@ public class FxService extends Service {
                             YinHuaData.PESQ = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
                             handler.sendEmptyMessage(COMPUTE_PESQ);
+//
+//                            Log.e("TWT", "2.PESQ:"+YinHuaData.PESQ);
+//                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
+//                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
+//                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
+                            if( YinHuaData.PSNR !=null &&
+                                YinHuaData.SSIM != null &&
+                                YinHuaData.PESQ !=null){
+                                codeTouchAble = true;
+                                btnToPrCode.setTextColor(0xff000000);
+                            }
 
                         }
                     });
