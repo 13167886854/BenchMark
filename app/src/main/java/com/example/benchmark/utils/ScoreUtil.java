@@ -109,6 +109,8 @@ public class ScoreUtil {
             float jankCount,
             float stutterRate
     ) {
+        lowFrameRate *= 100;
+        stutterRate *= 100;
         // 保存流畅性结果
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
