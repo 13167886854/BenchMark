@@ -3,6 +3,7 @@ package com.example.benchmark.Activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,6 +23,7 @@ import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.MyLayoutManager;
 import com.example.benchmark.utils.ScoreUtil;
 
 import java.util.ArrayList;
@@ -53,7 +55,13 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         back_ceping.setOnClickListener(this::onClick);
         Intent intent = getIntent();
         initdata(intent);
+
         jutiAdapter = new JutiAdapter(JutiZhibiaoActivity.this,data);
+        //MyLayoutManager myLayoutManager = new MyLayoutManager(getApplicationContext());
+        //myLayoutManager.setAutoMeasureEnabled(true);
+        //recyclerView.setLayoutManager(myLayoutManager);
+        //recyclerView.setAdapter(jutiAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(jutiAdapter);
     }
@@ -90,6 +98,8 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         juti_item.setText(select_item);
         juti_phone_name.setText(select_plat+"·"+select_item);
         juti_grade.setText(String.valueOf(grade));
+
+        Log.e("TWT", "select_item: "+select_item );
 
         switch (select_item) {
             case CacheConst.KEY_FLUENCY_INFO: {
@@ -146,7 +156,6 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 data.add(new JuTiData("可用RAM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
                 data.add(new JuTiData("总共RAM",CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
                 break ;
-
             }
             case CacheConst.KEY_RAM_INFO: {
                 mHeadScore.setVisibility(View.GONE);

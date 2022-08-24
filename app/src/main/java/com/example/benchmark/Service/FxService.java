@@ -547,8 +547,8 @@ public class FxService extends Service {
         Bitmap bitmap = screenShot();
         Log.d(TAG, "bitmap getWidth: " + bitmap.getWidth() + "  getHeight"+ bitmap.getHeight());
         String result = CodeUtils.parseCode(bitmap);
-        Log.e("QT-1", result+"123");
-        Log.e("QT-1", "123"+result);
+        Log.e("QT-1", result+"---123");
+        Log.e("QT-1", "123---"+result);
         if ("{}".equals(result)) {
             // 空数据，点击无效
             return;

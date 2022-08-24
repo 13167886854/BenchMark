@@ -29,6 +29,8 @@ import okhttp3.Cache;
 public class ScoreUtil {
 
 
+    private static final String TAG = "ScoreUtil";
+
     public static void calcAndSaveCPUScores(
             //String cpuName,
             int cpuCores
@@ -55,7 +57,16 @@ public class ScoreUtil {
         // 保存GPU结果
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
-        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+        String res = "";
+        String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
+        Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
+        if (select_plat.startsWith("红手指")) {
+            String[] strings = gpuVersion.split(" ");
+            for (int i = 0; i < strings.length - 1; i++) {
+                res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
+            }
+        }
+        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
         // 计算GPU分数
         // 保存GPU分数
         //CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
