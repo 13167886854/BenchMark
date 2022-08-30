@@ -1,27 +1,18 @@
 package com.example.benchmark.utils;
 
-import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.RequiresApi;
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.benchmark.Activity.AudioVideoActivity;
-import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.Data.YinHuaData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
 
-import cn.hutool.json.JSON;
-import okhttp3.Cache;
 
 /**
  * 计算分数
@@ -57,17 +48,22 @@ public class ScoreUtil {
         // 保存GPU结果
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
-        String res = "";
-        String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
-        Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
-/*        if (select_plat.startsWith("红手指")) {
-            String[] strings = gpuVersion.split(" ");
-            for (int i = 0; i < strings.length - 1; i++) {
-                res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
+        if (gpuVersion != null) {
+            String res = "";
+            String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
+            Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
+            if (select_plat.startsWith("红手指")) {
+                String[] strings = gpuVersion.split(" ");
+                for (int i = 0; i < strings.length - 1; i++) {
+                    res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
+                }
             }
+            CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
+        } else {
+            CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+
         }
-        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);*/
-        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+
         // 计算GPU分数
         // 保存GPU分数
         //CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
@@ -210,14 +206,12 @@ public class ScoreUtil {
     }
 
 
-
-
-    public static void calaAndSaveGameTouchScores(int testNum,float time){
+    public static void calaAndSaveGameTouchScores(int testNum, float time) {
         // 正确率
         float averageAccuracy = (float) (testNum) / GameTouchUtil.testNum;
-        Log.e("TWT", "GameTouchUtil.testNum: "+GameTouchUtil.testNum );
-        Log.e("TWT", "testNum: "+testNum );
-        Log.e("TWT", "time: "+time );
+        Log.e("TWT", "GameTouchUtil.testNum: " + GameTouchUtil.testNum);
+        Log.e("TWT", "testNum: " + testNum);
+        Log.e("TWT", "time: " + time);
 
         float averAccuracyScore = 100f * averageAccuracy / 2;
         float responseTimeScore = time < 50 ? 50 : 100f * 50 / (2 * time);
@@ -228,8 +222,8 @@ public class ScoreUtil {
         averageAccuracy *= 100;
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, time);
-        Log.e("TWT", "KEY_AVERAGE_ACCURACY: "+averageAccuracy);
-        Log.e("TWT", "KEY_RESPONSE_TIME: "+time);
+        Log.e("TWT", "KEY_AVERAGE_ACCURACY: " + averageAccuracy);
+        Log.e("TWT", "KEY_RESPONSE_TIME: " + time);
 
         return;
     }
@@ -244,7 +238,7 @@ public class ScoreUtil {
             String cloudDownTimeList, String cloudSpendTimeList) {
         //Log.d("zzl", "cloudSpendTime0: ");
         //没有进行触控测试 没有数据时 直接返回
-        if(cloudDownTimeList==null || cloudSpendTimeList ==null){
+        if (cloudDownTimeList == null || cloudSpendTimeList == null) {
             return;
         }
         String cloudDownTimeListSub = cloudDownTimeList.substring(1, cloudDownTimeList.length() - 1);
@@ -437,16 +431,16 @@ public class ScoreUtil {
             String resolution,
             float maxDiffValue
     ) {
-        if(YinHuaData.PESQ==null || YinHuaData.SSIM==null || YinHuaData.PSNR ==null){
+        if (YinHuaData.PESQ == null || YinHuaData.SSIM == null || YinHuaData.PSNR == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    calcAndSaveSoundFrameScores(resolution,maxDiffValue);
+                    calcAndSaveSoundFrameScores(resolution, maxDiffValue);
                     timer.cancel();
                 }
             };
-            timer.schedule(task,5000);
+            timer.schedule(task, 5000);
             return;
         }
         float PSNR = Float.parseFloat(YinHuaData.PSNR);
@@ -464,10 +458,10 @@ public class ScoreUtil {
         float resolutionValue = Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]);
         float resolutionScore = 100f * resolutionValue / (4 * 1920 * 1080);
         float maxDiffValueScore = maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue);
-        PSNR = PSNR>40 ? 40:PSNR;
-        float D3 = (100 * ((PSNR/40)+SSIM)) / 8;
-        float D4 = (float) ((100 * PESQ) / (4.5 *4));
-        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + D3+ D4 );
+        PSNR = PSNR > 40 ? 40 : PSNR;
+        float D3 = (100 * ((PSNR / 40) + SSIM)) / 8;
+        float D4 = (float) ((100 * PESQ) / (4.5 * 4));
+        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + D3 + D4);
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
     }

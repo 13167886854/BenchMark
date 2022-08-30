@@ -12,6 +12,13 @@ public class CepingData implements Serializable {
     //测评得说明信息
     private String CepingText;
 
+    public CepingData(int cepingImage, String cepingItem, String cepingText) {
+        CepingImage = cepingImage;
+        CepingItem = cepingItem;
+        CepingText = cepingText;
+    }
+
+
     public CepingData(int grade, int cepingImage, String cepingItem, String cepingText) {
         this.grade = grade;
         CepingImage = cepingImage;

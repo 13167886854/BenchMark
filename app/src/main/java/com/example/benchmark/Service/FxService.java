@@ -597,6 +597,8 @@ public class FxService extends Service {
                 (String) JsonData.get("totalStorage")
 
         );
+
+
         ScoreUtil.calcAndSaveFluencyScores(
                 getFloatDataFromJson(JsonData, "avergeFPS"),
                 getFloatDataFromJson(JsonData, "frameShakingRate"),
@@ -606,6 +608,7 @@ public class FxService extends Service {
                 getFloatDataFromJson(JsonData, "stutterRate")
         );
 
+        // 触控测试数据
         ScoreUtil.calcAndSaveTouchScores(
                 getCloudListDataFromJson(JsonData, "cloudDownTimeList"),
                 getCloudListDataFromJson(JsonData, "cloudSpendTimeList")

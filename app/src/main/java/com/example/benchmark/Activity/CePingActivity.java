@@ -233,7 +233,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckCPU) {
             ceping_data.add(new CepingData(
                     //ScoreUtil.getCPUScore(),
-                    0,
+                    //0,
                     isCloudPhone ? R.drawable.blue_cpu : R.drawable.red_cpu,
                     CacheConst.KEY_CPU_INFO,
                     getString(R.string.cpu_info_description)
@@ -242,7 +242,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckGPU) {
             ceping_data.add(new CepingData(
                     //ScoreUtil.getGPUScore(),
-                    0,
+                    //0,
                     isCloudPhone ? R.drawable.blue_gpu : R.drawable.red_gpu,
                     CacheConst.KEY_GPU_INFO,
                     getString(R.string.gpu_info_description)
@@ -252,7 +252,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckRAM) {
             ceping_data.add(new CepingData(
                     //ScoreUtil.getRAMScore(),
-                    0,
+                    //0,
                     isCloudPhone ? R.drawable.blue_ram : R.drawable.red_ram,
                     CacheConst.KEY_RAM_INFO,
                     getString(R.string.ram_info_description)
@@ -262,7 +262,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckROM) {
             ceping_data.add(new CepingData(
                     //ScoreUtil.getROMScore(),
-                    0,
+                    //0,
                     isCloudPhone ? R.drawable.blue_rom : R.drawable.red_rom,
                     CacheConst.KEY_ROM_INFO,
                     getString(R.string.rom_info_description)
