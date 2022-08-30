@@ -197,6 +197,7 @@ public class TapUtil {
     }
 
     public void PhoneTouchTap() {
+        phoneCurrentTapNum = 0;
         TimerTask task = new TimerTask() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override

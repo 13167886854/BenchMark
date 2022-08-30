@@ -129,7 +129,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             case CacheConst.KEY_SOUND_FRAME_INFO: {
                 data = new ArrayList<>();
                 data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
-                data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "ms"));
+                data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "帧"));
                 data.add(new JuTiData("PSNR", YinHuaData.PSNR));
                 data.add(new JuTiData("SSIM", YinHuaData.SSIM));
                 data.add(new JuTiData("PESQ", YinHuaData.PESQ));

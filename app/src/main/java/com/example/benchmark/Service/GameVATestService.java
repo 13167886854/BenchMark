@@ -3,16 +3,22 @@ package com.example.benchmark.Service;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
+import android.media.Image;
+import android.media.ImageReader;
 import android.media.MediaRecorder;
 import android.media.projection.MediaProjection;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Environment;
@@ -48,7 +54,10 @@ import com.example.benchmark.utils.Recorder;
 import com.example.benchmark.utils.TapUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -82,6 +91,8 @@ public class GameVATestService extends Service {
     private int height = screenHeight;
     private int dpi;
 
+    private ImageReader mImageReader;
+
     private TapUtil tapUtil;
 
     //视频音频录制变量初始化
@@ -96,7 +107,7 @@ public class GameVATestService extends Service {
     WindowManager mWindowManager;
     private Context mContext;
     TextView mFloatView;
-    TextView mFloatView2;
+    TextView KaCa;
     private long startTime;
     private long endTime;
     //private boolean isColor=true;
@@ -106,6 +117,7 @@ public class GameVATestService extends Service {
     private LinearLayout menu2;
 
     private GameVATestService service;
+    private VirtualDisplay mVirtualDisplay = null;
 
     //private Messenger mMessenger;
 
@@ -159,6 +171,7 @@ public class GameVATestService extends Service {
         mediaRecorder = new MediaRecorder();
         createFloatView();
 
+
     }
 
 
@@ -209,6 +222,8 @@ public class GameVATestService extends Service {
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
         menu2 = (LinearLayout) mFloatLayout.findViewById(R.id.menu2);
         mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText);
+        mFloatView.setVisibility(View.GONE);
+        KaCa = (TextView)mFloatLayout.findViewById(R.id.KaCa);
         //mFloatView2 = (TextView)mFloatLayout.findViewById(R.id.recordText2);
         mWindowManager.addView(mFloatLayout, wmParams);
 
@@ -271,40 +286,62 @@ public class GameVATestService extends Service {
                 return true;
             }
         });
-//        mFloatView2.setOnTouchListener(new OnTouchListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.Q)
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                boolean isclick=false;
-//                switch (event.getAction()){
-//                    case MotionEvent.ACTION_DOWN:
-//                        startTime=System.currentTimeMillis();
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-//                        wmParams.x = (int) event.getRawX() - mFloatView2.getMeasuredWidth()/2;
-//                        wmParams.y = (int) event.getRawY() - mFloatView2.getMeasuredHeight()/2-statusBarHeight;
-//                        //Log.d("TWT", "onTouch: "+MainActivity.);
-//                        //刷新
-//                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-//                        break;
-//                    case MotionEvent.ACTION_UP:
-//                        endTime=System.currentTimeMillis();
-//                        //小于0.2秒被判断为点击
-//                        if ((endTime - startTime) > 200) {
-//                            isclick = false;
-//                        } else {
-//                            isclick = true;
-//                        }
-//                        break;
-//                }
-//                //响应点击事件
-//                if (isclick&&isAble) {
-//
-//                }
-//                return true;
-//            }
-//        });
+
+        KaCa.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                boolean isclick=false;
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        startTime=System.currentTimeMillis();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        wmParams.x = (int) event.getRawX() - KaCa.getMeasuredWidth()/2;
+                        wmParams.y = (int) event.getRawY() - KaCa.getMeasuredHeight()/2-statusBarHeight;
+                        //Log.d("TWT", "onTouch: "+MainActivity.);
+                        //刷新
+                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        endTime=System.currentTimeMillis();
+                        //小于0.2秒被判断为点击
+                        if ((endTime - startTime) > 200) {
+                            isclick = false;
+                        } else {
+                            isclick = true;
+                        }
+                        break;
+                }
+                //响应点击事件
+                if (isclick) {
+                    KaCa.setVisibility(View.GONE);
+                    Handler handler1 = new Handler();
+                    handler1.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startVirtual();
+                        }
+                    },500);
+                    Handler handler2 = new Handler();
+                    handler2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startCapture();
+                        }
+                    },1500);
+                    Handler handler3 = new Handler();
+                    handler3.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mFloatView.setVisibility(View.VISIBLE);
+                        }
+                    },2000);
+                }
+                return true;
+            }
+        });
 
         mFloatView.setOnClickListener(new OnClickListener()
         {
@@ -322,7 +359,32 @@ public class GameVATestService extends Service {
     }
 
 
+    public void startVirtual(){
+        if (mediaProjection != null) {
+            Log.i(TAG, "want to display virtual");
+            virtualDisplay2();
+        }else{
+            Log.e(TAG, "start screen capture intent");
+            Log.e(TAG, "want to build mediaprojection and display virtual");
+        }
+    }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void virtualDisplay2(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+        dpi = metrics.densityDpi;
+        mImageReader = ImageReader.newInstance(width, height, 0x1, 2);
+        mVirtualDisplay = mediaProjection.createVirtualDisplay("screen-mirror",
+                    width, height, dpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mImageReader.getSurface(), null, null);
+        //Log.e(TAG, "width1: "+width );
+        //Log.e(TAG, "height1: "+height );
+        Log.i(TAG, "virtual displayed");
+    }
 
     public boolean startRecord() {
         if (mediaProjection == null || running) {
@@ -367,6 +429,147 @@ public class GameVATestService extends Service {
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void startCapture(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        width = metrics.widthPixels;
+        height = metrics.heightPixels;
+        dpi = metrics.densityDpi;
+
+        //mImageReader = ImageReader.newInstance(width, height, ImageFormat.RGB_565, 2);
+        //Log.e(TAG, "width2: "+width );
+        //Log.e(TAG, "height2: "+height );
+
+        Image image = mImageReader.acquireLatestImage();
+        int imgaeWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        //Log.e(TAG, "imgaeWidth: "+imgaeWidth );
+        //Log.e(TAG, "imgaeWidthimageHeight: "+imageHeight );
+        final Image.Plane[] planes = image.getPlanes();
+        final ByteBuffer buffer = planes[0].getBuffer();
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        int rowPadding = rowStride - pixelStride * imgaeWidth;
+        Bitmap bitmap = Bitmap.createBitmap(imgaeWidth+rowPadding/pixelStride, imageHeight, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(buffer);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0,imgaeWidth, imageHeight);
+        image.close();
+        Log.i(TAG, "image data captured");
+        if(bitmap != null) {
+            try{
+                String path = getsaveDirectory()+CacheConst.IMAGE_GAME;
+                File fileImage = new File(path);
+                if(!fileImage.exists()){
+                    fileImage.createNewFile();
+                    Log.i(TAG, "image file created");
+                    }
+                FileOutputStream out = new FileOutputStream(fileImage);
+                if(out != null){
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    out.flush();
+                    out.close();
+                    Intent media = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(fileImage);
+                    media.setData(contentUri);
+                    this.sendBroadcast(media);
+                    Log.i(TAG, "screen image saved");
+                    }
+                }catch(FileNotFoundException e) {
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+        }
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                .build();
+        MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+        // file是要上传的文件 File()
+        File file = new File(getsaveDirectory()  + CacheConst.IMAGE_GAME);
+        //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+        //Log.d(TAG, "onClick: " + file.exists());
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("image", CacheConst.IMAGE_GAME, requestBody)
+                //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(CacheConst.GLOBAL_IP + "/AudioVideo/image")
+                .post(multipartBody)
+                .build();
+        //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + e.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                        Log.d(TAG, "onResponse: response==>" + response.body());
+                        String res = response.body().string();
+                        Log.d(TAG, "onResponse:" + res);
+                        double x = Double.parseDouble(res);
+                        double score = 0;
+                        //Log.e(TAG, "onResponse: "+CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checked_plat);.);
+                        Log.e(TAG, "onResponse: "+CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME));
+//                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_Tencent_GAME)){
+//                            double min = 915;
+//                            double max = 920;
+//                            score = (x-min)/(max-min);
+//                        }else if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_MI_GU_GAME)){
+//                            double min = 573;
+//                            double max = 568;
+//                            score = (x-min)/(max-min);
+//                        }else if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME)){
+//                            double min = 431;
+//                            double max = 443;
+//                            score = (x-min)/(max-min);
+//                        }
+                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_Tencent_GAME)){
+                            if(x<917){//清晰度小于916判断为标清 720p
+                                YinHuaData.Resolution = "1280X720";
+                            }else{//超过917判断为 高清、超清 1080p
+                                YinHuaData.Resolution = "1920X1080";
+                            }
+                        }else if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_MI_GU_GAME)){
+                            if(x<600){//清晰度小于600判断为高清、超清、蓝光 720p
+                                YinHuaData.Resolution = "1280X720";
+                            }else{//超过600判断为原画1080p
+                                YinHuaData.Resolution = "1920X1080";
+                            }
+                        }else if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME)){
+                            if(x<436){//消息都小于436判断为标清
+                                YinHuaData.Resolution = "1280X720";
+                            }else{
+                                YinHuaData.Resolution = "1920X1080";
+                            }
+                        }
+
+                        //Log.d(TAG, "score: "+score);
+                        //double max = 574.199755;
+                        //double min = 566.853584;
+                        //double score = (x - min)/(max -min);
+                        //Log.e(TAG, "score: "+score);
+//                        }
+
+                    }
+                });
+    }
+
 
     public void startVideoRecord() {
         if (mediaProjection == null || running) {
@@ -379,7 +582,6 @@ public class GameVATestService extends Service {
         width = metrics.widthPixels;
         height = metrics.heightPixels;
         dpi = metrics.densityDpi;
-
         Log.d("TWT", "startRecord: start");
 
         initRecorder();
@@ -462,8 +664,6 @@ public class GameVATestService extends Service {
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
                             //handler.sendEmptyMessage(COMPUTE_PESQ);
-
-
                         }
                     });
         } else {

@@ -27,6 +27,11 @@
             />
     </LinearLayout>
 
-
+    <TextView
+        android:layout_marginTop="350dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="录屏文件上传服务器测试需要较长时间，请耐心等待，测试结束后将进行自动跳转。。。"/>
 
 </FrameLayout>

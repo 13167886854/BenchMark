@@ -29,6 +29,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.alibaba.fastjson.JSONException;
+import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 //import com.example.myapplication15.data.JsonData;
 import com.example.benchmark.thread.AudioDecodeThread;
@@ -71,7 +72,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime + "\n"
                         + "当前音频帧" + audiocurtime + "\n" +
                         "\n" + "最大音画同步差" + maxDifferenceValue);
-                ScoreUtil.calcAndSaveSoundFrameScores("0X0", maxDifferenceValue);
+                ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.Resolution, maxDifferenceValue);
                 isTestOver = true;
 
                 return;

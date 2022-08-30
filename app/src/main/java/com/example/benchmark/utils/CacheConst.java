@@ -82,8 +82,9 @@ public class CacheConst {
     public static String VIDEO_PATH = "";
     public static final String VIDEO_PHONE_NAME = "phone_video_record.mp4";
     public static final String VIDEO_GAME_NAME = "game_video_record.mp4";
+    public static final String IMAGE_GAME = "test.jpg";
 
     // 全局IP地址
-    public static final String GLOBAL_IP = "http://3319e5ee.vip.cpolar.cn";
+    public static final String GLOBAL_IP = "http://121.40.215.41:8080";
 }
 

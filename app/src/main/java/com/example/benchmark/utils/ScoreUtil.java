@@ -60,13 +60,14 @@ public class ScoreUtil {
         String res = "";
         String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
         Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
-        if (select_plat.startsWith("红手指")) {
+/*        if (select_plat.startsWith("红手指")) {
             String[] strings = gpuVersion.split(" ");
             for (int i = 0; i < strings.length - 1; i++) {
                 res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
             }
         }
-        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
+        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);*/
+        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
         // 计算GPU分数
         // 保存GPU分数
         //CacheUtil.put(CacheConst.KEY_GPU_SCORE, 0);
@@ -421,7 +422,7 @@ public class ScoreUtil {
     }
 
     public static float getResponseTime() {
-        return CacheUtil.getFloat(CacheConst.KEY_RESPONSE_TIME);
+        return CacheUtil.getLong(CacheConst.KEY_RESPONSE_TIME);
     }
 
 //    public static float getAverageResponseTime() {

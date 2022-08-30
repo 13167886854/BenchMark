@@ -11,5 +11,6 @@ public  class YinHuaData {
     // 视频得分
     public static  String SSIM;
     public static  String PSNR;
+    public static String Resolution;
 
 }

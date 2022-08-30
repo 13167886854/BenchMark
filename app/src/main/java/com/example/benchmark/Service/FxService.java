@@ -21,6 +21,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
@@ -754,6 +755,9 @@ public class FxService extends Service {
                                     YinHuaData.PESQ !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
+                                Looper.prepare();
+                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
+                                Looper.loop();
                             }
 
                         }
@@ -846,6 +850,9 @@ public class FxService extends Service {
                                 YinHuaData.PESQ !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
+                                Looper.prepare();
+                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
+                                Looper.loop();
                             }
 
                         }

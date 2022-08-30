@@ -89,9 +89,11 @@ public class MyAccessibilityService extends AccessibilityService {
         @Override
         public boolean handleMessage(@NonNull Message message) {
             if (message.what == MSG_CONTINUE_MONITOR) {
+                //Log.e("TWT", "handleMessage: "+"tteesstt" );
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-                ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch,isCheckSoundFrame);
+                //ServiceUtil.backToCePingActivity(MyAccessibilityService.this);
+                 ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch,isCheckSoundFrame);
             } else if (message.what == MSG_MONITOR_OVER) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
@@ -310,8 +312,10 @@ public class MyAccessibilityService extends AccessibilityService {
                 " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
         CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, true);
         if (isHaveOtherPerformance) {
+            Log.d("TWT", "isHaveOtherPerformance:yep ");
             mHandler.sendEmptyMessage(MSG_CONTINUE_MONITOR);
         } else {
+            Log.d("TWT", "isHaveOtherPerformance:nop ");
             mHandler.sendEmptyMessage(MSG_MONITOR_OVER);
         }
     }

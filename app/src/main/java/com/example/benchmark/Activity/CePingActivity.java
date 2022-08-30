@@ -153,16 +153,13 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED) && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
             startStabilityMonitorService();
         }
-        if (!isCheckStability && isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
+        if ( isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
 //        if (!isCheckStability && isHaveOtherPerformance) {
             Intent fxIntent = new Intent(this, FxService.class);
             startService(fxIntent);
             startFxService();
         }
-        if (isCheckSoundFrame && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
-//        if (!isCheckStability && isHaveOtherPerformance) {
-            //       startRecordService();
-        }
+
 
         //云游戏流畅性测试
         if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckFluency
@@ -417,11 +414,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
 
     private void startStabilityMonitorService() {
-        // 需要申请录屏权限
-        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager)
-                this.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        if (mMediaProjectionManager != null) {
-            this.startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), REQUEST_STABILITY);
+        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+        if (projectionManager != null) {
+            this.startActivityForResult(projectionManager.createScreenCaptureIntent(), REQUEST_STABILITY);
         }
     }
 
@@ -459,9 +454,12 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         intent.putExtra("isCheckSoundFrame", isCheckSoundFrame);
         intent.putExtra("isCheckTouch", isCheckTouch);
         bindService(intent, connection, BIND_AUTO_CREATE);
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        Intent captureIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, REQUEST_FX);
+        if(!isCheckStability){
+            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+            Intent captureIntent = projectionManager.createScreenCaptureIntent();
+            startActivityForResult(captureIntent, REQUEST_FX);
+        }
+
     }
 
     @Override
@@ -475,6 +473,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     .putExtra("data", data)
                     .putExtra("isCheckTouch", isCheckTouch);
 
+            if(isHaveOtherPerformance){
+                mediaProjection = projectionManager.getMediaProjection(resultCode, data);
+                fxService.setMediaProject(mediaProjection);
+                fxService.setPara(isCheckTouch, isCheckSoundFrame);
+            }
             Log.e("TWT", "onActivityResult: " + isCheckSoundFrame);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(service);
@@ -482,7 +485,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                 startService(service);
             }
         } else if (requestCode == REQUEST_FX && resultCode == RESULT_OK) {
-            //ServiceUtil.startFxService(this, checked_plat, resultCode, data, isCheckTouch,isCheckSoundFrame);
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             fxService.setMediaProject(mediaProjection);
             fxService.setPara(isCheckTouch, isCheckSoundFrame);
