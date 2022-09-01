@@ -150,7 +150,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         updateListData();
 
         Log.d("TWT", "platform_kind: " + platform_kind);
-        if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED) && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {
+        if (isCheckStability && !CacheUtil.getBoolean(CacheConst.KEY_STABILITY_IS_MONITORED)) {
             startStabilityMonitorService();
         }
         if ( isHaveOtherPerformance && platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_PHONE)) {

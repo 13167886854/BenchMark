@@ -54,7 +54,7 @@ public class TencentGamerStabilityService implements IStabilityService {
     public void onMonitor() {
         if (!isClickInstantPlay) {
             AccessibilityNodeInfo instantPlayNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_DETAIL_INSTANT_PLAY, NODE_TEXT_DETAIL_INSTANT_PLAY);
+                    service, NODE_ID_DETAIL_INSTANT_PLAY, "");
             if (instantPlayNode == null) return;
             AccessibilityUtil.performClick(instantPlayNode);
             isClickInstantPlay = true;
