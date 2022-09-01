@@ -175,10 +175,10 @@ public class TestSMActivity extends AppCompatActivity {
         ScoreUtil.calcAndSaveFluencyScores(
                 getRoundNumber((float)fpsUtil.getAvergeFps()),
                 getRoundNumber((float)fpsUtil.getFrameShakingRate()),
-                getRoundNumber((float)fpsUtil.getLowFrameRate()*100),
+                getRoundNumber((float)fpsUtil.getLowFrameRate()),
                 getRoundNumber((float)fpsUtil.getFrameIntervalTime()),
                 fpsUtil.getJankCount(),
-                getRoundNumber((float)fpsUtil.getShtutterRate())*100);
+                getRoundNumber((float)fpsUtil.getShtutterRate()));
         Intent intent = new Intent(TestSMActivity.this,CePingActivity.class);
         intent.putExtra("isFluencyUntested",false);
         startActivity(intent);

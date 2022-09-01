@@ -178,8 +178,8 @@ public class TapUtil {
                 Log.d("TWT", "turn = " + turn);
                 turn++;
                 if (turn % 2 == 1) {
-                    tap(2165, 860); //点击设置按钮
-//                    tap(2165, 630); //点击设置按钮
+//                    tap(2165, 860); //点击设置按钮
+                    tap(2165, 630); //点击设置按钮
                 } else {
                     tap(1000, 830);  //点击取消按钮
                     gameTouchUtil.getTapTime(System.currentTimeMillis());

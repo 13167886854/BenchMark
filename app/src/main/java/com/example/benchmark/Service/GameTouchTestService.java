@@ -168,8 +168,8 @@ public class GameTouchTestService extends Service {
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
-        mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText);
+        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
+        mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText2);
         mWindowManager.addView(mFloatLayout, wmParams);
 
         //获取状态栏的高度

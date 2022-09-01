@@ -211,9 +211,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer
 
     private void updateProjection(int videoWidth, int videoHeight) {
         float screenRatio = (float) screenWidth / screenHeight;
-        //float screenRatio = (float)  screenHeight/ screenWidth;
-        //float videoRatio = (float) videoWidth / videoHeight;
-        float videoRatio = (float) videoHeight / videoWidth;
+        float videoRatio = (float) videoWidth / videoHeight;
         if (videoRatio > screenRatio) {
              Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
 //            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -0.3f, 0.3f, -1f, 1f);

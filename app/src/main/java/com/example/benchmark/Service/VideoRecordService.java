@@ -340,7 +340,7 @@ public class VideoRecordService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
 //    public class RecordBinder extends Binder {

@@ -363,7 +363,7 @@ public class ScoreUtil {
         for (Long aLong : longs) {
             allResponseTime += aLong;
         }
-        long avgResponseTime = allResponseTime / longs.size();
+        float avgResponseTime = allResponseTime / longs.size();
         //long avgResponseTime = (ResponseTime1 + ResponseTime2 + ResponseTime3 + ResponseTime4 + ResponseTime5 +
         //        ResponseTime6 + ResponseTime7 + ResponseTime8 + ResponseTime9) / 9;
 
@@ -416,7 +416,7 @@ public class ScoreUtil {
     }
 
     public static float getResponseTime() {
-        return CacheUtil.getLong(CacheConst.KEY_RESPONSE_TIME);
+        return CacheUtil.getFloat(CacheConst.KEY_RESPONSE_TIME);
     }
 
 //    public static float getAverageResponseTime() {

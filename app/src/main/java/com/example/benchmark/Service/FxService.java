@@ -642,6 +642,7 @@ public class FxService extends Service {
         Toast.makeText(FxService.this, "测试结束！", Toast.LENGTH_SHORT).show();
         ServiceUtil.backToCePingActivity(FxService.this);
         stopSelf();
+        onDestroy();
     }
 
     public void setMediaProject(MediaProjection project) {
@@ -867,7 +868,7 @@ public class FxService extends Service {
 
 
     }
-    //stopSelf();
+
 
     private void createVirtualDisplay() {
         virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,

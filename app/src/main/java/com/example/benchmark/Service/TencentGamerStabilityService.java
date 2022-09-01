@@ -1,6 +1,7 @@
 package com.example.benchmark.Service;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityCallback;
@@ -26,7 +27,7 @@ public class TencentGamerStabilityService implements IStabilityService {
     private final String NODE_TEXT_INSTANT_PLAY = "秒玩";
     private final String NODE_ID_INSTANT_PLAY = "com.tencent.gamereva:id/game_play";
     private final String NODE_ID_DETAIL_INSTANT_PLAY = "com.tencent.gamereva:id/banner_game_play";
-    private final String NODE_TEXT_DETAIL_INSTANT_PLAY = "秒玩";
+    private final String NODE_TEXT_DETAIL_INSTANT_PLAY = "秒玩|游戏充值送时长";
     private final String NODE_ID_CONTINUE_GAME = "com.tencent.gamereva:id/sub_button";
     private final String NODE_TEXT_CONTINUE_GAME = "继续游戏";
     private final String NODE_CLASS_LOADING_GAME = "android.widget.ProgressBar";
@@ -59,6 +60,7 @@ public class TencentGamerStabilityService implements IStabilityService {
             AccessibilityUtil.performClick(instantPlayNode);
             isClickInstantPlay = true;
             startControlCloudPhone();
+            Log.e("TWT", "onMonitor: 123123");
         }
     }
 

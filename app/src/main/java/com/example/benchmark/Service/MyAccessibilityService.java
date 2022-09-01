@@ -191,6 +191,7 @@ public class MyAccessibilityService extends AccessibilityService {
             service = new TencentGamerStabilityService(this);
         } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
+            ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play2));
             service = new MiGuPlayStabilityService(this);
         } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));

@@ -1,13 +1,21 @@
 package com.example.benchmark.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
@@ -18,10 +26,14 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
     private FragmentManager fragmentManager;
     private RadioGroup main_menu;
-    private ImageButton menu,qr_code;
+    private ImageButton menu, qr_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         init();
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fram,new ZhuyeFragment());
+        fragmentTransaction.replace(R.id.main_fram, new ZhuyeFragment());
         fragmentTransaction.commit();
         main_menu.setOnCheckedChangeListener(this::onCheckedChanged);
         // 测量屏幕长宽
@@ -40,13 +52,12 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         CacheUtil.put(CacheConst.KEY_SCREEN_HEIGHT, dm.heightPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_DPI, dm.densityDpi);
 
-
     }
 
-    private   void init(){
-        main_menu=findViewById(R.id.main_select_menu);
-        menu=findViewById(R.id.menu);
-        qr_code=findViewById(R.id.qr_code);
+    private void init() {
+        main_menu = findViewById(R.id.main_select_menu);
+        menu = findViewById(R.id.menu);
+        qr_code = findViewById(R.id.qr_code);
     }
 
     @Override
@@ -57,32 +68,34 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
-            case R.id.main_zhuye:{
-                ChangeFragment(new ZhuyeFragment(),true);
+        switch (checkedId) {
+            case R.id.main_zhuye: {
+                ChangeFragment(new ZhuyeFragment(), true);
                 break;
             }
-            case R.id.main_tishi:{
-                ChangeFragment(new TishiFragment(),true);
+            case R.id.main_tishi: {
+                ChangeFragment(new TishiFragment(), true);
                 break;
             }
-            case R.id.main_setting:{
-                ChangeFragment(new SettingFragment(),true);
+            case R.id.main_setting: {
+                ChangeFragment(new SettingFragment(), true);
                 break;
             }
 
         }
     }
 
-    public  void  ChangeFragment(Fragment fragment, boolean isFisrt){
-        fragmentManager=getSupportFragmentManager();
+    public void ChangeFragment(Fragment fragment, boolean isFisrt) {
+        fragmentManager = getSupportFragmentManager();
         //开启事务
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fram,fragment);
-        if (!isFisrt){
-            fragmentTransaction.addToBackStack(null);;
+        fragmentTransaction.replace(R.id.main_fram, fragment);
+        if (!isFisrt) {
+            fragmentTransaction.addToBackStack(null);
+            ;
         }
         fragmentTransaction.commit();
     }
+
 
 }
