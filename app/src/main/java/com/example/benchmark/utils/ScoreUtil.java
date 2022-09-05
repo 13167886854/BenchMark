@@ -57,8 +57,10 @@ public class ScoreUtil {
                 for (int i = 0; i < strings.length - 1; i++) {
                     res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
                 }
+                CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
+            }else{
+                CacheUtil.put(CacheConst.KEY_GPU_VERSION,gpuVersion);
             }
-            CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
         } else {
             CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
 

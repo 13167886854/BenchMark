@@ -92,7 +92,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
-            if(blue_wending_cheak.isChecked()) {
+            if (blue_wending_cheak.isChecked()) {
                 if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
                         || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
@@ -100,19 +100,19 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
             }
-            if(blue_chukong_cheak.isChecked()) {
+            if (blue_chukong_cheak.isChecked()) {
                 if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                     popDiaLog.show();
                     return;
                 }
             }
-            if(blue_yinhua_cheak.isChecked()) {
+            if (blue_yinhua_cheak.isChecked()) {
                 if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                     popDiaLog.show();
                     return;
                 }
             }
-            if(!Settings.canDrawOverlays(getContext())){
+            if (!Settings.canDrawOverlays(getContext())) {
                 Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
                 Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
                 Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
@@ -177,7 +177,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void initPhoneBtn(){
+    public void initPhoneBtn() {
         Drawable drawable;
         Button btn;
         //移动云
@@ -209,6 +209,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
+        Log.d("mCheckCounts", "onClick: mCheckCounts==>  " + mCheckCounts);
         switch (v.getId()) {
             case R.id.kunpeng_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
@@ -328,6 +329,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
+
+
             case R.id.bule_cpu: {
 
                 boolean checked = blue_cpu_cheak.isChecked();
@@ -336,6 +339,23 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blue_cpu_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
                     mCheckCounts--;
+
+                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_gpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_ram_cheak.setVisibility(View.INVISIBLE);
+                    blue_ram_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_rom_cheak.setVisibility(View.INVISIBLE);
+                    blue_rom_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+
                 } else {
                     blue_cpu_cheak.setVisibility(View.VISIBLE);
                     blue_cpu_cheak.setChecked(true);
@@ -343,6 +363,28 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
                         phone_select_all.setChecked(true);
                     }
+
+                    blue_gpu_cheak.setVisibility(View.VISIBLE);
+                    blue_gpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_ram_cheak.setVisibility(View.VISIBLE);
+                    blue_ram_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_rom_cheak.setVisibility(View.VISIBLE);
+                    blue_rom_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
                 }
                 break;
             }
@@ -354,6 +396,22 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blue_gpu_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
                     mCheckCounts--;
+
+                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_cpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_ram_cheak.setVisibility(View.INVISIBLE);
+                    blue_ram_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_rom_cheak.setVisibility(View.INVISIBLE);
+                    blue_rom_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
                 } else {
                     blue_gpu_cheak.setVisibility(View.VISIBLE);
                     blue_gpu_cheak.setChecked(true);
@@ -361,6 +419,28 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
                         phone_select_all.setChecked(true);
                     }
+
+                    blue_cpu_cheak.setVisibility(View.VISIBLE);
+                    blue_cpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_ram_cheak.setVisibility(View.VISIBLE);
+                    blue_ram_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_rom_cheak.setVisibility(View.VISIBLE);
+                    blue_rom_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
                 }
                 break;
             }
@@ -371,6 +451,24 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blue_ram_cheak.setVisibility(View.INVISIBLE);
                     blue_ram_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_cpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_gpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+
+                    blue_rom_cheak.setVisibility(View.INVISIBLE);
+                    blue_rom_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
                 } else {
                     blue_ram_cheak.setVisibility(View.VISIBLE);
                     blue_ram_cheak.setChecked(true);
@@ -378,6 +476,29 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
                         phone_select_all.setChecked(true);
                     }
+
+                    blue_cpu_cheak.setVisibility(View.VISIBLE);
+                    blue_cpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_gpu_cheak.setVisibility(View.VISIBLE);
+                    blue_gpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+
+                    blue_rom_cheak.setVisibility(View.VISIBLE);
+                    blue_rom_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
                 }
                 break;
             }
@@ -388,6 +509,23 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blue_rom_cheak.setVisibility(View.INVISIBLE);
                     blue_rom_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_cpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
+                    blue_gpu_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
+                    blue_ram_cheak.setVisibility(View.INVISIBLE);
+                    blue_ram_cheak.setChecked(false);
+                    phone_select_all.setChecked(false);
+                    mCheckCounts--;
+
                 } else {
                     blue_rom_cheak.setVisibility(View.VISIBLE);
                     blue_rom_cheak.setChecked(true);
@@ -395,6 +533,29 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
                         phone_select_all.setChecked(true);
                     }
+
+                    blue_cpu_cheak.setVisibility(View.VISIBLE);
+                    blue_cpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_gpu_cheak.setVisibility(View.VISIBLE);
+                    blue_gpu_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+                    blue_ram_cheak.setVisibility(View.VISIBLE);
+                    blue_ram_cheak.setChecked(true);
+                    mCheckCounts++;
+                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                        phone_select_all.setChecked(true);
+                    }
+
+
                 }
                 break;
             }
@@ -426,6 +587,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
                     blue_rom_cheak.setVisibility(View.VISIBLE);
                     blue_rom_cheak.setChecked(true);
+                    mCheckCounts = 8;
                 } else {
                     blue_liuchang_cheak.setChecked(false);
                     blue_liuchang_cheak.setVisibility(View.INVISIBLE);
@@ -452,11 +614,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
                     blue_rom_cheak.setVisibility(View.INVISIBLE);
                     blue_rom_cheak.setChecked(false);
+                    mCheckCounts = 0;
                 }
             }
         }
     }
-
 
 
 }
