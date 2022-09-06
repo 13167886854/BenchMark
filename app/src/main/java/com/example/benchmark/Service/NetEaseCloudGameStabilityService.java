@@ -5,6 +5,7 @@ import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BA
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityUtil;
+import com.example.benchmark.utils.TapUtil;
 
 public class NetEaseCloudGameStabilityService implements IStabilityService {
 
@@ -135,7 +136,7 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
 
     @Override
     public float getStartSuccessRate() {
-        return (mCurrentMonitorNum - mFailMonitorNum) / (float) mWholeMonitorNum * 100;
+        return (mCurrentMonitorNum - mFailMonitorNum) / (float) TapUtil.mWholeMonitorNum * 100;
     }
 
     @Override

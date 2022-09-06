@@ -9,6 +9,7 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.StatusBarUtil;
+import com.example.benchmark.utils.TapUtil;
 
 public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
@@ -119,7 +120,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
     @Override
     public float getStartSuccessRate() {
-        return (mCurrentMonitorNum - mFailMonitorNum) / (float) mWholeMonitorNum * 100;
+        return (mCurrentMonitorNum - mFailMonitorNum) / (float) TapUtil.mWholeMonitorNum * 100;
     }
 
     @Override

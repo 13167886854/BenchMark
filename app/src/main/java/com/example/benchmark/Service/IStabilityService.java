@@ -1,8 +1,10 @@
 package com.example.benchmark.Service;
+import com.example.benchmark.utils.TapUtil;
+
+
 
 public interface IStabilityService {
 
-    int mWholeMonitorNum = 5;
 
     void onMonitor();
 
@@ -13,11 +15,11 @@ public interface IStabilityService {
     int getCurrentMonitorNum();
 
     default float getStartSuccessRate() {
-        return getCurrentMonitorNum() / (float) mWholeMonitorNum * 100;
+        return getCurrentMonitorNum() / (float) TapUtil.mWholeMonitorNum * 100;
     }
 
     default boolean isFinished() {
-        return getCurrentMonitorNum() == mWholeMonitorNum;
+        return getCurrentMonitorNum() == TapUtil.mWholeMonitorNum;
     }
 
 }

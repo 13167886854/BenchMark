@@ -2,6 +2,8 @@ package com.example.benchmark.Service;
 
 import android.util.Log;
 
+import com.example.benchmark.utils.TapUtil;
+
 public class DefaultStabilityService implements IStabilityService {
     @Override
     public void onMonitor() {
@@ -20,6 +22,6 @@ public class DefaultStabilityService implements IStabilityService {
 
     @Override
     public int getCurrentMonitorNum() {
-        return mWholeMonitorNum;
+        return TapUtil.mWholeMonitorNum;
     }
 }

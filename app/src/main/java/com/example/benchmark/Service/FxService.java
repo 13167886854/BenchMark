@@ -474,11 +474,18 @@ public class FxService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mFloatLayout != null) {
-            mWindowManager.removeView(mFloatLayout);
+        try{
+            if (mFloatLayout != null) {
+                mWindowManager.removeView(mFloatLayout);
+            }
+
+        }catch (Exception e){
+            Log.d(TAG, "error: "+e.toString());
+        }finally {
+            mediaProjection.stop();
+            stopSelf();
         }
-        mediaProjection.stop();
-        stopSelf();
+
     }
 
     @Override

@@ -22,6 +22,7 @@ import okhttp3.Response;
 
 
 public class TapUtil {
+    public static int mWholeMonitorNum;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     //单例模式
