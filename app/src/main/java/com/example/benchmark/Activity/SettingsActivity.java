@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,5 +60,6 @@ public class SettingsActivity extends AppCompatActivity {
         TapUtil.mWholeMonitorNum = TestNum;
         editor.putInt("TestNum",TestNum);
         editor.apply();
+        Toast.makeText(this,"保存成功",Toast.LENGTH_SHORT).show();
     }
 }
