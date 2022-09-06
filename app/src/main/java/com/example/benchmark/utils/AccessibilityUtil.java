@@ -292,7 +292,9 @@ public class AccessibilityUtil {
 
     public static void logAllChildNodesClass(AccessibilityNodeInfo nodeInfo, int index) {
         if (nodeInfo == null) return;
-        Log.e("AccessibilityUtil", index + ":" + nodeInfo.getClassName().toString());
+        String nodeClassName = nodeInfo.getClassName().toString();
+        Log.e("AccessibilityUtil", index + ":" + nodeClassName +
+                ("android.widget.TextView".equals(nodeClassName) ? nodeInfo.getText().toString() : ""));
         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
             if (childNode == null) continue;

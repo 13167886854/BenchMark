@@ -2,6 +2,7 @@ package com.example.benchmark.Service;
 
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
 
+import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityUtil;
@@ -80,7 +81,8 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
                         isCloudPhone = true;
                     }
                     if (isCloudPhone &&
-                            "android.widget.FrameLayout".equals(node.getClassName().toString())) {
+                            "android.view.ViewGroup".equals(node.getClassName().toString())) {
+                        Log.e("NetEase", "Click");
                         AccessibilityUtil.performClick(node.getChild(0));
                         isClickInstantPlay = true;
                         mStartTime = System.currentTimeMillis();
