@@ -4,13 +4,10 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
@@ -24,7 +21,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -45,7 +41,6 @@ import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.Activity.AudioVideoActivity;
 import com.example.benchmark.Activity.CePingActivity;
-import com.example.benchmark.Activity.TestGameTouchActivity;
 import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
@@ -502,7 +497,7 @@ public class GameVATestService extends Service {
                 .build();
 
         Request request = new Request.Builder()
-                .url(CacheConst.GLOBAL_IP + "/AudioVideo/image")
+                .url(CacheConst.ALIYUN_IP + "/AudioVideo/image")
                 .post(multipartBody)
                 .build();
         //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -637,7 +632,7 @@ public class GameVATestService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -688,7 +683,7 @@ public class GameVATestService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.VIDEO_GAME_NAME--" + CacheConst.VIDEO_GAME_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -835,7 +830,7 @@ public class GameVATestService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/AudioRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -887,7 +882,7 @@ public class GameVATestService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/AudioRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));

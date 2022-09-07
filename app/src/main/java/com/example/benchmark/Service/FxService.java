@@ -55,13 +55,10 @@ import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -159,13 +156,13 @@ public class FxService extends Service {
         service = this.service;
         tapUtil = TapUtil.getUtil();
 
-        try{
-            Log.e("TWT", "1.PESQ:"+YinHuaData.PESQ);
+        try {
+            Log.e("TWT", "1.PESQ:" + YinHuaData.PESQ);
             //Log.e("TWT", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
             //Log.e("TWT", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
-            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.PESQ==null));
-        }catch (Exception e){
-            Log.e("TWT", "error: "+e.toString());
+            Log.e("TWT", "1.PESQ==null:" + (YinHuaData.PESQ == null));
+        } catch (Exception e) {
+            Log.e("TWT", "error: " + e.toString());
         }
 
 
@@ -293,7 +290,7 @@ public class FxService extends Service {
 
 
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
-        if(this.isCheckSoundFrame){
+        if (this.isCheckSoundFrame) {
             btnToPrCode.setTextColor(0xFFCCCCCC);
             codeTouchAble = false;
         }
@@ -326,7 +323,7 @@ public class FxService extends Service {
                 }
                 //响应点击事件
                 if (isclick) {
-                    if(codeTouchAble){
+                    if (codeTouchAble) {
                         toCatchScreen();
                     }
                     //mFloatView.setVisibility(View.GONE);
@@ -448,7 +445,7 @@ public class FxService extends Service {
                 //响应返回点击事件
                 if (isclick) {
                     //Log.d("TWT", "screenWidth: "+screenWidth+" screenHeight"+screenHeight);
-                    tapUtil.tap(screenWidth/2, screenHeight/2);
+                    tapUtil.tap(screenWidth / 2, screenHeight / 2);
                     btnMenu.setVisibility(View.GONE);
                     startAudioRecord();
                     startVideoRecord();
@@ -571,10 +568,10 @@ public class FxService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
-        Log.d(TAG, "bitmap getWidth: " + bitmap.getWidth() + "  getHeight"+ bitmap.getHeight());
+        Log.d(TAG, "bitmap getWidth: " + bitmap.getWidth() + "  getHeight" + bitmap.getHeight());
         String result = CodeUtils.parseCode(bitmap);
-        Log.e("QT-1", result+"---123");
-        Log.e("QT-1", "123---"+result);
+        Log.e("QT-1", result + "---123");
+        Log.e("QT-1", "123---" + result);
         if ("{}".equals(result)) {
             // 空数据，点击无效
             return;
@@ -710,9 +707,7 @@ public class FxService extends Service {
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
                 platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             //OkHttpClient client = new OkHttpClient();
             OkHttpClient client = new OkHttpClient.Builder()
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
@@ -735,7 +730,7 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/VideoRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -761,21 +756,79 @@ public class FxService extends Service {
                             YinHuaData.SSIM = resArr[3];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            if( YinHuaData.PSNR !=null &&
+                            if (YinHuaData.PSNR != null &&
                                     YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ !=null){
+                                    YinHuaData.PESQ != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
-                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }
 
                         }
                     });
-        } else {
-            Log.d(TAG, "stopAudioRecord: 不是云手机平台==》" + platformKind);
-            Toast.makeText(service, platformKind, Toast.LENGTH_SHORT).show();
+        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)){
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_PHONE_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.HUAWEI_IP + "/AudioVideo/VideoRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            Log.d(TAG, "onResponse:" + res);
+                            String[] resArr = res.split("=");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PSNR = resArr[1];
+                            YinHuaData.SSIM = resArr[3];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            if (YinHuaData.PSNR != null &&
+                                    YinHuaData.SSIM != null &&
+                                    YinHuaData.PESQ != null) {
+                                codeTouchAble = true;
+                                btnToPrCode.setTextColor(0xff000000);
+                                Looper.prepare();
+                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
+
+                        }
+                    });
         }
 
     }
@@ -802,9 +855,7 @@ public class FxService extends Service {
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
                 platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             //OkHttpClient client = new OkHttpClient();
             OkHttpClient client = new OkHttpClient.Builder()
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
@@ -827,7 +878,7 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + "/AudioVideo/AudioRecord")
+                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/AudioRecord")
                     .post(multipartBody)
                     .build();
             //Log.d(TAG, "onClick: " + request.header("Content-Type"));
@@ -856,21 +907,83 @@ public class FxService extends Service {
 //                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
 //                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
 //                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
-                            if( YinHuaData.PSNR !=null &&
-                                YinHuaData.SSIM != null &&
-                                YinHuaData.PESQ !=null){
+                            if (YinHuaData.PSNR != null &&
+                                    YinHuaData.SSIM != null &&
+                                    YinHuaData.PESQ != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
-                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }
 
                         }
                     });
-        } else {
-            Log.d(TAG, "stopAudioRecord: 不是云手机平台==》" + platformKind);
-            Toast.makeText(service, platformKind, Toast.LENGTH_SHORT).show();
+        }
+        else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
+                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//连接超时
+                    .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//读取超时
+                    .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)//写入超时
+                    .build();
+            MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.AUDIO_PATH + "/" + CacheConst.AUDIO_PHONE_NAME);
+            //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
+            //Log.d(TAG, "onClick: " + file.exists());
+            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            //Log.d(TAG, "onClick: "+AudioData.FILE_NAME);
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
+                    //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
+                    .build();
+            Log.d("zzl", "stopAudioRecord: " + file.getName());
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.AUDIO_PHONE_NAME);
+            Request request = new Request.Builder()
+                    .url(CacheConst.HUAWEI_IP + "/AudioVideo/AudioRecord")
+                    .post(multipartBody)
+                    .build();
+            //Log.d(TAG, "onClick: " + request.header("Content-Type"));
+
+
+            client.newCall(request)
+                    .enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.d(TAG, "onFailure: call " + call);
+                            Log.d(TAG, "onFailure: e" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.d(TAG, "onResponse: response==>" + response);
+                            Log.d(TAG, "onResponse: response==>" + response.body());
+                            String res = response.body().string();
+                            String[] resArr = res.split(" ");
+                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            YinHuaData.PESQ = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            handler.sendEmptyMessage(COMPUTE_PESQ);
+//
+//                            Log.e("TWT", "2.PESQ:"+YinHuaData.PESQ);
+//                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
+//                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
+//                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
+                            if (YinHuaData.PSNR != null &&
+                                    YinHuaData.SSIM != null &&
+                                    YinHuaData.PESQ != null) {
+                                codeTouchAble = true;
+                                btnToPrCode.setTextColor(0xff000000);
+                                Looper.prepare();
+                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
+                                Looper.loop();
+                            }
+
+                        }
+                    });
         }
 
 
