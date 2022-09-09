@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.Adapter.CePingAdapter;
+import com.example.benchmark.Data.Admin;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.Data.YinHuaData;
 import com.example.benchmark.R;
@@ -52,6 +53,7 @@ import java.util.TimerTask;
 
 public class CePingActivity extends Activity implements View.OnClickListener {
 
+    private static final String TAG = "CePingActivity";
     private final int REQUEST_STABILITY = 0, REQUEST_FX = 1;
 
     private ImageButton ceshi_fanhui;
@@ -132,6 +134,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     void initData() {
         Intent intent = getIntent();
         checked_plat = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
+        Log.d(TAG, "initData: checked_plat===" + checked_plat);
+        // 获取平台名称
+        Admin.platformName = checked_plat;
+
         YinHuaData.platform_type = checked_plat;
         ceping_phone_name.setText(checked_plat);
         CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checked_plat);

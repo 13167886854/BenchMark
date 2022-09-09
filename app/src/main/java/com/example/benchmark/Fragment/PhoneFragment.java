@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.benchmark.Activity.CePingActivity;
+import com.example.benchmark.Data.Admin;
 import com.example.benchmark.Data.CepingData;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
@@ -32,11 +33,14 @@ import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ServiceUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class PhoneFragment extends Fragment implements View.OnClickListener {
+    private static final String TAG = "PhoneFragment";
     private Button blue_liuchang, blue_wending, blue_chukong, blue_yinhua;
     private List<CepingData> data;
 
@@ -88,6 +92,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 //        phone_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
 
         phone_start_ceping.setOnClickListener(v -> {
+            Date date = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = simpleDateFormat.format(date);
+            Admin.testTime = time;
+            Log.d(TAG, "onCreateView: 开始测试时间====" +Admin.testTime);
             if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
@@ -173,7 +182,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         yiodng_phone = view.findViewById(R.id.yidong_phone);
         wangyiyun_phone = view.findViewById(R.id.wangyiyun_phone);
         accessUtils = new AccessUtils(getContext());
-        popDiaLog = new PopDiaLog(Objects.requireNonNull(getActivity()));
+        //popDiaLog = new PopDiaLog(Objects.requireNonNull(getActivity()));
+        popDiaLog = new PopDiaLog(requireActivity());
 
     }
 

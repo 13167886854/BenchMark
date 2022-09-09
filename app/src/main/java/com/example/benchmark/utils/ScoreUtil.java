@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.example.benchmark.Data.Admin;
 import com.example.benchmark.Data.YinHuaData;
 
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
+
+import okhttp3.Call;
 
 
 /**
@@ -34,6 +37,27 @@ public class ScoreUtil {
         int cpuScore = (int) (cpuCoresScore);
         // 保存CPU分数
         CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
+
+        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
+                .addParam("adminName", Admin.adminName)
+                .addParam("platformName", Admin.platformName)
+                .addParam("cores", cpuCores + "")
+                .addParam("time", Admin.testTime)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .post(true)
+                .async(new OkHttpUtils.ICallBack() {
+                    @Override
+                    public void onSuccessful(Call call, String data) {
+                        Log.d(TAG, "onSuccessful: cpu---" + data);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, String errorMsg) {
+                        Log.d(TAG, "onFailure: cpu---" + errorMsg);
+                    }
+                });
+
+
     }
 
     //public static int getCPUScore() {
@@ -58,13 +82,34 @@ public class ScoreUtil {
                     res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
                 }
                 CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
-            }else{
-                CacheUtil.put(CacheConst.KEY_GPU_VERSION,gpuVersion);
+            } else {
+                CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
             }
         } else {
             CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
 
         }
+
+        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
+                .addParam("adminName", Admin.adminName)
+                .addParam("platformName", Admin.platformName)
+                .addParam("time", Admin.testTime)
+                .addParam("gpuVendor", gpuVendor)
+                .addParam("gpuRender", gpuRender)
+                .addParam("gpuVersion", gpuVersion)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .post(true)
+                .async(new OkHttpUtils.ICallBack() {
+                    @Override
+                    public void onSuccessful(Call call, String data) {
+                        Log.d(TAG, "onSuccessful: gpu---" + data);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, String errorMsg) {
+                        Log.d(TAG, "onFailure: gpu---" + errorMsg);
+                    }
+                });
 
         // 计算GPU分数
         // 保存GPU分数
@@ -82,6 +127,26 @@ public class ScoreUtil {
         // 保存RAM结果
         CacheUtil.put(CacheConst.KEY_AVAILABLE_RAM, availableRAM);
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
+
+        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/ram/save")
+                .addParam("adminName", Admin.adminName)
+                .addParam("platformName", Admin.platformName)
+                .addParam("time", Admin.testTime)
+                .addParam("availableRam", availableRAM)
+                .addParam("totalRam", totalRAM)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .post(true)
+                .async(new OkHttpUtils.ICallBack() {
+                    @Override
+                    public void onSuccessful(Call call, String data) {
+                        Log.d(TAG, "onSuccessful: ram---" + data);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, String errorMsg) {
+                        Log.d(TAG, "onFailure: ram---" + errorMsg);
+                    }
+                });
         // 计算RAM分数
         //float totalRAMScore = totalRAM <= 16 ? 100f * totalRAM / (9 * 16) : 100f / 9;
         //int ramScore = (int) (totalRAMScore);
@@ -100,6 +165,27 @@ public class ScoreUtil {
         // 保存ROM结果
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
+
+        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/rom/save")
+                .addParam("adminName", Admin.adminName)
+                .addParam("platformName", Admin.platformName)
+                .addParam("time", Admin.testTime)
+                .addParam("availableRom", availableROM)
+                .addParam("totalRom", totalROM)
+                .addHeader("Content-Type", "application/json; charset=utf-8")
+                .post(true)
+                .async(new OkHttpUtils.ICallBack() {
+                    @Override
+                    public void onSuccessful(Call call, String data) {
+                        Log.d(TAG, "onSuccessful: rom---" + data);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, String errorMsg) {
+                        Log.d(TAG, "onFailure: rom---" + errorMsg);
+                    }
+                });
+
         // 计算ROM分数
         //float totalROMScore = totalROM <= 16 ? 100f * totalROM / (9 * 16) : 100f / 9;
         //int romScore = (int) (totalROMScore);
@@ -142,6 +228,35 @@ public class ScoreUtil {
                 frameIntervalScore + jankCountScore + stutterRateScore);
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
+
+        // 判断数据是否为空
+        if (averageFPS + frameShakeRate + lowFrameRate + jankCount + stutterRate != 0.0f) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("averageFps", averageFPS + "")
+                    .addParam("frameShakeRate", frameShakeRate + "")
+                    .addParam("lowFrameRate", lowFrameRate + "")
+                    .addParam("jankCount", jankCount + "")
+                    .addParam("stutterRate", stutterRate + "")
+                    .addParam("fluencyScore", fluencyScore + "")
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: Fluency---" + data);
+                        }
+
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: Fluency---" + errorMsg);
+                        }
+                    });
+        }
+
+
     }
 
     public static float getAverageFPS() {
@@ -189,6 +304,32 @@ public class ScoreUtil {
         int stabilityScores = (int) (startSuccessScore + averageStartScore + averageQuitScore);
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
+
+        if (startSuccessRate + averageStartTime + averageQuitTime != 0.0f) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("startSuccessRate", startSuccessRate + "")
+                    .addParam("averageStartTime", averageStartTime + "")
+                    .addParam("averageQuitTime", averageQuitTime + "")
+                    .addParam("stabilityScore", stabilityScores + "")
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: Stability---" + data);
+                        }
+
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: Stability---" + errorMsg);
+                        }
+                    });
+        }
+
+
     }
 
     public static float getStartSuccessRate() {
@@ -227,7 +368,7 @@ public class ScoreUtil {
         Log.e("TWT", "KEY_AVERAGE_ACCURACY: " + averageAccuracy);
         Log.e("TWT", "KEY_RESPONSE_TIME: " + time);
 
-        return;
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -411,6 +552,30 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, avgResponseTime);
 
+        if (avgResponseTime + averageAccuracy != 0.0f) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("touchTimeDelay", avgResponseTime + "")
+                    .addParam("touchAccuracy", averageAccuracy + "%")
+                    .addParam("touchScore", touchScore + "")
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: Touch---" + data);
+                        }
+
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: Touch---" + errorMsg);
+                        }
+                    });
+        }
+
+
     }
 
     public static float getAverageAccuracy() {
@@ -466,6 +631,33 @@ public class ScoreUtil {
         int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + D3 + D4);
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
+        if (YinHuaData.PESQ != null && YinHuaData.SSIM != null && YinHuaData.PSNR != null) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("resolution", resolution + "")
+                    .addParam("maxDiffValue", maxDiffValue + "")
+                    .addParam("pesq", PESQ + "")
+                    .addParam("psnr", PSNR + "")
+                    .addParam("ssim", SSIM + "")
+                    .addParam("qualityScore", soundFrameScore + "")
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: AudioVideo---" + data);
+                        }
+
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: AudioVideo---" + errorMsg);
+                        }
+                    });
+        }
+
+
     }
 
     public static String getResolution() {

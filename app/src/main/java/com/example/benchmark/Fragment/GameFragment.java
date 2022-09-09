@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.BaseApp;
+import com.example.benchmark.Data.Admin;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.MyAccessibilityService;
@@ -31,7 +32,9 @@ import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ServiceUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,6 +63,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
+    private static final String TAG = "GameFragment";
 
 
     private static final HashMap<String,String> cheak_game_map;
@@ -90,10 +94,17 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         select_game.setOnCheckedChangeListener(this::onCheckedChanged);
 
         red_start_test.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                Date date = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time = simpleDateFormat.format(date);
+                Admin.testTime = time;
+                Log.d(TAG, "onCreateView: 开始测试时间====" +Admin.testTime);
                 if (cheak_game_map.get("cheaked_game") == null) {
-                    Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
+
+                    Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(red_wending_cheak.isChecked()||red_yinhua_cheak.isChecked() ){

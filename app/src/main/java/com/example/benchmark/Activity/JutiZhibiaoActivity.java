@@ -153,15 +153,15 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             case CacheConst.KEY_ROM_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("可用RAM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
-                data.add(new JuTiData("总共RAM",CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
+                data.add(new JuTiData("可用ROM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
+                data.add(new JuTiData("总共ROM",CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
                 break ;
             }
             case CacheConst.KEY_RAM_INFO: {
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
-                data.add(new JuTiData("可用ROM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
-                data.add(new JuTiData("总共ROM",CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
+                data.add(new JuTiData("可用RAM",CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
+                data.add(new JuTiData("总共RAM",CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
                 break ;
             }
         }

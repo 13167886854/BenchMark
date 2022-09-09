@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="teal_900">#EBF0FF</color>
     <color name="select">#03A9F4</color>
-
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="textInputLayout">#96ffffff</color>
 </resources>

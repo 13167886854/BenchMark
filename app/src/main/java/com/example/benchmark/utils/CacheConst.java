@@ -89,5 +89,9 @@ public class CacheConst {
 
     // 华为云IP地址
     public static final String HUAWEI_IP = "http://175.38.1.81:8080";
+
+    // 临时地址
+    public static final String GLOBAL_IP = "https://70345be2.cpolar.top";
+
 }
 
