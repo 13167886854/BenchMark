@@ -156,13 +156,13 @@ public class FxService extends Service {
         service = this.service;
         tapUtil = TapUtil.getUtil();
 
-        try {
-            Log.e("TWT", "1.PESQ:" + YinHuaData.PESQ);
+        try{
+            Log.e("TWT", "1.PESQ:"+YinHuaData.PESQ);
             //Log.e("TWT", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
             //Log.e("TWT", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
-            Log.e("TWT", "1.PESQ==null:" + (YinHuaData.PESQ == null));
-        } catch (Exception e) {
-            Log.e("TWT", "error: " + e.toString());
+            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.PESQ==null));
+        }catch (Exception e){
+            Log.e("TWT", "error: "+e.toString());
         }
 
 
@@ -290,7 +290,7 @@ public class FxService extends Service {
 
 
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
-        if (this.isCheckSoundFrame) {
+        if(this.isCheckSoundFrame){
             btnToPrCode.setTextColor(0xFFCCCCCC);
             codeTouchAble = false;
         }
@@ -323,7 +323,7 @@ public class FxService extends Service {
                 }
                 //响应点击事件
                 if (isclick) {
-                    if (codeTouchAble) {
+                    if(codeTouchAble){
                         toCatchScreen();
                     }
                     //mFloatView.setVisibility(View.GONE);
@@ -445,7 +445,7 @@ public class FxService extends Service {
                 //响应返回点击事件
                 if (isclick) {
                     //Log.d("TWT", "screenWidth: "+screenWidth+" screenHeight"+screenHeight);
-                    tapUtil.tap(screenWidth / 2, screenHeight / 2);
+                    tapUtil.tap(screenWidth/2, screenHeight/2);
                     btnMenu.setVisibility(View.GONE);
                     startAudioRecord();
                     startVideoRecord();
@@ -568,10 +568,10 @@ public class FxService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
-        Log.d(TAG, "bitmap getWidth: " + bitmap.getWidth() + "  getHeight" + bitmap.getHeight());
+        Log.d(TAG, "bitmap getWidth: " + bitmap.getWidth() + "  getHeight"+ bitmap.getHeight());
         String result = CodeUtils.parseCode(bitmap);
-        Log.e("QT-1", result + "---123");
-        Log.e("QT-1", "123---" + result);
+        Log.e("QT-1", result+"---123");
+        Log.e("QT-1", "123---"+result);
         if ("{}".equals(result)) {
             // 空数据，点击无效
             return;
@@ -756,13 +756,13 @@ public class FxService extends Service {
                             YinHuaData.SSIM = resArr[3];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            if (YinHuaData.PSNR != null &&
+                            if( YinHuaData.PSNR !=null &&
                                     YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ != null) {
+                                    YinHuaData.PESQ !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
-                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }
 
@@ -907,13 +907,13 @@ public class FxService extends Service {
 //                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
 //                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
 //                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
-                            if (YinHuaData.PSNR != null &&
-                                    YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ != null) {
+                            if( YinHuaData.PSNR !=null &&
+                                YinHuaData.SSIM != null &&
+                                YinHuaData.PESQ !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
-                                Toast.makeText(getBaseContext(), "音视频质量测试结束~", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }
 
