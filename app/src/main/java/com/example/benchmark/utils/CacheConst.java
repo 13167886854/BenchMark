@@ -91,7 +91,7 @@ public class CacheConst {
     public static final String HUAWEI_IP = "http://175.38.1.81:8080";
 
     // 临时地址
-    public static final String GLOBAL_IP = "http://69ac25f5.cpolar.top";
+    public static final String GLOBAL_IP = "http://44ebfe0b.r3.vip.cpolar.cn";
 
 }
 

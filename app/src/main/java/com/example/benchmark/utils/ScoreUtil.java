@@ -32,11 +32,11 @@ public class ScoreUtil {
         // 保存CPU结果
         //CacheUtil.put(CacheConst.KEY_CPU_NAME, cpuName);
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
-        // 计算CPU分数
-        float cpuCoresScore = cpuCores <= 8 ? 100f * cpuCores / (9 * 8) : 100f / 9;
-        int cpuScore = (int) (cpuCoresScore);
-        // 保存CPU分数
-        CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
+        //// 计算CPU分数
+        //float cpuCoresScore = cpuCores <= 8 ? 100f * cpuCores / (9 * 8) : 100f / 9;
+        //int cpuScore = (int) (cpuCoresScore);
+        //// 保存CPU分数
+        //CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
 
         if (cpuCores != 0) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
@@ -247,6 +247,7 @@ public class ScoreUtil {
                     .addParam("frameShakeRate", frameShakeRate + "")
                     .addParam("lowFrameRate", lowFrameRate + "")
                     .addParam("jankCount", jankCount + "")
+                    .addParam("frameInterval", frameInterval + "")
                     .addParam("stutterRate", stutterRate + "")
                     .addParam("fluencyScore", fluencyScore + "")
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -314,7 +315,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
 
         if (startSuccessRate + averageStartTime + averageQuitTime != 0.0f) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)

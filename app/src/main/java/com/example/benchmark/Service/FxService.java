@@ -754,8 +754,10 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                             YinHuaData.PSNR = resArr[1];
                             YinHuaData.SSIM = resArr[3];
+                            YinHuaData.Resolution = resArr[5];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            Log.d(TAG, "onResponse: YinHuaData.Resolution==>" + YinHuaData.Resolution);
                             if( YinHuaData.PSNR !=null &&
                                     YinHuaData.SSIM != null &&
                                     YinHuaData.PESQ !=null){
@@ -765,7 +767,6 @@ public class FxService extends Service {
                                 Toast.makeText(getBaseContext(),"音视频质量测试结束~",Toast.LENGTH_SHORT).show();
                                 Looper.loop();
                             }
-
                         }
                     });
         } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
@@ -815,8 +816,10 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                             YinHuaData.PSNR = resArr[1];
                             YinHuaData.SSIM = resArr[3];
+                            YinHuaData.Resolution = resArr[5];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            Log.d(TAG, "onResponse: YinHuaData.Resolution==>" + YinHuaData.Resolution);
                             if (YinHuaData.PSNR != null &&
                                     YinHuaData.SSIM != null &&
                                     YinHuaData.PESQ != null) {
