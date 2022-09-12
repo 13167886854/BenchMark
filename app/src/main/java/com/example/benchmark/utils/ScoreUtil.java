@@ -38,25 +38,26 @@ public class ScoreUtil {
         // 保存CPU分数
         CacheUtil.put(CacheConst.KEY_CPU_SCORE, cpuScore);
 
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
-                .addParam("adminName", Admin.adminName)
-                .addParam("platformName", Admin.platformName)
-                .addParam("cores", cpuCores + "")
-                .addParam("time", Admin.testTime)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .post(true)
-                .async(new OkHttpUtils.ICallBack() {
-                    @Override
-                    public void onSuccessful(Call call, String data) {
-                        Log.d(TAG, "onSuccessful: cpu---" + data);
-                    }
+        if (cpuCores != 0) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("cores", cpuCores + "")
+                    .addParam("time", Admin.testTime)
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: cpu---" + data);
+                        }
 
-                    @Override
-                    public void onFailure(Call call, String errorMsg) {
-                        Log.d(TAG, "onFailure: cpu---" + errorMsg);
-                    }
-                });
-
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: cpu---" + errorMsg);
+                        }
+                    });
+        }
 
     }
 
@@ -89,27 +90,29 @@ public class ScoreUtil {
             CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
 
         }
+        if (gpuVendor != null && gpuRender != null && gpuVersion != null) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("gpuVendor", gpuVendor)
+                    .addParam("gpuRender", gpuRender)
+                    .addParam("gpuVersion", gpuVersion)
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: gpu---" + data);
+                        }
 
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
-                .addParam("adminName", Admin.adminName)
-                .addParam("platformName", Admin.platformName)
-                .addParam("time", Admin.testTime)
-                .addParam("gpuVendor", gpuVendor)
-                .addParam("gpuRender", gpuRender)
-                .addParam("gpuVersion", gpuVersion)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .post(true)
-                .async(new OkHttpUtils.ICallBack() {
-                    @Override
-                    public void onSuccessful(Call call, String data) {
-                        Log.d(TAG, "onSuccessful: gpu---" + data);
-                    }
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: gpu---" + errorMsg);
+                        }
+                    });
+        }
 
-                    @Override
-                    public void onFailure(Call call, String errorMsg) {
-                        Log.d(TAG, "onFailure: gpu---" + errorMsg);
-                    }
-                });
 
         // 计算GPU分数
         // 保存GPU分数
@@ -128,25 +131,28 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVAILABLE_RAM, availableRAM);
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
 
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/ram/save")
-                .addParam("adminName", Admin.adminName)
-                .addParam("platformName", Admin.platformName)
-                .addParam("time", Admin.testTime)
-                .addParam("availableRam", availableRAM)
-                .addParam("totalRam", totalRAM)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .post(true)
-                .async(new OkHttpUtils.ICallBack() {
-                    @Override
-                    public void onSuccessful(Call call, String data) {
-                        Log.d(TAG, "onSuccessful: ram---" + data);
-                    }
+        if (availableRAM != null && totalRAM != null) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/ram/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("availableRam", availableRAM)
+                    .addParam("totalRam", totalRAM)
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: ram---" + data);
+                        }
 
-                    @Override
-                    public void onFailure(Call call, String errorMsg) {
-                        Log.d(TAG, "onFailure: ram---" + errorMsg);
-                    }
-                });
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: ram---" + errorMsg);
+                        }
+                    });
+        }
+
         // 计算RAM分数
         //float totalRAMScore = totalRAM <= 16 ? 100f * totalRAM / (9 * 16) : 100f / 9;
         //int ramScore = (int) (totalRAMScore);
@@ -165,26 +171,28 @@ public class ScoreUtil {
         // 保存ROM结果
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
+        if (availableROM != null && totalROM != null) {
+            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/rom/save")
+                    .addParam("adminName", Admin.adminName)
+                    .addParam("platformName", Admin.platformName)
+                    .addParam("time", Admin.testTime)
+                    .addParam("availableRom", availableROM)
+                    .addParam("totalRom", totalROM)
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .post(true)
+                    .async(new OkHttpUtils.ICallBack() {
+                        @Override
+                        public void onSuccessful(Call call, String data) {
+                            Log.d(TAG, "onSuccessful: rom---" + data);
+                        }
 
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/rom/save")
-                .addParam("adminName", Admin.adminName)
-                .addParam("platformName", Admin.platformName)
-                .addParam("time", Admin.testTime)
-                .addParam("availableRom", availableROM)
-                .addParam("totalRom", totalROM)
-                .addHeader("Content-Type", "application/json; charset=utf-8")
-                .post(true)
-                .async(new OkHttpUtils.ICallBack() {
-                    @Override
-                    public void onSuccessful(Call call, String data) {
-                        Log.d(TAG, "onSuccessful: rom---" + data);
-                    }
+                        @Override
+                        public void onFailure(Call call, String errorMsg) {
+                            Log.d(TAG, "onFailure: rom---" + errorMsg);
+                        }
+                    });
+        }
 
-                    @Override
-                    public void onFailure(Call call, String errorMsg) {
-                        Log.d(TAG, "onFailure: rom---" + errorMsg);
-                    }
-                });
 
         // 计算ROM分数
         //float totalROMScore = totalROM <= 16 ? 100f * totalROM / (9 * 16) : 100f / 9;
