@@ -42,6 +42,9 @@
         android:theme="@style/Theme.BenchMark"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.TestInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.LoginActivity"
             android:exported="false" />
         <activity

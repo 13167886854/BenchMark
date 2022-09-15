@@ -67,7 +67,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             videocurtime = videoDecodeThread.getcurTime() / 10000;
             audiocurtime = audioDecodeThread.getcurTime() / 10000;
 
-            if (isCompleted) {
+            if (isCompleted&&YinHuaData.Resolution!=null) {
                 yinhuaxinxi.setText("测试结束！\n" +
                         "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime + "\n"
                         + "当前音频帧" + audiocurtime + "\n" +

@@ -3,11 +3,54 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="tisi"-->
+<!--        android:textSize="40sp"-->
+<!--        />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="tisi"
-        android:textSize="40sp"
-        />
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/info_fluency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/blue_liuchang"
+            android:text="流畅性"
+            />
+        <Button
+            android:id="@+id/info_stability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/blue_wending"
+            android:text="稳定性"
+            />
+        <Button
+            android:id="@+id/info_touch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/blue_chukong"
+            android:text="触控测试"
+            />
+        <Button
+            android:id="@+id/info_audio_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/blue_yinhua"
+            android:text="音画质量"
+            />
+        <Button
+            android:id="@+id/info_hardware"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/blue_cpu"
+            android:text="硬件信息"
+            />
+    </LinearLayout>
 
 </LinearLayout>

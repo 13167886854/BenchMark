@@ -223,7 +223,6 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
         CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
         // 计算流畅性分数
-        frameShakeRate /= 100;
         lowFrameRate /= 100;
         stutterRate /= 100;
         float averFpsScore = averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6;
@@ -622,14 +621,20 @@ public class ScoreUtil {
         float PSNR = Float.parseFloat(YinHuaData.PSNR);
         float SSIM = Float.parseFloat(YinHuaData.SSIM);
         float PESQ = Float.parseFloat(YinHuaData.PESQ);
-        // 保存音画质量结果
+
+            // 保存音画质量结果
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
         CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.PESQ);
         CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.PSNR);
         CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.SSIM);
 
+
+
+
+
         // 计算音画质量分数
+
         String[] resolutionArray = resolution.split("X");
         float resolutionValue = Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]);
         float resolutionScore = 100f * resolutionValue / (4 * 1920 * 1080);

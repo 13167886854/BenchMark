@@ -100,7 +100,7 @@
             <RadioButton
                 android:id="@+id/main_tishi"
                 android:drawableTop="@drawable/selector_main_radio_btn_notify"
-                android:text="@string/main_tishi"
+                android:text="历史"
                 android:textColor="@color/white"
                 android:drawablePadding="4dp"
                 android:textSize="11sp"
