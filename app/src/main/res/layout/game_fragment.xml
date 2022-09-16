@@ -7,374 +7,374 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="8"
-            android:orientation="vertical">
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1.3"
+            android:elevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:elevation="2dp">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.3"
-                android:layout_marginTop="2dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:cardElevation="2dp"
-                android:elevation="2dp"
-                app:elevation="2dp"
-                app:cardCornerRadius="8dp">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/select_game"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp">
+
+                    <RadioButton
+                        android:id="@+id/tengxun_game"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/tengxunxianfeng_dark"
+                        android:gravity="center"
+                        android:text="@string/tengxunxianfeng"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/migu_game"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/migukuaiyou_dark"
+                        android:gravity="center"
+                        android:text="@string/migukuaiyou"
+                        android:textSize="12sp" />
+
+                    <RadioButton
+                        android:id="@+id/wangyi_game"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:button="@null"
+                        android:drawableTop="@drawable/wangyiyunyouxi_dark"
+                        android:gravity="center"
+                        android:text="@string/wangyiyunyouxi"
+                        android:textSize="12sp" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="3"
+            android:elevation="2dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            app:contentPaddingLeft="8dp"
+            app:contentPaddingRight="8dp"
+            app:elevation="2dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/base_xinneng"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <CheckBox
+                        android:id="@+id/game_select_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:checked="true"
+                        android:text="@string/quanxuan" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="center">
-
-                    <RadioGroup
-                        android:id="@+id/select_game"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:orientation="horizontal"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="5dp">
-
-                        <RadioButton
-                            android:id="@+id/tengxun_game"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:drawableTop="@drawable/tengxunxianfeng_dark"
-                            android:gravity="center"
-                            android:text="@string/tengxunxianfeng"
-                            android:textSize="12sp" />
-
-                        <RadioButton
-                            android:id="@+id/migu_game"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:drawableTop="@drawable/migukuaiyou_dark"
-                            android:gravity="center"
-                            android:text="@string/migukuaiyou"
-                            android:textSize="12sp" />
-
-                        <RadioButton
-                            android:id="@+id/wangyi_game"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:button="@null"
-                            android:drawableTop="@drawable/wangyiyunyouxi_dark"
-                            android:gravity="center"
-                            android:text="@string/wangyiyunyouxi"
-                            android:textSize="12sp" />
-                    </RadioGroup>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="3"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="4dp"
-                app:cardElevation="2dp"
-                android:elevation="2dp"
-                app:elevation="2dp"
-                android:layout_marginBottom="2dp"
-                app:cardCornerRadius="8dp"
-                app:contentPaddingLeft="8dp"
-                app:contentPaddingRight="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="vertical">
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <Button
+                            android:id="@+id/red_liuchangxing"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:layout_marginStart="5dp"
-                            android:text="@string/base_xinneng"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:background="@null"
+                            android:drawableTop="@drawable/blue_liuchang"
+                            android:gravity="center"
+                            android:text="@string/liuchangxing"
+                            android:textColor="@color/black" />
 
-                        <CheckBox
-                            android:id="@+id/game_select_all"
-                            android:layout_width="wrap_content"
+                        <Button
+                            android:id="@+id/red_wendinxing"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:layout_marginEnd="10dp"
-                            android:text="@string/quanxuan" />
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_wending"
+                            android:gravity="center"
+                            android:text="@string/wendingxing"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/red_chukong"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_chukong"
+                            android:gravity="center"
+                            android:text="@string/chukongtiyan"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/red_yinhua"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_yinhua"
+                            android:gravity="center"
+                            android:text="@string/yinhuazhiliang"
+                            android:textColor="@color/black" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp">
+                        android:orientation="horizontal">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <Button
-                                android:id="@+id/red_liuchangxing"
-                                android:layout_width="0dp"
+                            <CheckBox
+                                android:id="@+id/red_liuchang_cheak"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/blue_liuchang"
-                                android:gravity="center"
-                                android:text="@string/liuchangxing"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_wendinxing"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_wending"
-                                android:gravity="center"
-                                android:text="@string/wendingxing"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_chukong"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_chukong"
-                                android:gravity="center"
-                                android:text="@string/chukongtiyan"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_yinhua"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_yinhua"
-                                android:gravity="center"
-                                android:text="@string/yinhuazhiliang"
-                                android:textColor="@color/black" />
+                                android:checked="true"
+                                android:clickable="false" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_liuchang_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_wending_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_chukong_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_yinhua_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/base_guige"
-                        android:textColor="@color/black"
-                        android:textSize="16sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <Button
-                                android:id="@+id/red_cpu"
-                                android:layout_width="0dp"
+                            <CheckBox
+                                android:id="@+id/red_wending_cheak"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_cpu"
-                                android:gravity="center"
-                                android:text="@string/cpu"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_gpu"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_gpu"
-                                android:gravity="center"
-                                android:text="@string/gpu"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_ram"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_ram"
-                                android:gravity="center"
-                                android:text="@string/ram"
-                                android:textColor="@color/black" />
-
-                            <Button
-                                android:id="@+id/red_rom"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:drawableTop="@drawable/red_rom"
-                                android:gravity="center"
-                                android:text="@string/rom"
-                                android:textColor="@color/black" />
+                                android:checked="true"
+                                android:clickable="false" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
+                            <CheckBox
+                                android:id="@+id/red_chukong_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
 
-                                <CheckBox
-                                    android:id="@+id/red_cpu_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_gpu_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_ram_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:gravity="center">
-
-                                <CheckBox
-                                    android:id="@+id/red_rom_cheak"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:checked="true"
-                                    android:clickable="false" />
-                            </LinearLayout>
-
+                            <CheckBox
+                                android:id="@+id/red_yinhua_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
                         </LinearLayout>
 
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/base_guige"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/red_cpu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_cpu"
+                            android:gravity="center"
+                            android:text="@string/cpu"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/red_gpu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_gpu"
+                            android:gravity="center"
+                            android:text="@string/gpu"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/red_ram"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_ram"
+                            android:gravity="center"
+                            android:text="@string/ram"
+                            android:textColor="@color/black" />
+
+                        <Button
+                            android:id="@+id/red_rom"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:drawableTop="@drawable/red_rom"
+                            android:gravity="center"
+                            android:text="@string/rom"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/red_cpu_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/red_gpu_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/red_ram_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <CheckBox
+                                android:id="@+id/red_rom_cheak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:checked="true"
+                                android:clickable="false" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/red_start_test"
@@ -385,5 +385,10 @@
         android:text="@string/starttest"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <android.opengl.GLSurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
 
 </LinearLayout>

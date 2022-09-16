@@ -7,6 +7,9 @@ package com.example.benchmark.Data;
  */
 public class Admin {
     public static String adminName;
+    public static String username;
+    public static String password;
     public static String platformName;
     public static String testTime;
+    public static String STATUS = "Failure"; // 登录状态
 }

@@ -46,6 +46,8 @@ public class TapUtil {
     private long endTime = 0L;
     private long responseTime = 0L;
 
+    private Thread mThread;
+
     //    public  Handler handler = new Handler(){
 //        @Override
 //        public void handleMessage(@NonNull Message msg) {
@@ -117,7 +119,7 @@ public class TapUtil {
                                 .get()
                                 .url(CacheConst.WEB_TIME_URL)
                                 .build();
-                        new Thread(new Runnable() {
+                        mThread =  new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 client.newCall(request)
@@ -156,7 +158,8 @@ public class TapUtil {
                                             }
                                         });
                             }
-                        }).start();
+                        });
+                        mThread.start();
                     }
 
 
@@ -208,6 +211,8 @@ public class TapUtil {
                 cloudPhoneTap(screenWidth / 2, screenHeight / 2); //点击设置按钮
 
                 if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
+                    phoneCurrentTapNum = 0;
+                    mCurrentTapNum = 0;
                     Log.d("zzl", "run: stop");
                     cancel();
                 }

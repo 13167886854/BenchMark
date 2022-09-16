@@ -21,66 +21,66 @@
     </FrameLayout>
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="80dp"-->
+<!--        android:orientation="horizontal">-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham"
-                android:text="Good "
-                android:textColor="#ffffff"
-                android:textSize="32sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/gotham"-->
+<!--                android:text="Good "-->
+<!--                android:textColor="#ffffff"-->
+<!--                android:textSize="32sp" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham"
-                android:text="Morning"
-                android:textColor="#ffffff"
-                android:textSize="32sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/textView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/gotham"-->
+<!--                android:text="Morning"-->
+<!--                android:textColor="#ffffff"-->
+<!--                android:textSize="32sp" />-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="2dp"
-                android:background="#deff00" />
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:background="#deff00" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/calibri"
-        android:gravity="center"
-        android:text="We pursue a relaxed gaming experience"
-        android:textColor="#9affffff"
-        android:textSize="10sp"
-        tools:ignore="SmallSp" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/linearLayout"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:fontFamily="@font/calibri"-->
+<!--        android:gravity="center"-->
+<!--        android:text="We pursue a relaxed gaming experience"-->
+<!--        android:textColor="#9affffff"-->
+<!--        android:textSize="10sp"-->
+<!--        tools:ignore="SmallSp" />-->
 
 
     <LinearLayout
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="300dp"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
@@ -108,7 +108,7 @@
                 android:drawablePadding="16dp"
                 android:fontFamily="@font/calibri"
                 android:hint="Username"
-                android:inputType="textVisiblePassword"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="16sp" />

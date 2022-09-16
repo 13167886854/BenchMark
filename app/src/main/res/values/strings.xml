@@ -14,7 +14,7 @@
     <string name="yidongphone">移动云手机</string>
     <string name="wangyiyunphone">网易云手机</string>
     <string name="base_xinneng">基础体验性能:</string>
-    <string name="base_guige">云平台基本规格:</string>
+    <string name="base_guige">本地手机基本规格:</string>
     <string name="select_phone">选择测评云手机</string>
     <string name="liuchangxing">流畅性</string>
     <string name="wendingxing">稳定性</string>
@@ -95,4 +95,5 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="isShowAgain">是否记住密码</string>
 </resources>

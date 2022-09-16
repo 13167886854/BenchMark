@@ -73,23 +73,26 @@ public class ScoreUtil {
         // 保存GPU结果
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
-        if (gpuVersion != null) {
-            String res = "";
-            String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
-            Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
-            if (select_plat.startsWith("红手指")) {
-                String[] strings = gpuVersion.split(" ");
-                for (int i = 0; i < strings.length - 1; i++) {
-                    res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
-                }
-                CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
-            } else {
-                CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
-            }
-        } else {
+        //if (gpuVersion != null) {
+        //    String res = "";
+        //    String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
+        //    Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
+        //    if (select_plat.startsWith("红手指")) {
+        //        String[] strings = gpuVersion.split(" ");
+        //        for (int i = 0; i < strings.length - 1; i++) {
+        //            res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
+        //        }
+        //        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
+        //    } else {
+        //        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+        //    }
+        //} else {
+        //    CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+        //
+        //}
+
             CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
 
-        }
         if (gpuVendor != null && gpuRender != null && gpuVersion != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
                     .addParam("adminName", Admin.adminName)
@@ -565,7 +568,7 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
-                    .addParam("touchTimeDelay", avgResponseTime + "")
+                    .addParam("touchTimeDelay", avgResponseTime + "ms")
                     .addParam("touchAccuracy", averageAccuracy + "%")
                     .addParam("touchScore", touchScore + "")
                     .addHeader("Content-Type", "application/json; charset=utf-8")

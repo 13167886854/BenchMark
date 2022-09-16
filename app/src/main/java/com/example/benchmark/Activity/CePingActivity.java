@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.fastjson.JSON;
 import com.example.benchmark.Adapter.CePingAdapter;
 import com.example.benchmark.Data.Admin;
 import com.example.benchmark.Data.CepingData;
@@ -47,6 +48,7 @@ import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -150,6 +152,13 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isCheckGPU = intent.getBooleanExtra(CacheConst.KEY_GPU_INFO, false);
         isCheckRAM = intent.getBooleanExtra(CacheConst.KEY_RAM_INFO, false);
         isCheckROM = intent.getBooleanExtra(CacheConst.KEY_ROM_INFO, false);
+
+        String localMobileInfo = intent.getStringExtra("localMobileInfo");
+        Log.d(TAG, "initData: localMobileInfo-------" + localMobileInfo);
+
+        HashMap hashMap = JSON.parseObject(localMobileInfo, HashMap.class);
+        Log.d(TAG, "initData: hashMap-------" + hashMap);
+
         isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         isFluencyUntested = intent.getBooleanExtra("isFluencyUntested", false);
         isGameTouchTested = intent.getBooleanExtra("isGameTouchTested", false);

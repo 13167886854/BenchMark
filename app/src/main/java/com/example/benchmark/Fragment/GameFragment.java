@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -23,13 +24,18 @@ import androidx.fragment.app.Fragment;
 import com.example.benchmark.Activity.CePingActivity;
 import com.example.benchmark.BaseApp;
 import com.example.benchmark.Data.Admin;
+import com.example.benchmark.DiaLog.LoginDialog;
 import com.example.benchmark.DiaLog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.Service.MyAccessibilityService;
+import com.example.benchmark.render.GPURenderer;
 import com.example.benchmark.utils.AccessUtils;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.DeviceInfoUtils;
+import com.example.benchmark.utils.MemInfoUtil;
+import com.example.benchmark.utils.SDCardUtils;
 import com.example.benchmark.utils.ServiceUtil;
 
 import java.text.SimpleDateFormat;
@@ -37,9 +43,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {
     private Button red_liuchang,red_wending,red_chukong,red_yinhua;
+    private GLSurfaceView mSurfaceView;
 
     private CheckBox red_liuchang_cheak;
     private CheckBox red_wending_cheak;
@@ -76,6 +84,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.game_fragment, container, false);
         initview(view);
+
         red_liuchang.setOnClickListener(this::onClick);
         red_wending.setOnClickListener(this::onClick);
         red_chukong.setOnClickListener(this::onClick);
@@ -87,23 +96,19 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         red_rom.setOnClickListener(this::onClick);
 
 
-
-
-
         game_select_all.setOnCheckedChangeListener(this::onCheckedChanged);
         select_game.setOnCheckedChangeListener(this::onCheckedChanged);
 
         red_start_test.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = simpleDateFormat.format(date);
                 Admin.testTime = time;
+                Map<String, Object> localMobileInfo = getInfo();
                 Log.d(TAG, "onCreateView: 开始测试时间====" +Admin.testTime);
                 if (cheak_game_map.get("cheaked_game") == null) {
-
                     Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -143,16 +148,17 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 intent.putExtra(CacheConst.KEY_STABILITY_INFO, red_wending_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_TOUCH_INFO, red_chukong_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, red_yinhua_cheak.isChecked());
+
                 intent.putExtra(CacheConst.KEY_CPU_INFO, red_cpu_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_GPU_INFO, red_gpu_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_ROM_INFO, red_ram_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_RAM_INFO, red_rom_cheak.isChecked());
+                intent.putExtra("localMobileInfo", localMobileInfo.toString());
                 intent.putExtra(CacheConst.KEY_PLATFORM_NAME, cheak_game_map.get("cheaked_game"));
+
                 startActivity(intent);
             }
         });
-
-
 
         return view;
     }
@@ -165,6 +171,10 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         red_chukong=view.findViewById(R.id.red_chukong);
         red_yinhua = view.findViewById(R.id.red_yinhua);
 
+        mSurfaceView =view.findViewById(R.id.surfaceView);
+        mSurfaceView.setEGLContextClientVersion(1);
+        mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 0, 0);
+        mSurfaceView.setRenderer(new GPURenderer());
 
         red_cpu = view.findViewById(R.id.red_cpu);
         red_gpu=view.findViewById(R.id.red_gpu);
@@ -220,7 +230,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
             case R.id.red_liuchangxing:{
                 boolean checked = red_liuchang_cheak.isChecked();
                 if (checked){
-
                     red_liuchang_cheak.setChecked(false);
                     red_liuchang_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
@@ -329,8 +338,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 }
                 break;
             }
-
-
         }
     }
 
@@ -373,7 +380,6 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         if (isChecked){
                 red_liuchang_cheak.setChecked(true);
                 red_liuchang_cheak.setVisibility(View.VISIBLE);
-
 
                 red_wending_cheak.setVisibility(View.VISIBLE);
                 red_wending_cheak.setChecked(true);
@@ -426,4 +432,44 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
         }
     }
+
+    /**
+     * 查询本机的规格数据
+     * @return
+     */
+    private Map<String, Object> getInfo() {
+
+
+        // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
+        Map<String, String> ramInfo = SDCardUtils.getRAMInfo(getContext());
+        if (ramInfo.get("可用").equals(ramInfo.get("总共"))) {
+            ramInfo.put("可用", MemInfoUtil.getMemAvailable());
+        }
+        for (Map.Entry<String, String> entry : ramInfo.entrySet()) {
+            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            entry.setValue(value);
+        }
+        Log.d(TAG, "getInfo: " + ramInfo);
+
+        Map<String, String> storageInfo = SDCardUtils.getStorageInfo(getContext(), 0);
+        for (Map.Entry<String, String> entry : storageInfo.entrySet()) {
+            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            entry.setValue(value);
+        }
+        Log.d(TAG, "getInfo: " + storageInfo);
+
+        //String cpuName = DeviceInfoUtils.getCpuName();
+        int cpuNumCores = DeviceInfoUtils.getCpuNumCores();
+        Map<String, Object> res = new HashMap<>();
+        res.put("RAM", ramInfo);
+        res.put("ROM", storageInfo);
+        //res.put("CPUName", cpuName);
+        res.put("CPUCores", cpuNumCores);
+        res.put("GPURenderer", GPURenderer.gl_renderer);
+        res.put("GPUVendor", GPURenderer.gl_vendor);
+        res.put("GPUVersion", GPURenderer.gl_version);
+        Log.d(TAG, "getInfo: res-----------+\n" + res);
+        return res;
+    }
+
 }

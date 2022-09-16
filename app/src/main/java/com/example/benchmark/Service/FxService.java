@@ -464,8 +464,6 @@ public class FxService extends Service {
             }
         });//设置监听浮动窗口的触摸移动
         btnToRecord.setVisibility(isCheckSoundFrame ? View.VISIBLE : View.GONE);
-
-
     }
 
     @Override
