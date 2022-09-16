@@ -143,13 +143,13 @@ public class TapUtil {
                                                 //Log.d("zzl", "onResponse: response===>" + response);
                                                 // 获取到的时间戳，应该减去响应时延
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
+                                                mCurrentTapNum++;
 
                                                 Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + mLastTapTime);
                                                 Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + "System.currentTimeMillis(): " + System.currentTimeMillis());
                                                 //Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
                                                 //service.mTapStartTimes.add(String.valueOf(mLastTapTime));
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
-                                                mCurrentTapNum++;
                                                 //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
                                                 //Message msg = Message.obtain();
                                                 //msg.what = 1;
@@ -160,6 +160,9 @@ public class TapUtil {
                             }
                         });
                         mThread.start();
+                        if (mCurrentTapNum == TOTAL_TAP_NUM) {
+                            mCurrentTapNum = 0;
+                        }
                     }
 
 
@@ -209,10 +212,9 @@ public class TapUtil {
                 Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);
                 phoneCurrentTapNum++;
                 cloudPhoneTap(screenWidth / 2, screenHeight / 2); //点击设置按钮
-
                 if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
                     phoneCurrentTapNum = 0;
-                    mCurrentTapNum = 0;
+                    Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);
                     Log.d("zzl", "run: stop");
                     cancel();
                 }

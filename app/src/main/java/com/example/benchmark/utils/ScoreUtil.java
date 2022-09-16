@@ -73,25 +73,7 @@ public class ScoreUtil {
         // 保存GPU结果
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
-        //if (gpuVersion != null) {
-        //    String res = "";
-        //    String select_plat = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME, "select_plat");
-        //    Log.d(TAG, "calcAndSaveGPUScores: select_plat--" + select_plat);
-        //    if (select_plat.startsWith("红手指")) {
-        //        String[] strings = gpuVersion.split(" ");
-        //        for (int i = 0; i < strings.length - 1; i++) {
-        //            res += (i == strings.length - 2) ? strings[i] : (strings[i] + " ");
-        //        }
-        //        CacheUtil.put(CacheConst.KEY_GPU_VERSION, res);
-        //    } else {
-        //        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
-        //    }
-        //} else {
-        //    CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
-        //
-        //}
-
-            CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
+        CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
 
         if (gpuVendor != null && gpuRender != null && gpuVersion != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
@@ -429,20 +411,20 @@ public class ScoreUtil {
 
         // 响应次数
         int responseNum = 0;
-        long ResponseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal0") + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
-        long ResponseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal1") + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
-        long ResponseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal2") + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
-        long ResponseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal3") + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
-        long ResponseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal4") + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
-        long ResponseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal5") + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
-        long ResponseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal6") + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
-        long ResponseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal7") + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
-        long ResponseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal8") + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
-        long ResponseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal9") + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
-        long ResponseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal10") + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
+        long ResponseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1") + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
+        long ResponseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2") + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
+        long ResponseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3") + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
+        long ResponseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4") + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
+        long ResponseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5") + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
+        long ResponseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6") + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
+        long ResponseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7") + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
+        long ResponseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8") + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
+        long ResponseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9") + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
+        long ResponseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10") + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
+        long ResponseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11") + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
 
 
-        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal10") - CacheUtil.getLong("tapTimeOnLocal0")));
+        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal11") - CacheUtil.getLong("tapTimeOnLocal1")));
         ArrayList<Long> longs = new ArrayList<>();
 
         if (ResponseTime0 != 0L) {
@@ -625,15 +607,12 @@ public class ScoreUtil {
         float SSIM = Float.parseFloat(YinHuaData.SSIM);
         float PESQ = Float.parseFloat(YinHuaData.PESQ);
 
-            // 保存音画质量结果
+        // 保存音画质量结果
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
         CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.PESQ);
         CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.PSNR);
         CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.SSIM);
-
-
-
 
 
         // 计算音画质量分数
