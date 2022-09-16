@@ -57,6 +57,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
 
     public static void start(Context context) {
         Intent intent = new Intent(context, AudioVideoActivity.class);
+        intent.putExtra("isAudioVideoTested",true);
         context.startActivity(intent);
     }
 

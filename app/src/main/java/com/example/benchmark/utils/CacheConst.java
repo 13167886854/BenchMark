@@ -85,13 +85,13 @@ public class CacheConst {
     public static final String IMAGE_GAME = "test.jpg";
 
     // 阿里云IP地址
-    public static final String ALIYUN_IP = "http://121.40.215.41:8080";
+    public static final String ALIYUN_IP = "http://121.40.215.41:7070";
 
     // 华为云IP地址
     public static final String HUAWEI_IP = "http://175.38.1.81:8080";
 
     // 临时地址
-    public static final String GLOBAL_IP = "http://44ebfe0b.r3.vip.cpolar.cn";
+    public static final String GLOBAL_IP = "http://121.40.215.41:7070";
 
 }
 

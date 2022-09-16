@@ -67,7 +67,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
     private boolean isCheckStability, isCheckFluency, isCheckTouch, isCheckSoundFrame,
             isCheckCPU, isCheckGPU, isCheckROM, isCheckRAM, isHaveOtherPerformance, isFluencyUntested,
-            isGameTouchTested;
+            isGameTouchTested,isAudioVideoTested;
 
 
     private ServiceConnection sm_connection;
@@ -153,6 +153,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         isFluencyUntested = intent.getBooleanExtra("isFluencyUntested", false);
         isGameTouchTested = intent.getBooleanExtra("isGameTouchTested", false);
+        isAudioVideoTested = intent.getBooleanExtra("isAudioVideoTested", false);
         updateListData();
 
         Log.d("TWT", "platform_kind: " + platform_kind);
@@ -182,7 +183,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 //                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
 //                }
 
-        } else if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckSoundFrame) {
+        } else if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckSoundFrame && !isAudioVideoTested) {
             startGameVAService();
             //Log.d("TWT", "initData: 开始测试游戏音画质量");
 
