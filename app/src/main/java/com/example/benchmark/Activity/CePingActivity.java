@@ -156,8 +156,8 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         String localMobileInfo = intent.getStringExtra("localMobileInfo");
         Log.d(TAG, "initData: localMobileInfo-------" + localMobileInfo);
 
-        HashMap hashMap = JSON.parseObject(localMobileInfo, HashMap.class);
-        Log.d(TAG, "initData: hashMap-------" + hashMap);
+//        HashMap hashMap = JSON.parseObject(localMobileInfo, HashMap.class);
+//        Log.d(TAG, "initData: hashMap-------" + hashMap);
 
         isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         isFluencyUntested = intent.getBooleanExtra("isFluencyUntested", false);

@@ -44,7 +44,6 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     public static boolean isTestOver = false;
     private SurfaceView mSurfaceView;
     public static String mMp4FilePath;
-    private MediaPlayer mMediaPlayer;
     private SurfaceHolder mHolder;
     private TextView yinhuaxinxi;
     private long videocurtime, audiocurtime;
@@ -75,7 +74,6 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         "\n" + "最大音画同步差" + maxDifferenceValue);
                 ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.Resolution, maxDifferenceValue);
                 isTestOver = true;
-
                 return;
             }
 
@@ -84,6 +82,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                 //Toast.makeText(AudioVideoActivity.this,"视频播放结束",Toast.LENGTH_LONG).show();
                 isCompleted = true;
             }
+       //     Log.e("TWT", "audiocurtime: "+audiocurtime + "    videocurtime:"+videocurtime );
 
 
             if (Math.abs(videocurtime - audiocurtime) > maxDifferenceValue) {
@@ -105,9 +104,16 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_video);
         init();
-
-        Log.d("资源文件", "资源文件的路径" + mMp4FilePath);
-
+        Log.d("TWT", "资源文件的路径" + mMp4FilePath);
+        //直接开始测试崩溃 等待1S后开始测试
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                startTest();
+            }
+        };
+        timer.schedule(task, 1000);
         //截取视频一帧图像 分析分辨率
 //        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 //        retriever.setDataSource(mMp4FilePath);
@@ -118,13 +124,16 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     }
 
     void init() {
-        mMediaPlayer = new MediaPlayer();
+        isCompleted = false;
+        isTestOver = false;
+        //mMediaPlayer = new MediaPlayer();
         mSurfaceView = findViewById(R.id.surface_view);
         mHolder = mSurfaceView.getHolder();
         yinhuaxinxi = findViewById(R.id.yinhua_item);
         //mMp4FilePath="android.resource://"+AudioVideoActivity.this.getPackageName()+"/"+R.raw.minions;
         //mMp4FilePath="/sdcard/ScreenRecorder/1660217722579.mp4";
         mMp4FilePath = getIntent().getStringExtra("path");
+        //Log.e("TWT", "mMp4FilePath: "+mMp4FilePath );
         WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -134,15 +143,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         //最大同步差
         maxDifferenceValue = 0;
 
-        //直接开始测试崩溃 等待1S后开始测试
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                startTest();
-            }
-        };
-        timer.schedule(task, 1000);
+
         //startTest();
 
     }
@@ -183,4 +184,14 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //Log.e("TWT", "onDestroy: destroy");
+    }
 }

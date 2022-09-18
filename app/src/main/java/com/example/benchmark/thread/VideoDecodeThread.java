@@ -67,7 +67,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
                 return;
             }
             final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
-            Log.e(TAG, "视频编码器 run: " + videoFormat.toString());
+            //Log.e(TAG, "视频编码器 run: " + videoFormat.toString());
             String videoMime = videoFormat.getString(MediaFormat.KEY_MIME);
             int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);//24
             int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);//45591
@@ -112,6 +112,8 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mVideoDecoder = MediaCodec.createDecoderByType(videoMime);
             mVideoDecoder.configure(videoFormat, mSurfaceView.getHolder().getSurface(), null, 0);
             mVideoDecoder.start();
+            //
+            //Log.e("TWT", "run: ////start!!!!!" );
             videocurtime = mMediaExtractor.getSampleTime();
 
             ByteBuffer byteBuffer = ByteBuffer.allocate(maxInputSize);
@@ -119,6 +121,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             mMediaExtractor.selectTrack(mVideoTrackIndex);
             SpeedManager mSpeedManager = new SpeedManager();//音视频同步器
+            //Log.e("TWT", "AudioVideoActivity.isTestOver: "+AudioVideoActivity.isTestOver );
             while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
                 //填充要解码的数据
@@ -137,6 +140,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
                                     mSpeedManager.preRender(sampleTime);
 
                                     mMediaExtractor.advance();
+                                   // Log.e("TWT", "sampleTime="+sampleTime+"sampleSize="+sampleSize+ "  when AudioVideoActivity.isTestOver is "+AudioVideoActivity.isTestOver );
                                 }
                             }
                         }

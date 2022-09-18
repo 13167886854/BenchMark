@@ -60,6 +60,7 @@
 
     <string name="pkg_name_red_finger_game">com.redfinger.app</string>
     <string name="pkg_name_huawei_cloud_game">com.huawei.cloudphonedaily</string>
+<!--    <string name="pkg_name_huawei_cloud_game">com.huawei.cloudphone</string>-->
     <string name="pkg_name_huawei_cloud_phone">com.huawei.instructionstream.appui</string>
     <string name="pkg_name_e_cloud_phone">com.chinamobile.cmss.saas.cloundphone</string>
     <string name="pkg_name_net_ease_cloud_phone">com.netease.android.cloudgame</string>
