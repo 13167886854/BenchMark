@@ -38,6 +38,7 @@ import com.example.benchmark.utils.MemInfoUtil;
 import com.example.benchmark.utils.SDCardUtils;
 import com.example.benchmark.utils.ServiceUtil;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,7 +107,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = simpleDateFormat.format(date);
                 Admin.testTime = time;
-                Map<String, Object> localMobileInfo = getInfo();
+                Map<String, Object> localMobileInfo = getInfo(); // 本地手机的规格数据
                 Log.d(TAG, "onCreateView: 开始测试时间====" +Admin.testTime);
                 if (cheak_game_map.get("cheaked_game") == null) {
                     Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
@@ -153,7 +154,16 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 intent.putExtra(CacheConst.KEY_GPU_INFO, red_gpu_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_ROM_INFO, red_ram_cheak.isChecked());
                 intent.putExtra(CacheConst.KEY_RAM_INFO, red_rom_cheak.isChecked());
-                intent.putExtra("localMobileInfo", localMobileInfo.toString());
+
+                Log.d(TAG, "onClick: -----------" + red_cpu_cheak.isChecked());
+                Log.d(TAG, "onClick: -----------" + red_gpu_cheak.isChecked());
+                Log.d(TAG, "onClick: -----------" + red_ram_cheak.isChecked());
+                Log.d(TAG, "onClick: -----------" + red_rom_cheak.isChecked());
+
+                if (red_rom_cheak.isChecked() || red_ram_cheak.isChecked() || red_gpu_cheak.isChecked() || red_cpu_cheak.isChecked()) {
+                    intent.putExtra("localMobileInfo", (Serializable) localMobileInfo);
+                }
+
                 intent.putExtra(CacheConst.KEY_PLATFORM_NAME, cheak_game_map.get("cheaked_game"));
 
                 startActivity(intent);
@@ -437,7 +447,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
      * 查询本机的规格数据
      * @return
      */
-    private Map<String, Object> getInfo() {
+    public Map<String, Object> getInfo() {
 
 
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}

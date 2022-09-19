@@ -66,10 +66,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private CePingAdapter adapter;
     private String checked_plat;
     private String platform_kind;
+    private Boolean isCloudPhone;
 
     private boolean isCheckStability, isCheckFluency, isCheckTouch, isCheckSoundFrame,
             isCheckCPU, isCheckGPU, isCheckROM, isCheckRAM, isHaveOtherPerformance, isFluencyUntested,
-            isGameTouchTested,isAudioVideoTested;
+            isGameTouchTested, isAudioVideoTested;
 
 
     private ServiceConnection sm_connection;
@@ -92,6 +93,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private static final int STORAGE_REQUEST_CODE = 555;
     private static final int AUDIO_REQUEST_CODE = 666;
     private static final int RECORD_REQUEST_CODE = 777;
+    private HashMap mHashMapLocal = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +111,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             intent.putExtra("select_img", data.getCepingImage());
             intent.putExtra("select_text", data.getCepingText());
             intent.putExtra("select_grade", data.getGrade());
+            intent.putExtra("isCloudPhone", isCloudPhone);
+            intent.putExtra("localMobileInfo", mHashMapLocal);
+
             startActivity(intent);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -153,11 +158,12 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isCheckRAM = intent.getBooleanExtra(CacheConst.KEY_RAM_INFO, false);
         isCheckROM = intent.getBooleanExtra(CacheConst.KEY_ROM_INFO, false);
 
-        String localMobileInfo = intent.getStringExtra("localMobileInfo");
-        Log.d(TAG, "initData: localMobileInfo-------" + localMobileInfo);
-
-//        HashMap hashMap = JSON.parseObject(localMobileInfo, HashMap.class);
-//        Log.d(TAG, "initData: hashMap-------" + hashMap);
+        if (checked_plat.equals(CacheConst.PLATFORM_NAME_MI_GU_GAME) || checked_plat.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME) || checked_plat.equals(CacheConst.PLATFORM_NAME_Tencent_GAME)) {
+            if (isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM) {
+                mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
+                Log.d(TAG, "initData: hashMap-------" + mHashMapLocal);
+            }
+        }
 
         isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
         isFluencyUntested = intent.getBooleanExtra("isFluencyUntested", false);
@@ -211,7 +217,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
     private void updateListData() {
         Intent intent = getIntent();
-        boolean isCloudPhone = CacheConst.PLATFORM_KIND_CLOUD_PHONE.equals(
+        isCloudPhone = CacheConst.PLATFORM_KIND_CLOUD_PHONE.equals(
                 intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND));
         ceping_data.clear();
         if (isCheckStability) {
