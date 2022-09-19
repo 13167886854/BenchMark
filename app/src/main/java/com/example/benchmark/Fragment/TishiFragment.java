@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.benchmark.Activity.LoginActivity;
 import com.example.benchmark.Activity.MainActivity;
@@ -40,6 +42,8 @@ public class TishiFragment extends Fragment {
     private LoginDialog myDialog;
     private Message mMessage;
     private Thread mThread;
+    private FragmentManager fragmentManager;
+    private HistoryFragment history;
     private static final String TAG = "login";
     private Handler mHandler = new Handler() {
         @Override
@@ -65,6 +69,8 @@ public class TishiFragment extends Fragment {
         info_audio_video = view.findViewById(R.id.info_audio_video);
         info_hardware = view.findViewById(R.id.info_hardware);
 
+        history = new HistoryFragment();
+
         if (!Admin.STATUS.equals("Success")) {
             showDialog();
         }
@@ -72,41 +78,81 @@ public class TishiFragment extends Fragment {
         info_fluency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TestInfoActivity.class);
-                intent.putExtra("type", "info_fluency");
-                getContext().startActivity(intent);
+//                Intent intent = new Intent(getContext(), TestInfoActivity.class);
+//                intent.putExtra("type", "info_fluency");
+//                getContext().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_fluency");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();;
+                //开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
             }
         });
         info_stability.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TestInfoActivity.class);
-                intent.putExtra("type", "info_stability");
-                getContext().startActivity(intent);
+//                Intent intent = new Intent(getContext(), TestInfoActivity.class);
+//                intent.putExtra("type", "");
+//                getContext().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_stability");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();;
+                //开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
             }
         });
         info_touch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TestInfoActivity.class);
-                intent.putExtra("type", "info_touch");
-                getContext().startActivity(intent);
+//                Intent intent = new Intent(getContext(), TestInfoActivity.class);
+//                intent.putExtra("type", "info_touch");
+//                getContext().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_touch");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();;
+                //开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
             }
         });
         info_audio_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TestInfoActivity.class);
-                intent.putExtra("type", "info_audio_video");
-                getContext().startActivity(intent);
+//                Intent intent = new Intent(getContext(), TestInfoActivity.class);
+//                intent.putExtra("type", "info_audio_video");
+//                getContext().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_audio_video");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();;
+                //开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
             }
         });
         info_hardware.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), TestInfoActivity.class);
-                intent.putExtra("type", "info_hardware");
-                getContext().startActivity(intent);
+//                Intent intent = new Intent(getContext(), TestInfoActivity.class);
+//                intent.putExtra("type", "info_hardware");
+//                getContext().startActivity(intent);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_hardware");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();;
+                //开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
             }
         });
 
