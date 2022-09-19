@@ -70,26 +70,22 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
         if (viewPager == null) return;
         for (int i = 0; i < viewPager.getChildCount(); i++) {
             AccessibilityNodeInfo recyclerView = viewPager.getChild(i);
+            if (!"androidx.recyclerview.widget.RecyclerView".equals(recyclerView.getClassName().toString())) continue;
+//            AccessibilityUtil.logAllChildNodesClass(recyclerView, 0);
+            boolean isCloudPhone = false;
             for (int j = 0; j < recyclerView.getChildCount(); j++) {
-                AccessibilityNodeInfo frameLayout = recyclerView.getChild(j);
-                if (!"android.widget.FrameLayout".equals(frameLayout.getClassName().toString()))
-                    continue;
-                boolean isCloudPhone = false;
-                for (int k = 0; k < frameLayout.getChildCount(); k++) {
-                    AccessibilityNodeInfo node = frameLayout.getChild(k);
-                    if (node.getText() != null && NODE_TEXT_CLOUD_PHONE.equals(node.getText().toString())) {
-                        isCloudPhone = true;
-                    }
-                    if (isCloudPhone &&
-                            "android.view.ViewGroup".equals(node.getClassName().toString())) {
-                        Log.e("NetEase", "Click");
-                        AccessibilityUtil.performClick(node.getChild(0));
-                        isClickInstantPlay = true;
-                        mStartTime = System.currentTimeMillis();
-                        startControlCloudPhone();
-                        startQuitCloudPhone();
-                        return;
-                    }
+                AccessibilityNodeInfo node = recyclerView.getChild(j);
+                if (node.getText() != null && NODE_TEXT_CLOUD_PHONE.equals(node.getText().toString())) {
+                    isCloudPhone = true;
+                }
+                if (isCloudPhone && "android.view.ViewGroup".equals(node.getClassName().toString())) {
+                    Log.e("NetEase", "Click");
+                    AccessibilityUtil.performClick(node.getChild(0));
+                    isClickInstantPlay = true;
+                    mStartTime = System.currentTimeMillis();
+                    startControlCloudPhone();
+                    startQuitCloudPhone();
+                    return;
                 }
             }
         }

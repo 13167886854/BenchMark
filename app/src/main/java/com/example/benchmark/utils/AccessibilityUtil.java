@@ -294,7 +294,7 @@ public class AccessibilityUtil {
         if (nodeInfo == null) return;
         String nodeClassName = nodeInfo.getClassName().toString();
         Log.e("AccessibilityUtil", index + ":" + nodeClassName +
-                ("android.widget.TextView".equals(nodeClassName) ? nodeInfo.getText().toString() : ""));
+                (nodeInfo.getText() != null ? nodeInfo.getText().toString() : ""));
         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
             if (childNode == null) continue;
