@@ -55,6 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            android:onClick="back"
+            />
+        <Button
             android:id="@+id/saveNum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

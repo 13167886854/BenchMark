@@ -62,4 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
         Toast.makeText(this,"保存成功",Toast.LENGTH_SHORT).show();
     }
+
+    public void back(View view) {
+        onBackPressed();
+    }
 }
