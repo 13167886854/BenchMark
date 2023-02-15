@@ -75,7 +75,7 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
                 try {
                     StopTest();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("TWT", e.toString());
                 }
             }
         });
@@ -89,7 +89,7 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
             //glVideoRenderer.getMediaPlayer().setDataSource(path);
             glVideoRenderer.getMediaPlayer().prepare();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("TWT", e.toString());
         }
 
         //自动开始

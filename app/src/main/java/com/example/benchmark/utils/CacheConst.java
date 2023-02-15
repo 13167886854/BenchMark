@@ -84,7 +84,7 @@ public class CacheConst {
     public static final String VIDEO_GAME_NAME = "game_video_record.mp4";
     public static final String IMAGE_GAME = "test.jpg";
 
-    // 阿里云IP地址
+    // a阿里云IP地址
     //public static final String ALIYUN_IP = "http://121.40.215.41:8080";
     public static final String ALIYUN_IP = "http://175.38.1.81:8080";
 

@@ -196,7 +196,8 @@ public class ScoreUtil {
             float lowFrameRate,
             float frameInterval,
             float jankCount,
-            float stutterRate
+            float stutterRate,
+            String eachFps
     ) {
         lowFrameRate *= 100;
         stutterRate *= 100;
@@ -234,6 +235,7 @@ public class ScoreUtil {
                     .addParam("frameInterval", frameInterval + "")
                     .addParam("stutterRate", stutterRate + "")
                     .addParam("fluencyScore", fluencyScore + "")
+                    .addParam("eachFps",eachFps)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .post(true)
                     .async(new OkHttpUtils.ICallBack() {

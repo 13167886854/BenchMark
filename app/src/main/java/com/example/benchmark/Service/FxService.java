@@ -607,8 +607,10 @@ public class FxService extends Service {
                 getFloatDataFromJson(JsonData, "lowFrameRate"),
                 getFloatDataFromJson(JsonData, "frameInterval"),
                 getFloatDataFromJson(JsonData, "jankCount"),
-                getFloatDataFromJson(JsonData, "stutterRate")
+                getFloatDataFromJson(JsonData, "stutterRate"),
+                JsonData.getString("eachFps")
         );
+
 
         // 触控测试数据
         ScoreUtil.calcAndSaveTouchScores(

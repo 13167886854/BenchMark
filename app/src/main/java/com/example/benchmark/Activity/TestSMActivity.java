@@ -47,7 +47,7 @@ public class TestSMActivity extends AppCompatActivity {
     //判断是否正在测试
     private boolean isTesting = false;
 
-
+    private String eachFps = "";
 
     public static void start(Context context, String path){
         Intent intent = new Intent(context,TestSMActivity.class);
@@ -178,7 +178,9 @@ public class TestSMActivity extends AppCompatActivity {
                 getRoundNumber((float)fpsUtil.getLowFrameRate()),
                 getRoundNumber((float)fpsUtil.getFrameIntervalTime()),
                 fpsUtil.getJankCount(),
-                getRoundNumber((float)fpsUtil.getShtutterRate()));
+                getRoundNumber((float)fpsUtil.getShtutterRate()),
+                eachFps
+                );
         Intent intent = new Intent(TestSMActivity.this,CePingActivity.class);
         intent.putExtra("isFluencyUntested",false);
         startActivity(intent);
@@ -333,6 +335,11 @@ public class TestSMActivity extends AppCompatActivity {
         public void run() {
             fpsUtil.updateBeforeGetInfo();
             //打印测试中数据到TextView上
+            if(eachFps.equals("")){
+                eachFps += String.valueOf(fpsUtil.getCount());
+            }else {
+                eachFps += ","+String.valueOf(fpsUtil.getCount());
+            }
             Log.d("TWT", "runing.......... ");
             textInfo.setText(
                     "当前FPS"+fpsUtil.getCount()+"帧/秒\n"

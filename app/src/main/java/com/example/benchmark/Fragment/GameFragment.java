@@ -46,43 +46,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GameFragment extends Fragment implements View.OnClickListener, RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {
-    private Button red_liuchang,red_wending,red_chukong,red_yinhua;
-    private GLSurfaceView mSurfaceView;
+/**
+ * @description 云游戏Fragment
+ * @date 2023/2/15 16:14
+ * @version 1.0
+ */
+public class GameFragment extends Fragment implements View.OnClickListener,
+        RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {
 
+    private static final String TAG = "GameFragment";
+    private static final HashMap<String, String> cheak_game_map;
+    private static List<Boolean> list;
+
+    static {
+        cheak_game_map = new HashMap<>();
+        list = new ArrayList<>();
+    }
+
+    private Button red_liuchang;
+    private Button red_wending;
+    private Button red_chukong;
+    private Button red_yinhua;
+    private GLSurfaceView mSurfaceView;
     private CheckBox red_liuchang_cheak;
     private CheckBox red_wending_cheak;
     private CheckBox red_chukong_cheak;
     private CheckBox red_yinhua_cheak;
-
     private CheckBox red_cpu_cheak;
     private CheckBox red_gpu_cheak;
     private CheckBox red_ram_cheak;
     private CheckBox red_rom_cheak;
-
     private CheckBox game_select_all;
-
-    private Button red_cpu,red_gpu,red_ram,red_rom;
-
+    private Button red_cpu;
+    private Button red_gpu;
+    private Button red_ram;
+    private Button red_rom;
     private Button red_start_test;
-
     private RadioGroup select_game;
-
-    private static List<Boolean> list;
-
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
-    private static final String TAG = "GameFragment";
 
 
-    private static final HashMap<String,String> cheak_game_map;
-    static {
-        cheak_game_map=new HashMap<>();
-        list = new ArrayList<>();
-    }
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.game_fragment, container, false);
         initview(view);
 
@@ -108,38 +116,40 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 String time = simpleDateFormat.format(date);
                 Admin.testTime = time;
                 Map<String, Object> localMobileInfo = getInfo(); // 本地手机的规格数据
-                Log.d(TAG, "onCreateView: 开始测试时间====" +Admin.testTime);
+                Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
                 if (cheak_game_map.get("cheaked_game") == null) {
                     Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(red_wending_cheak.isChecked()||red_yinhua_cheak.isChecked() ){
+                if(red_wending_cheak.isChecked() || red_yinhua_cheak.isChecked() ) {
                     if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
                             || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         popDiaLog.show();
                         return;
                     }
-                }else if(red_chukong_cheak.isChecked()){
-                    //Log.d("TWT", "isOK: "+!ServiceUtil.isServiceRunning(BaseApp.context, AutoTapService.class.getName()));
+                }else if(red_chukong_cheak.isChecked()) {
                     //检查是否开启无障碍服务。。。。
-                    if(!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())){
+                    if(!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         return;
                     }
                     //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
+                }else {
+                    Log.d(TAG, "onCreateView: 正常启动");
                 }
-                if(!Settings.canDrawOverlays(getContext())){
+                if(!Settings.canDrawOverlays(getContext())) {
                     Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
-                    Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
-                    Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
+                    Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + getContext().getPackageName()));
+                    Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:"
+                            + getContext().getPackageName()));
                     //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                     startActivity(intentToFloatPermission);
-                    //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
                     return;
-                }else{
-                    Toast.makeText(getContext(),"can draw floatWindow",Toast.LENGTH_SHORT);
+                }else {
+                    Toast.makeText(getContext(),"can draw floatWindow", Toast.LENGTH_SHORT);
                 }
                 CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
                 CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
@@ -160,7 +170,8 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
                 Log.d(TAG, "onClick: -----------" + red_ram_cheak.isChecked());
                 Log.d(TAG, "onClick: -----------" + red_rom_cheak.isChecked());
 
-                if (red_rom_cheak.isChecked() || red_ram_cheak.isChecked() || red_gpu_cheak.isChecked() || red_cpu_cheak.isChecked()) {
+                if (red_rom_cheak.isChecked() || red_ram_cheak.isChecked() || red_gpu_cheak.isChecked()
+                        || red_cpu_cheak.isChecked()) {
                     intent.putExtra("localMobileInfo", (Serializable) localMobileInfo);
                 }
 
@@ -175,24 +186,24 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
 
 
-    private void initview(View view){
-        red_liuchang=view.findViewById(R.id.red_liuchangxing);
-        red_wending=view.findViewById(R.id.red_wendinxing);
-        red_chukong=view.findViewById(R.id.red_chukong);
+    private void initview(View view) {
+        red_liuchang = view.findViewById(R.id.red_liuchangxing);
+        red_wending = view.findViewById(R.id.red_wendinxing);
+        red_chukong = view.findViewById(R.id.red_chukong);
         red_yinhua = view.findViewById(R.id.red_yinhua);
 
-        mSurfaceView =view.findViewById(R.id.surfaceView);
+        mSurfaceView = view.findViewById(R.id.surfaceView);
         mSurfaceView.setEGLContextClientVersion(1);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 0, 0);
         mSurfaceView.setRenderer(new GPURenderer());
 
         red_cpu = view.findViewById(R.id.red_cpu);
-        red_gpu=view.findViewById(R.id.red_gpu);
+        red_gpu = view.findViewById(R.id.red_gpu);
         red_ram = view.findViewById(R.id.red_ram);
         red_rom = view.findViewById(R.id.red_rom);
 
         red_liuchang_cheak = view.findViewById(R.id.red_liuchang_cheak);
-        red_wending_cheak=view.findViewById(R.id.red_wending_cheak);
+        red_wending_cheak = view.findViewById(R.id.red_wending_cheak);
         red_chukong_cheak = view.findViewById(R.id.red_chukong_cheak);
         red_yinhua_cheak = view.findViewById(R.id.red_yinhua_cheak);
 
@@ -202,18 +213,18 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
         red_rom_cheak = view.findViewById(R.id.red_rom_cheak);
 
 
-        red_start_test=view.findViewById(R.id.red_start_test);
+        red_start_test = view.findViewById(R.id.red_start_test);
 
-        select_game=view.findViewById(R.id.select_game);
-        game_select_all=view.findViewById(R.id.game_select_all);
+        select_game = view.findViewById(R.id.select_game);
+        game_select_all = view.findViewById(R.id.game_select_all);
 
-        accessUtils=new AccessUtils(getContext());
+        accessUtils = new AccessUtils(getContext());
         popDiaLog = new PopDiaLog(getActivity());
 
     }
 
 
-    public void initGameBtn(){
+    public void initGameBtn() {
         Drawable drawable;
         Button btn;
         //腾讯
@@ -412,8 +423,7 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
                 red_rom_cheak.setVisibility(View.VISIBLE);
                 red_rom_cheak.setChecked(true);
-            }
-            else{
+        }else{
                 red_liuchang_cheak.setChecked(false);
                 red_liuchang_cheak.setVisibility(View.INVISIBLE);
 
@@ -439,14 +449,10 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
 
                 red_rom_cheak.setVisibility(View.INVISIBLE);
                 red_rom_cheak.setChecked(false);
-
         }
     }
 
-    /**
-     * 查询本机的规格数据
-     * @return
-     */
+
     public Map<String, Object> getInfo() {
 
 
@@ -456,14 +462,16 @@ public class GameFragment extends Fragment implements View.OnClickListener, Radi
             ramInfo.put("可用", MemInfoUtil.getMemAvailable());
         }
         for (Map.Entry<String, String> entry : ramInfo.entrySet()) {
-            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            String value = entry.getValue().endsWith("吉字节") ?
+                    (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
             entry.setValue(value);
         }
         Log.d(TAG, "getInfo: " + ramInfo);
 
         Map<String, String> storageInfo = SDCardUtils.getStorageInfo(getContext(), 0);
         for (Map.Entry<String, String> entry : storageInfo.entrySet()) {
-            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB")
+                    : entry.getValue();
             entry.setValue(value);
         }
         Log.d(TAG, "getInfo: " + storageInfo);
