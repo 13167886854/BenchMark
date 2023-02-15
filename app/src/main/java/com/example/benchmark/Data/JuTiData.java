@@ -1,30 +1,32 @@
 package com.example.benchmark.Data;
 
 public class JuTiData {
-    private String JutiItem;
-    private String JuTiItemGrade;
-
-    public String getJutiItem() {
-        return JutiItem;
-    }
-
-    public void setJutiItem(String jutiItem) {
-        JutiItem = jutiItem;
-    }
-
-    public String getJuTiItemGrade() {
-        return JuTiItemGrade;
-    }
-
-    public void setJuTiItemGrade(String juTiItemGrade) {
-        JuTiItemGrade = juTiItemGrade;
-    }
+    private String jutiItem;
+    private String juTiItemGrade;
 
     public JuTiData() {
     }
 
-    public JuTiData(String jutiItem, String juTiItemGrade) {
-        JutiItem = jutiItem;
-        JuTiItemGrade = juTiItemGrade;
+    public JuTiData(String item, String itemGrade) {
+        jutiItem = item;
+        juTiItemGrade = itemGrade;
     }
+
+    public String getJutiItem() {
+        return jutiItem;
+    }
+
+    public void setJutiItem(String item) {
+        jutiItem = item;
+    }
+
+    public String getJuTiItemGrade() {
+        return juTiItemGrade;
+    }
+
+    public void setJuTiItemGrade(String itemGrade) {
+        juTiItemGrade = itemGrade;
+    }
+
+
 }

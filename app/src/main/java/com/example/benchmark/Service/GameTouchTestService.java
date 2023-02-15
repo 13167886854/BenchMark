@@ -46,6 +46,14 @@ import java.io.IOException;
 public class GameTouchTestService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
+    private static final String TAG = "TWT";
+
+    //定义浮动窗口布局
+    LinearLayout mFloatLayout;
+    LayoutParams wmParams;
+    //创建浮动窗口设置布局参数的对象
+    WindowManager mWindowManager;
+    TextView mFloatView;
 
     private TapUtil tapUtil = TapUtil.getUtil();
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
@@ -59,38 +67,31 @@ public class GameTouchTestService extends Service {
     private int width = 720;
     private int height = 1080;
     private int dpi;
-
-
-    private boolean isAble=true;
-    //定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    LayoutParams wmParams;
-    //创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
+    private boolean isAble = true;
     private Context mContext;
-    TextView mFloatView;
     private long startTime;
     private long endTime;
     //private boolean isColor=true;
-    private boolean isRecording=false;
+    private boolean isRecording = false;
     private int statusBarHeight;
 
     //private Messenger mMessenger;
 
-    private static final String TAG = "TWT";
-    Handler handler=new Handler(){
+
+
+    Handler handler = new Handler() {
         @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case START_RECORD:
                     //mFloatView.setText("停止");
-                    isRecording=!isRecording;
+                    isRecording =! isRecording;
                     startRecord();
 
                     break;
                 case STOP_RECORD:
-                    isRecording=!isRecording;
+                    isRecording =! isRecording;
                     //点击结束录制后休息1s后才能继续录制
                     isAble = false;
                     //mFloatView.setText("开始");
@@ -98,7 +99,7 @@ public class GameTouchTestService extends Service {
                     stopRecord();
 
                     Intent intent = new Intent(mContext, TestGameTouchActivity.class);
-                    intent.putExtra("path",path);
+                    intent.putExtra("path", path);
                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     break;
@@ -114,7 +115,7 @@ public class GameTouchTestService extends Service {
     {
         Log.d(TAG, "onCreate: 121212");
         super.onCreate();
-        mContext= GameTouchTestService.this;
+        mContext = GameTouchTestService.this;
 //        HandlerThread serviceThread = new HandlerThread("service_thread",
 //                android.os.Process.THREAD_PRIORITY_BACKGROUND);
 //        serviceThread.start();
@@ -143,12 +144,12 @@ public class GameTouchTestService extends Service {
         Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         //设置window type
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
-        }else{
-            wmParams.type= LayoutParams.TYPE_TOAST;
+        } else {
+            wmParams.type = LayoutParams.TYPE_TOAST;
         }
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
@@ -161,15 +162,15 @@ public class GameTouchTestService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = screenWidth/2;
-        wmParams.y =screenHeight;
+        wmParams.x = screenWidth / 2;
+        wmParams.y = screenHeight;
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
         //获取浮动窗口视图所在布局
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
-        mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText2);
+        mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText2);
         mWindowManager.addView(mFloatLayout, wmParams);
 
         //获取状态栏的高度
@@ -185,21 +186,21 @@ public class GameTouchTestService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight()/2-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -209,21 +210,23 @@ public class GameTouchTestService extends Service {
                         break;
                 }
                 //响应点击事件
-                if (isclick&&isAble) {
-                    if(!isRecording){
+                if (isclick && isAble) {
+                    if (!isRecording) {
                         mFloatView.setText("停止");
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                getDrawable(R.drawable.ic_stop), null, null, null);
 
                         //开始录制
                         handler.sendEmptyMessage(START_RECORD);
                         //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
                         //mFloatView.setBackgroundColor(Color.RED);
-                    }else{
+                    } else {
                         //mFloatView.setText("开始");
                         //停止录制
                         //handler.sendEmptyMessageDelayed(STOP_RECORD,500);
                         //mFloatView.setBackgroundColor(Color.GREEN);
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),null,null,null);
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                getDrawable(R.drawable.ic_rest), null, null, null);
                         mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
 
 
@@ -231,8 +234,9 @@ public class GameTouchTestService extends Service {
                             @Override
                             public void run() {
                                 if (handler != null) {
-                                    isAble=true;
-                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_start),null,null,null);
+                                    isAble = true;
+                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                            getDrawable(R.drawable.ic_start), null, null, null);
                                     mFloatView.setTextColor(Color.parseColor("#000000"));
                                 }
                             }
@@ -282,8 +286,8 @@ public class GameTouchTestService extends Service {
     }
 
 
-    public void sendStopMsg(){
-        handler.sendEmptyMessageDelayed(STOP_RECORD,1000);
+    public void sendStopMsg() {
+        handler.sendEmptyMessageDelayed(STOP_RECORD, 1000);
     }
 
     public boolean stopRecord() {
@@ -301,8 +305,7 @@ public class GameTouchTestService extends Service {
         stopSelf();
 
 
-        if(mFloatLayout != null)
-        {
+        if (mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
         }
         return true;
@@ -314,7 +317,7 @@ public class GameTouchTestService extends Service {
     }
 
     private void initRecorder() {
-        try{
+        try {
             //mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
@@ -326,9 +329,8 @@ public class GameTouchTestService extends Service {
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
-
-        }catch (Exception e){
-            Log.e("TWT", "initRecorder: "+e.toString() );
+        } catch (Exception e) {
+            Log.e("TWT", "initRecorder: "+ e.toString());
         }
         try {
             mediaRecorder.prepare();

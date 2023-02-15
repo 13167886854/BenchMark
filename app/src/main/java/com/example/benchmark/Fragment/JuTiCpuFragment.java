@@ -1,6 +1,7 @@
 package com.example.benchmark.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,12 @@ public class JuTiCpuFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.juti_cpu_fragment, container, false);
-        TextView juti_cpu_model = view.findViewById(R.id.juti_cpu_model);
-        //TextView juti_cpu_name = view.findViewById(R.id.juti_cpu_name);
-        TextView juti_cpu_core = view.findViewById(R.id.juti_cpu_core);
-        TextView juti_cpu_maxrate = view.findViewById(R.id.juti_cpu_maxrate);
-        juti_cpu_core.setText(MobileCloud.cpuCoreNum);
-        System.out.println(MobileCloud.spec);
-        System.out.println(MobileCloud.name);
-        return  view;
+        TextView cpuModel = view.findViewById(R.id.juti_cpu_model);
+        TextView cpuCore = view.findViewById(R.id.juti_cpu_core);
+        TextView cpuMaxRate = view.findViewById(R.id.juti_cpu_maxrate);
+        cpuCore.setText(MobileCloud.cpuCoreNum);
+        Log.d("info", MobileCloud.spec);
+        Log.d("info", MobileCloud.name);
+        return view;
     }
-
 }

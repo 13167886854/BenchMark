@@ -3,33 +3,33 @@ package com.example.benchmark.Data;
 import java.util.List;
 
 public class ShuoMingData {
-    private Integer shuoming_image;
-    private String item_shuoming;
+    private Integer infoImage;
+    private String itemInfo;
     private List<LiuChang> list;
 
-    public String getItem_shuoming() {
-        return item_shuoming;
-    }
-
-    public void setItem_shuoming(String item_shuoming) {
-        this.item_shuoming = item_shuoming;
-    }
-
-    public ShuoMingData(Integer shuoming_image, String item_shuoming, List<LiuChang> list) {
-        this.shuoming_image = shuoming_image;
-        this.item_shuoming =item_shuoming;
+    public ShuoMingData(Integer infoImage, String itemInfo, List<LiuChang> list) {
+        this.infoImage = infoImage;
+        this.itemInfo = itemInfo;
         this.list = list;
     }
 
     public ShuoMingData() {
     }
 
-    public Integer getShuoming_image() {
-        return shuoming_image;
+    public String getItemInfo() {
+        return itemInfo;
     }
 
-    public void setShuoming_image(Integer shuoming_image) {
-        this.shuoming_image = shuoming_image;
+    public void setItemInfo(String itemInfo) {
+        this.itemInfo = itemInfo;
+    }
+
+    public Integer getInfoImage() {
+        return infoImage;
+    }
+
+    public void setInfoImage(Integer infoImage) {
+        this.infoImage = infoImage;
     }
 
     public List<LiuChang> getList() {

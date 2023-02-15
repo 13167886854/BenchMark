@@ -8,31 +8,31 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.example.benchmark.utils.AccessibilityUtil;
 
 public class MiGuPlayStabilityService implements IStabilityService {
+    private final String nodeClassParentTabHome = "android.widget.RelativeLayout";
+    private final String nodeIdTabHome = "cn.emagsoftware.gamehall:id/tv_tab_title";
+    private final String nodeClassTabHome = "android.widget.TextView";
+    private final String nodeTextTabHome = "首页";
+    private final String nodeClassParentTabRecommend = "android.widget.FrameLayout";
+    private final String nodeIdTabRecommend = "cn.emagsoftware.gamehall:id/tab_title";
+    private final String nodeClassTabRecommend = "android.widget.TextView";
+    private final String nodeTextTabRecommend = "推荐";
+    private final String nodeIdHotWeek = "cn.emagsoftware.gamehall:id/week_hot_recycler";
+    private final String nodeClassHotWeek = "android.support.v7.widget.RecyclerView";
+    private final String nodeIdInstantPlay = "cn.emagsoftware.gamehall:id/detail_gameInfo_play_icon";
+    private final String nodeTextInstantPlay = "秒 玩";
+    private final String nodeIdSelfPlay = "cn.emagsoftware.gamehall:id/play_self_img";
+    private final String nodeIdContinueGame = "cn.emagsoftware.gamehall:id/dialog_button2_id";
+    private final String nodeTextContinueGame = "继续游戏";
+    private final String nodeIdEnterGameVip = "cn.emagsoftware.gamehall:id/vip_tip_content";
+    private final String nodeTextEnterGameVip = "你已进入会员专属通道，排队快人一步";
+    private final String nodeTextEnterGameNormal = "当前账户剩余时长";
+    private final String nodeIdFlowView = "cn.emagsoftware.gamehall:id/cloud_game_flow_view";
+    private final String nodeClassFlowView = "android.view.ViewGroup";
 
-    private final String NODE_CLASS_PARENT_TAB_HOME = "android.widget.RelativeLayout";
-    private final String NODE_ID_TAB_HOME = "cn.emagsoftware.gamehall:id/tv_tab_title";
-    private final String NODE_CLASS_TAB_HOME = "android.widget.TextView";
-    private final String NODE_TEXT_TAB_HOME = "首页";
-    private final String NODE_CLASS_PARENT_TAB_RECOMMEND = "android.widget.FrameLayout";
-    private final String NODE_ID_TAB_RECOMMEND = "cn.emagsoftware.gamehall:id/tab_title";
-    private final String NODE_CLASS_TAB_RECOMMEND = "android.widget.TextView";
-    private final String NODE_TEXT_TAB_RECOMMEND = "推荐";
-    private final String NODE_ID_HOT_WEEK = "cn.emagsoftware.gamehall:id/week_hot_recycler";
-    private final String NODE_CLASS_HOT_WEEK = "android.support.v7.widget.RecyclerView";
-    private final String NODE_ID_INSTANT_PLAY = "cn.emagsoftware.gamehall:id/detail_gameInfo_play_icon";
-    private final String NODE_TEXT_INSTANT_PLAY = "秒 玩";
-    private final String NODE_ID_SELF_PLAY = "cn.emagsoftware.gamehall:id/play_self_img";
-    private final String NODE_ID_CONTINUE_GAME = "cn.emagsoftware.gamehall:id/dialog_button2_id";
-    private final String NODE_TEXT_CONTINUE_GAME = "继续游戏";
-    private final String NODE_ID_ENTER_GAME_VIP = "cn.emagsoftware.gamehall:id/vip_tip_content";
-    private final String NODE_TEXT_ENTER_GAME_VIP = "你已进入会员专属通道，排队快人一步";
-    private final String NODE_TEXT_ENTER_GAME_NORMAL = "当前账户剩余时长";
-    private final String NODE_ID_FLOW_VIW = "cn.emagsoftware.gamehall:id/cloud_game_flow_view";
-    private final String NODE_CLASS_FLOW_VIW = "android.view.ViewGroup";
-    private final String NODE_ID_CONFIRM_QUIT = "cn.emagsoftware.gamehall:id/dialog_button2_id";
-    private final String NODE_TEXT_CONFIRM_QUIT = "确定";
-    private final String NODE_ID_CANCEL_AFTER_QUIT_GAME = "cn.emagsoftware.gamehall:id/cancle_txt";
-    private final String NODE_TEXT_CANCEL_AFTER_QUIT_GAME = "下次吧";
+    private final String nodeIdConfirmQuit = "cn.emagsoftware.gamehall:id/dialog_button2_id";
+    private final String nodeTextConfirmQuit = "确定";
+    private final String nodeIdCancelAfterQuitGame = "cn.emagsoftware.gamehall:id/cancle_txt";
+    private final String nodeTextCancelAfterQuitGame = "下次吧";
 
     private int mCurrentMonitorNum = 0;
     private int mFailMonitorNum = 0;
@@ -49,7 +49,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
     public void onMonitor() {
         if (!isClickInstantPlay) {
             AccessibilityNodeInfo instantPlay = AccessibilityUtil.findNodeInfo(service,
-                    NODE_ID_INSTANT_PLAY, NODE_TEXT_INSTANT_PLAY);
+                    nodeIdInstantPlay, nodeTextInstantPlay);
             if (instantPlay == null) return;
             AccessibilityUtil.performClick(instantPlay);
             startControlCloudPhone();
@@ -66,7 +66,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
             e.printStackTrace();
         }
         AccessibilityNodeInfo selfPlayNode = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_SELF_PLAY, "");
+                service, nodeIdSelfPlay, "");
         if (selfPlayNode != null) {
             AccessibilityUtil.performClick(selfPlayNode);
         }
@@ -76,18 +76,12 @@ public class MiGuPlayStabilityService implements IStabilityService {
             e.printStackTrace();
         }
         AccessibilityNodeInfo continueGameNode = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_CONTINUE_GAME, NODE_TEXT_CONTINUE_GAME);
+                service, nodeIdContinueGame, nodeTextContinueGame);
         if (continueGameNode != null) {
             AccessibilityUtil.performClick(continueGameNode);
         }
         while (!AccessibilityUtil.findIsContainText(service, "100%")
                 || !AccessibilityUtil.findIsContainText(service, "启动完成"));
-//        AccessibilityNodeInfo enterGameNode = null;
-//        while (enterGameNode == null && !AccessibilityUtil.findIsContainText(service, NODE_TEXT_ENTER_GAME_NORMAL)) {
-//            AccessibilityUtil.logAllChildNodesText(service, 0);
-//            enterGameNode = AccessibilityUtil.findNodeInfo(
-//                    service, NODE_ID_ENTER_GAME_VIP, NODE_TEXT_ENTER_GAME_VIP);
-//        }
         Log.e("QT", "openTime:" + (System.currentTimeMillis() - startTime));
         service.mOpenTime.add(System.currentTimeMillis() - startTime);
     }
@@ -106,7 +100,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
             e.printStackTrace();
         }
         AccessibilityNodeInfo confirmQuitNode = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_CONFIRM_QUIT, NODE_TEXT_CONFIRM_QUIT);
+                service, nodeIdConfirmQuit, nodeTextConfirmQuit);
         if (confirmQuitNode != null) {
             AccessibilityUtil.performClick(confirmQuitNode);
         }
@@ -115,10 +109,10 @@ public class MiGuPlayStabilityService implements IStabilityService {
         boolean isCancelNode = false;
         while (gameViewNode == null) {
             gameViewNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_INSTANT_PLAY, NODE_TEXT_INSTANT_PLAY);
+                    service, nodeIdInstantPlay, nodeTextInstantPlay);
             if (gameViewNode == null) {
                 gameViewNode = AccessibilityUtil.findNodeInfo(
-                        service, NODE_ID_CANCEL_AFTER_QUIT_GAME, NODE_TEXT_CANCEL_AFTER_QUIT_GAME);
+                        service, nodeIdCancelAfterQuitGame, nodeTextCancelAfterQuitGame);
                 if (gameViewNode != null) isCancelNode = true;
             }
         }

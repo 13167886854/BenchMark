@@ -54,10 +54,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class CePingActivity extends Activity implements View.OnClickListener {
-
     private static final String TAG = "CePingActivity";
     private final int REQUEST_STABILITY = 0, REQUEST_FX = 1;
-
     private ImageButton ceshi_fanhui;
     private RecyclerView recyclerView;
     private TextView cepingtv, ceping_phone_name;
@@ -67,7 +65,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private String checked_plat;
     private String platform_kind;
     private Boolean isCloudPhone;
-
     private boolean isCheckStability, isCheckFluency, isCheckTouch, isCheckSoundFrame,
             isCheckCPU, isCheckGPU, isCheckROM, isCheckRAM, isHaveOtherPerformance, isFluencyUntested,
             isGameTouchTested, isAudioVideoTested;
@@ -165,7 +162,14 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }
         }
 
-        isHaveOtherPerformance = isCheckFluency || isCheckTouch || isCheckSoundFrame || isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM;
+        if (isCheckFluency || isCheckTouch || isCheckSoundFrame) {
+            isHaveOtherPerformance = true;
+        } else if (isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM) {
+            isHaveOtherPerformance = true;
+        } else {
+            isHaveOtherPerformance = false;
+        }
+
         isFluencyUntested = intent.getBooleanExtra("isFluencyUntested", false);
         isGameTouchTested = intent.getBooleanExtra("isGameTouchTested", false);
         isAudioVideoTested = intent.getBooleanExtra("isAudioVideoTested", false);
@@ -182,7 +186,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             startFxService();
         }
 
-
         //云游戏流畅性测试
         if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckFluency
                 && !isFluencyUntested
@@ -197,11 +200,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 //                } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checked_plat)) {
 //                    ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
 //                }
-
         } else if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckSoundFrame && !isAudioVideoTested) {
             startGameVAService();
             //Log.d("TWT", "initData: 开始测试游戏音画质量");
-
         } else if (platform_kind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckTouch && !isGameTouchTested) {
             //开始云游戏触控体验测试。。。
             //Log.d("TWT", "开始云游戏触控体验测试");
@@ -269,7 +270,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     CacheConst.KEY_GPU_INFO,
                     getString(R.string.gpu_info_description)
             ));
-
         }
         if (isCheckRAM) {
             ceping_data.add(new CepingData(
@@ -279,7 +279,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     CacheConst.KEY_RAM_INFO,
                     getString(R.string.ram_info_description)
             ));
-
         }
         if (isCheckROM) {
             ceping_data.add(new CepingData(
@@ -430,8 +429,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
         Intent captureIntent = projectionManager.createScreenCaptureIntent();
         startActivityForResult(captureIntent, RECORD_SM_REQUEST_CODE);
-
-
     }
 
 
@@ -481,7 +478,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             Intent captureIntent = projectionManager.createScreenCaptureIntent();
             startActivityForResult(captureIntent, REQUEST_FX);
         }
-
     }
 
     @Override
@@ -601,6 +597,4 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         //unbindService(connection);
         super.onDestroy();
     }
-
-
 }

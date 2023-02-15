@@ -36,7 +36,7 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
         ShuoMingData data = this.data.get(position);
 
-        recyclerViewHolder.shuoming_item_img.setImageResource(data.getShuoming_image());
+        recyclerViewHolder.shuoming_item_img.setImageResource(data.getInfoImage());
         List<LiuChang> list = data.getList();
 
         ItemAdapter adapter = new ItemAdapter(context, list);

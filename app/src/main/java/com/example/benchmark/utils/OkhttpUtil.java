@@ -68,7 +68,7 @@ public class OkhttpUtil {
                         BaseData.gpuRenderer = jsonObject.getString("gpuRenderer");
                         BaseData.gpuVersion = jsonObject.getString("gpuVersion");
                         BaseData.date = jsonObject.getString("date");
-                        BaseData.haveData = true;
+                        BaseData.hasData = true;
                         Looper.prepare();
 //                        Toast.makeText(CePingActivity.this,"获取触控测试数据成功",Toast.LENGTH_SHORT).show();
                         Toast.makeText(context,"获取基础硬件数据成功",Toast.LENGTH_SHORT).show();
@@ -177,7 +177,7 @@ public class OkhttpUtil {
                         TouchData.responseTime = jsonObject.getString("responseTime");
                         TouchData.averageResponseTime = jsonObject.getString("averageResponseTime");
                         TouchData.date = jsonObject.getString("date");
-                        TouchData.haveData = true;
+                        TouchData.hasData = true;
                         Looper.prepare();
 //                        Toast.makeText(CePingActivity.this,"获取触控测试数据成功",Toast.LENGTH_SHORT).show();
                         Toast.makeText(context,"获取触控测试数据成功",Toast.LENGTH_SHORT).show();

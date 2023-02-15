@@ -1,7 +1,7 @@
 package com.example.benchmark.Data;
 
 public class BaseData {
-    public static boolean haveData = false;
+    public static boolean hasData = false;
     public static String availRam = "";
     public static String totalRam = "";
     public static String availStorage = "";

@@ -50,7 +50,7 @@ public class VideoRecordService extends Service {
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
     private String path = "";
-    private boolean running;
+    private boolean isRunning;
     private int width = 720;
     private int height = 1080;
     private int dpi;
@@ -103,15 +103,13 @@ public class VideoRecordService extends Service {
 
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         Log.d(TAG, "onCreate: 121212");
         super.onCreate();
         mContext= VideoRecordService.this;
-        running = false;
+        isRunning = false;
         mediaRecorder = new MediaRecorder();
         createFloatView();
-
     }
 
 
@@ -128,11 +126,10 @@ public class VideoRecordService extends Service {
         this.dpi = dpi;
     }
 
-    private void createFloatView()
-    {
+    private void createFloatView() {
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         //设置window type
         if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -142,11 +139,7 @@ public class VideoRecordService extends Service {
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
         //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags =
-//          LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                LayoutParams.FLAG_NOT_FOCUSABLE
-//          LayoutParams.FLAG_NOT_TOUCHABLE
-        ;
+        wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
@@ -174,8 +167,8 @@ public class VideoRecordService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isClick=false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime=System.currentTimeMillis();
                         break;
@@ -191,15 +184,15 @@ public class VideoRecordService extends Service {
                         endTime=System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
                 //响应点击事件
-                if (isclick&&isAble) {
-                    if(!isRecording){
+                if (isClick&&isAble) {
+                    if (!isRecording) {
                         mFloatView.setText("停止");
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),null,null,null);
 
@@ -207,7 +200,7 @@ public class VideoRecordService extends Service {
                         handler.sendEmptyMessage(START_RECORD);
                         //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
                         //mFloatView.setBackgroundColor(Color.RED);
-                    }else{
+                    } else {
                         //mFloatView.setText("开始");
                         //停止录制
                         handler.sendEmptyMessage(STOP_RECORD);
@@ -234,12 +227,9 @@ public class VideoRecordService extends Service {
             }
         });
 
-        mFloatView.setOnClickListener(new OnClickListener()
-        {
-
+        mFloatView.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 //Toast.makeText(RecordService.this, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
@@ -250,32 +240,31 @@ public class VideoRecordService extends Service {
     }
 
     public boolean startRecord() {
-        if (mediaProjection == null || running) {
+        if (mediaProjection == null || isRunning) {
             return false;
         }
         initRecorder();
         createVirtualDisplay();
         mediaRecorder.start();
-        running = true;
+        isRunning = true;
         Log.d(TAG, "begin:开始录制 ");
         return true;
     }
 
 
     public boolean stopRecord() {
-        if (!running) {
+        if (!isRunning) {
             return false;
         }
 
-        running = false;
+        isRunning = false;
         mediaRecorder.stop();
         mediaRecorder.reset();
         virtualDisplay.release();
         stopSelf();
 
 
-        if(mFloatLayout != null)
-        {
+        if(mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
         }
         return true;
@@ -313,7 +302,7 @@ public class VideoRecordService extends Service {
 
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ScreenRecorder/";
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -329,13 +318,8 @@ public class VideoRecordService extends Service {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
-//        if(mFloatLayout != null)
-//        {
-//            mWindowManager.removeView(mFloatLayout);
-//        }
     }
 
     @Override
@@ -343,18 +327,11 @@ public class VideoRecordService extends Service {
         return START_NOT_STICKY;
     }
 
-//    public class RecordBinder extends Binder {
-//        public RecordService getRecordService() {
-//            return RecordService.this;
-//        }
-//    }
-
     public class RecordBinder extends Binder {
         public VideoRecordService getRecordService() {
             return VideoRecordService.this;
         }
     }
-
 }
 
 
