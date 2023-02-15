@@ -121,25 +121,25 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                     Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(red_wending_cheak.isChecked() || red_yinhua_cheak.isChecked() ) {
+                if (red_wending_cheak.isChecked() || red_yinhua_cheak.isChecked()) {
                     if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
                             || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         popDiaLog.show();
                         return;
                     }
-                }else if(red_chukong_cheak.isChecked()) {
+                } else if (red_chukong_cheak.isChecked()) {
                     //检查是否开启无障碍服务。。。。
-                    if(!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+                    if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         return;
                     }
                     //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
-                }else {
+                } else {
                     Log.d(TAG, "onCreateView: 正常启动");
                 }
-                if(!Settings.canDrawOverlays(getContext())) {
+                if (!Settings.canDrawOverlays(getContext())) {
                     Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
                     Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                             Uri.parse("package:" + getContext().getPackageName()));
@@ -148,7 +148,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                     //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                     startActivity(intentToFloatPermission);
                     return;
-                }else {
+                } else {
                     Toast.makeText(getContext(),"can draw floatWindow", Toast.LENGTH_SHORT);
                 }
                 CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
@@ -247,10 +247,10 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.red_liuchangxing:{
+        switch (v.getId()) {
+            case R.id.red_liuchangxing: {
                 boolean checked = red_liuchang_cheak.isChecked();
-                if (checked){
+                if (checked) {
                     red_liuchang_cheak.setChecked(false);
                     red_liuchang_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
@@ -261,10 +261,10 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 break;
 
             }
-            case R.id.red_wendinxing:{
+            case R.id.red_wendinxing: {
 
                 boolean checked = red_wending_cheak.isChecked();
-                if (checked){
+                if (checked) {
 
                     red_wending_cheak.setChecked(false);
                     red_wending_cheak.setVisibility(View.INVISIBLE);
@@ -276,84 +276,84 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 }
                 break;
             }
-            case R.id.red_chukong:{
+            case R.id.red_chukong: {
 
                 boolean checked = red_chukong_cheak.isChecked();
-                if (checked){
+                if (checked) {
 
                     red_chukong_cheak.setChecked(false);
                     red_chukong_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_chukong_cheak.setVisibility(View.VISIBLE);
                     red_chukong_cheak.setChecked(true);
                 }
                 break;
             }
-            case R.id.red_yinhua:{
+            case R.id.red_yinhua: {
 
                 boolean checked = red_yinhua_cheak.isChecked();
-                if (checked){
+                if (checked) {
                     red_yinhua_cheak.setVisibility(View.INVISIBLE);
                     red_yinhua_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_yinhua_cheak.setVisibility(View.VISIBLE);
                     red_yinhua_cheak.setChecked(true);
                 }
                 break;
             }
-            case R.id.red_cpu:{
+            case R.id.red_cpu: {
 
                 boolean checked = red_cpu_cheak.isChecked();
 
-                if (checked){
+                if (checked) {
                     red_cpu_cheak.setVisibility(View.INVISIBLE);
                     red_cpu_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_cpu_cheak.setVisibility(View.VISIBLE);
                     red_cpu_cheak.setChecked(true);
                 }
                 break;
             }
-            case R.id.red_gpu:{
+            case R.id.red_gpu: {
 
                 boolean checked = red_gpu_cheak.isChecked();
 
-                if (checked){
+                if (checked) {
                     red_gpu_cheak.setVisibility(View.INVISIBLE);
                     red_gpu_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_gpu_cheak.setVisibility(View.VISIBLE);
                     red_gpu_cheak.setChecked(true);
                 }
                 break;
             }
-            case R.id.red_ram:{
+            case R.id.red_ram: {
 
                 boolean checked = red_ram_cheak.isChecked();
 
-                if (checked){
+                if (checked) {
                     red_ram_cheak.setVisibility(View.INVISIBLE);
                     red_ram_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_ram_cheak.setVisibility(View.VISIBLE);
                     red_ram_cheak.setChecked(true);
                 }
                 break;
             }
-            case R.id.red_rom:{
+            case R.id.red_rom: {
 
                 boolean checked = red_rom_cheak.isChecked();
 
-                if (checked){
+                if (checked) {
                     red_rom_cheak.setVisibility(View.INVISIBLE);
                     red_rom_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else{
+                }else {
                     red_rom_cheak.setVisibility(View.VISIBLE);
                     red_rom_cheak.setChecked(true);
                 }
@@ -365,9 +365,9 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
-            case R.id.tengxun_game:{
-                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_Tencent_GAME);
+        switch (checkedId) {
+            case R.id.tengxun_game: {
+                cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_Tencent_GAME);
                 initGameBtn();
                 Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
                 Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng);
@@ -375,8 +375,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
-            case R.id.migu_game:{
-                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_MI_GU_GAME);
+            case R.id.migu_game: {
+                cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_MI_GU_GAME);
                 initGameBtn();
                 Button btn = (Button) getActivity().findViewById(R.id.migu_game);
                 Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou);
@@ -384,8 +384,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
                 break;
             }
-            case R.id.wangyi_game:{
-                cheak_game_map.put("cheaked_game",CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME);
+            case R.id.wangyi_game: {
+                cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME);
                 initGameBtn();
                 Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
                 Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi);
@@ -398,7 +398,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked){
+        if (isChecked) {
                 red_liuchang_cheak.setChecked(true);
                 red_liuchang_cheak.setVisibility(View.VISIBLE);
 
@@ -423,7 +423,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
 
                 red_rom_cheak.setVisibility(View.VISIBLE);
                 red_rom_cheak.setChecked(true);
-        }else{
+        }else {
                 red_liuchang_cheak.setChecked(false);
                 red_liuchang_cheak.setVisibility(View.INVISIBLE);
 
