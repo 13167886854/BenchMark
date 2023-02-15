@@ -115,7 +115,6 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = simpleDateFormat.format(date);
                 Admin.testTime = time;
-                Map<String, Object> localMobileInfo = getInfo(); // 本地手机的规格数据
                 Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
                 if (cheak_game_map.get("cheaked_game") == null) {
                     Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
@@ -135,7 +134,6 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                         startActivity(intent);
                         return;
                     }
-                    //if(isServiceON(this, YourAccessibilityServiceName.class.getName())
                 } else {
                     Log.d(TAG, "onCreateView: 正常启动");
                 }
@@ -145,7 +143,6 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                             Uri.parse("package:" + getContext().getPackageName()));
                     Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:"
                             + getContext().getPackageName()));
-                    //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
                     startActivity(intentToFloatPermission);
                     return;
                 } else {
@@ -170,9 +167,12 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 Log.d(TAG, "onClick: -----------" + red_ram_cheak.isChecked());
                 Log.d(TAG, "onClick: -----------" + red_rom_cheak.isChecked());
 
+                Map<String, Object> localMobileInfo = getInfo(); // 本地手机的规格数据
                 if (red_rom_cheak.isChecked() || red_ram_cheak.isChecked() || red_gpu_cheak.isChecked()
                         || red_cpu_cheak.isChecked()) {
-                    intent.putExtra("localMobileInfo", (Serializable) localMobileInfo);
+                    if (localMobileInfo instanceof Serializable) {
+                        intent.putExtra("localMobileInfo", (Serializable) localMobileInfo);
+                    }
                 }
 
                 intent.putExtra(CacheConst.KEY_PLATFORM_NAME, cheak_game_map.get("cheaked_game"));
@@ -225,23 +225,29 @@ public class GameFragment extends Fragment implements View.OnClickListener,
 
 
     public void initGameBtn() {
-        Drawable drawable;
-        Button btn;
         //腾讯
-        btn = (Button) getActivity().findViewById(R.id.tengxun_game);
-        drawable = getResources().getDrawable(R.drawable.tengxunxianfeng_dark);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        if (getActivity().findViewById(R.id.tengxun_game) instanceof  Button){
+            Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
+            Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng_dark);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+
+        }
         //咪咕
-        btn = (Button) getActivity().findViewById(R.id.migu_game);
-        drawable = getResources().getDrawable(R.drawable.migukuaiyou_dark);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        if (getActivity().findViewById(R.id.migu_game) instanceof  Button){
+            Button btn = (Button) getActivity().findViewById(R.id.migu_game);
+            Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou_dark);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        }
         //网易
-        btn = (Button) getActivity().findViewById(R.id.wangyi_game);
-        drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi_dark);
-        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-        btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        if (getActivity().findViewById(R.id.wangyi_game) instanceof  Button){
+            Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
+            Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi_dark);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+        }
+
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -249,55 +255,48 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.red_liuchangxing: {
-                boolean checked = red_liuchang_cheak.isChecked();
-                if (checked) {
+                boolean isChecked = red_liuchang_cheak.isChecked();
+                if (isChecked) {
                     red_liuchang_cheak.setChecked(false);
                     red_liuchang_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_liuchang_cheak.setChecked(true);
                     red_liuchang_cheak.setVisibility(View.VISIBLE);
                 }
                 break;
-
             }
             case R.id.red_wendinxing: {
-
-                boolean checked = red_wending_cheak.isChecked();
-                if (checked) {
-
+                boolean isChecked = red_wending_cheak.isChecked();
+                if (isChecked) {
                     red_wending_cheak.setChecked(false);
                     red_wending_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
-
-                }else {
+                } else {
                     red_wending_cheak.setVisibility(View.VISIBLE);
                     red_wending_cheak.setChecked(true);
                 }
                 break;
             }
             case R.id.red_chukong: {
-
-                boolean checked = red_chukong_cheak.isChecked();
-                if (checked) {
-
+                boolean isChecked = red_chukong_cheak.isChecked();
+                if (isChecked) {
                     red_chukong_cheak.setChecked(false);
                     red_chukong_cheak.setVisibility(View.INVISIBLE);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_chukong_cheak.setVisibility(View.VISIBLE);
                     red_chukong_cheak.setChecked(true);
                 }
                 break;
             }
             case R.id.red_yinhua: {
-
-                boolean checked = red_yinhua_cheak.isChecked();
-                if (checked) {
+                boolean isChecked = red_yinhua_cheak.isChecked();
+                if (isChecked) {
                     red_yinhua_cheak.setVisibility(View.INVISIBLE);
                     red_yinhua_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_yinhua_cheak.setVisibility(View.VISIBLE);
                     red_yinhua_cheak.setChecked(true);
                 }
@@ -305,13 +304,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             }
             case R.id.red_cpu: {
 
-                boolean checked = red_cpu_cheak.isChecked();
+                boolean isChecked = red_cpu_cheak.isChecked();
 
-                if (checked) {
+                if (isChecked) {
                     red_cpu_cheak.setVisibility(View.INVISIBLE);
                     red_cpu_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_cpu_cheak.setVisibility(View.VISIBLE);
                     red_cpu_cheak.setChecked(true);
                 }
@@ -319,13 +318,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             }
             case R.id.red_gpu: {
 
-                boolean checked = red_gpu_cheak.isChecked();
+                boolean isChecked = red_gpu_cheak.isChecked();
 
-                if (checked) {
+                if (isChecked) {
                     red_gpu_cheak.setVisibility(View.INVISIBLE);
                     red_gpu_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_gpu_cheak.setVisibility(View.VISIBLE);
                     red_gpu_cheak.setChecked(true);
                 }
@@ -333,13 +332,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             }
             case R.id.red_ram: {
 
-                boolean checked = red_ram_cheak.isChecked();
+                boolean isChecked = red_ram_cheak.isChecked();
 
-                if (checked) {
+                if (isChecked) {
                     red_ram_cheak.setVisibility(View.INVISIBLE);
                     red_ram_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_ram_cheak.setVisibility(View.VISIBLE);
                     red_ram_cheak.setChecked(true);
                 }
@@ -347,13 +346,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             }
             case R.id.red_rom: {
 
-                boolean checked = red_rom_cheak.isChecked();
+                boolean isChecked = red_rom_cheak.isChecked();
 
-                if (checked) {
+                if (isChecked) {
                     red_rom_cheak.setVisibility(View.INVISIBLE);
                     red_rom_cheak.setChecked(false);
                     game_select_all.setChecked(false);
-                }else {
+                } else {
                     red_rom_cheak.setVisibility(View.VISIBLE);
                     red_rom_cheak.setChecked(true);
                 }
@@ -369,28 +368,34 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             case R.id.tengxun_game: {
                 cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_Tencent_GAME);
                 initGameBtn();
-                Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
-                Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                if (getActivity().findViewById(R.id.tengxun_game) instanceof  Button) {
+                    Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
+                    Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                }
                 break;
             }
             case R.id.migu_game: {
                 cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_MI_GU_GAME);
                 initGameBtn();
-                Button btn = (Button) getActivity().findViewById(R.id.migu_game);
-                Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                if (getActivity().findViewById(R.id.migu_game) instanceof  Button) {
+                    Button btn = (Button) getActivity().findViewById(R.id.migu_game);
+                    Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                }
                 break;
             }
             case R.id.wangyi_game: {
                 cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME);
                 initGameBtn();
-                Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
-                Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                if (getActivity().findViewById(R.id.wangyi_game) instanceof  Button) {
+                    Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
+                    Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); //设置底图标
+                }
                 break;
             }
         }
@@ -476,12 +481,10 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         }
         Log.d(TAG, "getInfo: " + storageInfo);
 
-        //String cpuName = DeviceInfoUtils.getCpuName();
         int cpuNumCores = DeviceInfoUtils.getCpuNumCores();
         Map<String, Object> res = new HashMap<>();
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
-        //res.put("CPUName", cpuName);
         res.put("CPUCores", cpuNumCores);
         res.put("GPURenderer", GPURenderer.gl_renderer);
         res.put("GPUVendor", GPURenderer.gl_vendor);
