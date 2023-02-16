@@ -3,12 +3,13 @@ package com.example.benchmark.utils;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.chinamobile.bcop.api.sdk.constant.HttpMethod;
-import com.example.benchmark.Data.MobileCloud;
-import com.example.benchmark.Data.RedFingure;
+import com.example.benchmark.data.MobileCloud;
+import com.example.benchmark.data.RedFingure;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 public class RequestDataUtils {
+    private static final String TAG = "RequestDataUtils";
     //主线程实例化Handler
     private static Handler mHandler = new Handler(Looper.myLooper()) {
         @Override
@@ -125,7 +127,7 @@ public class RequestDataUtils {
             RedFingure.cpumaxrate=cpu_maxrate;
             RedFingure.cpuname=cpu_zhilingji;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getRedFingureInfo: ", e);
         }
     }
 

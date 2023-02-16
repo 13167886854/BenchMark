@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#EBF0FF"
-    tools:context=".Activity.MainActivity">
+    tools:context=".activity.MainActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:padding="10dp"

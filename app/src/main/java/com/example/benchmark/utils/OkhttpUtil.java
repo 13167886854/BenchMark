@@ -5,10 +5,10 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.benchmark.Data.AudioVideoData;
-import com.example.benchmark.Data.BaseData;
-import com.example.benchmark.Data.SmoothData;
-import com.example.benchmark.Data.TouchData;
+import com.example.benchmark.data.AudioVideoData;
+import com.example.benchmark.data.BaseData;
+import com.example.benchmark.data.SmoothData;
+import com.example.benchmark.data.TouchData;
 
 import org.json.JSONException;
 import org.json.JSONObject;

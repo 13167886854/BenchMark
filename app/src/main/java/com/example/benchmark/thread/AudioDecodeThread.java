@@ -1,7 +1,6 @@
 package com.example.benchmark.thread;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -13,12 +12,10 @@ import android.media.MediaFormat;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.benchmark.Activity.AudioVideoActivity;
-import com.example.benchmark.R;
+import com.example.benchmark.activity.AudioVideoActivity;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class AudioDecodeThread extends Thread implements Runnable {
     private static final String TAG = AudioDecodeThread.class.getSimpleName();
@@ -42,7 +39,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
 //            mMediaExtractor.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
             mMediaExtractor.setDataSource(mMp4FilePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "AudioDecodeThread: ", e);
         }
     }
 
@@ -189,7 +186,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
             mMediaExtractor.release();
             audioTrack.release();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "run: ", e);
         }
     }
 

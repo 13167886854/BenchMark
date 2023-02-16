@@ -51,21 +51,21 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
-            android:name=".Activity.TestInfoActivity"
+            android:name=".activity.TestInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".Activity.TestGameTouchActivity"
+            android:name=".activity.TestGameTouchActivity"
             android:exported="false" />
 
         <service
-            android:name=".Service.MyAccessibilityService"
+            android:name=".service.MyAccessibilityService"
             android:exported="true"
             android:foregroundServiceType="mediaProjection"
             android:label="@string/accessibility_description"
@@ -80,10 +80,10 @@
         </service>
 
         <activity
-            android:name=".Activity.AudioVideoActivity"
+            android:name=".activity.AudioVideoActivity"
             android:exported="true" />
         <activity
-            android:name=".Activity.StartActivity"
+            android:name=".activity.StartActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -93,51 +93,51 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.TestSMActivity"
+            android:name=".activity.TestSMActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.CheckFrameUpateActivity"
+            android:name=".activity.CheckFrameUpateActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.CePingActivity"
+            android:name=".activity.CePingActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.JutiZhibiaoActivity"
+            android:name=".activity.JutiZhibiaoActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Activity.ShuoMingActivity"
+            android:name=".activity.ShuoMingActivity"
             android:launchMode="singleTask" />
 
         <service
-            android:name=".Service.FxService"
+            android:name=".service.FxService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
         <service
-            android:name=".Service.GameSmoothTestService"
+            android:name=".service.GameSmoothTestService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
         <service
-            android:name=".Service.GameTouchTestService"
+            android:name=".service.GameTouchTestService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
         <service
-            android:name=".Service.GameVATestService"
+            android:name=".service.GameVATestService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
         <service
-            android:name=".Service.VideoRecordService"
+            android:name=".service.VideoRecordService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
         <service
-            android:name=".Service.BothRecordService"
+            android:name=".service.BothRecordService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />

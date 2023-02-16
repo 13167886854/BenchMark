@@ -20,6 +20,8 @@ import java.util.regex.Pattern;
  */
 public class DeviceInfoUtils {
 
+    private static final String TAG = "DeviceInfoUtils";
+
     /**
      * 获取设备宽度（px）
      */
@@ -174,13 +176,9 @@ public class DeviceInfoUtils {
             BufferedReader br = new BufferedReader(fr);
             String text = br.readLine();
             String[] array = text.split(":\\s+", 2);
-            for (int i = 0; i < array.length; i++) {
-            }
             return array[1];
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getCpuName: ", e);
         }
         return null;
     }
@@ -205,10 +203,7 @@ public class DeviceInfoUtils {
             //Return the number of cores (virtual CPU devices)
             return files.length;
         } catch (Exception e) {
-            //Print exception
-            // Log.d(TAG, "CPU Count: Failed.");
-            e.printStackTrace();
-            //Default to return 1 core
+            Log.e(TAG, "getCpuNumCores: ", e);
             return 1;
         }
     }
@@ -233,8 +228,8 @@ public class DeviceInfoUtils {
                 result = result + new String(re);
             }
             in.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "getMaxCpuFreq: ", e);
             result = "N/A";
         }
         return result.trim() + "Hz";
@@ -256,8 +251,8 @@ public class DeviceInfoUtils {
                 result = result + new String(re);
             }
             in.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            Log.e(TAG, "getMinCpuFreq: ", e);
             result = "N/A";
         }
         return result.trim() + "Hz";
@@ -273,10 +268,8 @@ public class DeviceInfoUtils {
             BufferedReader br = new BufferedReader(fr);
             String text = br.readLine();
             result = text.trim() + "Hz";
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getCurCpuFreq: ", e);
         }
         return result;
     }

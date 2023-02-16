@@ -1,6 +1,6 @@
 package com.example.benchmark.InitbenchMarkData;
 
-import com.example.benchmark.Data.LiuChang;
+import com.example.benchmark.data.LiuChang;
 
 import java.util.ArrayList;
 import java.util.List;

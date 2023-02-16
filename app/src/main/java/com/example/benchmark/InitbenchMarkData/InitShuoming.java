@@ -1,6 +1,6 @@
 package com.example.benchmark.InitbenchMarkData;
 
-import com.example.benchmark.Data.ShuoMingData;
+import com.example.benchmark.data.ShuoMingData;
 import com.example.benchmark.R;
 
 import java.util.ArrayList;

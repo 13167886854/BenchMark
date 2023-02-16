@@ -13,8 +13,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.benchmark.Activity.CePingActivity;
-import com.example.benchmark.Service.FxService;
+import com.example.benchmark.activity.CePingActivity;
+import com.example.benchmark.service.FxService;
 
 public class ServiceUtil {
     /**

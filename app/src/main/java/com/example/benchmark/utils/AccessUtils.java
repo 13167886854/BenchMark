@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -64,7 +65,7 @@ public class AccessUtils {
             intent.setData(Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("AccessUtils", "requestIgnoreBatteryOptimizations: ", e);
         }
     }
 
@@ -76,7 +77,7 @@ public class AccessUtils {
             intent1.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             context.startActivity(intent1);
         }catch (Exception e){
-
+            Log.e("AccessUtils", "openAccessibilityService: ", e);
         }
     }
 }

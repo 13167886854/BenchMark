@@ -5,8 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.benchmark.Data.Admin;
-import com.example.benchmark.Data.YinHuaData;
+import com.example.benchmark.data.Admin;
+import com.example.benchmark.data.YinHuaData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -250,8 +250,6 @@ public class ScoreUtil {
                         }
                     });
         }
-
-
     }
 
     public static float getAverageFPS() {

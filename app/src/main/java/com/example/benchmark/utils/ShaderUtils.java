@@ -55,7 +55,7 @@ public class ShaderUtils {
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            Log.e("ShaderUtils", "readRawTextFile: ", e);;
         }
         return result;
     }

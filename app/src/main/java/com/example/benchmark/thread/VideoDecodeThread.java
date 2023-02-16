@@ -2,7 +2,6 @@ package com.example.benchmark.thread;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.media.MediaCodec;
@@ -14,8 +13,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.example.benchmark.Activity.AudioVideoActivity;
-import com.example.benchmark.R;
+import com.example.benchmark.activity.AudioVideoActivity;
 import com.example.benchmark.utils.SpeedManager;
 
 import java.io.IOException;
@@ -41,7 +39,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             //mMediaExtractor.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
             mMediaExtractor.setDataSource(mMp4FilePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "VideoDecodeThread: ", e);
         }
     }
 
@@ -161,7 +159,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mVideoDecoder.release();
        // } catch (IOException | InterruptedException e) {
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "run: ", e);
         }
     }
     /**

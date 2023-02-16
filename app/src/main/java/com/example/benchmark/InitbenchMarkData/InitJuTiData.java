@@ -1,6 +1,6 @@
 package com.example.benchmark.InitbenchMarkData;
 
-import com.example.benchmark.Data.JuTiData;
+import com.example.benchmark.data.JuTiData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

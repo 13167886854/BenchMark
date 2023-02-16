@@ -6,7 +6,7 @@ import com.chinamobile.bcop.api.sdk.auth.signature.ISignature;
 import com.chinamobile.bcop.api.sdk.auth.signature.v2.Credential;
 import com.chinamobile.bcop.api.sdk.auth.signature.v2.SignatureGenerator;
 import com.chinamobile.bcop.api.sdk.constant.HttpMethod;
-import com.example.benchmark.Data.MobileCloud;
+import com.example.benchmark.data.MobileCloud;
 
 import java.util.HashMap;
 import java.util.Map;

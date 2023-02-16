@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.benchmark.Data.YinHuaData;
+import com.example.benchmark.data.YinHuaData;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,12 +25,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Recorder {
 
-    static final String TAG = "myTest";
+    static final String TAG = "Recorder";
     public boolean isRecording = false;
     private AudioRecord mRecorder;
 
@@ -79,6 +77,7 @@ public class Recorder {
 
             } catch (NoClassDefFoundError e) {
                 Toast.makeText(context, "System Audio Capture is not Supported on this Device", Toast.LENGTH_LONG).show();
+
                 return false;
             }
             AudioFormat format = new AudioFormat.Builder()
@@ -139,7 +138,6 @@ public class Recorder {
             rawOutput.createNewFile();
         } catch (IOException e) {
             Log.e(TAG, "createAudioFile: " + e.toString());
-            e.printStackTrace();
         }
 
     }
@@ -208,7 +206,7 @@ public class Recorder {
                 }
             }
         } catch (IOException e) {
-            throw e;
+            Log.e(TAG, "fullyReadFileToBytes: ", e);
         } finally {
             fis.close();
         }
@@ -247,8 +245,9 @@ public class Recorder {
 
     void writeAudioFile() {
         try {
-            FileOutputStream outputStream = new FileOutputStream(rawOutput.getAbsolutePath());
-            short data[] = new short[bufferElements2Rec];
+            String absolutePath = rawOutput.getAbsolutePath();
+            FileOutputStream outputStream = new FileOutputStream(absolutePath);
+            short[] data = new short[bufferElements2Rec];
 
             while (isRecording) {
                 mRecorder.read(data, 0, bufferElements2Rec);
@@ -266,10 +265,8 @@ public class Recorder {
 
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File Not Found: " + e.toString());
-            e.printStackTrace();
         } catch (IOException e) {
             Log.e(TAG, "IO Exception: " + e.toString());
-            e.printStackTrace();
         }
     }
 
@@ -284,16 +281,13 @@ public class Recorder {
         try {
             output.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
             Log.e(TAG, "startProcessing: " + e);
         }
 
         try {
             rawToWave(rawOutput, output);
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            //rawOutput.delete();
+            Log.e(TAG, "startProcessing: ", e);
         }
     }
 

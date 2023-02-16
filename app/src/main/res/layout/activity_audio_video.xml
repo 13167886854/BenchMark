@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/layout"
-    tools:context=".Activity.AudioVideoActivity">
+    tools:context=".activity.AudioVideoActivity">
 
     <SurfaceView
         android:id="@+id/surface_view"

@@ -5,8 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.benchmark.Service.MyAccessibilityService;
-import com.example.benchmark.Service.GameTouchTestService;
+import com.example.benchmark.service.MyAccessibilityService;
+import com.example.benchmark.service.GameTouchTestService;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -126,7 +126,6 @@ public class TapUtil {
                                         .enqueue(new Callback() {
                                             @Override
                                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                                e.printStackTrace();
                                                 Log.d("zzl", "onFailure: call===>" + e.toString());
                                             }
 

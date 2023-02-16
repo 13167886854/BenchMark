@@ -119,7 +119,7 @@ public class RomUtil {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "getProp: ", e);
                 }
             }
         }

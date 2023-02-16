@@ -1,6 +1,7 @@
 package com.example.benchmark.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
@@ -55,7 +56,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
                     result = true;
                 }
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e("OnSwipeTouchListener", "onFling: ", exception);
             }
             return result;
         }

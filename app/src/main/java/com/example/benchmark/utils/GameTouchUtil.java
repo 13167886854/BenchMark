@@ -1,10 +1,6 @@
 package com.example.benchmark.utils;
 
-import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.example.benchmark.Activity.TestGameTouchActivity;
 
 import java.util.ArrayList;
 

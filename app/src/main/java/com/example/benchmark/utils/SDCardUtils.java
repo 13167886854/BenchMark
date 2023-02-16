@@ -26,6 +26,7 @@ public class SDCardUtils {
 
     private static final int INTERNAL_STORAGE = 0;
     private static final int EXTERNAL_STORAGE = 1;
+    private static final String TAG = "SDCardUtils";
 
     /**
      * 获取 手机 RAM 信息
@@ -130,7 +131,7 @@ public class SDCardUtils {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "getStoragePath: ", e);
         }
         return null;
     }
@@ -162,7 +163,7 @@ public class SDCardUtils {
             firstLine = br.readLine().split("\\s+")[1];
             br.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "getTotalRAMOther: ", e);
         }
         if (firstLine != null) {
 

@@ -1,6 +1,8 @@
 package com.example.benchmark.utils;
 
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class MemInfoUtil {
     private static final int MB = 1024 * 1024;
     //定义KB的计算常量
     private static final int KB = 1024;
+    private static final String TAG = "MemInfoUtil";
 
     public static List<String> getMemInfo() {
         List<String> result = new ArrayList<>();
@@ -34,7 +37,7 @@ public class MemInfoUtil {
             }
             br.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getMemInfo: ", e);
         }
 
         return result;
@@ -104,7 +107,7 @@ public class MemInfoUtil {
         try {
             result = getFieldFromMeminfo("MemTotal");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getMemTotal: ", e);
         }
 
         return result;
@@ -117,7 +120,7 @@ public class MemInfoUtil {
         try {
             result = getFieldFromMeminfo("MemAvailable");
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getMemAvailable: ", e);
         }
         return bytes2kb(Float.parseFloat(result.substring(0, result.length() - 3)) * 1024 + 282 * MB);
     }

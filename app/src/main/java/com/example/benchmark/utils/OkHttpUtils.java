@@ -1,4 +1,6 @@
 package com.example.benchmark.utils;
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import okhttp3.*;
 
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class OkHttpUtils {
+    private static final String TAG = "MyOkHttpUtils";
     private static volatile OkHttpClient okHttpClient = null;
     private static volatile Semaphore semaphore = null;
     private Map<String, String> headerMap;
@@ -134,7 +137,7 @@ public class OkHttpUtils {
                             append("&");
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "get: ", e);
             }
             urlBuilder.deleteCharAt(urlBuilder.length() - 1);
         }
@@ -177,12 +180,14 @@ public class OkHttpUtils {
         setHeader(request);
         try {
             Response response = okHttpClient.newCall(request.build()).execute();
-            assert response.body() != null;
-            return response.body().string();
+            if (response.body() != null) {
+                return response.body().toString();
+            }
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "sync: ", e);
             return "请求失败：" + e.getMessage();
         }
+        return "未收到数据";
     }
 
     /**
@@ -199,15 +204,16 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                assert response.body() != null;
-                buffer.append(response.body().string());
-                getSemaphoreInstance().release();
+                if (response.body() != null) {
+                    buffer.append(response.body().string());
+                    getSemaphoreInstance().release();
+                }
             }
         });
         try {
             getSemaphoreInstance().acquire();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG, "async: ", e);
         }
         return buffer.toString();
     }
@@ -227,8 +233,9 @@ public class OkHttpUtils {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                assert response.body() != null;
-                callBack.onSuccessful(call, response.body().string());
+                if (response.body() != null) {
+                    callBack.onSuccessful(call, response.body().toString());
+                }
             }
         });
     }
@@ -245,7 +252,7 @@ public class OkHttpUtils {
                     request.addHeader(entry.getKey(), entry.getValue());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "setHeader: ", e);
             }
         }
     }
@@ -263,7 +270,7 @@ public class OkHttpUtils {
             sc.init(null, trustAllCerts, new SecureRandom());
             ssfFactory = sc.getSocketFactory();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "createSSLSocketFactory: ", e);
         }
         return ssfFactory;
     }
