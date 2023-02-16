@@ -591,7 +591,7 @@ public class ScoreUtil {
             String resolution,
             float maxDiffValue
     ) {
-        if (YinHuaData.PESQ == null || YinHuaData.SSIM == null || YinHuaData.PSNR == null) {
+        if (YinHuaData.pesq == null || YinHuaData.ssim == null || YinHuaData.psnr == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -603,16 +603,16 @@ public class ScoreUtil {
             timer.schedule(task, 5000);
             return;
         }
-        float PSNR = Float.parseFloat(YinHuaData.PSNR);
-        float SSIM = Float.parseFloat(YinHuaData.SSIM);
-        float PESQ = Float.parseFloat(YinHuaData.PESQ);
+        float PSNR = Float.parseFloat(YinHuaData.psnr);
+        float SSIM = Float.parseFloat(YinHuaData.ssim);
+        float PESQ = Float.parseFloat(YinHuaData.pesq);
 
         // 保存音画质量结果
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
-        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.PESQ);
-        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.PSNR);
-        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.SSIM);
+        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.pesq);
+        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.psnr);
+        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.ssim);
 
 
         // 计算音画质量分数
@@ -627,7 +627,7 @@ public class ScoreUtil {
         int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + D3 + D4);
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
-        if (YinHuaData.PESQ != null && YinHuaData.SSIM != null && YinHuaData.PSNR != null) {
+        if (YinHuaData.pesq != null && YinHuaData.ssim != null && YinHuaData.psnr != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)

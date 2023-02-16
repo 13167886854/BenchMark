@@ -48,10 +48,11 @@ public class GameTouchTestService extends Service {
     private static final int STOP_RECORD = 2;
     private static final String TAG = "TWT";
 
-    //定义浮动窗口布局
+    // 定义浮动窗口布局
     LinearLayout mFloatLayout;
     LayoutParams wmParams;
-    //创建浮动窗口设置布局参数的对象
+
+    // 创建浮动窗口设置布局参数的对象
     WindowManager mWindowManager;
     TextView mFloatView;
 
@@ -71,11 +72,12 @@ public class GameTouchTestService extends Service {
     private Context mContext;
     private long startTime;
     private long endTime;
-    //private boolean isColor=true;
+
+    // private boolean isColor=true;
     private boolean isRecording = false;
     private int statusBarHeight;
 
-    //private Messenger mMessenger;
+
 
 
 
@@ -85,25 +87,21 @@ public class GameTouchTestService extends Service {
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case START_RECORD:
-                    //mFloatView.setText("停止");
+                    // mFloatView.setText("停止");
                     isRecording =! isRecording;
                     startRecord();
 
                     break;
                 case STOP_RECORD:
                     isRecording =! isRecording;
-                    //点击结束录制后休息1s后才能继续录制
+                    // 点击结束录制后休息1s后才能继续录制
                     isAble = false;
-                    //mFloatView.setText("开始");
-                    //gameTouchUtil.setVideoEndTime(System.currentTimeMillis());
                     stopRecord();
-
                     Intent intent = new Intent(mContext, TestGameTouchActivity.class);
                     intent.putExtra("path", path);
                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     break;
-
             }
             super.handleMessage(msg);
         }
@@ -116,15 +114,10 @@ public class GameTouchTestService extends Service {
         Log.d(TAG, "onCreate: 121212");
         super.onCreate();
         mContext = GameTouchTestService.this;
-//        HandlerThread serviceThread = new HandlerThread("service_thread",
-//                android.os.Process.THREAD_PRIORITY_BACKGROUND);
-//        serviceThread.start();
         running = false;
         mediaRecorder = new MediaRecorder();
         createFloatView();
-
     }
-
 
 
     @Override
@@ -143,49 +136,50 @@ public class GameTouchTestService extends Service {
     {
         Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
-        //获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        //设置window type
+        // 获取WindowManagerImpl.CompatModeWrapper
+        if(mContext.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager) {
+            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        }
+        // 设置window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             wmParams.type = LayoutParams.TYPE_TOAST;
         }
-        //设置图片格式，效果为背景透明
+        // 设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
-        //设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags =
-//          LayoutParams.FLAG_NOT_TOUCH_MODAL |
-                LayoutParams.FLAG_NOT_FOCUSABLE
-//          LayoutParams.FLAG_NOT_TOUCHABLE
-        ;
-        //调整悬浮窗显示的停靠位置为左侧置顶
+        // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
+        wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
+        // 调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
         wmParams.x = screenWidth / 2;
         wmParams.y = screenHeight;
-        //设置悬浮窗口长宽数据
+        // 设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
-        //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
-        mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText2);
+        // 获取浮动窗口视图所在布局
+        if (inflater.inflate(R.layout.record_float2, null) instanceof LinearLayout) {
+            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
+        }
+        if (mFloatLayout.findViewById(R.id.recordText2) instanceof  TextView) {
+            mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText2);
+        }
         mWindowManager.addView(mFloatLayout, wmParams);
 
-        //获取状态栏的高度
+        // 获取状态栏的高度
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // handler.sendEmptyMessage(1);
-        //浮动窗口按钮
+        // 浮动窗口按钮
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        //设置监听浮动窗口的触摸移动
+        // 设置监听浮动窗口的触摸移动
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isclick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -209,28 +203,22 @@ public class GameTouchTestService extends Service {
                         }
                         break;
                 }
-                //响应点击事件
+                // 响应点击事件
                 if (isclick && isAble) {
                     if (!isRecording) {
                         mFloatView.setText("停止");
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 getDrawable(R.drawable.ic_stop), null, null, null);
 
-                        //开始录制
+                        // 开始录制
                         handler.sendEmptyMessage(START_RECORD);
-                        //handler.sendEmptyMessageDelayed(START_AUTO_TAP,1500);
-                        //mFloatView.setBackgroundColor(Color.RED);
                     } else {
-                        //mFloatView.setText("开始");
-                        //停止录制
-                        //handler.sendEmptyMessageDelayed(STOP_RECORD,500);
-                        //mFloatView.setBackgroundColor(Color.GREEN);
+                        // 停止录制
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
                                 getDrawable(R.drawable.ic_rest), null, null, null);
                         mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
 
-
-                        Runnable r = new Runnable() {
+                        Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
                                 if (handler != null) {
@@ -241,47 +229,53 @@ public class GameTouchTestService extends Service {
                                 }
                             }
                         };
-                        //主线程中调用：
-                        handler.postDelayed(r, 1000);//延时1000毫秒
+                        // 主线程中调用：
+                        handler.postDelayed(runnable, 1000); // 延时1000毫秒
                     }
-                    //Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
         });
 
-        mFloatView.setOnClickListener(new OnClickListener()
-        {
-
+        mFloatView.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                //Toast.makeText(RecordService.this, "onClick", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
             }
         });
     }
 
+    /**
+     * @description: setMediaProject
+     * @param project description
+     * @return void
+     * @throws
+     * @date 2023/2/16 15:30
+     */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
+
 
     public boolean startRecord() {
         if (mediaProjection == null || running) {
             return false;
         }
         DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels;
-        height = metrics.heightPixels;
-        dpi = metrics.densityDpi;
-        initRecorder();
-        createVirtualDisplay();
-        mediaRecorder.start();
-        gameTouchUtil.setVideoStartTime(System.currentTimeMillis());
-        tapUtil.GameTouchTap(GameTouchTestService.this);
-        running = true;
-        Log.d(TAG, "begin:开始录制 ");
+        if (this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+            width = metrics.widthPixels;
+            height = metrics.heightPixels;
+            dpi = metrics.densityDpi;
+            initRecorder();
+            createVirtualDisplay();
+            mediaRecorder.start();
+            gameTouchUtil.setVideoStartTime(System.currentTimeMillis());
+            tapUtil.GameTouchTap(GameTouchTestService.this);
+            running = true;
+            Log.d(TAG, "begin:开始录制 ");
+        }
         return true;
     }
 
@@ -299,11 +293,9 @@ public class GameTouchTestService extends Service {
         mediaRecorder.stop();
         mediaRecorder.reset();
         virtualDisplay.release();
-        //mediaProjection.stop();
         Log.d(TAG, "begin:结束录制 ");
         gameTouchUtil.setVideoEndTime(System.currentTimeMillis());
         stopSelf();
-
 
         if (mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
@@ -318,14 +310,11 @@ public class GameTouchTestService extends Service {
 
     private void initRecorder() {
         try {
-            //mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mediaRecorder.setOutputFile(path);
-            //mediaRecorder.setVideoSize(width, height);
-            mediaRecorder.setVideoSize(width, height);//横向录屏
+            mediaRecorder.setVideoSize(width, height); // 横向录屏
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
@@ -345,15 +334,12 @@ public class GameTouchTestService extends Service {
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
-                    return null;
+                    return "null";
                 }
             }
-
-            //Toast.makeText(getApplicationContext(), rootDir, Toast.LENGTH_SHORT).show();
-
             return rootDir;
         } else {
-            return null;
+            return "null";
         }
     }
 
@@ -361,10 +347,6 @@ public class GameTouchTestService extends Service {
     public void onDestroy()
     {
         super.onDestroy();
-//        if(mFloatLayout != null)
-//        {
-//            mWindowManager.removeView(mFloatLayout);
-//        }
     }
 
     @Override
@@ -372,18 +354,11 @@ public class GameTouchTestService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-//    public class RecordBinder extends Binder {
-//        public RecordService getRecordService() {
-//            return RecordService.this;
-//        }
-//    }
-
     public class RecordBinder extends Binder {
         public GameTouchTestService getRecordService() {
             return GameTouchTestService.this;
         }
     }
-
 }
 
 

@@ -51,7 +51,7 @@ public class Recorder {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
         // 判断平台
-        String platformKind = YinHuaData.platform_type;
+        String platformKind = YinHuaData.platformType;
         //file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
 
         //如果是云手机平台

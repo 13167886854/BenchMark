@@ -51,7 +51,9 @@ public class MiGuPlayStabilityService implements IStabilityService {
         if (!isClickInstantPlay) {
             AccessibilityNodeInfo instantPlay = AccessibilityUtil.findNodeInfo(service,
                     nodeIdInstantPlay, nodeTextInstantPlay);
-            if (instantPlay == null) return;
+            if (instantPlay == null) {
+                return;
+            }
             AccessibilityUtil.performClick(instantPlay);
             startControlCloudPhone();
             startQuitCloudPhone();
@@ -61,6 +63,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
     @Override
     public void startControlCloudPhone() {
         long startTime = System.currentTimeMillis();
+        Log.e("QT", "startTime:" + startTime);
         try {
             Thread.sleep(1000L);
         } catch (InterruptedException e) {
@@ -82,7 +85,9 @@ public class MiGuPlayStabilityService implements IStabilityService {
             AccessibilityUtil.performClick(continueGameNode);
         }
         while (!AccessibilityUtil.findIsContainText(service, "100%")
-                || !AccessibilityUtil.findIsContainText(service, "启动完成"));
+                || !AccessibilityUtil.findIsContainText(service, "启动完成")) {
+            Log.d("QT", "服务启动中" );
+        }
         Log.e("QT", "openTime:" + (System.currentTimeMillis() - startTime));
         service.mOpenTime.add(System.currentTimeMillis() - startTime);
     }
@@ -106,6 +111,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
             AccessibilityUtil.performClick(confirmQuitNode);
         }
         long quitTime = System.currentTimeMillis();
+        Log.e("QT", "quitTime:" + quitTime);
         AccessibilityNodeInfo gameViewNode = null;
         boolean isCancelNode = false;
         while (gameViewNode == null) {
@@ -114,11 +120,15 @@ public class MiGuPlayStabilityService implements IStabilityService {
             if (gameViewNode == null) {
                 gameViewNode = AccessibilityUtil.findNodeInfo(
                         service, nodeIdCancelAfterQuitGame, nodeTextCancelAfterQuitGame);
-                if (gameViewNode != null) isCancelNode = true;
+                if (gameViewNode != null) {
+                    isCancelNode = true;
+                }
             }
         }
         service.mQuitTimes.add(System.currentTimeMillis() - quitTime);
-        if (isCancelNode) AccessibilityUtil.performClick(gameViewNode);
+        if (isCancelNode) {
+            AccessibilityUtil.performClick(gameViewNode);
+        }
         isClickInstantPlay = false;
         mCurrentMonitorNum++;
     }

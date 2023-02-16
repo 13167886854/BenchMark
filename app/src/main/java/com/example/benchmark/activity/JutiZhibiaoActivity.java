@@ -149,9 +149,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 data = new ArrayList<>();
                 data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
                 data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "帧"));
-                data.add(new JuTiData("PSNR", YinHuaData.PSNR));
-                data.add(new JuTiData("SSIM", YinHuaData.SSIM));
-                data.add(new JuTiData("PESQ", YinHuaData.PESQ));
+                data.add(new JuTiData("PSNR", YinHuaData.psnr));
+                data.add(new JuTiData("SSIM", YinHuaData.ssim));
+                data.add(new JuTiData("PESQ", YinHuaData.pesq));
                 break;
             }
             case CacheConst.KEY_CPU_INFO: {

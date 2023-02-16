@@ -16,49 +16,52 @@ import java.util.Map;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public final class DecodeFormatManager {
-
     /**
      * 所有的
      */
-    public static final Map<DecodeHintType,Object> ALL_HINTS = new EnumMap<>(DecodeHintType.class);
+    public static final Map<DecodeHintType, Object> ALL_HINTS = new EnumMap<>(DecodeHintType.class);
+
     /**
      * CODE_128 (最常用的一维码)
      */
-    public static final Map<DecodeHintType,Object> CODE_128_HINTS = createDecodeHint(BarcodeFormat.CODE_128);
+    public static final Map<DecodeHintType, Object> CODE_128_HINTS = createDecodeHint(BarcodeFormat.CODE_128);
+
     /**
      * QR_CODE (最常用的二维码)
      */
-    public static final Map<DecodeHintType,Object> QR_CODE_HINTS = createDecodeHint(BarcodeFormat.QR_CODE);
+    public static final Map<DecodeHintType, Object> QR_CODE_HINTS = createDecodeHint(BarcodeFormat.QR_CODE);
+
     /**
      * 一维码
      */
-    public static final Map<DecodeHintType,Object> ONE_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
+    public static final Map<DecodeHintType, Object> ONE_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
+
     /**
      * 二维码
      */
-    public static final Map<DecodeHintType,Object> TWO_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
+    public static final Map<DecodeHintType, Object> TWO_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
 
     /**
      * 默认
      */
-    public static final Map<DecodeHintType,Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
+    public static final Map<DecodeHintType, Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
 
     static {
-        //all hints
-        addDecodeHintTypes(ALL_HINTS,getAllFormats());
-        //one dimension
-        addDecodeHintTypes(ONE_DIMENSIONAL_HINTS,getOneDimensionalFormats());
-        //Two dimension
-        addDecodeHintTypes(TWO_DIMENSIONAL_HINTS,getTwoDimensionalFormats());
-        //default hints
-        addDecodeHintTypes(DEFAULT_HINTS,getDefaultFormats());
+        // all hints
+        addDecodeHintTypes(ALL_HINTS, getAllFormats());
+        // one dimension
+        addDecodeHintTypes(ONE_DIMENSIONAL_HINTS, getOneDimensionalFormats());
+        // Two dimension
+        addDecodeHintTypes(TWO_DIMENSIONAL_HINTS, getTwoDimensionalFormats());
+        // default hints
+        addDecodeHintTypes(DEFAULT_HINTS, getDefaultFormats());
     }
 
     /**
      * 所有支持的{@link BarcodeFormat}
      * @return
      */
-    private static List<BarcodeFormat> getAllFormats(){
+    private static List<BarcodeFormat> getAllFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.AZTEC);
         list.add(BarcodeFormat.CODABAR);
@@ -97,7 +100,7 @@ public final class DecodeFormatManager {
      *  {@link BarcodeFormat#UPC_EAN_EXTENSION}
      * @return
      */
-    private static List<BarcodeFormat> getOneDimensionalFormats(){
+    private static List<BarcodeFormat> getOneDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.CODABAR);
         list.add(BarcodeFormat.CODE_39);
@@ -124,7 +127,7 @@ public final class DecodeFormatManager {
      *  {@link BarcodeFormat#QR_CODE}
      * @return
      */
-    private static List<BarcodeFormat> getTwoDimensionalFormats(){
+    private static List<BarcodeFormat> getTwoDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.AZTEC);
         list.add(BarcodeFormat.DATA_MATRIX);
@@ -143,7 +146,7 @@ public final class DecodeFormatManager {
      *  {@link BarcodeFormat#CODE_128}
      * @return
      */
-    private static List<BarcodeFormat> getDefaultFormats(){
+    private static List<BarcodeFormat> getDefaultFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.QR_CODE);
         list.add(BarcodeFormat.UPC_A);
@@ -152,7 +155,7 @@ public final class DecodeFormatManager {
         return list;
     }
 
-    private static <T> List<T> singletonList(T o){
+    private static <T> List<T> singletonList(T o) {
         return Collections.singletonList(o);
     }
 
@@ -161,8 +164,8 @@ public final class DecodeFormatManager {
      * @param barcodeFormats {@link BarcodeFormat}
      * @return
      */
-    public static Map<DecodeHintType,Object> createDecodeHints(@NonNull BarcodeFormat... barcodeFormats){
-        Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
+    public static Map<DecodeHintType, Object> createDecodeHints(@NonNull BarcodeFormat... barcodeFormats) {
+        Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
         addDecodeHintTypes(hints, Arrays.asList(barcodeFormats));
         return hints;
     }
@@ -172,9 +175,9 @@ public final class DecodeFormatManager {
      * @param barcodeFormat {@link BarcodeFormat}
      * @return
      */
-    public static Map<DecodeHintType,Object> createDecodeHint(@NonNull BarcodeFormat barcodeFormat){
-        Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
-        addDecodeHintTypes(hints,singletonList(barcodeFormat));
+    public static Map<DecodeHintType, Object> createDecodeHint(@NonNull BarcodeFormat barcodeFormat) {
+        Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
+        addDecodeHintTypes(hints, singletonList(barcodeFormat));
         return hints;
     }
 
@@ -183,7 +186,7 @@ public final class DecodeFormatManager {
      * @param hints
      * @param formats
      */
-    private static void addDecodeHintTypes(Map<DecodeHintType,Object> hints,List<BarcodeFormat> formats){
+    private static void addDecodeHintTypes(Map<DecodeHintType,Object> hints, List<BarcodeFormat> formats) {
         // Image is known to be of one of a few possible formats.
         hints.put(DecodeHintType.POSSIBLE_FORMATS, formats);
         // Spend more time to try to find a barcode; optimize for accuracy, not speed.
@@ -191,5 +194,4 @@ public final class DecodeFormatManager {
         // Specifies what character encoding to use when decoding, where applicable (type String)
         hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
     }
-
 }

@@ -138,8 +138,8 @@ public class GameVATestService extends Service {
 //                    Toast.makeText(mContext, "录制结束，请耐心等待音频质量计算结果~", Toast.LENGTH_SHORT).show();
 //                    break;
                 case COMPUTE_PESQ:
-                    if (YinHuaData.PESQ != null) {
-                        Toast.makeText(mContext, (YinHuaData.platform_type + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
+                    if (YinHuaData.pesq != null) {
+                        Toast.makeText(mContext, (YinHuaData.platformType + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
                     }
                     break;
             }
@@ -596,7 +596,7 @@ public class GameVATestService extends Service {
         //mediaProjection.stop();
 
         // 平台类型
-        String platformKind = YinHuaData.platform_type;
+        String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
@@ -648,13 +648,13 @@ public class GameVATestService extends Service {
                             Log.d(TAG, "onResponse:" + res);
                             String[] resArr = res.split("=");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PSNR = resArr[1];
-                            YinHuaData.SSIM = resArr[3];
-                            YinHuaData.Resolution = resArr[5];
+                            YinHuaData.psnr = resArr[1];
+                            YinHuaData.ssim = resArr[3];
+                            YinHuaData.resolution = resArr[5];
 
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.Resolution);
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
                             //handler.sendEmptyMessage(COMPUTE_PESQ);
                         }
                     });
@@ -702,14 +702,14 @@ public class GameVATestService extends Service {
                             String[] resArr = res.split("=");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
 
-                            YinHuaData.PSNR = resArr[1];
-                            YinHuaData.SSIM = resArr[3];
-                            YinHuaData.Resolution = resArr[5];
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.Resolution);
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
+                            YinHuaData.psnr = resArr[1];
+                            YinHuaData.ssim = resArr[3];
+                            YinHuaData.resolution = resArr[5];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
                             //Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
                             //handler.sendEmptyMessage(COMPUTE_PESQ);
                             Intent intent = new Intent(getApplicationContext(), CePingActivity.class);
@@ -728,7 +728,7 @@ public class GameVATestService extends Service {
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             // 平台类型
-            String platformKind = YinHuaData.platform_type;
+            String platformKind = YinHuaData.platformType;
             Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
             // 如果是云手机
             if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
@@ -802,7 +802,7 @@ public class GameVATestService extends Service {
             }
         }
         // 平台类型
-        String platformKind = YinHuaData.platform_type;
+        String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
@@ -853,8 +853,8 @@ public class GameVATestService extends Service {
                             String res = response.body().string();
                             String[] resArr = res.split(" ");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PESQ = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            YinHuaData.pesq = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(COMPUTE_PESQ);
 //                            Looper.prepare();
 //                            Toast.makeText(service,"音频测试结束",Toast.LENGTH_SHORT);
@@ -905,8 +905,8 @@ public class GameVATestService extends Service {
                             String res = response.body().string();
                             String[] resArr = res.split(" ");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PESQ = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            YinHuaData.pesq = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(COMPUTE_PESQ);
 
                         }

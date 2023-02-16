@@ -137,8 +137,8 @@ public class FxService extends Service {
                     btnMenu.setVisibility(View.VISIBLE);
                     Toast.makeText(mContext, "录制结束，请耐心等待音频质量计算结果~", Toast.LENGTH_SHORT).show();
                 case COMPUTE_PESQ:
-                    if (YinHuaData.PESQ != null) {
-                        Toast.makeText(mContext, (YinHuaData.platform_type + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
+                    if (YinHuaData.pesq != null) {
+                        Toast.makeText(mContext, (YinHuaData.platformType + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
                     }
             }
         }
@@ -157,10 +157,10 @@ public class FxService extends Service {
         tapUtil = TapUtil.getUtil();
 
         try{
-            Log.e("TWT", "1.PESQ:"+YinHuaData.PESQ);
+            Log.e("TWT", "1.PESQ:"+YinHuaData.pesq);
             //Log.e("TWT", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
             //Log.e("TWT", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
-            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.PESQ==null));
+            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.pesq==null));
         }catch (Exception e){
             Log.e("TWT", "error: "+e.toString());
         }
@@ -702,7 +702,7 @@ public class FxService extends Service {
         //mediaProjection.stop();
 
         // 平台类型
-        String platformKind = YinHuaData.platform_type;
+        String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
@@ -752,13 +752,13 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse:" + res);
                             String[] resArr = res.split("=");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PSNR = resArr[1];
-                            YinHuaData.SSIM = resArr[3];
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            if( YinHuaData.PSNR !=null &&
-                                    YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ !=null){
+                            YinHuaData.psnr = resArr[1];
+                            YinHuaData.ssim = resArr[3];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                            if( YinHuaData.psnr !=null &&
+                                    YinHuaData.ssim != null &&
+                                    YinHuaData.pesq !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -812,13 +812,13 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse:" + res);
                             String[] resArr = res.split("=");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PSNR = resArr[1];
-                            YinHuaData.SSIM = resArr[3];
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.PSNR);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.SSIM);
-                            if (YinHuaData.PSNR != null &&
-                                    YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ != null) {
+                            YinHuaData.psnr = resArr[1];
+                            YinHuaData.ssim = resArr[3];
+                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                            if (YinHuaData.psnr != null &&
+                                    YinHuaData.ssim != null &&
+                                    YinHuaData.pesq != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -849,7 +849,7 @@ public class FxService extends Service {
             }
         }
         // 平台类型
-        String platformKind = YinHuaData.platform_type;
+        String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
         // 如果是云手机
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
@@ -898,17 +898,17 @@ public class FxService extends Service {
                             String res = response.body().string();
                             String[] resArr = res.split(" ");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PESQ = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            YinHuaData.pesq = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(COMPUTE_PESQ);
 //
 //                            Log.e("TWT", "2.PESQ:"+YinHuaData.PESQ);
 //                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
 //                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
 //                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
-                            if( YinHuaData.PSNR !=null &&
-                                YinHuaData.SSIM != null &&
-                                YinHuaData.PESQ !=null){
+                            if( YinHuaData.psnr !=null &&
+                                YinHuaData.ssim != null &&
+                                YinHuaData.pesq !=null){
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -963,17 +963,17 @@ public class FxService extends Service {
                             String res = response.body().string();
                             String[] resArr = res.split(" ");
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.PESQ = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.PESQ);
+                            YinHuaData.pesq = resArr[resArr.length - 1];
+                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(COMPUTE_PESQ);
 //
 //                            Log.e("TWT", "2.PESQ:"+YinHuaData.PESQ);
 //                            Log.e("TWT", "2.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
 //                            Log.e("TWT", "2.PESQ.equals():"+YinHuaData.PESQ.equals(""));
 //                            Log.e("TWT", "2.PESQ==null:"+(YinHuaData.PESQ==null));
-                            if (YinHuaData.PSNR != null &&
-                                    YinHuaData.SSIM != null &&
-                                    YinHuaData.PESQ != null) {
+                            if (YinHuaData.psnr != null &&
+                                    YinHuaData.ssim != null &&
+                                    YinHuaData.pesq != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -1001,7 +1001,7 @@ public class FxService extends Service {
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             // 平台类型
-            String platformKind = YinHuaData.platform_type;
+            String platformKind = YinHuaData.platformType;
             Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
             // 如果是云手机
             if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
