@@ -64,7 +64,7 @@ public class GameTouchTestService extends Service {
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
     private String path = "";
-    private boolean running;
+    private boolean isRunning;
     private int width = 720;
     private int height = 1080;
     private int dpi;
@@ -109,12 +109,11 @@ public class GameTouchTestService extends Service {
 
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         Log.d(TAG, "onCreate: 121212");
         super.onCreate();
         mContext = GameTouchTestService.this;
-        running = false;
+        isRunning = false;
         mediaRecorder = new MediaRecorder();
         createFloatView();
     }
@@ -132,8 +131,7 @@ public class GameTouchTestService extends Service {
         this.dpi = dpi;
     }
 
-    private void createFloatView()
-    {
+    private void createFloatView() {
         Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         // 获取WindowManagerImpl.CompatModeWrapper
@@ -180,7 +178,7 @@ public class GameTouchTestService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -197,14 +195,14 @@ public class GameTouchTestService extends Service {
                         endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
                 // 响应点击事件
-                if (isclick && isAble) {
+                if (isClick && isAble) {
                     if (!isRecording) {
                         mFloatView.setText("停止");
                         mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
@@ -258,7 +256,7 @@ public class GameTouchTestService extends Service {
 
 
     public boolean startRecord() {
-        if (mediaProjection == null || running) {
+        if (mediaProjection == null || isRunning) {
             return false;
         }
         DisplayMetrics metrics = new DisplayMetrics();
@@ -273,7 +271,7 @@ public class GameTouchTestService extends Service {
             mediaRecorder.start();
             gameTouchUtil.setVideoStartTime(System.currentTimeMillis());
             tapUtil.GameTouchTap(GameTouchTestService.this);
-            running = true;
+            isRunning = true;
             Log.d(TAG, "begin:开始录制 ");
         }
         return true;
@@ -285,11 +283,11 @@ public class GameTouchTestService extends Service {
     }
 
     public boolean stopRecord() {
-        if (!running) {
+        if (!isRunning) {
             return false;
         }
 
-        running = false;
+        isRunning = false;
         mediaRecorder.stop();
         mediaRecorder.reset();
         virtualDisplay.release();
@@ -330,7 +328,7 @@ public class GameTouchTestService extends Service {
 
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -344,8 +342,7 @@ public class GameTouchTestService extends Service {
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
     }
 

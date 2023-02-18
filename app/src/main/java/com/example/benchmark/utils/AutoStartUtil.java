@@ -19,7 +19,7 @@ public class AutoStartUtil {
 
 
     /* 打开自启动管理页 */
-    public static void openStart(Context context){
+    public static void openStart(Context context) {
         if (Build.VERSION.SDK_INT < 23) {
             return;
         }
@@ -59,8 +59,8 @@ public class AutoStartUtil {
             // 系统更新之后，完全找不到了，心里默默Fuck！
             // 针对魅族，我们只能通过魅族内置手机管家去设置自启动，
             // 所以我在这里直接跳转到魅族内置手机管家界面，具体结果请看图
-            ComponentName componentName = ComponentName.unflattenFromString("com.meizu.safe" +
-                    "/.permission.PermissionMainActivity");
+            ComponentName componentName = ComponentName.unflattenFromString("com.meizu.safe"
+                    + "/.permission.PermissionMainActivity");
             intent.setComponent(componentName);
         } else {
             // 以上只是市面上主流机型，由于公司你懂的，所以很不容易才凑齐以上设备
