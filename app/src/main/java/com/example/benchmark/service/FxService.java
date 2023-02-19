@@ -716,7 +716,7 @@ public class FxService extends Service {
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
-            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_PHONE_NAME);
+            File file = new File(CacheConst.videoPath + "/" + CacheConst.VIDEO_PHONE_NAME);
             //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
             //Log.d(TAG, "onClick: " + file.exists());
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -727,7 +727,7 @@ public class FxService extends Service {
                     //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
@@ -776,7 +776,7 @@ public class FxService extends Service {
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
-            File file = new File(CacheConst.VIDEO_PATH + "/" + CacheConst.VIDEO_PHONE_NAME);
+            File file = new File(CacheConst.videoPath + "/" + CacheConst.VIDEO_PHONE_NAME);
             //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
             //Log.d(TAG, "onClick: " + file.exists());
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -787,7 +787,7 @@ public class FxService extends Service {
                     //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.VIDEO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.HUAWEI_IP + "/AudioVideo/VideoRecord")
@@ -863,7 +863,7 @@ public class FxService extends Service {
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
-            File file = new File(CacheConst.AUDIO_PATH + "/" + CacheConst.AUDIO_PHONE_NAME);
+            File file = new File(CacheConst.audioPath + "/" + CacheConst.AUDIO_PHONE_NAME);
             //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
             //Log.d(TAG, "onClick: " + file.exists());
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -874,7 +874,7 @@ public class FxService extends Service {
                     //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.ALIYUN_IP + "/AudioVideo/AudioRecord")
@@ -928,7 +928,7 @@ public class FxService extends Service {
                     .build();
             MediaType type = MediaType.parse("application/octet-stream");//"text/xml;charset=utf-8"
             // file是要上传的文件 File()
-            File file = new File(CacheConst.AUDIO_PATH + "/" + CacheConst.AUDIO_PHONE_NAME);
+            File file = new File(CacheConst.audioPath + "/" + CacheConst.AUDIO_PHONE_NAME);
             //Log.d(TAG, "onClick: " + AudioData.FILE_PATH);
             //Log.d(TAG, "onClick: " + file.exists());
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -939,7 +939,7 @@ public class FxService extends Service {
                     //.addFormDataPart("AudioRecord",CacheConst.AUDIO_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PATH--" + CacheConst.AUDIO_PATH);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.HUAWEI_IP + "/AudioVideo/AudioRecord")
@@ -1032,8 +1032,8 @@ public class FxService extends Service {
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
-            //CacheConst.VIDEO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
-            CacheConst.VIDEO_PATH = rootDir;
+            //CacheConst.videoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            CacheConst.videoPath = rootDir;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {

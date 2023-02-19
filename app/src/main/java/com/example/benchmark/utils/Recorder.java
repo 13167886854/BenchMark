@@ -114,8 +114,8 @@ public class Recorder {
     void createAudioFile(Context context) {
         //root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "/Audio Capture");
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
-        CacheConst.AUDIO_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
-        //Log.d("zzl", "createAudioFile: CacheConst.AUDIO_PATH" + CacheConst.AUDIO_PATH);
+        CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
+        //Log.d("zzl", "createAudioFile: CacheConst.audioPath" + CacheConst.audioPath);
         //root = new File("/sdcard/Music", "/Audio Capture");
         //Log.e(TAG, "Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
         Log.e(TAG, "root: " + root);

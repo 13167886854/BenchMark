@@ -23,54 +23,44 @@ import okhttp3.Response;
 
 public class TapUtil {
     public static int mWholeMonitorNum;
+    public static final int TOTAL_TAP_NUM = 12;
+
+    private static TapUtil util = new TapUtil();
+
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
-    //单例模式
+    private final OkHttpClient client = new OkHttpClient();
+
+
     private MyAccessibilityService service;
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
-    private static TapUtil util = new TapUtil();
 
 
     private int phoneCurrentTapNum = 0;
+
     // 触控测试模拟点击次数
-    public static final int TOTAL_TAP_NUM = 12;
-
-    private final OkHttpClient client = new OkHttpClient();
-
     private int mCurrentTapNum = 0;
-
     private long mLastTapTime = 0L;
-    //private long mCurrentTime = 0;
-
+    private int turn = 0;
     private long startTime = 0L;
     private long endTime = 0L;
     private long responseTime = 0L;
 
     private Thread mThread;
 
-    //    public  Handler handler = new Handler(){
-//        @Override
-//        public void handleMessage(@NonNull Message msg) {
-//            switch (msg.what){
-//                case 0:
-//                    timer.cancel();
-//                    break;
-//            }
-//            super.handleMessage(msg);
-//        }
-//    };
+
     private TapUtil() {
     }
 
+    // 单例模式
     public static TapUtil getUtil() {
         if (util == null) {
             util = new TapUtil();
-            //util.tap();
         }
         return util;
     }
 
-    private int turn = 0;
+
 
 
     public void setService(MyAccessibilityService service) {
@@ -86,7 +76,6 @@ public class TapUtil {
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
-                        //Log.d("TWT", "do tap when time is " + System.currentTimeMillis());
                     }
 
                     @Override
@@ -119,7 +108,7 @@ public class TapUtil {
                                 .get()
                                 .url(CacheConst.WEB_TIME_URL)
                                 .build();
-                        mThread =  new Thread(new Runnable() {
+                        mThread = new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 client.newCall(request)
@@ -139,21 +128,13 @@ public class TapUtil {
                                                 String res = result.substring(81, 94);
                                                 Log.d("zzl", "onResponse: result===>" + result);
                                                 Log.d("zzl", "onResponse: res===>" + res);
-                                                //Log.d("zzl", "onResponse: response===>" + response);
                                                 // 获取到的时间戳，应该减去响应时延
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
                                                 mCurrentTapNum++;
 
                                                 Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + mLastTapTime);
                                                 Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + "System.currentTimeMillis(): " + System.currentTimeMillis());
-                                                //Log.e("TWT", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " +new Date().getTime());
-                                                //service.mTapStartTimes.add(String.valueOf(mLastTapTime));
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
-                                                //Log.e("Auto Tap", "Tap Time:" + System.currentTimeMillis());
-                                                //Message msg = Message.obtain();
-                                                //msg.what = 1;
-                                                //msg.obj = result;
-                                                //mHandler.sendMessage(msg);
                                             }
                                         });
                             }
@@ -184,10 +165,9 @@ public class TapUtil {
                 Log.d("TWT", "turn = " + turn);
                 turn++;
                 if (turn % 2 == 1) {
-//                    tap(2165, 860); //点击设置按钮
-                    tap(2165, 630); //点击设置按钮
+                    tap(2165, 630); // 点击设置按钮
                 } else {
-                    tap(1000, 830);  //点击取消按钮
+                    tap(1000, 830);  // 点击取消按钮
                     gameTouchUtil.getTapTime(System.currentTimeMillis());
                 }
                 if (turn == 20) {
@@ -210,7 +190,7 @@ public class TapUtil {
             public void run() {
                 Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);
                 phoneCurrentTapNum++;
-                cloudPhoneTap(screenWidth / 2, screenHeight / 2); //点击设置按钮
+                cloudPhoneTap(screenWidth / 2, screenHeight / 2); // 点击设置按钮
                 if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
                     phoneCurrentTapNum = 0;
                     Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);

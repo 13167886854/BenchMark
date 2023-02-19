@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat;
 
 import com.example.benchmark.data.YinHuaData;
 import com.example.benchmark.R;
-//import com.example.myapplication15.data.JsonData;
 import com.example.benchmark.thread.AudioDecodeThread;
 import com.example.benchmark.thread.VideoDecodeThread;
 import com.example.benchmark.utils.ScoreUtil;
@@ -51,7 +50,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
 
     public static void start(Context context) {
         Intent intent = new Intent(context, AudioVideoActivity.class);
-        intent.putExtra("isAudioVideoTested",true);
+        intent.putExtra("isAudioVideoTested", true);
         context.startActivity(intent);
     }
 
@@ -62,11 +61,11 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             videocurtime = videoDecodeThread.getcurTime() / 10000;
             audiocurtime = audioDecodeThread.getcurTime() / 10000;
 
-            if (isCompleted&&YinHuaData.resolution!=null) {
-                yinhuaxinxi.setText("测试结束！\n" +
-                        "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime + "\n"
-                        + "当前音频帧" + audiocurtime + "\n" +
-                        "\n" + "最大音画同步差" + maxDifferenceValue);
+            if (isCompleted && YinHuaData.resolution != null) {
+                yinhuaxinxi.setText("测试结束！\n"
+                        + "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime
+                        + "\n" + "当前音频帧" + audiocurtime + "\n"
+                        + "\n" + "最大音画同步差" + maxDifferenceValue);
                 ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.resolution, maxDifferenceValue);
                 isTestOver = true;
                 return;
@@ -74,21 +73,17 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
 
             //当视频帧和音频帧不再增加判断播放结束
             if (lastAudioCurtime == audiocurtime && lastVideoCurtime == videocurtime && !isCompleted) {
-                //Toast.makeText(AudioVideoActivity.this,"视频播放结束",Toast.LENGTH_LONG).show();
                 isCompleted = true;
             }
-       //     Log.e("TWT", "audiocurtime: "+audiocurtime + "    videocurtime:"+videocurtime );
-
 
             if (Math.abs(videocurtime - audiocurtime) > maxDifferenceValue) {
                 maxDifferenceValue = Math.abs(videocurtime - audiocurtime);
             }
-            yinhuaxinxi.setText("手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime + "\n"
-                    + "当前音频帧" + audiocurtime + "\n" + "当前音画同步差" + Math.abs((videocurtime - audiocurtime))
+            yinhuaxinxi.setText("手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime
+                    + "\n当前音频帧" + audiocurtime + "\n当前音画同步差" + Math.abs((videocurtime - audiocurtime))
             );
             lastAudioCurtime = audiocurtime;
             lastVideoCurtime = videocurtime;
-
         }
     };
 
@@ -109,45 +104,34 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             }
         };
         timer.schedule(task, 1000);
-        //截取视频一帧图像 分析分辨率
-//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//        retriever.setDataSource(mMp4FilePath);
-//        Bitmap bitmap = retriever.getFrameAtIndex(10);
-//        Log.e("TWT", "height: "+bitmap.getHeight() + "width:" +bitmap.getWidth());
-
-
     }
 
     void init() {
         isCompleted = false;
         isTestOver = false;
-        //mMediaPlayer = new MediaPlayer();
         mSurfaceView = findViewById(R.id.surface_view);
         mHolder = mSurfaceView.getHolder();
         yinhuaxinxi = findViewById(R.id.yinhua_item);
-        //mMp4FilePath="android.resource://"+AudioVideoActivity.this.getPackageName()+"/"+R.raw.minions;
-        //mMp4FilePath="/sdcard/ScreenRecorder/1660217722579.mp4";
         mMp4FilePath = getIntent().getStringExtra("path");
-        //Log.e("TWT", "mMp4FilePath: "+mMp4FilePath );
-        WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        //分辨率
-        heightPixels = outMetrics.heightPixels;
-        widthPixels = outMetrics.widthPixels;
-        //最大同步差
-        maxDifferenceValue = 0;
-
-
-        //startTest();
-
+        if (getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics outMetrics = new DisplayMetrics();
+            wm.getDefaultDisplay().getMetrics(outMetrics);
+            // 分辨率
+            heightPixels = outMetrics.heightPixels;
+            widthPixels = outMetrics.widthPixels;
+            // 最大同步差
+            maxDifferenceValue = 0;
+        }
     }
 
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
-    public void onClick(View v) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+    public void onClick(View view) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    0);
             return;
         }
     }
@@ -157,25 +141,27 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         videoDecodeThread.setSurfaceView(mSurfaceView);
         //开启音频解码线程
         audioDecodeThread = new AudioDecodeThread(mMp4FilePath, AudioVideoActivity.this);
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        int sessionId = audioManager.generateAudioSessionId();
-        audioDecodeThread.setSessionId(sessionId);
-        videoDecodeThread.start();
-        audioDecodeThread.start();
-        if (videoDecodeThread.isAlive() && audioDecodeThread.isAlive()) {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Message message = new Message();
-                    handler.sendMessage(message);
-                    if (isTestOver) {
-                        timer.cancel();
+        if (getSystemService(AUDIO_SERVICE) instanceof AudioManager) {
+            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            int sessionId = audioManager.generateAudioSessionId();
+            audioDecodeThread.setSessionId(sessionId);
+            videoDecodeThread.start();
+            audioDecodeThread.start();
+            if (videoDecodeThread.isAlive() && audioDecodeThread.isAlive()) {
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        Message message = new Message();
+                        handler.sendMessage(message);
+                        if (isTestOver) {
+                            timer.cancel();
+                        }
                     }
-                }
-            }, 0, 1000);
-        } else {
-            Toast.makeText(AudioVideoActivity.this, "视频播放结束", Toast.LENGTH_LONG).show();
+                }, 0, 1000);
+            } else {
+                Toast.makeText(AudioVideoActivity.this, "视频播放结束", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -187,6 +173,5 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //Log.e("TWT", "onDestroy: destroy");
     }
 }

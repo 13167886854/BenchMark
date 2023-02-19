@@ -125,11 +125,11 @@ public class AudioDecodeThread extends Thread implements Runnable {
                         .setChannelMask(channelConfig)
                         .build();
                 audioTrack = new AudioTrack(
-                        audioAttributes
-                        , audioTrackFormat
-                        , minBufferSize
-                        , AudioTrack.MODE_STREAM
-                        , mSessionId
+                        audioAttributes,
+                        audioTrackFormat,
+                        minBufferSize,
+                        AudioTrack.MODE_STREAM,
+                        mSessionId
                 );
             } else {
                 Log.e(TAG, "run: 旧方式，初始化音频播放器");

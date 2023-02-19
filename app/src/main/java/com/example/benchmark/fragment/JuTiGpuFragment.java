@@ -15,11 +15,10 @@ import com.example.benchmark.R;
 public class JuTiGpuFragment extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.juti_gpu_fragment, container, false);
-        TextView juti_gpu_info = view.findViewById(R.id.juti_gpu_info);
-
-        return  view;
+        TextView gpuInfo = view.findViewById(R.id.juti_gpu_info);
+        return view;
     }
-
 }

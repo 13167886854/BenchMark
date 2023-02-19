@@ -22,10 +22,11 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnBenchmarkResultItemClickListener onClickListener;
 
-    public CePingAdapter(List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener){
-        this.data=data;
+    public CePingAdapter(List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener) {
+        this.data = data;
         this.onClickListener = onClickListener;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,7 +36,7 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final RecyclerViewHolder recyclerViewHolder= (RecyclerViewHolder) holder;
+        final RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
         CepingData cepingData = data.get(position);
         recyclerViewHolder.ceping_image.setImageResource(cepingData.getCepingImage());
         recyclerViewHolder.ceping_item.setText(cepingData.getCepingItem());
@@ -47,7 +48,7 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             recyclerViewHolder.ceping_grade.setText(String.valueOf(cepingData.getGrade()));
 
         recyclerViewHolder.itemView.setOnClickListener(v -> {
-            int p= recyclerViewHolder.getAdapterPosition();
+            int p = recyclerViewHolder.getAdapterPosition();
             onClickListener.onClick(data.get(p));
         });
     }
@@ -56,7 +57,8 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount() {
         return data.size();
     }
-    class RecyclerViewHolder extends RecyclerView.ViewHolder{
+
+    class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public ImageView ceping_image;
         public TextView ceping_item;
         public TextView ceping_grade;
@@ -65,11 +67,11 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            ceping_image=itemView.findViewById(R.id.ceping_image);
-            ceping_item=itemView.findViewById(R.id.ceping_item);
-            ceping_grade=itemView.findViewById(R.id.ceping_grade);
-            ceping_text=itemView.findViewById(R.id.ceping_text);
-            relativeLayout=itemView.findViewById(R.id.ceping_lay);
+            ceping_image = itemView.findViewById(R.id.ceping_image);
+            ceping_item = itemView.findViewById(R.id.ceping_item);
+            ceping_grade = itemView.findViewById(R.id.ceping_grade);
+            ceping_text = itemView.findViewById(R.id.ceping_text);
+            relativeLayout = itemView.findViewById(R.id.ceping_lay);
         }
     }
 }

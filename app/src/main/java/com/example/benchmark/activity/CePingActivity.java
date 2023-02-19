@@ -164,8 +164,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                 checkedPlat.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME) ||
                 checkedPlat.equals(CacheConst.PLATFORM_NAME_Tencent_GAME)) {
             if (isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM) {
-                mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
-                Log.d(TAG, "initData: hashMap-------" + mHashMapLocal);
+                if (intent.getSerializableExtra("localMobileInfo") instanceof HashMap) {
+                    mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
+                    Log.d(TAG, "initData: hashMap-------" + mHashMapLocal);
+                }
             }
         }
 
@@ -295,10 +297,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                GameTouchTestService.RecordBinder binder = (GameTouchTestService.RecordBinder) service;
-                gameTouchTestService = binder.getRecordService();
-                gameTouchTestService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
-                // start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+                if (service instanceof GameTouchTestService.RecordBinder) {
+                    GameTouchTestService.RecordBinder binder = (GameTouchTestService.RecordBinder) service;
+                    gameTouchTestService = binder.getRecordService();
+                    gameTouchTestService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+                }
             }
 
             @Override
@@ -318,9 +321,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
         Intent intent = new Intent(this, GameTouchTestService.class);
         bindService(intent, touchConnection, BIND_AUTO_CREATE);
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        Intent captureIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, RECORD_TOUCH_REQUEST_CODE);
+        if (getSystemService(MEDIA_PROJECTION_SERVICE) instanceof MediaProjectionManager) {
+            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+            Intent captureIntent = projectionManager.createScreenCaptureIntent();
+            startActivityForResult(captureIntent, RECORD_TOUCH_REQUEST_CODE);
+        }
     }
 
 
@@ -330,10 +335,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                GameVATestService.RecordBinder binder = (GameVATestService.RecordBinder) service;
-                gameVATestService = binder.getRecordService();
-                gameVATestService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
-                // start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+                if (service instanceof GameVATestService.RecordBinder) {
+                    GameVATestService.RecordBinder binder = (GameVATestService.RecordBinder) service;
+                    gameVATestService = binder.getRecordService();
+                    gameVATestService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+                }
             }
 
             @Override
@@ -353,9 +359,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
         Intent intent = new Intent(this, GameVATestService.class);
         bindService(intent, vaConnection, BIND_AUTO_CREATE);
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        Intent captureIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, RECORD_VA_REQUEST_CODE);
+        if (getSystemService(MEDIA_PROJECTION_SERVICE) instanceof MediaProjectionManager) {
+            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+            Intent captureIntent = projectionManager.createScreenCaptureIntent();
+            startActivityForResult(captureIntent, RECORD_VA_REQUEST_CODE);
+        }
     }
 
 
@@ -365,10 +373,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceConnected(ComponentName className, IBinder service) {
                 DisplayMetrics metrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                GameSmoothTestService.GameSmoothBinder binder = (GameSmoothTestService.GameSmoothBinder) service;
-                gameSmoothService = binder.getGameSmoothService();
-                gameSmoothService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
-                // start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+                if (service instanceof GameSmoothTestService.GameSmoothBinder) {
+                    GameSmoothTestService.GameSmoothBinder binder = (GameSmoothTestService.GameSmoothBinder) service;
+                    gameSmoothService = binder.getGameSmoothService();
+                    gameSmoothService.setConfig(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi);
+                }
             }
 
             @Override
@@ -388,16 +397,20 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
         Intent intent = new Intent(this, GameSmoothTestService.class);
         bindService(intent, smoothConnection, BIND_AUTO_CREATE);
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        Intent captureIntent = projectionManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, RECORD_SM_REQUEST_CODE);
+        if (getSystemService(MEDIA_PROJECTION_SERVICE) instanceof MediaProjectionManager) {
+            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+            Intent captureIntent = projectionManager.createScreenCaptureIntent();
+            startActivityForResult(captureIntent, RECORD_SM_REQUEST_CODE);
+        }
     }
 
 
     private void startStabilityMonitorService() {
-        projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-        if (projectionManager != null) {
-            this.startActivityForResult(projectionManager.createScreenCaptureIntent(), requestStability);
+        if (getSystemService(MEDIA_PROJECTION_SERVICE) instanceof MediaProjectionManager) {
+            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+            if (projectionManager != null) {
+                this.startActivityForResult(projectionManager.createScreenCaptureIntent(), requestStability);
+            }
         }
     }
 
@@ -405,9 +418,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         connection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName className, IBinder service) {
-                FxService.RecordBinder binder = (FxService.RecordBinder) service;
-                fxService = binder.getRecordService();
-                // start.setText(recordService.isRunning() ? "停止录制" : "开始录制");
+                if (service instanceof FxService.RecordBinder) {
+                    FxService.RecordBinder binder = (FxService.RecordBinder) service;
+                    fxService = binder.getRecordService();
+                }
             }
 
             @Override
@@ -431,9 +445,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         intent.putExtra("isCheckTouch", isCheckTouch);
         bindService(intent, connection, BIND_AUTO_CREATE);
         if (!isCheckStability) {
-            projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-            Intent captureIntent = projectionManager.createScreenCaptureIntent();
-            startActivityForResult(captureIntent, requestFX);
+            if (getSystemService(MEDIA_PROJECTION_SERVICE) instanceof MediaProjectionManager) {
+                projectionManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+                Intent captureIntent = projectionManager.createScreenCaptureIntent();
+                startActivityForResult(captureIntent, requestFX);
+            }
         }
     }
 
@@ -559,9 +575,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
-        // unbindService(sm_connection);
-        // unbindService(touch_connection);
-        // unbindService(connection);
         super.onDestroy();
     }
 }

@@ -23,27 +23,32 @@ public class CacheConst {
 
     // 硬件信息
     public static final String KEY_HARDWARE_INFO = "硬件信息";
+
     // RAM
     public static final String KEY_RAM_INFO = "硬件RAM信息";
     public static final String KEY_RAM_SCORE = "RAM分数";
     public static final String KEY_AVAILABLE_RAM = "可用RAM";
     public static final String KEY_TOTAL_RAM = "总RAM";
+
     // ROM
     public static final String KEY_ROM_INFO = "硬件ROM信息";
     public static final String KEY_ROM_SCORE = "ROM分数";
     public static final String KEY_AVAILABLE_STORAGE = "可用ROM";
     public static final String KEY_TOTAL_STORAGE = "总ROM";
+
     // CPU
     public static final String KEY_CPU_INFO = "硬件CPU信息";
     public static final String KEY_CPU_SCORE = "CPU分数";
     public static final String KEY_CPU_NAME = "CPU名称";
     public static final String KEY_CPU_CORES = "CPU核心数";
+
     // GPU
     public static final String KEY_GPU_INFO = "硬件GPU信息";
     public static final String KEY_GPU_SCORE = "GPU分数";
     public static final String KEY_GPU_VENDOR = "GPU供应商";
     public static final String KEY_GPU_RENDER = "GPU渲染器";
     public static final String KEY_GPU_VERSION = "GPU版本";
+
     // 流畅性信息
     public static final String KEY_FLUENCY_INFO = "流畅性信息";
     public static final String KEY_FLUENCY_SCORE = "流畅性分数";
@@ -53,12 +58,14 @@ public class CacheConst {
     public static final String KEY_FRAME_INTERVAL = "frameInterval";
     public static final String KEY_JANK_COUNT = "jankCount";
     public static final String KEY_STUTTER_RATE = "stutterRate";
+
     // 稳定性信息
     public static final String KEY_STABILITY_INFO = "稳定性信息";
     public static final String KEY_STABILITY_SCORE = "稳定性分数";
     public static final String KEY_START_SUCCESS_RATE = "START_SUCCESS_RATE";
     public static final String KEY_AVERAGE_START_TIME = "AVERAGE_START_TIME";
     public static final String KEY_AVERAGE_QUIT_TIME = "AVERAGE_QUIT_TIME";
+
     // 触控信息
     public static final String WEB_TIME_URL = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"; // 淘宝标准时间戳
     public static final String KEY_TOUCH_INFO = "触控体验信息";
@@ -68,6 +75,7 @@ public class CacheConst {
     public static final String KEY_AVERAGE_RESPONSE_TIME = "averageResponseTime"; // 平均触控时延
     public static final String KEY_AUTO_TAP_TIMES = "autoTapTimes";
     public static final String KEY_IS_AUTO_TAP = "isAutoTap";
+
     // 音画质量信息
     public static final String KEY_SOUND_FRAME_INFO = "音画质量信息";
     public static final String KEY_SOUND_FRAME_SCORE = "音画质量分数";
@@ -76,16 +84,15 @@ public class CacheConst {
     public static final String KEY_PESQ = "PESQ";
     public static final String KEY_PSNR = "PSNR";
     public static final String KEY_SSIM = "SSIM";
-    public static String AUDIO_PATH = "";
+    public static String audioPath = "";
     public static final String AUDIO_PHONE_NAME = "phone_audio_record.pcm";
     public static final String AUDIO_GAME_NAME = "game_audio_record.pcm";
-    public static String VIDEO_PATH = "";
+    public static String videoPath = "";
     public static final String VIDEO_PHONE_NAME = "phone_video_record.mp4";
     public static final String VIDEO_GAME_NAME = "game_video_record.mp4";
     public static final String IMAGE_GAME = "test.jpg";
 
     // a阿里云IP地址
-    //public static final String ALIYUN_IP = "http://121.40.215.41:8080";
     public static final String ALIYUN_IP = "http://175.38.1.81:8080";
 
     // 华为云IP地址
@@ -93,6 +100,5 @@ public class CacheConst {
 
     // 临时地址
     public static final String GLOBAL_IP = "http://175.38.1.81:8080";
-
 }
 
