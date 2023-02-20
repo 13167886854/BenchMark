@@ -67,10 +67,11 @@ public class CacheConst {
     public static final String KEY_AVERAGE_QUIT_TIME = "AVERAGE_QUIT_TIME";
 
     // 触控信息
-    public static final String WEB_TIME_URL = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp"; // 淘宝标准时间戳
+    // 淘宝标准时间戳
+    public static final String WEB_TIME_URL = "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp";
     public static final String KEY_TOUCH_INFO = "触控体验信息";
     public static final String KEY_TOUCH_SCORE = "触控体验分数";
-    public static final String KEY_AVERAGE_ACCURACY = "averageAccuracy";          // 触控正确率
+    public static final String KEY_AVERAGE_ACCURACY = "averageAccuracy"; // 触控正确率
     public static final String KEY_RESPONSE_TIME = "responseTime";
     public static final String KEY_AVERAGE_RESPONSE_TIME = "averageResponseTime"; // 平均触控时延
     public static final String KEY_AUTO_TAP_TIMES = "autoTapTimes";

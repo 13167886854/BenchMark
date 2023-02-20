@@ -23,8 +23,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OkhttpUtil {
-
-    public static void getBaseData(Context context){
+    public static void getBaseData(Context context) {
         // 请求连接云手机app
         OkHttpClient client = new OkHttpClient();
         // post发生测试结果数据
@@ -32,7 +31,7 @@ public class OkhttpUtil {
                 .add("link_key", ConfigurationUtils.linkKey)
                 .build();
         final Request request = new Request.Builder()
-                .url(ConfigurationUtils.url+"/getBaseDataByKey")
+                .url(ConfigurationUtils.url + "/getBaseDataByKey")
                 .post(formBody)
                 .build();
         Call call = client.newCall(request);
@@ -48,10 +47,10 @@ public class OkhttpUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                Log.d("TWT", "result: "+res);
-                if(res.equals("null")){
+                Log.d("TWT", "result: " + res);
+                if (res.equals("null")) {
                     Log.e("TAG", "onResponse: empty info");
-                }else{
+                } else {
                     // 获取数据后显示到前端页面
                     try {
                         JSONObject jsonObject = new JSONObject(res);
@@ -67,11 +66,11 @@ public class OkhttpUtil {
                         BaseData.date = jsonObject.getString("date");
                         BaseData.hasData = true;
                         Looper.prepare();
-                        Toast.makeText(context,"获取基础硬件数据成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"获取基础硬件数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     } catch (JSONException exception) {
                         Looper.prepare();
-                        Toast.makeText(context,"未接受到数据",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"未接受到数据", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                         exception.printStackTrace();
                     }
@@ -80,7 +79,7 @@ public class OkhttpUtil {
         });
     }
 
-    public static void getSmoothTestData(Context context){
+    public static void getSmoothTestData(Context context) {
         // 请求连接云手机app
         OkHttpClient client = new OkHttpClient();
         // post发生测试结果数据
@@ -88,7 +87,7 @@ public class OkhttpUtil {
                 .add("link_key", ConfigurationUtils.linkKey)
                 .build();
         final Request request = new Request.Builder()
-                .url(ConfigurationUtils.url+"/getSmoothDataByKey")
+                .url(ConfigurationUtils.url + "/getSmoothDataByKey")
                 .post(formBody)
                 .build();
         Call call = client.newCall(request);
@@ -104,14 +103,14 @@ public class OkhttpUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                Log.d("TWT", "result: "+res);
-                if(res.equals("null")){
+                Log.d("TWT", "result: " + res);
+                if (res.equals("null")) {
                     Log.e("TAG", "onResponse: empty info");
-                }else{
+                } else {
                     // 获取数据后显示到前端页面
                     try {
                         JSONObject jsonObject = new JSONObject(res);
-                        Log.d("TWT", "avergeFPS:"+jsonObject.getString("avergeFPS"));
+                        Log.d("TWT", "avergeFPS:" + jsonObject.getString("avergeFPS"));
                         SmoothData.avergeFPS = jsonObject.getString("avergeFPS");
                         SmoothData.frameShakingRate = jsonObject.getString("frameShakingRate");
                         SmoothData.lowFrameRate = jsonObject.getString("lowFrameRate");
@@ -121,7 +120,7 @@ public class OkhttpUtil {
                         SmoothData.date = jsonObject.getString("date");
                         SmoothData.haveData = true;
                         Looper.prepare();
-                        Toast.makeText(context,"获取流畅性测试数据成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"获取流畅性测试数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     } catch (JSONException exception) {
                         exception.printStackTrace();
@@ -132,7 +131,7 @@ public class OkhttpUtil {
     }
 
 
-    public static void getTouchData(Context context){
+    public static void getTouchData(Context context) {
         // 请求连接云手机app
         OkHttpClient client = new OkHttpClient();
         // post发生测试结果数据
@@ -140,7 +139,7 @@ public class OkhttpUtil {
                 .add("link_key", ConfigurationUtils.linkKey)
                 .build();
         final Request request = new Request.Builder()
-                .url(ConfigurationUtils.url+"/getTouchDataByKey")
+                .url(ConfigurationUtils.url + "/getTouchDataByKey")
                 .post(formBody)
                 .build();
         Call call = client.newCall(request);
@@ -156,10 +155,10 @@ public class OkhttpUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                Log.d("TWT", "result: "+res);
-                if(res.equals("null")){
+                Log.d("TWT", "result: " + res);
+                if (res.equals("null")) {
                     Log.e("TAG", "onResponse: empty info");
-                }else{
+                } else {
                     // 获取数据后显示到前端页面
                     try {
                         JSONObject jsonObject = new JSONObject(res);
@@ -169,11 +168,11 @@ public class OkhttpUtil {
                         TouchData.date = jsonObject.getString("date");
                         TouchData.hasData = true;
                         Looper.prepare();
-                        Toast.makeText(context,"获取触控测试数据成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"获取触控测试数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     } catch (JSONException exception) {
                         Looper.prepare();
-                        Toast.makeText(context,"未接受到数据",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"未接受到数据", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                         exception.printStackTrace();
                     }
@@ -182,7 +181,7 @@ public class OkhttpUtil {
         });
     }
 
-    public static void getAudioVideoData(Context context){
+    public static void getAudioVideoData(Context context) {
         // 请求连接云手机app
         OkHttpClient client = new OkHttpClient();
         // post发生测试结果数据
@@ -190,7 +189,7 @@ public class OkhttpUtil {
                 .add("link_key", ConfigurationUtils.linkKey)
                 .build();
         final Request request = new Request.Builder()
-                .url(ConfigurationUtils.url+"/getAudioVideoDataByKey")
+                .url(ConfigurationUtils.url + "/getAudioVideoDataByKey")
                 .post(formBody)
                 .build();
         Call call = client.newCall(request);
@@ -206,10 +205,10 @@ public class OkhttpUtil {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String res = response.body().string();
-                Log.d("TWT", "result: "+res);
-                if(res.equals("null")){
+                Log.d("TWT", "result: " + res);
+                if (res.equals("null")) {
                     Log.e("TAG", "onResponse: empty info");
-                }else{
+                } else {
                     // 获取数据后显示到前端页面
                     try {
                         JSONObject jsonObject = new JSONObject(res);
@@ -218,11 +217,11 @@ public class OkhttpUtil {
                         AudioVideoData.date = jsonObject.getString("date");
                         AudioVideoData.haveData = true;
                         Looper.prepare();
-                        Toast.makeText(context,"获取音画测试数据成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"获取音画测试数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                     } catch (JSONException exception) {
                         Looper.prepare();
-                        Toast.makeText(context,"未接受到数据",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"未接受到数据", Toast.LENGTH_SHORT).show();
                         Looper.loop();
                         exception.printStackTrace();
                     }

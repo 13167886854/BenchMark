@@ -30,6 +30,10 @@ public class AudioDecodeThread extends Thread implements Runnable {
     private long audiocurtime;
 
 
+    public AudioDecodeThread(String name) {
+        super(name);
+    }
+
     public AudioDecodeThread(String path,Context context) {
         mMp4FilePath = path;
         this.context=context;
@@ -157,7 +161,8 @@ public class AudioDecodeThread extends Thread implements Runnable {
                         ByteBuffer inputBuffer = mAudioDecoder.getInputBuffer(inputBufferIndex);
                         if (inputBuffer != null) {
                             inputBuffer.put(byteBuffer);
-                            mAudioDecoder.queueInputBuffer(inputBufferIndex, 0, sampleSize, mMediaExtractor.getSampleTime(), 0);
+                            mAudioDecoder.queueInputBuffer(inputBufferIndex,
+                                    0, sampleSize, mMediaExtractor.getSampleTime(), 0);
                             audiocurtime = mMediaExtractor.getSampleTime();
                             mMediaExtractor.advance();
                         }

@@ -368,7 +368,7 @@ public class FxService extends Service {
                     Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onTouch: 点击了开启触控服务");
                     //startAutoTapService();
-                    tapUtil.PhoneTouchTap();
+                    tapUtil.phoneTouchTap();
                 }
                 return true;
             }

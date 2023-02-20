@@ -50,8 +50,9 @@ import okio.Sink;
 
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
     private FragmentManager fragmentManager;
-    private RadioGroup main_menu;
-    private ImageButton menu, qr_code;
+    private RadioGroup mainMenu;
+    private ImageButton menu;
+    private ImageButton qrCode;
     private Context mContext = this;
     private String tmp_url = "https://1d2f09a7.r2.cpolar.top";
     private String latestVersion = null;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_fram, new ZhuyeFragment());
         fragmentTransaction.commit();
-        main_menu.setOnCheckedChangeListener(this::onCheckedChanged);
+        mainMenu.setOnCheckedChangeListener(this::onCheckedChanged);
         // 测量屏幕长宽
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -114,9 +115,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     }
 
     private void init() {
-        main_menu = findViewById(R.id.main_select_menu);
+        mainMenu = findViewById(R.id.main_select_menu);
         menu = findViewById(R.id.menu);
-        qr_code = findViewById(R.id.qr_code);
+        qrCode = findViewById(R.id.qr_code);
     }
 
     @Override

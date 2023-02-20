@@ -270,7 +270,7 @@ public class GameTouchTestService extends Service {
             createVirtualDisplay();
             mediaRecorder.start();
             gameTouchUtil.setVideoStartTime(System.currentTimeMillis());
-            tapUtil.GameTouchTap(GameTouchTestService.this);
+            tapUtil.gameTouchTap(GameTouchTestService.this);
             isRunning = true;
             Log.d(TAG, "begin:开始录制 ");
         }

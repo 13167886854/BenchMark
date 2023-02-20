@@ -242,18 +242,12 @@ public class TestInfoActivity extends AppCompatActivity {
 
     private void queryForData(String username,String type){
         OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/data/"+username+"/"+type)
-//                .addParam("adminName", Admin.adminName)
-//                .addParam("platformName", Admin.platformName)
-//                .addParam("cores", cpuCores + "")
-//                .addParam("time", Admin.testTime)
-//                .addHeader("Content-Type", "application/json; charset=utf-8")
                 .get()
                 .async(new OkHttpUtils.ICallBack() {
                     @Override
                     public void onSuccessful(Call call, String data) {
                         Log.e("TWT", "data: " + data);
                         JSONObject jsonObject = JSON.parseObject(data);
-//                        Map info = jsonObject.getInnerMap();
                         rom = jsonObject.getJSONArray("ROM");
                         ram = jsonObject.getJSONArray("RAM");
                         cpu = jsonObject.getJSONArray("CPU");
@@ -262,17 +256,7 @@ public class TestInfoActivity extends AppCompatActivity {
                         stability =  jsonObject.getJSONArray("Stability");
                         audioVideo =  jsonObject.getJSONArray("AudioVideo");
                         touch =  jsonObject.getJSONArray("Touch");
-
-                       // Log.e("TWT", "Stability: "+ Stability );
-                        //test_info.setText(ROM.get(0).toString());
                         handler.sendEmptyMessage(0);
-
-
-//                        Log.e("TWT", "RAM: "+RAM);
-//                        Log.e("TWT", "CPU: "+CPU);
-//                        Log.e("TWT", "GPU: "+GPU);
-
-
                     }
 
                     @Override

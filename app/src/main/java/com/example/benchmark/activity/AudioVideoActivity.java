@@ -36,13 +36,17 @@ import java.util.TimerTask;
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static boolean isTestOver = false;
-    private SurfaceView mSurfaceView;
     public static String mMp4FilePath;
+
+    private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private TextView yinhuaxinxi;
-    private long videocurtime, audiocurtime;
-    private long lastVideoCurtime = -1, lastAudioCurtime = -1;
-    private int heightPixels, widthPixels;
+    private long videocurtime;
+    private long audiocurtime;
+    private long lastVideoCurtime = -1;
+    private long lastAudioCurtime = -1;
+    private int heightPixels;
+    private int  widthPixels;
     private long maxDifferenceValue;
     private boolean isCompleted = false;
     private VideoDecodeThread videoDecodeThread;
@@ -62,16 +66,21 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             audiocurtime = audioDecodeThread.getcurTime() / 10000;
 
             if (isCompleted && YinHuaData.resolution != null) {
-                yinhuaxinxi.setText("测试结束！\n"
-                        + "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime
-                        + "\n" + "当前音频帧" + audiocurtime + "\n"
-                        + "\n" + "最大音画同步差" + maxDifferenceValue);
+                yinhuaxinxi.setText("测试结束！"
+                        + System.getProperty("line.separator")
+                        + "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素"
+                        + System.getProperty("line.separator")
+                        + "当前视频帧" + videocurtime
+                        + System.getProperty("line.separator")
+                        + "当前音频帧" + audiocurtime
+                        + System.getProperty("line.separator")
+                        + "最大音画同步差" + maxDifferenceValue);
                 ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.resolution, maxDifferenceValue);
                 isTestOver = true;
                 return;
             }
 
-            //当视频帧和音频帧不再增加判断播放结束
+            // 当视频帧和音频帧不再增加判断播放结束
             if (lastAudioCurtime == audiocurtime && lastVideoCurtime == videocurtime && !isCompleted) {
                 isCompleted = true;
             }
@@ -79,8 +88,13 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             if (Math.abs(videocurtime - audiocurtime) > maxDifferenceValue) {
                 maxDifferenceValue = Math.abs(videocurtime - audiocurtime);
             }
-            yinhuaxinxi.setText("手机像素为" + heightPixels + "X" + widthPixels + "像素" + "\n当前视频帧" + videocurtime
-                    + "\n当前音频帧" + audiocurtime + "\n当前音画同步差" + Math.abs((videocurtime - audiocurtime))
+            yinhuaxinxi.setText("手机像素为" + heightPixels + "X" + widthPixels + "像素"
+                    + System.getProperty("line.separator")
+                    + "当前视频帧" + videocurtime
+                    + System.getProperty("line.separator")
+                    + "当前音频帧" + audiocurtime
+                    + System.getProperty("line.separator")
+                    + "当前音画同步差" + Math.abs((videocurtime - audiocurtime))
             );
             lastAudioCurtime = audiocurtime;
             lastVideoCurtime = videocurtime;
@@ -95,7 +109,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_audio_video);
         init();
         Log.d("TWT", "资源文件的路径" + mMp4FilePath);
-        //直接开始测试崩溃 等待1S后开始测试
+        // 直接开始测试崩溃 等待1S后开始测试
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -139,7 +153,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     private void startTest() {
         videoDecodeThread = new VideoDecodeThread(mMp4FilePath, AudioVideoActivity.this);
         videoDecodeThread.setSurfaceView(mSurfaceView);
-        //开启音频解码线程
+        // 开启音频解码线程
         audioDecodeThread = new AudioDecodeThread(mMp4FilePath, AudioVideoActivity.this);
         if (getSystemService(AUDIO_SERVICE) instanceof AudioManager) {
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);

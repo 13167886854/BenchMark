@@ -20,7 +20,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-
 public class TapUtil {
     public static int mWholeMonitorNum;
     public static final int TOTAL_TAP_NUM = 12;
@@ -68,11 +67,11 @@ public class TapUtil {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void tap(int x, int y) {
+    public void tap(int locationX, int locationY) {
         if (service == null) {
             Log.e("TWT", "service is not initial yet");
         }
-        AccessibilityUtil.tap(service, x, y,
+        AccessibilityUtil.tap(service, locationX, locationY,
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
@@ -84,16 +83,15 @@ public class TapUtil {
                     }
                 }
         );
-
     }
 
     // 云手机触控体验
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void cloudPhoneTap(int x, int y) {
+    public void cloudPhoneTap(int locationX, int locationY) {
         if (service == null) {
             Log.e("TWT", "service is not initial yet");
         }
-        AccessibilityUtil.tap(service, x, y,
+        AccessibilityUtil.tap(service, locationX, locationY,
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
@@ -114,12 +112,13 @@ public class TapUtil {
                                 client.newCall(request)
                                         .enqueue(new Callback() {
                                             @Override
-                                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                                Log.d("zzl", "onFailure: call===>" + e.toString());
+                                            public void onFailure(@NotNull Call call, @NotNull IOException exception) {
+                                                Log.d("zzl", "onFailure: call===>" + exception.toString());
                                             }
 
                                             @Override
-                                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                            public void onResponse(@NotNull Call call, @NotNull Response response)
+                                                    throws IOException {
                                                 // 获取成功响应的系统时间戳
                                                 endTime = System.currentTimeMillis();
                                                 responseTime = endTime - startTime;
@@ -128,12 +127,16 @@ public class TapUtil {
                                                 String res = result.substring(81, 94);
                                                 Log.d("zzl", "onResponse: result===>" + result);
                                                 Log.d("zzl", "onResponse: res===>" + res);
+
                                                 // 获取到的时间戳，应该减去响应时延
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
                                                 mCurrentTapNum++;
 
-                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + ": " + mLastTapTime);
-                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-" + mCurrentTapNum + "System.currentTimeMillis(): " + System.currentTimeMillis());
+                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-"
+                                                        + mCurrentTapNum + ": " + mLastTapTime);
+                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-"
+                                                        + mCurrentTapNum + "System.currentTimeMillis(): "
+                                                        + System.currentTimeMillis());
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
                                             }
                                         });
@@ -145,17 +148,15 @@ public class TapUtil {
                         }
                     }
 
-
                     @Override
                     public void onFailure() {
                         Log.e("TWT", "tap failure");
                     }
                 }
         );
-
     }
 
-    public void GameTouchTap(GameTouchTestService service) {
+    public void gameTouchTap(GameTouchTestService service) {
         turn = 0;
         gameTouchUtil.clear();
 
@@ -182,7 +183,7 @@ public class TapUtil {
         timer.schedule(task, 1500, 750);
     }
 
-    public void PhoneTouchTap() {
+    public void phoneTouchTap() {
         phoneCurrentTapNum = 0;
         TimerTask task = new TimerTask() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -202,6 +203,4 @@ public class TapUtil {
         Timer timer = new Timer();
         timer.schedule(task, 1000, 1500);
     }
-
-
 }
