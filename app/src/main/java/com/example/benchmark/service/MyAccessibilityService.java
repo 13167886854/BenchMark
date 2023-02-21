@@ -186,7 +186,7 @@ public class MyAccessibilityService extends AccessibilityService {
         } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
             service = new NetEaseCloudPhoneStabilityService(this);
-        } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkPlatform)) {
+        } else if (CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkPlatform)) {
             ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
             service = new TencentGamerStabilityService(this);
         } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)) {
@@ -348,7 +348,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
 
     private boolean isGamePlatform() {
-        return CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkPlatform)
+        return CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME.equals(checkPlatform);
     }

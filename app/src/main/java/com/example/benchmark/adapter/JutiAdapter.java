@@ -35,10 +35,12 @@ public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
-        JuTiData info = this.data.get(position);
-        recyclerViewHolder.juTiItemZhiBiao.setText(info.getJutiItem());
-        recyclerViewHolder.juTiItemGrade.setText(info.getJuTiItemGrade());
+        if (holder instanceof RecyclerViewHolder) {
+            final RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
+            JuTiData info = this.data.get(position);
+            recyclerViewHolder.juTiItemZhiBiao.setText(info.getJutiItem());
+            recyclerViewHolder.juTiItemGrade.setText(info.getJuTiItemGrade());
+        }
     }
 
     @Override

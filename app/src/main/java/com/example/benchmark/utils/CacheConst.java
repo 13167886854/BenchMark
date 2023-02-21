@@ -19,7 +19,7 @@ public class CacheConst {
     public static final String PLATFORM_NAME_NET_EASE_CLOUD_PHONE = "网易云手机";
     public static final String PLATFORM_NAME_NET_EASE_CLOUD_GAME = "网易云游戏";
     public static final String PLATFORM_NAME_MI_GU_GAME = "咪咕快游";
-    public static final String PLATFORM_NAME_Tencent_GAME = "腾讯先锋";
+    public static final String PLATFORM_NAME_TENCENT_GAME = "腾讯先锋";
 
     // 硬件信息
     public static final String KEY_HARDWARE_INFO = "硬件信息";

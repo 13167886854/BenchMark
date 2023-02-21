@@ -515,7 +515,7 @@ public class GameVATestService extends Service {
 //                        double score = 0;
 //                        //Log.e(TAG, "onResponse: "+CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checked_plat);.);
 //                        Log.e(TAG, "onResponse: "+CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME));
-////                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_Tencent_GAME)){
+////                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_TENCENT_GAME)){
 ////                            double min = 915;
 ////                            double max = 920;
 ////                            score = (x-min)/(max-min);
@@ -528,7 +528,7 @@ public class GameVATestService extends Service {
 ////                            double max = 443;
 ////                            score = (x-min)/(max-min);
 ////                        }
-////                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_Tencent_GAME)){
+////                        if(CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME).equals(CacheConst.PLATFORM_NAME_TENCENT_GAME)){
 ////                            if(x<917){//清晰度小于916判断为标清 720p
 ////                                YinHuaData.Resolution = "1280X720";
 ////                            }else{//超过917判断为 高清、超清 1080p

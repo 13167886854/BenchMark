@@ -162,7 +162,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
         if (checkedPlat.equals(CacheConst.PLATFORM_NAME_MI_GU_GAME) ||
                 checkedPlat.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME) ||
-                checkedPlat.equals(CacheConst.PLATFORM_NAME_Tencent_GAME)) {
+                checkedPlat.equals(CacheConst.PLATFORM_NAME_TENCENT_GAME)) {
             if (isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM) {
                 if (intent.getSerializableExtra("localMobileInfo") instanceof HashMap) {
                     mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
@@ -490,7 +490,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_huawei_cloud_phone));
                 } else if (CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_net_ease_cloud_phone));
-                } else if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkedPlat)) {
+                } else if (CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
@@ -507,7 +507,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameSmoothService.setMediaProject(mediaProjection);
             try {
-                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkedPlat)) {
+                if (CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
@@ -524,7 +524,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameVATestService.setMediaProject(mediaProjection);
             try {
-                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkedPlat)) {
+                if (CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));
@@ -542,7 +542,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             mediaProjection = projectionManager.getMediaProjection(resultCode, data);
             gameTouchTestService.setMediaProject(mediaProjection);
             try {
-                if (CacheConst.PLATFORM_NAME_Tencent_GAME.equals(checkedPlat)) {
+                if (CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_tencent_gamer));
                 } else if (CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkedPlat)) {
                     ApkUtil.launchApp(this, getString(R.string.pkg_name_mi_gu_play));

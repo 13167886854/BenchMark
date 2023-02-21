@@ -365,7 +365,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.tengxun_game: {
-                cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_Tencent_GAME);
+                cheak_game_map.put("cheaked_game", CacheConst.PLATFORM_NAME_TENCENT_GAME);
                 initGameBtn();
                 if (getActivity().findViewById(R.id.tengxun_game) instanceof  Button) {
                     Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
