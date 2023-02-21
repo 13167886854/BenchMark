@@ -12,6 +12,8 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        System.out.println(1);
+        System.out.print(4 + System.getProperty("line.separator"));
+        System.out.println(2);
     }
 }

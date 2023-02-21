@@ -30,16 +30,15 @@ import java.io.IOException;
  * @time 2022/6/14 15:30
  */
 public class BothRecordService extends Service {
-    private MediaProjection mProjection;
-    private MediaProjectionManager manager;
-    private Recorder mRecorder;
-    private boolean isRunning;
-
     // path
     private static String path = "";
+
+    private boolean isRunning;
     private int width;
     private int height;
     private int dpi;
+    private MediaProjection mProjection;
+    private Recorder mRecorder;
     private VirtualDisplay virtualDisplay;
     private MediaRecorder mediaRecorder;
 
@@ -75,8 +74,8 @@ public class BothRecordService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
-        boolean isSupported;
         mRecorder = new Recorder();
+        boolean isSupported;
         isSupported = mRecorder.start(this, mProjection);
         if (!isSupported) {
             mProjection.stop();
@@ -90,17 +89,17 @@ public class BothRecordService extends Service {
             return;
         }
         DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
+        if (this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+        }
         width = metrics.widthPixels;
         height = metrics.heightPixels;
         dpi = metrics.densityDpi;
-
         Log.d("TWT", "startRecord: start");
         initRecorder();
         createVirtualDisplay();
         mediaRecorder.start();
-
         isRunning = true;
     }
 
@@ -147,10 +146,6 @@ public class BothRecordService extends Service {
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
-        } catch (Exception e) {
-            Log.e("TWT", "initRecorder: " + e.toString());
-        }
-        try {
             mediaRecorder.prepare();
         } catch (IOException e) {
             Log.e("BothRecordService", e.toString());
@@ -164,12 +159,12 @@ public class BothRecordService extends Service {
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
-                    return null;
+                    return "";
                 }
             }
             return rootDir;
         } else {
-            return null;
+            return "";
         }
     }
 

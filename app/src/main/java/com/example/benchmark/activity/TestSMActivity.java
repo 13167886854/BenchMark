@@ -19,36 +19,39 @@ import com.example.benchmark.utils.FpsUtils;
 import com.example.benchmark.render.GLVideoRenderer;
 import com.example.benchmark.utils.ScoreUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+/**
+ * @version 1.0
+ * @description TestSMActivity
+ * @time 2022/6/14 15:30
+ */
 public class TestSMActivity extends AppCompatActivity {
+    private static final int FILE_REQUEST_CODE = 50;
+
     private GLSurfaceView glView;
     private GLVideoRenderer glVideoRenderer;
-
-
     private FpsUtils fpsUtil = FpsUtils.getFpsUtils();
     private TextView textInfo;
     private FpsRunnalbe fpsRunnalbe;
-
-    // 0表示默认视频测试  1表示录屏测试
-    private int launchMode = 0;
-
-    private int FILE_REQUEST_CODE = 50;
-    private Context mContext = this;
     private String path = "";
 
     // 百分比显示
     private DecimalFormat df = new DecimalFormat("0.00%");
 
-    // SharePreferences测试结果保存
-    private String STORE_NAME = "LastTestResult";
-
     // 判断是否正在测试
     private boolean isTesting = false;
     private String eachFps = "";
 
+    /**
+     * Activity的启动方法
+     *
+     * @param context 上下文
+     * @param path    Intent传过来的参数
+     */
     public static void start(Context context, String path) {
         Intent intent = new Intent(context, TestSMActivity.class);
         intent.putExtra("path", path);
@@ -60,7 +63,6 @@ public class TestSMActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_smactivity);
-
 
         // 获取显示文本
         textInfo = findViewById(R.id.textview);
@@ -82,7 +84,7 @@ public class TestSMActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 Log.d("TWT", "onCompletion: 播放结束");
                 try {
-                    StopTest();
+                    stopTest();
                 } catch (IOException e) {
                     Log.e("TestSMActivity: ", e.toString());
                 }
@@ -99,20 +101,20 @@ public class TestSMActivity extends AppCompatActivity {
 
         //自动开始
         try {
-            DoTest();
+            doTest();
         } catch (IOException e) {
             Log.e("TestSMActivity: ", e.toString());
         }
     }
 
-    public void DoTest() throws IOException {
+    private void doTest() throws IOException {
         isTesting = true;
-        Log.d("TWT", "DoTest: 开始播放");
+        Log.d("TWT", "doTest: 开始播放");
         fpsUtil.startMonitor(fpsRunnalbe);
         glVideoRenderer.getMediaPlayer().start();
     }
 
-    public void StopTest() throws IOException {
+    private void stopTest() throws IOException {
         isTesting = false;
 
         // 停止监听和播放
@@ -148,7 +150,7 @@ public class TestSMActivity extends AppCompatActivity {
         if (isTesting) {
             glVideoRenderer.getMediaPlayer().stop();
             try {
-                StopTest();
+                stopTest();
             } catch (IOException e) {
                 Log.e("TestSMActivity: ", e.toString());
             }
@@ -173,14 +175,14 @@ public class TestSMActivity extends AppCompatActivity {
             }
             Log.d("TWT", "runing.......... ");
             textInfo.setText(
-                    "当前FPS" + fpsUtil.getCount() + "帧/秒" + "\n"
-                            + "帧抖动率" + String.format("%.2f", fpsUtil.getFrameShakingRate()) + "\n"
-                            + "低帧率" + df.format(fpsUtil.getLowFrameRate()) + "\n"
-                            + "当前帧间隔" + fpsUtil.getIntervalTime() + "ms" + "\n"
-                            + "jank发生次数" + fpsUtil.getJankCount() + "\n"
-                            + "卡顿率" + df.format(fpsUtil.getShtutterRate()) + "\n"
-                            + "总帧数" + fpsUtil.getTotalCount() + "\n"
-                            + "测试时长" + (fpsUtil.getSizeOfCountArray() + 1) + "s" + "\n"
+                    "当前FPS" + fpsUtil.getCount() + "帧/秒" + System.getProperty("line.separator")
+                            + "帧抖动率" + String.format("%.2f", fpsUtil.getFrameShakingRate()) + System.getProperty("line.separator")
+                            + "低帧率" + df.format(fpsUtil.getLowFrameRate()) + System.getProperty("line.separator")
+                            + "当前帧间隔" + fpsUtil.getIntervalTime() + "ms" + System.getProperty("line.separator")
+                            + "jank发生次数" + fpsUtil.getJankCount() + System.getProperty("line.separator")
+                            + "卡顿率" + df.format(fpsUtil.getShtutterRate()) + System.getProperty("line.separator")
+                            + "总帧数" + fpsUtil.getTotalCount() + System.getProperty("line.separator")
+                            + "测试时长" + (fpsUtil.getSizeOfCountArray() + 1) + "s" + System.getProperty("line.separator")
             );
             fpsUtil.updateAfterGetInfo();
 
@@ -197,14 +199,10 @@ public class TestSMActivity extends AppCompatActivity {
                 try {
                     Uri uri = data.getData();
                     Log.d("TWT", "uri:" + uri.toString());
-                    try {
-                        glVideoRenderer.getMediaPlayer().reset();
-                        glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this, uri);
-                        glVideoRenderer.getMediaPlayer().prepare();
-                    } catch (IOException e) {
-                        Log.e("TestSMActivity: ", e.toString());
-                    }
-                } catch (Exception e) {
+                    glVideoRenderer.getMediaPlayer().reset();
+                    glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this, uri);
+                    glVideoRenderer.getMediaPlayer().prepare();
+                } catch (IOException e) {
                     Log.e("TestSMActivity: ", e.toString());
                 }
             }
