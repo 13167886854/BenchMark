@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.data.Admin;
+import com.example.benchmark.data.IpPort;
 import com.example.benchmark.data.YinHuaData;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class ScoreUtil {
                     .addParam("platformName", Admin.platformName)
                     .addParam("cores", cpuCores + "")
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .post(true)
                     .async(new OkHttpUtils.ICallBack() {
@@ -80,6 +83,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("gpuVendor", gpuVendor)
                     .addParam("gpuRender", gpuRender)
                     .addParam("gpuVersion", gpuVersion)
@@ -121,6 +126,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("availableRam", availableRAM)
                     .addParam("totalRam", totalRAM)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -161,6 +168,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("availableRom", availableROM)
                     .addParam("totalRom", totalROM)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -228,6 +237,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("averageFps", averageFPS + "")
                     .addParam("frameShakeRate", frameShakeRate + "")
                     .addParam("lowFrameRate", lowFrameRate + "")
@@ -303,6 +314,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("startSuccessRate", startSuccessRate + "")
                     .addParam("averageStartTime", averageStartTime + "")
                     .addParam("averageQuitTime", averageQuitTime + "")
@@ -550,6 +563,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("touchTimeDelay", avgResponseTime + "ms")
                     .addParam("touchAccuracy", averageAccuracy + "%")
                     .addParam("touchScore", touchScore + "")
@@ -632,6 +647,8 @@ public class ScoreUtil {
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
                     .addParam("time", Admin.testTime)
+                    .addParam("ip", IpPort.ip)
+                    .addParam("port", IpPort.port)
                     .addParam("resolution", resolution + "")
                     .addParam("maxDiffValue", maxDiffValue + "")
                     .addParam("pesq", PESQ + "")

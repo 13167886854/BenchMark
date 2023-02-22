@@ -157,12 +157,12 @@ public class FxService extends Service {
         tapUtil = TapUtil.getUtil();
 
         try{
-            Log.e("TWT", "1.PESQ:"+YinHuaData.pesq);
-            //Log.e("TWT", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
-            //Log.e("TWT", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
-            Log.e("TWT", "1.PESQ==null:"+(YinHuaData.pesq==null));
+            Log.e("FxService", "1.PESQ:"+YinHuaData.pesq);
+            // Log.e("FxService", "1.PESQ.isEmpty:"+YinHuaData.PESQ.isEmpty());
+            // Log.e("FxService", "1.PESQ.equals():"+YinHuaData.PESQ.equals(""));
+            Log.e("FxService", "1.PESQ==null:"+(YinHuaData.pesq==null));
         }catch (Exception e){
-            Log.e("TWT", "error: "+e.toString());
+            Log.e("FxService", "error: "+e.toString());
         }
 
 
