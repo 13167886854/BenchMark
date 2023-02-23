@@ -56,7 +56,10 @@ import java.util.Map;
  */
 public final class CodeUtils {
 
+    // 默认宽度要求
     public static final int DEFAULT_REQ_WIDTH = 480;
+
+    // 默认高度要求
     public static final int DEFAULT_REQ_HEIGHT = 640;
 
     private CodeUtils() {
@@ -444,7 +447,6 @@ public final class CodeUtils {
             result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
         } catch (NotFoundException e) {
             Log.e("decodeInternal", "decodeInternal: ", e);
-
         }
         if (result == null) {
 
@@ -523,7 +525,6 @@ public final class CodeUtils {
         bitmap.getPixels(pixels, 0, bitmap.getWidth(),
                 0, 0, bitmap.getWidth(), bitmap.getHeight());
         return new RGBLuminanceSource(width, height, pixels);
-
     }
 
     /**
@@ -669,8 +670,8 @@ public final class CodeUtils {
         if (TextUtils.isEmpty(content)) {
             return null;
         }
-        final int WHITE = Color.WHITE;
-        final int BLACK = codeColor;
+        final int white = Color.WHITE;
+        final int black = codeColor;
         MultiFormatWriter writer = new MultiFormatWriter();
         try {
             BitMatrix result = writer.encode(content, format, desiredWidth,
@@ -683,7 +684,7 @@ public final class CodeUtils {
             for (int y = 0; y < height; y++) {
                 int offset = y * width;
                 for (int x = 0; x < width; x++) {
-                    pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+                    pixels[offset + x] = result.get(x, y) ? black : white;
                 }
             }
             Bitmap bitmap = Bitmap.createBitmap(width, height,

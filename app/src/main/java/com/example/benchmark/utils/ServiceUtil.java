@@ -16,31 +16,69 @@ import android.widget.Toast;
 import com.example.benchmark.activity.CePingActivity;
 import com.example.benchmark.service.FxService;
 
+/**
+ * @version 1.0
+ * @description ServiceUtil
+ * @time 2023/2/22 14:52
+ */
 public class ServiceUtil {
+
     /**
-     * 校验某个服务是否还存在
+     * @param context     description
+     * @param serviceName description
+     * @return boolean
+     * @throws null
+     * @description: isServiceRunning  校验某个服务是否还存在
+     * @date 2023/2/22 14:52
      */
     public static boolean isServiceRunning(Context context, String serviceName) {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        ComponentName componentName=new ComponentName(context.getPackageName(),serviceName);
-        PendingIntent intent = am.getRunningServiceControlPanel(componentName);
-        return intent != null;
-    }
-
-    public static void backToCePingActivity(Service service) {
-        Intent resultIntent = new Intent(service, CePingActivity.class);
-        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        service.startActivity(resultIntent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && service instanceof AccessibilityService) {
-            ((AccessibilityService) service).disableSelf();
+        PendingIntent intent = null;
+        if (context.getSystemService(Context.ACTIVITY_SERVICE) instanceof ActivityManager) {
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ComponentName componentName = new ComponentName(context.getPackageName(), serviceName);
+            intent = am.getRunningServiceControlPanel(componentName);
+            return intent != null;
+        } else {
+            return false;
         }
-        service.stopSelf();
     }
 
-    public static void startFxService(Context context, String checked_plat, int resultCode, Intent data, boolean isCheckTouch,boolean isCheckSoundFrame) {
+    /**
+     * @param serviceName description
+     * @return void
+     * @throws null
+     * @description: backToCePingActivity
+     * @date 2023/2/22 14:53
+     */
+    public static void backToCePingActivity(Service serviceName) {
+        Intent resultIntent = new Intent(serviceName, CePingActivity.class);
+        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        serviceName.startActivity(resultIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && serviceName
+                instanceof AccessibilityService) {
+            ((AccessibilityService) serviceName).disableSelf();
+        }
+        serviceName.stopSelf();
+    }
+
+    /**
+     * @param context           description
+     * @param checked_plat      description
+     * @param resultCode        description
+     * @param data              description
+     * @param isCheckTouch      description
+     * @param isCheckSoundFrame description
+     * @return void
+     * @throws null
+     * @description: startFxService
+     * @date 2023/2/22 14:53
+     */
+    public static void startFxService(Context context, String checked_plat, int resultCode,
+                                      Intent data, boolean isCheckTouch,
+                                      boolean isCheckSoundFrame) {
         if (!Settings.canDrawOverlays(context)) {
             toFloatGetPermission(context);
-        }else{
+        } else {
             Intent fxService = new Intent(context, FxService.class)
                     .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
                     .putExtra("resultCode", resultCode)
@@ -56,11 +94,13 @@ public class ServiceUtil {
     }
 
     private static void toFloatGetPermission(Context context) {
+
         Toast.makeText(context, "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
-        Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + context.getPackageName()));
-        //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + context.getPackageName()));
+
+        Log.d("TWT", "toFloatGetPermission: " +
+                Uri.parse("package:" + context.getPackageName()));
         context.startActivity(intent);
-        //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
     }
 }

@@ -157,7 +157,7 @@ public class TishiFragment extends Fragment {
 
     public void showDialog() {
         myDialog = new LoginDialog(getContext());
-        myDialog.setNoOnclickListener("取消", new LoginDialog.onNoOnclickListener() {
+        myDialog.setNoOnclickListener("取消", new LoginDialog.OnNoOnclickListener() {
             @Override
             public void onNoClick() {
                 myDialog.dismiss();
@@ -167,7 +167,7 @@ public class TishiFragment extends Fragment {
         mThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                myDialog.setYesOnclickListener("确定", new LoginDialog.onYesOnclickListener() {
+                myDialog.setYesOnclickListener("确定", new LoginDialog.OnYesOnclickListener() {
                     @Override
                     public void onYesClick() {
                         myDialog.yes.setEnabled(false);

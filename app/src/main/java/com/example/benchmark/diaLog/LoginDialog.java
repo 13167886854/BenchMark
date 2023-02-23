@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -21,37 +22,52 @@ import androidx.annotation.NonNull;
 import com.example.benchmark.data.Admin;
 import com.example.benchmark.R;
 
+
 /**
- * @Author: ranzili
- * @Time: 2022/9/15 20:49
- * @Description:
+ * @version 1.0
+ * @description LoginDialog 登录DigLog
+ * @time 2023/2/23 09:41
  */
-
 public class LoginDialog extends Dialog {
-    public Button yes;//确定按钮
-    private Button no;//取消按钮
-    private TextView titleTv;//消息标题文本
-    private TextView messageTv;//消息提示文本
-    private String titleStr;//从外界设置的title文本
-    private String messageStr;//从外界设置的消息文本
-    private View view;
-    //确定文本和取消文本的显示内容
-    private String yesStr, noStr;
-
-    private EditText mUserName;
-    private EditText mPassWord;
-    private String username = "";
-    private String password = "";
-    private SharedPreferences sharedPreferences;
-    private boolean mIsChecked=false;
-    private Thread mThread;
-    private Message mMessage;
     private static final String TAG = "Login";
 
-    private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
-    private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
+    //确定按钮
+    private Button yes;
 
-    private Handler mHandler = new Handler(){
+    //取消按钮
+    private Button no;
+
+    //消息标题文本
+    private TextView titleTv;
+
+    //消息提示文本
+    private TextView messageTv;
+
+    //从外界设置的title文本
+    private String titleStr;
+
+    //从外界设置的消息文本
+    private String messageStr;
+    private View view;
+    private String yesStr, noStr;
+    private String username = "";
+    private String password = "";
+    private boolean mIsChecked = false;
+
+    //确定文本和取消文本的显示内容
+    private EditText mUserName;
+    private EditText mPassWord;
+    private SharedPreferences sharedPreferences;
+    private Thread mThread;
+    private Message mMessage;
+
+    //取消按钮被点击了的监听器
+    private OnNoOnclickListener noOnclickListener;
+
+    //确定按钮被点击了的监听器
+    private OnYesOnclickListener yesOnclickListener;
+
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -60,195 +76,133 @@ public class LoginDialog extends Dialog {
             }
         }
     };
+
+    /**
+     * @param context description
+     * @return null
+     * @throws null
+     * @description: LoginDialog
+     * @date 2023/2/23 09:44
+     */
     public LoginDialog(@NonNull Context context) {
         super(context);
     }
 
     /**
-     * 设置取消按钮的显示内容和监听
-     *
-     * @param str
-     * @param onNoOnclickListener
+     * @param str                 description
+     * @param onNoOnclickListener description
+     * @return void
+     * @throws null
+     * @description: 设置取消按钮的显示内容和监听
+     * @date 2023/2/23 09:41
      */
-    public void setNoOnclickListener(String str, onNoOnclickListener onNoOnclickListener) {
+    public void setNoOnclickListener(String str, OnNoOnclickListener onNoOnclickListener) {
         if (str != null) {
-
             noStr = str;
         }
         this.noOnclickListener = onNoOnclickListener;
     }
 
     /**
-     * 设置确定按钮的显示内容和监听
-     *
-     * @param str
-     * @param onYesOnclickListener
+     * @param str                  description
+     * @param onYesOnclickListener description
+     * @return void
+     * @throws null
+     * @description: 设置确定按钮的显示内容和监听
+     * @date 2023/2/23 09:42
      */
-    public void setYesOnclickListener(String str, onYesOnclickListener onYesOnclickListener) {
+    public void setYesOnclickListener(String str, OnYesOnclickListener onYesOnclickListener) {
         if (str != null) {
             yesStr = str;
         }
         this.yesOnclickListener = onYesOnclickListener;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mydialog);
+
         //设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         //按空白处不能取消动画
         setCanceledOnTouchOutside(false);
+
         //初始化界面控件
         initView();
+
         //初始化界面数据
         initData();
+
         //初始化界面控件的事件
         initEvent();
-        mUserName = findViewById(R.id.et_username); // 用户名
+
+        // 用户名
+        mUserName = findViewById(R.id.et_username);
         mUserName.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "beforeTextChanged: ");
+            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "onTextChanged: " + charSequence);
+            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //Log.d(TAG, "afterTextChanged: " + editable);
-                //在文本改变之后记录用户账号
-                //if (mIsChecked){
-                //    if (sharedPreferences == null)
-                //        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
-                //    SharedPreferences.Editor editor = sharedPreferences.edit();
-                //    editor.putString("username", mUserName.getText().toString());
-                //}
                 username = editable.toString();
                 Admin.username = username;
-                //Log.d(TAG, "afterTextChanged: " + username);ad
+
             }
         });
 
-        mPassWord = findViewById(R.id.et_password); // 密码
+        // 密码
+        mPassWord = findViewById(R.id.et_password);
         mPassWord.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "beforeTextChanged: ");
+            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "onTextChanged: " + charSequence);
+            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //Log.d(TAG, "afterTextChanged: " + editable);
-                //在文本改变之后记录用户密码
-                //if (mIsChecked){
-                //    if (sharedPreferences == null)
-                //        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
-                //    SharedPreferences.Editor editor = sharedPreferences.edit();
-                //    editor.putString("password", mPassWord.getText().toString());
-                //}
                 password = editable.toString();
                 Admin.password = password;
-                //Log.d(TAG, "afterTextChanged: " + password);
             }
         });
 
     }
 
     /**
-     * 初始化界面的确定和取消监听器
+     * @return void
+     * @throws null
+     * @description: 初始化界面的确定和取消监听器
+     * @date 2023/2/23 09:42
      */
     private void initEvent() {
+
         //设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (yesOnclickListener != null) {
-                    //Toast.makeText(getContext(), (username + "---" + password), Toast.LENGTH_SHORT).show();
-                        // 点击登录后禁用登录按钮
-                        //yes.setEnabled(false);
-                        //Log.d(TAG, "点击登录: username---" + username + "---password---" + password);
-                        //if (username.length() < 5 || username.length() > 15) {
-                        //    Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
-                        //    yes.setEnabled(true);
-                        //    if (password.length() < 5 || password.length() > 15) {
-                        //        Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
-                        //        yes.setEnabled(true);
-                        //    }
-                        //} else {
-                        //    // 发送后端登录验证请求
-                        //    mThread = new Thread(new Runnable() {
-                        //        @Override
-                        //        public void run() {
-                        //            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP+"/admin/loginAndReg")
-                        //                    .addParam("adminName", username)
-                        //                    .addParam("adminPasswd", password)
-                        //                    .addHeader("Content-Type", "application/json; charset=utf-8")
-                        //                    .post(true)
-                        //                    .async(new OkHttpUtils.ICallBack() {
-                        //                        @Override
-                        //                        public void onSuccessful(Call call, String data) {
-                        //                            Log.d(TAG, "onSuccessful: data--" + data);
-                        //                            if (data.endsWith("成功")) {
-                        //                                Admin.adminName = data.split(" ")[1];
-                        //                                Log.d(TAG, "onSuccessful: Admin.adminName==" + Admin.adminName);
-                        //                                Admin.STATUS = "Success";
-                        //                                mMessage = mHandler.obtainMessage();
-                        //                                mMessage.what = 1;
-                        //                                mHandler.sendMessage(mMessage);
-                        //                                Looper.prepare();
-                        //                                Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                        //                                // 验证成功后，跳转到主界面
-                        //                                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        //                                Looper.loop();
-                        //                            } else {
-                        //                                Log.d(TAG, "onSuccessful: data==>" + data);
-                        //                                mMessage = mHandler.obtainMessage();
-                        //                                mMessage.what = 1;
-                        //                                mHandler.sendMessage(mMessage);
-                        //
-                        //                                Looper.prepare();
-                        //                                Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                        //                                Looper.loop();
-                        //                            }
-                        //                        }
-                        //
-                        //                        @Override
-                        //                        public void onFailure(Call call, String errorMsg) {
-                        //                            Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
-                        //                            mMessage = mHandler.obtainMessage();
-                        //                            mMessage.what = 1;
-                        //                            mHandler.sendMessage(mMessage);
-                        //
-                        //                            Looper.prepare();
-                        //                            Toast.makeText(getContext(), "遇见未知异常! 请检查网络后重新启动应用🙂 ", Toast.LENGTH_SHORT).show();
-                        //                            Looper.loop();
-                        //                        }
-                        //                    });
-                        //        }
-                        //    });
-                        //    mThread.start();
-                        //}
-                    }
-                    yesOnclickListener.onYesClick();
+                    Log.d(TAG, "onClick: yesOnclickListener");
                 }
+                yesOnclickListener.onYesClick();
+            }
         });
+
         //设置取消按钮被点击后，向外界提供监听
         no.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (noOnclickListener != null) {
                     noOnclickListener.onNoClick();
                 }
@@ -257,7 +211,10 @@ public class LoginDialog extends Dialog {
     }
 
     /**
-     * 初始化界面控件的显示数据
+     * @return void
+     * @throws null
+     * @description: 初始化界面控件的显示数据
+     * @date 2023/2/23 09:43
      */
     private void initData() {
 
@@ -275,32 +232,33 @@ public class LoginDialog extends Dialog {
     }
 
     /**
-     * 从外界Activity为Dialog设置标题
-     *
-     * @param title
+     * @param title description
+     * @return void
+     * @throws null
+     * @description: 从外界Activity为Dialog设置标题
+     * @date 2023/2/23 09:43
      */
     public void setTitle(String title) {
         titleStr = title;
     }
 
     /**
-     * 从外界Activity为Dialog设置dialog的message
-     *
-     * @param message
+     * @param message description
+     * @return void
+     * @throws null
+     * @description: 从外界Activity为Dialog设置dialog的message
+     * @date 2023/2/23 09:43
      */
     public void setMessage(String message) {
         messageStr = message;
     }
 
-    /**
-     * 设置确定按钮和取消被点击的接口
-     */
-    public interface onYesOnclickListener {
-        public void onYesClick();
+    public interface OnYesOnclickListener {
+        void onYesClick();
     }
 
-    public interface onNoOnclickListener {
-        public void onNoClick();
+    public interface OnNoOnclickListener {
+        void onNoClick();
     }
 
 }
