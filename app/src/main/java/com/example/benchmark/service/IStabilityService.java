@@ -1,11 +1,8 @@
 package com.example.benchmark.service;
+
 import com.example.benchmark.utils.TapUtil;
 
-
-
 public interface IStabilityService {
-
-
     void onMonitor();
 
     void startControlCloudPhone();
@@ -21,5 +18,4 @@ public interface IStabilityService {
     default boolean isFinished() {
         return getCurrentMonitorNum() == TapUtil.mWholeMonitorNum;
     }
-
 }

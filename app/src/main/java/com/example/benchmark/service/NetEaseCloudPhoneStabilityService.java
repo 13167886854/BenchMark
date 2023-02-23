@@ -8,23 +8,23 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.example.benchmark.utils.AccessibilityUtil;
 
 public class NetEaseCloudPhoneStabilityService implements IStabilityService {
-
     private static final String TAG = "NetEaseCloudPhoneStabilityService";
-    private final String NODE_TEXT_MORE_GAME = "更多游戏";
-    private final String NODE_TEXT_PHONE_GAME = "手机游戏";
-    private final String NODE_TEXT_CLOUD_PHONE = "云手机";
-    private final String NODE_TEXT_INSTANT_PLAY = "秒玩";
-    private final String NODE_ID_LOADING_GAME = "com.netease.android.cloudgame:id/gaming_reconnect_text";
-    private final String NODE_TEXT_LOADING_GAME = "游戏加载中，请稍等";
-    private final String NODE_ID_CLOUD_PHONE_INTRODUCTION_BTN = "com.netease.android.cloudgame:id/ok_btn";
-    private final String NODE_TEXT_CLOUD_PHONE_INTRODUCTION_BTN = "知道了";
-    private final String NODE_ID_STILL_QUIT = "com.netease.android.cloudgame:id/quit_btn";
-    private final String NODE_TEXT_STILL_QUIT = "仍要退出";
-    private final String NODE_ID_CANCEL_STILL_QUIT = "com.netease.android.cloudgame:id/cancel_btn";
-    private final String NODE_ID_QUIT_PHONE = "com.netease.android.cloudgame:id/dialog_sure";
-    private final String NODE_TEXT_QUIT_PHONE = "退出";
-    private final String NODE_TEXT_CONTINUE_WAIT = "继续等待";
-    private final String NODE_ID_CONTINUE_WAIT = "com.netease.android.cloudgame:id/vip_continue_wait_btn";
+
+    private final String nodeTextMoreGame = "更多游戏";
+    private final String nodeTextPhoneGame = "手机游戏";
+    private final String nodeTextCloudPhone = "云手机";
+    private final String nodeTextInstantPlay = "秒玩";
+    private final String nodeIdLoadingGame = "com.netease.android.cloudgame:id/gaming_reconnect_text";
+    private final String nodeTextLoadingGame = "游戏加载中，请稍等";
+    private final String nodeIdCloudPhoneIntroductionBtn = "com.netease.android.cloudgame:id/ok_btn";
+    private final String nodeTextCloudPhoneIntroductionBtn = "知道了";
+    private final String nodeIdStillQuit = "com.netease.android.cloudgame:id/quit_btn";
+    private final String nodeTextStillQuit = "仍要退出";
+    private final String nodeIdCancelStillQuit = "com.netease.android.cloudgame:id/cancel_btn";
+    private final String nodeIdQuitPhone = "com.netease.android.cloudgame:id/dialog_sure";
+    private final String nodeTextQuitPhone = "退出";
+    private final String nodeTextContinueWait = "继续等待";
+    private final String nodeIdContinueWait = "com.netease.android.cloudgame:id/vip_continue_wait_btn";
 
     private final MyAccessibilityService service;
 
@@ -45,8 +45,10 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
         if (!isClickPhoneGame) {
             if (!isFirstMonitor) {
                 AccessibilityNodeInfo moreGame = AccessibilityUtil.findNodeInfoByText(
-                        service, "android.widget.TextView", NODE_TEXT_MORE_GAME);
-                if (moreGame == null) return;
+                        service, "android.widget.TextView", nodeTextMoreGame);
+                if (moreGame == null) {
+                    return;
+                }
                 AccessibilityUtil.performClick(moreGame);
                 isFirstMonitor = false;
                 try {
@@ -56,8 +58,10 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
                 }
             }
             AccessibilityNodeInfo phoneGame = AccessibilityUtil.findNodeInfoByText(
-                    service, "android.widget.TextView", NODE_TEXT_MORE_GAME);
-            if (phoneGame == null) return;
+                    service, "android.widget.TextView", nodeTextMoreGame);
+            if (phoneGame == null) {
+                return;
+            }
             AccessibilityUtil.performClick(phoneGame);
             isClickPhoneGame = true;
         }
@@ -68,18 +72,20 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
 
     private void clickInstantPlay() {
         AccessibilityNodeInfo viewPager = AccessibilityUtil.findNodeInfo(service, "com.netease.android.cloudgame:id/view_pager", "");
-        if (viewPager == null) return;
+        if (viewPager == null) {
+            return;
+        }
         for (int i = 0; i < viewPager.getChildCount(); i++) {
             AccessibilityNodeInfo recyclerView = viewPager.getChild(i);
-//            AccessibilityUtil.logAllChildNodesClass(recyclerView, 0);
             for (int j = 0; j < recyclerView.getChildCount(); j++) {
                 AccessibilityNodeInfo frameLayout = recyclerView.getChild(j);
-                if (!"android.widget.FrameLayout".equals(frameLayout.getClassName().toString()))
+                if (!"android.widget.FrameLayout".equals(frameLayout.getClassName().toString())) {
                     continue;
+                }
                 boolean isCloudPhone = false;
                 for (int k = 0; k < frameLayout.getChildCount(); k++) {
                     AccessibilityNodeInfo node = frameLayout.getChild(k);
-                    if (node.getText() != null && NODE_TEXT_CLOUD_PHONE.equals(node.getText().toString())) {
+                    if (node.getText() != null && nodeTextCloudPhone.equals(node.getText().toString())) {
                         isCloudPhone = true;
                     }
                     if (isCloudPhone &&
@@ -100,24 +106,26 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
     @Override
     public void startControlCloudPhone() {
         AccessibilityNodeInfo loadGameNode = AccessibilityUtil.findNodeInfo(service,
-                NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
+                nodeIdLoadingGame, nodeTextLoadingGame);
         while (loadGameNode == null) {
             AccessibilityNodeInfo continueWaitNode = AccessibilityUtil.findNodeInfo(service,
-                    NODE_ID_CONTINUE_WAIT, NODE_TEXT_CONTINUE_WAIT);
-            if (continueWaitNode != null) AccessibilityUtil.performClick(continueWaitNode);
+                    nodeIdContinueWait, nodeTextContinueWait);
+            if (continueWaitNode != null) {
+                AccessibilityUtil.performClick(continueWaitNode);
+            }
             AccessibilityNodeInfo enterGameNode = AccessibilityUtil.findNodeInfoByText(
                     service, "android.widget.Button", "进入游戏");
-            if (enterGameNode != null) AccessibilityUtil.performClick(enterGameNode);
+            if (enterGameNode != null) {
+                AccessibilityUtil.performClick(enterGameNode);
+            }
             loadGameNode = AccessibilityUtil
-                    .findNodeInfo(service, NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
+                    .findNodeInfo(service, nodeIdLoadingGame, nodeTextLoadingGame);
         }
         while (loadGameNode != null) {
             loadGameNode = AccessibilityUtil
-                    .findNodeInfo(service, NODE_ID_LOADING_GAME, NODE_TEXT_LOADING_GAME);
+                    .findNodeInfo(service, nodeIdLoadingGame, nodeTextLoadingGame);
         }
-//        Log.e("QT", "openTime:"+(System.currentTimeMillis() - mStartTime));
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
-        //TODO 此处检测黑屏
     }
 
     @Override
@@ -129,18 +137,18 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
             Log.e(TAG, "startQuitCloudPhone: ", e);
         }
         AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                NODE_ID_STILL_QUIT, NODE_TEXT_STILL_QUIT);
+                nodeIdStillQuit, nodeTextStillQuit);
         while (nodeBtnQuit == null) {
             nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                    NODE_ID_STILL_QUIT, NODE_TEXT_STILL_QUIT);
+                    nodeIdStillQuit, nodeTextStillQuit);
         }
         AccessibilityUtil.performClick(nodeBtnQuit);
         long quitTime = System.currentTimeMillis();
         AccessibilityNodeInfo phoneGame = AccessibilityUtil.findNodeInfoByText(
-                service, "android.widget.TextView", NODE_TEXT_PHONE_GAME);
+                service, "android.widget.TextView", nodeTextPhoneGame);
         while (phoneGame == null) {
             phoneGame = AccessibilityUtil.findNodeInfoByText(
-                    service, "android.widget.TextView", NODE_TEXT_PHONE_GAME);
+                    service, "android.widget.TextView", nodeTextPhoneGame);
         }
         service.mQuitTimes.add(System.currentTimeMillis() - quitTime);
         mCurrentMonitorNum++;

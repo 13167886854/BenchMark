@@ -155,7 +155,7 @@ public class TestInfoActivity extends AppCompatActivity {
                         if (object instanceof Map) {
                             map = (Map) object;
                             text += "测试平台： " + (map.get("platformName") == null ?
-                                    "null" : map.get("platformName").toString()) + "\n";
+                                    "null" : map.get("platformName").toString()) + System.getProperty("line.separator");
                             text += "    分辨率: " + (map.get("resolution") == null ?
                                     "null" : map.get("resolution").toString()) +
                                     System.getProperty("line.separator");
@@ -192,7 +192,7 @@ public class TestInfoActivity extends AppCompatActivity {
                             text += "测试平台： " + (map.get("platformName") == null ?
                                     "null" : map.get("platformName").toString()) +
                                     System.getProperty("line.separator");
-                            text += "ROM\n";
+                            text += "ROM" + System.getProperty("line.separator");
                             text += "    可用内存: " + (map.get("availableRom") == null ?
                                     "null" : map.get("availableRom").toString()) +
                                     System.getProperty("line.separator");
@@ -203,7 +203,7 @@ public class TestInfoActivity extends AppCompatActivity {
                         object = ram.get(i);
                         if (object instanceof Map) {
                             map = (Map) object;
-                            text += "RAM\n";
+                            text += "RAM" + System.getProperty("line.separator");
                             text += "    可用内存: " + (map.get("availableRam") == null ?
                                     "null" : map.get("availableRam").toString()) +
                                     System.getProperty("line.separator");
@@ -214,13 +214,13 @@ public class TestInfoActivity extends AppCompatActivity {
                         object = cpu.get(i);
                         if (object instanceof Map) {
                             map = (Map) object;
-                            text += "CPU\n";
+                            text += "CPU" + System.getProperty("line.separator");
                             text += "    核数: " + (map.get("cores") == null ?
                                     "null" : map.get("cores").toString()) +
                                     System.getProperty("line.separator");
                             object = gpu.get(i);
                             map = (Map) object;
-                            text += "GPU\n";
+                            text += "GPU" + System.getProperty("line.separator");
                             text += "    gpuVendor: " + (map.get("gpuRender") == null ?
                                     "null" : map.get("gpuRender").toString()) +
                                     System.getProperty("line.separator");
