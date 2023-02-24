@@ -62,25 +62,27 @@ public class HistoryFragment extends Fragment {
                     }
                     for (int i = 0; i < fluency.size(); i++) {
                         object = fluency.get(i);
-                        map = (Map) object;
-                        text += "测试平台： " + (map.get("platformName") == null ? "null" :
-                                map.get("platformName").toString()) + System.getProperty("line.separator");
-                        text += "    平均帧率: " + (map.get("averageFps") == null ? "null" :
-                                map.get("averageFps").toString()) + System.getProperty("line.separator");
-                        text += "    低帧率: " + (map.get("lowFrameRate") == null ? "null" :
-                                map.get("lowFrameRate").toString()) + System.getProperty("line.separator");
-                        text += "    抖动方差: " + (map.get("frameShakeRate") == null ? "null" :
-                                map.get("frameShakeRate").toString()) + System.getProperty("line.separator");
-                        text += "    jank次数: " + (map.get("jankCount") == null ? "null" :
-                                map.get("jankCount").toString()) + System.getProperty("line.separator");
-                        text += "    帧间隔: " + (map.get("frameInterval") == null ? "null" :
-                                map.get("frameInterval").toString()) + System.getProperty("line.separator");
-                        text += "    卡顿占比时长: " + (map.get("stutterRate") == null ? "null" :
-                                map.get("stutterRate").toString()) + System.getProperty("line.separator");
-                        text += "    评分: " + (map.get("fluencyScore") == null ? "null" :
-                                map.get("fluencyScore").toString()) + System.getProperty("line.separator");
-                        text += "测试时间: " + (map.get("time") == null ? "null" :
-                                map.get("time").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "测试平台： " + (map.get("platformName") == null ? "null" :
+                                    map.get("platformName").toString()) + System.getProperty("line.separator");
+                            text += "    平均帧率: " + (map.get("averageFps") == null ? "null" :
+                                    map.get("averageFps").toString()) + System.getProperty("line.separator");
+                            text += "    低帧率: " + (map.get("lowFrameRate") == null ? "null" :
+                                    map.get("lowFrameRate").toString()) + System.getProperty("line.separator");
+                            text += "    抖动方差: " + (map.get("frameShakeRate") == null ? "null" :
+                                    map.get("frameShakeRate").toString()) + System.getProperty("line.separator");
+                            text += "    jank次数: " + (map.get("jankCount") == null ? "null" :
+                                    map.get("jankCount").toString()) + System.getProperty("line.separator");
+                            text += "    帧间隔: " + (map.get("frameInterval") == null ? "null" :
+                                    map.get("frameInterval").toString()) + System.getProperty("line.separator");
+                            text += "    卡顿占比时长: " + (map.get("stutterRate") == null ? "null" :
+                                    map.get("stutterRate").toString()) + System.getProperty("line.separator");
+                            text += "    评分: " + (map.get("fluencyScore") == null ? "null" :
+                                    map.get("fluencyScore").toString()) + System.getProperty("line.separator");
+                            text += "测试时间: " + (map.get("time") == null ? "null" :
+                                    map.get("time").toString()) + System.getProperty("line.separator");
+                        }
                     }
                     break;
                 case "info_stability":
@@ -90,19 +92,21 @@ public class HistoryFragment extends Fragment {
                     }
                     for (int i = 0; i < stability.size(); i++) {
                         object = stability.get(i);
-                        map = (Map) object;
-                        text += "测试平台： " + (map.get("platformName") == null ? "null" :
-                                map.get("platformName").toString()) + System.getProperty("line.separator");
-                        text += "    启动成功率: " + (map.get("startSuccessRate") == null ? "null" :
-                                map.get("startSuccessRate").toString()) + System.getProperty("line.separator");
-                        text += "    平均启动时间: " + (map.get("averageStartTime") == null ? "null" :
-                                map.get("averageStartTime").toString()) + System.getProperty("line.separator");
-                        text += "    平均退出时间: " + (map.get("averageQuitTime") == null ? "null" :
-                                map.get("averageQuitTime").toString()) + System.getProperty("line.separator");
-                        text += "    评分: " + (map.get("stabilityScore") == null ? "null" :
-                                map.get("stabilityScore").toString()) + System.getProperty("line.separator");
-                        text += "测试时间: " + (map.get("time") == null ? "null" :
-                                map.get("time").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "测试平台： " + (map.get("platformName") == null ? "null" :
+                                    map.get("platformName").toString()) + System.getProperty("line.separator");
+                            text += "    启动成功率: " + (map.get("startSuccessRate") == null ? "null" :
+                                    map.get("startSuccessRate").toString()) + System.getProperty("line.separator");
+                            text += "    平均启动时间: " + (map.get("averageStartTime") == null ? "null" :
+                                    map.get("averageStartTime").toString()) + System.getProperty("line.separator");
+                            text += "    平均退出时间: " + (map.get("averageQuitTime") == null ? "null" :
+                                    map.get("averageQuitTime").toString()) + System.getProperty("line.separator");
+                            text += "    评分: " + (map.get("stabilityScore") == null ? "null" :
+                                    map.get("stabilityScore").toString()) + System.getProperty("line.separator");
+                            text += "测试时间: " + (map.get("time") == null ? "null" :
+                                    map.get("time").toString()) + System.getProperty("line.separator");
+                        }
                     }
                     break;
                 case "info_touch":
@@ -112,17 +116,19 @@ public class HistoryFragment extends Fragment {
                     }
                     for (int i = 0; i < touch.size(); i++) {
                         object = touch.get(i);
-                        map = (Map) object;
-                        text += "测试平台： " + (map.get("platformName") == null ? "null" :
-                                map.get("platformName").toString()) + System.getProperty("line.separator");
-                        text += "    正确率: " + (map.get("touchAccuracy") == null ? "null" :
-                                map.get("touchAccuracy").toString()) + System.getProperty("line.separator");
-                        text += "    点击时延: " + (map.get("touchTimeDelay") == null ? "null" :
-                                map.get("touchTimeDelay").toString()) + System.getProperty("line.separator");
-                        text += "    评分: " + (map.get("touchScore") == null ? "null" :
-                                map.get("touchScore").toString()) + System.getProperty("line.separator");
-                        text += "测试时间: " + (map.get("time") == null ? "null" :
-                                map.get("time").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "测试平台： " + (map.get("platformName") == null ? "null" :
+                                    map.get("platformName").toString()) + System.getProperty("line.separator");
+                            text += "    正确率: " + (map.get("touchAccuracy") == null ? "null" :
+                                    map.get("touchAccuracy").toString()) + System.getProperty("line.separator");
+                            text += "    点击时延: " + (map.get("touchTimeDelay") == null ? "null" :
+                                    map.get("touchTimeDelay").toString()) + System.getProperty("line.separator");
+                            text += "    评分: " + (map.get("touchScore") == null ? "null" :
+                                    map.get("touchScore").toString()) + System.getProperty("line.separator");
+                            text += "测试时间: " + (map.get("time") == null ? "null" :
+                                    map.get("time").toString()) + System.getProperty("line.separator");
+                        }
                     }
                     break;
                 case "info_audio_video":
@@ -132,23 +138,25 @@ public class HistoryFragment extends Fragment {
                     }
                     for (int i = 0; i < audioVideo.size(); i++) {
                         object = audioVideo.get(i);
-                        map = (Map) object;
-                        text += "测试平台： " + (map.get("platformName") == null ? "null" :
-                                map.get("platformName").toString()) + System.getProperty("line.separator");
-                        text += "    分辨率: " + (map.get("resolution") == null ? "null" :
-                                map.get("resolution").toString()) + System.getProperty("line.separator");
-                        text += "    音画同步差: " + (map.get("maxDiffValue") == null ? "null" :
-                                map.get("maxDiffValue").toString()) + System.getProperty("line.separator");
-                        text += "    PESQ: " + (map.get("pesq") == null ? "null" :
-                                map.get("pesq").toString()) + System.getProperty("line.separator");
-                        text += "    SSIM: " + (map.get("ssim") == null ? "null" :
-                                map.get("ssim").toString()) + System.getProperty("line.separator");
-                        text += "    PSNR: " + (map.get("psnr") == null ? "null" :
-                                map.get("psnr").toString()) + System.getProperty("line.separator");
-                        text += "    评分: " + (map.get("qualityScore") == null ? "null" :
-                                map.get("qualityScore").toString()) + System.getProperty("line.separator");
-                        text += "测试时间: " + (map.get("time") == null ? "null" :
-                                map.get("time").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "测试平台： " + (map.get("platformName") == null ? "null" :
+                                    map.get("platformName").toString()) + System.getProperty("line.separator");
+                            text += "    分辨率: " + (map.get("resolution") == null ? "null" :
+                                    map.get("resolution").toString()) + System.getProperty("line.separator");
+                            text += "    音画同步差: " + (map.get("maxDiffValue") == null ? "null" :
+                                    map.get("maxDiffValue").toString()) + System.getProperty("line.separator");
+                            text += "    PESQ: " + (map.get("pesq") == null ? "null" :
+                                    map.get("pesq").toString()) + System.getProperty("line.separator");
+                            text += "    SSIM: " + (map.get("ssim") == null ? "null" :
+                                    map.get("ssim").toString()) + System.getProperty("line.separator");
+                            text += "    PSNR: " + (map.get("psnr") == null ? "null" :
+                                    map.get("psnr").toString()) + System.getProperty("line.separator");
+                            text += "    评分: " + (map.get("qualityScore") == null ? "null" :
+                                    map.get("qualityScore").toString()) + System.getProperty("line.separator");
+                            text += "测试时间: " + (map.get("time") == null ? "null" :
+                                    map.get("time").toString()) + System.getProperty("line.separator");
+                        }
                     }
                     break;
                 case "info_hardware":
@@ -158,39 +166,50 @@ public class HistoryFragment extends Fragment {
                     }
                     for (int i = 0; i < rom.size(); i++) {
                         object = rom.get(i);
-                        map = (Map) object;
-                        text += "测试平台： " + (map.get("platformName") == null ? "null" :
-                                map.get("platformName").toString()) + System.getProperty("line.separator");
-                        text += "ROM" + System.getProperty("line.separator");
-                        text += "    可用内存: " + (map.get("availableRom") == null ? "null" :
-                                map.get("availableRom").toString()) + System.getProperty("line.separator");
-                        text += "    总内存: " + (map.get("totalRom") == null ? "null" :
-                                map.get("totalRom").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "测试平台： " + (map.get("platformName") == null ? "null" :
+                                    map.get("platformName").toString()) + System.getProperty("line.separator");
+                            text += "ROM" + System.getProperty("line.separator");
+                            text += "    可用内存: " + (map.get("availableRom") == null ? "null" :
+                                    map.get("availableRom").toString()) + System.getProperty("line.separator");
+                            text += "    总内存: " + (map.get("totalRom") == null ? "null" :
+                                    map.get("totalRom").toString()) + System.getProperty("line.separator");
 
+
+                        }
                         object = ram.get(i);
-                        map = (Map) object;
-                        text += "RAM" + System.getProperty("line.separator");
-                        text += "    可用内存: " + (map.get("availableRam") == null ? "null" :
-                                map.get("availableRam").toString()) + System.getProperty("line.separator");
-                        text += "    总内存: " + (map.get("totalRam") == null ? "null" :
-                                map.get("totalRam").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "RAM" + System.getProperty("line.separator");
+                            text += "    可用内存: " + (map.get("availableRam") == null ? "null" :
+                                    map.get("availableRam").toString()) + System.getProperty("line.separator");
+                            text += "    总内存: " + (map.get("totalRam") == null ? "null" :
+                                    map.get("totalRam").toString()) + System.getProperty("line.separator");
 
+
+                        }
                         object = cpu.get(i);
-                        map = (Map) object;
-                        text += "CPU" + System.getProperty("line.separator");
-                        text += "    核数: " + (map.get("cores") == null ? "null" :
-                                map.get("cores").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "CPU" + System.getProperty("line.separator");
+                            text += "    核数: " + (map.get("cores") == null ? "null" :
+                                    map.get("cores").toString()) + System.getProperty("line.separator");
+
+                        }
                         object = gpu.get(i);
-                        map = (Map) object;
-                        text += "GPU" + System.getProperty("line.separator");
-                        text += "    gpuVendor: " + (map.get("gpuRender") == null ? "null" :
-                                map.get("gpuRender").toString()) + System.getProperty("line.separator");
-                        text += "    gpuVersion: " + (map.get("gpuVersion") == null ? "null" :
-                                map.get("gpuVersion").toString()) + System.getProperty("line.separator");
-                        text += "    gpuVendor: " + (map.get("gpuVendor") == null ? "null" :
-                                map.get("gpuVendor").toString()) + System.getProperty("line.separator");
-                        text += "测试时间: " + (map.get("time") == null ? "null" :
-                                map.get("time").toString()) + System.getProperty("line.separator");
+                        if (object instanceof Map) {
+                            map = (Map) object;
+                            text += "GPU" + System.getProperty("line.separator");
+                            text += "    gpuVendor: " + (map.get("gpuRender") == null ? "null" :
+                                    map.get("gpuRender").toString()) + System.getProperty("line.separator");
+                            text += "    gpuVersion: " + (map.get("gpuVersion") == null ? "null" :
+                                    map.get("gpuVersion").toString()) + System.getProperty("line.separator");
+                            text += "    gpuVendor: " + (map.get("gpuVendor") == null ? "null" :
+                                    map.get("gpuVendor").toString()) + System.getProperty("line.separator");
+                            text += "测试时间: " + (map.get("time") == null ? "null" :
+                                    map.get("time").toString()) + System.getProperty("line.separator");
+                        }
                     }
                     break;
                 default:
@@ -228,7 +247,6 @@ public class HistoryFragment extends Fragment {
 
         Bundle arguments = getArguments();
         type = arguments.getString("type");
-//        type = intent.getStringExtra("type");
 
         Log.e("TWT", "onCreate: " + type);
         initTitle(type);

@@ -33,15 +33,17 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
-        ShuoMingData data = this.data.get(position);
+        if (holder instanceof RecyclerViewHolder) {
+            RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
+            ShuoMingData smData = this.data.get(position);
 
-        recyclerViewHolder.shuoming_item_img.setImageResource(data.getInfoImage());
-        List<LiuChang> list = data.getList();
+            recyclerViewHolder.introductionImg.setImageResource(smData.getInfoImage());
+            List<LiuChang> list = smData.getList();
 
-        ItemAdapter adapter = new ItemAdapter(context, list);
-        recyclerViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
-        recyclerViewHolder.recyclerView.setAdapter(adapter);
+            ItemAdapter adapter = new ItemAdapter(context, list);
+            recyclerViewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
+            recyclerViewHolder.recyclerView.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -51,11 +53,11 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
-        public ImageView shuoming_item_img;
+        public ImageView introductionImg;
         public RecyclerView recyclerView;
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            shuoming_item_img=itemView.findViewById(R.id.shuoming_img);
+            introductionImg=itemView.findViewById(R.id.shuoming_img);
             recyclerView=itemView.findViewById(R.id.shuoming_item_rv);
         }
     }

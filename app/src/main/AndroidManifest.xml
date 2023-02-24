@@ -99,7 +99,7 @@
             android:name=".activity.TestSMActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.CheckFrameUpateActivity"
+            android:name=".activity.CheckFrameUpdateActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.CePingActivity"

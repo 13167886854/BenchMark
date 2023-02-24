@@ -71,7 +71,8 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
     }
 
     private void clickInstantPlay() {
-        AccessibilityNodeInfo viewPager = AccessibilityUtil.findNodeInfo(service, "com.netease.android.cloudgame:id/view_pager", "");
+        AccessibilityNodeInfo viewPager = AccessibilityUtil.findNodeInfo(service,
+                "com.netease.android.cloudgame:id/view_pager", "");
         if (viewPager == null) {
             return;
         }
@@ -88,8 +89,8 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
                     if (node.getText() != null && nodeTextCloudPhone.equals(node.getText().toString())) {
                         isCloudPhone = true;
                     }
-                    if (isCloudPhone &&
-                            "android.view.ViewGroup".equals(node.getClassName().toString())) {
+                    if (isCloudPhone
+                            && "android.view.ViewGroup".equals(node.getClassName().toString())) {
                         Log.e("NetEase", "Click");
                         AccessibilityUtil.performClick(node.getChild(0));
                         isClickInstantPlay = true;

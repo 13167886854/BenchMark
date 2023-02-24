@@ -19,7 +19,7 @@ import com.example.benchmark.utils.GameTouchUtil;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-public class CheckFrameUpateActivity extends AppCompatActivity {
+public class CheckFrameUpdateActivity extends AppCompatActivity {
     private GLSurfaceView glView;
     private CheckVedioUpdateFrameRenderer glVideoRenderer;
 
@@ -29,45 +29,37 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
 
     private int FILE_REQUEST_CODE = 50;
 
-   // private final int
     private Context mContext = this;
     private String path = "";
 
-    //百分比显示
+    // 百分比显示
     private DecimalFormat df =  new DecimalFormat("0.00%");
-    //SharePreferences测试结果保存
+
+    // SharePreferences测试结果保存
     private String STORE_NAME = "LastTestResult";
-    //判断是否正在测试
+
+    // 判断是否正在测试
     private boolean isTesting = false;
 
-
-
-
-
-
     public static void start(Context context, String path){
-        Intent intent = new Intent(context, CheckFrameUpateActivity.class);
+        Intent intent = new Intent(context, CheckFrameUpdateActivity.class);
         intent.putExtra("path",path);
         context.startActivity(intent);
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkframeupdate);
 
-
-        //获取显示文本
+        // 获取显示文本
         textInfo = findViewById(R.id.textview);
 
-
-        //初始化视频播放器
+        // 初始化视频播放器
         glView = findViewById(R.id.play_surface_view);
         glView.setEGLContextClientVersion(2);
-        glVideoRenderer = new CheckVedioUpdateFrameRenderer(this);//创建renderer
-        glView.setRenderer(glVideoRenderer);//设置renderer
+        glVideoRenderer = new CheckVedioUpdateFrameRenderer(this); // 创建renderer
+        glView.setRenderer(glVideoRenderer); // 设置renderer
         glVideoRenderer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -80,26 +72,23 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
             }
         });
         path = getIntent().getStringExtra("path");
-        //path = "/storage/emulated/0/ScreenRecorder/1657851464717.mp4";
-        //Log.d("TWT", "path: "+path);
         try {
             glVideoRenderer.getMediaPlayer().reset();
-            glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpateActivity.this,Uri.parse(path));
+            glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this,Uri.parse(path));
             //glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this,path);
             //glVideoRenderer.getMediaPlayer().setDataSource(path);
             glVideoRenderer.getMediaPlayer().prepare();
         } catch (IOException e) {
             Log.e("CheckFrameUpdate", e.toString());
         }
-        //自动开始
+
+        // 自动开始
         try {
             DoTest();
         } catch (IOException e) {
             Log.e("CheckFrameUpdate", e.toString());
         }
-
     }
-
 
     public void DoTest() throws IOException {
         isTesting = true;
@@ -117,7 +106,7 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
         gameTouchUtil.printAutoTapTime();
         gameTouchUtil.clear();
 
-        Intent intent = new Intent(CheckFrameUpateActivity.this,CePingActivity.class);
+        Intent intent = new Intent(CheckFrameUpdateActivity.this,CePingActivity.class);
         intent.putExtra("isFluencyUntested",false);
         startActivity(intent);
     }
@@ -126,7 +115,8 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //判断是否正在测试
+
+        // 判断是否正在测试
         if(isTesting){
             glVideoRenderer.getMediaPlayer().stop();
             try {
@@ -140,9 +130,7 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //glVideoRenderer.getMediaPlayer().start();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -154,7 +142,7 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
                     Log.d("TWT", "uri:"+uri.toString());
                     try {
                         glVideoRenderer.getMediaPlayer().reset();
-                        glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpateActivity.this,uri);
+                        glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this,uri);
                         glVideoRenderer.getMediaPlayer().prepare();
                     } catch (IOException e) {
                         Log.e("CheckFrameUpdate", e.toString());
@@ -165,6 +153,4 @@ public class CheckFrameUpateActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }
