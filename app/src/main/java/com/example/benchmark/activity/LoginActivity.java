@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private CheckBox checkBox;
     private SharedPreferences sharedPreferences;
     private boolean isChecked = false;
-
     private Message mMessage;
     private LoginDialog myDialog;
 
@@ -51,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
             super.handleMessage(msg);
             if (msg.what == 1) {
                 mBtnSignIn.setEnabled(true);
-
             }
         }
     };
@@ -85,8 +83,9 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 // 在文本改变之后记录用户账号
                 if (isChecked) {
-                    if (sharedPreferences == null)
+                    if (sharedPreferences == null) {
                         sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
+                    }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("username", mUserName.getText().toString());
                 }
@@ -96,7 +95,6 @@ public class LoginActivity extends AppCompatActivity {
 
         mPassWord = findViewById(R.id.et_password); // 密码
         mPassWord.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
                 Log.d(TAG, "beforeTextChanged: ");
@@ -111,8 +109,9 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 // 在文本改变之后记录用户密码
                 if (isChecked) {
-                    if (sharedPreferences == null)
+                    if (sharedPreferences == null) {
                         sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
+                    }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("password", mPassWord.getText().toString());
                 }
@@ -122,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void showDialog() {
-
         myDialog = new LoginDialog(this);
         myDialog.setNoOnclickListener("取消", new LoginDialog.OnNoOnclickListener() {
             @Override
@@ -150,12 +148,12 @@ public class LoginActivity extends AppCompatActivity {
 
     // 记住密码了之后，还需要能够将其回显出来
     private void setView() {
-        if (sharedPreferences == null)
+        if (sharedPreferences == null) {
             sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
+        }
         mUserName.setText(sharedPreferences.getString("username", ""));
         mPassWord.setText(sharedPreferences.getString("password", ""));
         isChecked = sharedPreferences.getBoolean("状态", false);
         checkBox.setChecked(isChecked);
     }
-
 }

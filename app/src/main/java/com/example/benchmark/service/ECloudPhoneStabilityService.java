@@ -11,8 +11,7 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
-public class ECloudPhoneStabilityService implements IStabilityService{
-
+public class ECloudPhoneStabilityService implements IStabilityService {
     private static final String TAG = "ECloudPhoneStabilityService";
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
@@ -37,7 +36,9 @@ public class ECloudPhoneStabilityService implements IStabilityService{
 
     @Override
     public void onMonitor() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) {
+            return;
+        }
         if (isTapSuccess) {
             isConnectSuccess = true;
             startControlCloudPhone();
@@ -50,8 +51,12 @@ public class ECloudPhoneStabilityService implements IStabilityService{
         if (!isConnectSuccess) {
             AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
                     service, NODE_ID_CLICK_VIEW, "");
-            if (clickNode == null) return;
-            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1000L) return;
+            if (clickNode == null) {
+                return;
+            }
+            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1000L) {
+                return;
+            }
             mLastTapTime = System.currentTimeMillis();
             service.startCaptureScreen();
             AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
@@ -60,6 +65,7 @@ public class ECloudPhoneStabilityService implements IStabilityService{
                         public void onSuccess() {
                             isTapSuccess = true;
                         }
+
                         @Override
                         public void onFailure() {
                             isTapSuccess = true;
@@ -78,7 +84,7 @@ public class ECloudPhoneStabilityService implements IStabilityService{
             clickNode = AccessibilityUtil.findNodeInfo(
                     service, NODE_ID_CLICK_VIEW, "");
         }
-        Log.e("QT", "openTime:"+(System.currentTimeMillis() - mStartTime));
+        Log.e("QT", "openTime:" + (System.currentTimeMillis() - mStartTime));
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
         try {
             Thread.sleep(3000L);
@@ -114,7 +120,9 @@ public class ECloudPhoneStabilityService implements IStabilityService{
     }
 
     private void closeDialogIfExistWhenQuit() {
-        if (isClickQuitNotice) return;
+        if (isClickQuitNotice) {
+            return;
+        }
         new Thread(() -> {
             try {
                 Thread.sleep(1000L);
@@ -123,7 +131,9 @@ public class ECloudPhoneStabilityService implements IStabilityService{
                 if (nodeBtnQuit != null) {
                     AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
                             NODE_ID_NO_NOTICE, "");
-                    if (noNotionNode != null) AccessibilityUtil.performClick(noNotionNode);
+                    if (noNotionNode != null) {
+                        AccessibilityUtil.performClick(noNotionNode);
+                    }
                     AccessibilityUtil.performClick(nodeBtnQuit);
                     mQuitTime = System.currentTimeMillis();
                 }

@@ -27,23 +27,23 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
 
     private TextView textInfo;
 
-    private int FILE_REQUEST_CODE = 50;
+    private int fileRequestCode = 50;
 
     private Context mContext = this;
     private String path = "";
 
     // 百分比显示
-    private DecimalFormat df =  new DecimalFormat("0.00%");
+    private DecimalFormat df = new DecimalFormat("0.00%");
 
     // SharePreferences测试结果保存
-    private String STORE_NAME = "LastTestResult";
+    private String storeName = "LastTestResult";
 
     // 判断是否正在测试
     private boolean isTesting = false;
 
-    public static void start(Context context, String path){
+    public static void start(Context context, String path) {
         Intent intent = new Intent(context, CheckFrameUpdateActivity.class);
-        intent.putExtra("path",path);
+        intent.putExtra("path", path);
         context.startActivity(intent);
     }
 
@@ -65,7 +65,7 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
             public void onCompletion(MediaPlayer mediaPlayer) {
                 Log.d("TWT", "onCompletion: 播放结束");
                 try {
-                    StopTest();
+                    stopTest();
                 } catch (IOException e) {
                     Log.e("CheckFrameUpdate", e.toString());
                 }
@@ -74,9 +74,7 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
         path = getIntent().getStringExtra("path");
         try {
             glVideoRenderer.getMediaPlayer().reset();
-            glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this,Uri.parse(path));
-            //glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this,path);
-            //glVideoRenderer.getMediaPlayer().setDataSource(path);
+            glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this, Uri.parse(path));
             glVideoRenderer.getMediaPlayer().prepare();
         } catch (IOException e) {
             Log.e("CheckFrameUpdate", e.toString());
@@ -84,20 +82,20 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
 
         // 自动开始
         try {
-            DoTest();
+            doTest();
         } catch (IOException e) {
             Log.e("CheckFrameUpdate", e.toString());
         }
     }
 
-    public void DoTest() throws IOException {
+    public void doTest() throws IOException {
         isTesting = true;
-        Log.d("TWT", "DoTest: 开始播放");
-        Log.d("TWT", "DoTest: 开始播放时间戳:"+System.currentTimeMillis());
+        Log.d("TWT", "doTest: 开始播放");
+        Log.d("TWT", "doTest: 开始播放时间戳:" + System.currentTimeMillis());
         glVideoRenderer.getMediaPlayer().start();
     }
 
-    public void StopTest() throws IOException {
+    public void stopTest() throws IOException {
         isTesting = false;
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
@@ -106,8 +104,8 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
         gameTouchUtil.printAutoTapTime();
         gameTouchUtil.clear();
 
-        Intent intent = new Intent(CheckFrameUpdateActivity.this,CePingActivity.class);
-        intent.putExtra("isFluencyUntested",false);
+        Intent intent = new Intent(CheckFrameUpdateActivity.this, CePingActivity.class);
+        intent.putExtra("isFluencyUntested", false);
         startActivity(intent);
     }
 
@@ -117,10 +115,10 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
         super.onPause();
 
         // 判断是否正在测试
-        if(isTesting){
+        if (isTesting) {
             glVideoRenderer.getMediaPlayer().stop();
             try {
-                StopTest();
+                stopTest();
             } catch (IOException e) {
                 Log.e("CheckFrameUpdate", e.toString());
             }
@@ -135,14 +133,14 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == FILE_REQUEST_CODE) {
+        if (resultCode == RESULT_OK && requestCode == fileRequestCode) {
             if (data.getData() != null) {
                 try {
                     Uri uri = data.getData();
-                    Log.d("TWT", "uri:"+uri.toString());
+                    Log.d("TWT", "uri:" + uri.toString());
                     try {
                         glVideoRenderer.getMediaPlayer().reset();
-                        glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this,uri);
+                        glVideoRenderer.getMediaPlayer().setDataSource(CheckFrameUpdateActivity.this, uri);
                         glVideoRenderer.getMediaPlayer().prepare();
                     } catch (IOException e) {
                         Log.e("CheckFrameUpdate", e.toString());

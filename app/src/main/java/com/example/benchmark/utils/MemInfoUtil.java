@@ -47,14 +47,14 @@ public class MemInfoUtil {
 
     public static String getFieldFromMeminfo(String field) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(File.separator + "proc" + File.separator + "meminfo"));
-        Pattern p = Pattern.compile(field + "\\s*:\\s*(.*)");
+        Pattern pa = Pattern.compile(field + "\\s*:\\s*(.*)");
 
         try {
             String line;
             while ((line = br.readLine()) != null) {
-                Matcher m = p.matcher(line);
-                if (m.matches()) {
-                    return m.group(1);
+                Matcher ma = pa.matcher(line);
+                if (ma.matches()) {
+                    return ma.group(1);
                 }
             }
         } finally {

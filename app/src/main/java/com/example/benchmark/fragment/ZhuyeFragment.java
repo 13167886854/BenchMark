@@ -19,30 +19,31 @@ import com.example.benchmark.R;
 import java.util.Objects;
 
 public class ZhuyeFragment extends Fragment {
-    private ImageButton cloud_phone,cloud_game;
     private FragmentManager fragmentManager;
     private RadioGroup main_select_plat;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.zhuye_fragment, container, false);
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.zhuye_fram,new PhoneFragment());
+        fragmentTransaction.replace(R.id.zhuye_fram, new PhoneFragment());
         fragmentTransaction.commit();
 
-        main_select_plat=view.findViewById(R.id.main_select_plat);
+        main_select_plat = view.findViewById(R.id.main_select_plat);
         main_select_plat.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
-                    case R.id.cloud_phone:{
-                        ChangeFragment(new PhoneFragment(),true);
+                switch (checkedId) {
+                    case R.id.cloud_phone: {
+                        changeFragment(new PhoneFragment(), true);
                         break;
                     }
-                    case R.id.cloud_game:{
-                        ChangeFragment(new GameFragment(),true);
+                    case R.id.cloud_game: {
+                        changeFragment(new GameFragment(), true);
                         break;
                     }
                 }
@@ -51,20 +52,20 @@ public class ZhuyeFragment extends Fragment {
         return view;
     }
 
-    public  void  ChangeFragment(Fragment fragment, boolean isFisrt){
-        fragmentManager= Objects.requireNonNull(getActivity()).getSupportFragmentManager();
-        //开启事务
+    public void changeFragment(Fragment fragment, boolean isFisrt) {
+        fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+
+        // 开启事务
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.zhuye_fram,fragment);
-        if (!isFisrt){
-            fragmentTransaction.addToBackStack(null);;
+        fragmentTransaction.replace(R.id.zhuye_fram, fragment);
+        if (!isFisrt) {
+            fragmentTransaction.addToBackStack(null);
         }
         fragmentTransaction.commit();
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
-
 }

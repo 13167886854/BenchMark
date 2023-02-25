@@ -24,5 +24,4 @@ public class JuTiYingPanFragment extends Fragment {
 
         return  view;
     }
-
 }

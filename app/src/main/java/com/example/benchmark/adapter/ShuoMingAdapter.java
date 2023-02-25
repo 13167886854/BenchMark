@@ -16,13 +16,16 @@ import com.example.benchmark.R;
 
 import java.util.List;
 
-public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private Context context;
+public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<ShuoMingData> data;
+
+    private Context context;
+
     public ShuoMingAdapter(Context context, List<ShuoMingData> data) {
         this.context = context;
         this.data = data;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,14 +54,14 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return data.size();
     }
 
-    class RecyclerViewHolder extends RecyclerView.ViewHolder{
-
+    class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public ImageView introductionImg;
         public RecyclerView recyclerView;
+
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            introductionImg=itemView.findViewById(R.id.shuoming_img);
-            recyclerView=itemView.findViewById(R.id.shuoming_item_rv);
+            introductionImg = itemView.findViewById(R.id.shuoming_img);
+            recyclerView = itemView.findViewById(R.id.shuoming_item_rv);
         }
     }
 }
