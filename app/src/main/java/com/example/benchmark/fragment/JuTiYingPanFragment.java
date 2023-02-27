@@ -16,12 +16,11 @@ import com.example.benchmark.R;
 public class JuTiYingPanFragment extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.juti_yingpan_fragment, container, false);
-
-        TextView juti_yingpan_num = view.findViewById(R.id.juti_yingpan_num);
-        juti_yingpan_num.setText(MobileCloud.storage);
-
-        return  view;
+        TextView juTiYingPanNum = view.findViewById(R.id.juti_yingpan_num);
+        juTiYingPanNum.setText(MobileCloud.storage);
+        return view;
     }
 }

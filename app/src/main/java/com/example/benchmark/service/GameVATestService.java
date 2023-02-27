@@ -61,15 +61,23 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class GameVATestService extends Service {
+    private static final String TAG = "TWT";
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
 
+    //定义浮动窗口布局
+    LinearLayout mFloatLayout;
+    LayoutParams wmParams;
+    //创建浮动窗口设置布局参数的对象
+    WindowManager mWindowManager;
+    TextView mFloatView;
+    TextView KaCa;
+
     private final int STOP_RECORD2 = 111;
     private final int COMPUTE_PESQ = 222;
-
-
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
+
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -85,21 +93,15 @@ public class GameVATestService extends Service {
 
     //视频音频录制变量初始化
     private Recorder mRecorder;
+    private boolean isAble = true;
 
-
-    private boolean isAble=true;
-    //定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    LayoutParams wmParams;
-    //创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
     private Context mContext;
-    TextView mFloatView;
-    TextView KaCa;
+
     private long startTime;
     private long endTime;
+
     //private boolean isColor=true;
-    private boolean isRecording=false;
+    private boolean isRecording = false;
     private int statusBarHeight;
 
     private LinearLayout menu2;
@@ -107,28 +109,25 @@ public class GameVATestService extends Service {
     private GameVATestService service;
     private VirtualDisplay mVirtualDisplay = null;
 
-    //private Messenger mMessenger;
-
-    private static final String TAG = "TWT";
-    Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case START_RECORD:
                     //mFloatView.setText("停止");
-                    isRecording=!isRecording;
+                    isRecording = !isRecording;
                     startRecord();
                     break;
 
                 case STOP_RECORD:
-                    isRecording=!isRecording;
+                    isRecording = !isRecording;
                     //点击结束录制后休息1s后才能继续录制
                     isAble = false;
                     stopRecord();
 
                     Intent intent = new Intent(mContext, AudioVideoActivity.class);
-                    intent.putExtra("path",path);
+                    intent.putExtra("path", path);
                     intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     break;
@@ -149,20 +148,15 @@ public class GameVATestService extends Service {
 
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         service = GameVATestService.this;
         tapUtil = TapUtil.getUtil();
-        mContext= GameVATestService.this;
+        mContext = GameVATestService.this;
         running = false;
         mediaRecorder = new MediaRecorder();
         createFloatView();
-
-
     }
-
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -176,17 +170,16 @@ public class GameVATestService extends Service {
         this.dpi = dpi;
     }
 
-    private void createFloatView()
-    {
+    private void createFloatView() {
         Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         //获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager =  (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         //设置window type
-        if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
-        }else{
-            wmParams.type= LayoutParams.TYPE_TOAST;
+        } else {
+            wmParams.type = LayoutParams.TYPE_TOAST;
         }
         //设置图片格式，效果为背景透明
         wmParams.format = PixelFormat.RGBA_8888;
@@ -199,9 +192,9 @@ public class GameVATestService extends Service {
         //调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
         // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = screenWidth/2;
-        wmParams.y =screenHeight;
-        Log.d(TAG, "screenWidth: "+screenWidth+"  screenHeight: "+screenHeight);
+        wmParams.x = screenWidth / 2;
+        wmParams.y = screenHeight;
+        Log.d(TAG, "screenWidth: " + screenWidth + "  screenHeight: " + screenHeight);
         //设置悬浮窗口长宽数据
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
@@ -209,9 +202,9 @@ public class GameVATestService extends Service {
         //获取浮动窗口视图所在布局
         mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
         menu2 = (LinearLayout) mFloatLayout.findViewById(R.id.menu2);
-        mFloatView = (TextView)mFloatLayout.findViewById(R.id.recordText);
+        mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText);
         //mFloatView.setVisibility(View.GONE);
-        KaCa = (TextView)mFloatLayout.findViewById(R.id.KaCa);
+        KaCa = (TextView) mFloatLayout.findViewById(R.id.KaCa);
         KaCa.setVisibility(View.GONE);
         //mFloatView2 = (TextView)mFloatLayout.findViewById(R.id.recordText2);
         mWindowManager.addView(mFloatLayout, wmParams);
@@ -230,21 +223,21 @@ public class GameVATestService extends Service {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick=false;
-                switch (event.getAction()){
+                boolean isclick = false;
+                switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startTime=System.currentTimeMillis();
+                        startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
                         //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth()/2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight()/2-statusBarHeight;
+                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
                         //Log.d("TWT", "onTouch: "+MainActivity.);
                         //刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        endTime=System.currentTimeMillis();
+                        endTime = System.currentTimeMillis();
                         //小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
@@ -254,8 +247,8 @@ public class GameVATestService extends Service {
                         break;
                 }
                 //响应点击事件
-                if (isclick&&isAble) {
-                    Log.d(TAG, "screenWidth: "+screenWidth+" screenWidth"+screenWidth);
+                if (isclick && isAble) {
+                    Log.d(TAG, "screenWidth: " + screenWidth + " screenWidth" + screenWidth);
                     tapUtil.tap(500, 500);
                     menu2.setVisibility(View.GONE);
                     startAudioRecord();
@@ -332,12 +325,10 @@ public class GameVATestService extends Service {
 //            }
 //        });
 
-        mFloatView.setOnClickListener(new OnClickListener()
-        {
+        mFloatView.setOnClickListener(new OnClickListener() {
 
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 //Toast.makeText(RecordService.this, "onClick", Toast.LENGTH_SHORT).show();
             }
         });
@@ -348,11 +339,11 @@ public class GameVATestService extends Service {
     }
 
 
-    public void startVirtual(){
+    public void startVirtual() {
         if (mediaProjection != null) {
             Log.i(TAG, "want to display virtual");
 //            virtualDisplay2();
-        }else{
+        } else {
             Log.e(TAG, "start screen capture intent");
             Log.e(TAG, "want to build mediaprojection and display virtual");
         }
@@ -406,8 +397,7 @@ public class GameVATestService extends Service {
         stopSelf();
 
 
-        if(mFloatLayout != null)
-        {
+        if (mFloatLayout != null) {
             mWindowManager.removeView(mFloatLayout);
         }
         return true;
@@ -918,8 +908,7 @@ public class GameVATestService extends Service {
 
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
 //        if(mFloatLayout != null)
 //        {

@@ -234,7 +234,7 @@ public class OkHttpUtils {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.body() != null) {
-                    callBack.onSuccessful(call, response.body().toString());
+                    callBack.onSuccessful(call, response.body().string());
                 }
             }
         });

@@ -24,24 +24,21 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
-        , SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
-
+public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
+        SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
     private static final String TAG = "GLRenderer";
-
-    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
-
     private final int TIMER_RELAX = 1;
     private final int TIMER_WORK = 2;
-    private boolean isTimerRelaxing=false;
+    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
+    private boolean isTimerRelaxing = false;
 
-    Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case TIMER_RELAX:
                     isTimerRelaxing = true;
-                    handler.sendEmptyMessageDelayed(TIMER_WORK,1000);
+                    handler.sendEmptyMessageDelayed(TIMER_WORK, 1000);
                     break;
                 case TIMER_WORK:
                     isTimerRelaxing = false;
@@ -82,7 +79,8 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
     private int uSTMMatrixHandle;
 
     private boolean updateSurface;
-    private int screenWidth, screenHeight;
+    private int screenWidth;
+    private int screenHeight;
 
     public CheckVedioUpdateFrameRenderer(Context context) {
         this.context = context;
@@ -155,7 +153,7 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
             mediaPlayer.prepareAsync();
 
         } catch (IllegalStateException e) {
-            Log.e("TWT", "onSurfaceChanged: "+e.toString());
+            Log.e("TWT", "onSurfaceChanged: " + e.toString());
         }
 
 
@@ -173,11 +171,13 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
         synchronized (this) {
             if (updateSurface) {
                 surfaceTexture.updateTexImage();//获取新数据
-                surfaceTexture.getTransformMatrix(mSTMatrix);//让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
+
+                //让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
+                surfaceTexture.getTransformMatrix(mSTMatrix);
                 updateSurface = false;
                 Log.d("TWT", "onDrawFrame: 画面更新！");
                 //编写测试FPS代码
-                if(!isTimerRelaxing){
+                if (!isTimerRelaxing) {
                     //Log.d("TWT", "检测到1s内画面更新");
                     //Log.d("TWT", "UpdateTime:"+System.currentTimeMillis());
                     //handler.sendEmptyMessage(TIMER_RELAX);
@@ -185,8 +185,6 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
                 }
 
                 //gameTouchUtil.print();
-
-
 
 
             }
@@ -215,7 +213,7 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer
     }
 
     @Override
-    synchronized public void onFrameAvailable(SurfaceTexture surface) {
+    public synchronized void onFrameAvailable(SurfaceTexture surface) {
         updateSurface = true;
     }
 

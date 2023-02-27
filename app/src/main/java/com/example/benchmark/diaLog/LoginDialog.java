@@ -32,7 +32,7 @@ public class LoginDialog extends Dialog {
     private static final String TAG = "Login";
 
     //确定按钮
-    private Button yes;
+    public Button yes;
 
     //取消按钮
     private Button no;

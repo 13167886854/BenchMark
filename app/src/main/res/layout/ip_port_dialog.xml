@@ -45,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/calibri"
                 android:hint="端口号"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
@@ -70,8 +70,9 @@
                 android:layout_height="match_parent"
                 android:background="#E4E4E4" />
 
+            <!--            android:visibility="gone"-->
             <Button
-                android:id="@+id/no"
+                android:id="@+id/no2"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -84,9 +85,9 @@
                 android:textColor="#38ADFF"
                 android:textSize="20sp"
                 tools:ignore="TouchTargetSizeCheck" />
-<!--            android:visibility="gone"-->
+
             <Button
-                android:id="@+id/yes"
+                android:id="@+id/yes2"
                 android:layout_width="90dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -99,7 +100,6 @@
                 android:textColor="#38ADFF"
                 android:textSize="20sp"
                 tools:ignore="TouchTargetSizeCheck" />
-
         </LinearLayout>
 
         <TextView

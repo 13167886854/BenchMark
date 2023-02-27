@@ -20,7 +20,7 @@ import java.util.Objects;
 
 public class ZhuyeFragment extends Fragment {
     private FragmentManager fragmentManager;
-    private RadioGroup main_select_plat;
+    private RadioGroup mainSelectPlat;
 
     @Nullable
     @Override
@@ -32,8 +32,8 @@ public class ZhuyeFragment extends Fragment {
         fragmentTransaction.replace(R.id.zhuye_fram, new PhoneFragment());
         fragmentTransaction.commit();
 
-        main_select_plat = view.findViewById(R.id.main_select_plat);
-        main_select_plat.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mainSelectPlat = view.findViewById(R.id.main_select_plat);
+        mainSelectPlat.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

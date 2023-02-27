@@ -36,15 +36,15 @@ import okhttp3.Response;
 public class SettingFragment extends Fragment {
     private String tmp_url = "https://1d2f09a7.r2.cpolar.top";
     private String latestVersion = null;
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            if(msg.what==101){
-                Log.d("TWT", "handleMessage: "+msg.getData().getString("result"));
-            }else if(msg.what==111){
-                Toast.makeText(getContext(),"已是最新版本!",Toast.LENGTH_SHORT).show();
-            }else if(msg.what==222){
+            if (msg.what == 101) {
+                Log.d("TWT", "handleMessage: " + msg.getData().getString("result"));
+            } else if (msg.what == 111) {
+                Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 222) {
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
                         .setIcon(R.mipmap.icon) // 设置标题的图片
                         .setTitle("checkUpdate") // 设置对话框的标题
@@ -58,31 +58,34 @@ public class SettingFragment extends Fragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                openBrowser(getContext(),tmp_url+"/upgrade/update?version="+latestVersion+"&platform=Local");
+                                openBrowser(getContext(), tmp_url
+                                        + "/upgrade/update?version="
+                                        + latestVersion + "&platform=Local");
                                 dialog.dismiss();
                             }
                         }).create();
                 dialog.show();
-                Toast.makeText(getContext(),"检测到有新版本，请前往浏览器下载最新版。",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
             }
         }
     };
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_fragment, container, false);
         RelativeLayout relativeLayout = view.findViewById(R.id.set_shiyongshuom);
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View vi) {
                 startActivity(new Intent(getActivity(), ShuoMingActivity.class));
             }
         });
         RelativeLayout paraSet = view.findViewById(R.id.set_paraSet);
         paraSet.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View vi) {
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
             }
         });
@@ -91,13 +94,8 @@ public class SettingFragment extends Fragment {
         set_system_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    checkUpdate();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
+                // 打印信息 do nothing checkUpdate();
+                Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -106,11 +104,12 @@ public class SettingFragment extends Fragment {
 
 
     private void checkUpdate() throws IOException, PackageManager.NameNotFoundException {
-        String localVersion = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
-        Log.e("TWT", "localVersion: "+localVersion );
+        String localVersion = getContext().getPackageManager()
+                .getPackageInfo(getContext().getPackageName(), 0).versionName;
+        Log.e("TWT", "localVersion: " + localVersion);
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
-        String url = tmp_url+"/upgrade/hint?version="+localVersion+"&platform=Local";
+        String url = tmp_url + "/upgrade/hint?version=" + localVersion + "&platform=Local";
 
         // 创建一个request对象
         Request request = new Request.Builder()
@@ -120,18 +119,18 @@ public class SettingFragment extends Fragment {
         // 执行和回调
         client.newCall(request).enqueue(new Callback() {
             public void onFailure(Call call, IOException e) {
-                Log.e("TWT", "onFailure: "+e );
+                Log.e("TWT", "onFailure: " + e);
             }
 
             public void onResponse(Call call, Response response)
                     throws IOException {
                 String str = response.body().string();
                 System.out.println("OkHttp的get()请求方式" + str);
-                if(str.equals("当前已是最新版本")){
+                if (str.equals("当前已是最新版本")) {
                     Message msg = new Message();
                     msg.what = 111;
                     handler.sendMessage(msg);
-                }else{
+                } else {
                     latestVersion = str;
                     Message msg = new Message();
                     msg.what = 222;
@@ -141,12 +140,12 @@ public class SettingFragment extends Fragment {
         });
     }
 
-    public static void openBrowser(Context context, String url){
+    public static void openBrowser(Context context, String url) {
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         if (intent.resolveActivity(context.getPackageManager()) != null) {
-            final ComponentName componentName = intent.resolveActivity(context.getPackageManager()); // 打印Log  ComponentName到底是什么 L.d("componentName = " + componentName.getClassName());
+            final ComponentName componentName = intent.resolveActivity(context.getPackageManager());
             context.startActivity(Intent.createChooser(intent, "请选择浏览器"));
         } else {
             Toast.makeText(context.getApplicationContext(), "请下载浏览器", Toast.LENGTH_SHORT).show();

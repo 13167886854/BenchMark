@@ -15,10 +15,10 @@ public class ECloudPhoneStabilityService implements IStabilityService {
     private static final String TAG = "ECloudPhoneStabilityService";
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
-    private final String NODE_ID_CLICK_VIEW = "com.chinamobile.cmss.saas.cloundphone:id/index_img";
-    private final String NODE_ID_QUIT_PHONE = "com.chinamobile.cmss.saas.cloundphone:id/netwrok_ok";
-    private final String NODE_TEXT_QUIT_PHONE = "确认";
-    private final String NODE_ID_NO_NOTICE = "com.chinamobile.cmss.saas.cloundphone:id/netwrok_check";
+    private final String nodeIdClickView = "com.chinamobile.cmss.saas.cloundphone:id/index_img";
+    private final String nodeIdQuitPhone = "com.chinamobile.cmss.saas.cloundphone:id/netwrok_ok";
+    private final String nodeTextQuitPhone = "确认";
+    private final String nodeIdNoNotice = "com.chinamobile.cmss.saas.cloundphone:id/netwrok_check";
 
     private final MyAccessibilityService service;
 
@@ -50,7 +50,7 @@ public class ECloudPhoneStabilityService implements IStabilityService {
         }
         if (!isConnectSuccess) {
             AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
+                    service, nodeIdClickView, "");
             if (clickNode == null) {
                 return;
             }
@@ -78,11 +78,11 @@ public class ECloudPhoneStabilityService implements IStabilityService {
     public void startControlCloudPhone() {
         long mStartTime = System.currentTimeMillis();
         AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_CLICK_VIEW, "");
+                service, nodeIdClickView, "");
         while (clickNode != null || AccessibilityUtil.findIsExistClass(
                 service, "android.widget.ProgressBar")) {
             clickNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
+                    service, nodeIdClickView, "");
         }
         Log.e("QT", "openTime:" + (System.currentTimeMillis() - mStartTime));
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
@@ -109,7 +109,7 @@ public class ECloudPhoneStabilityService implements IStabilityService {
         AccessibilityNodeInfo nodeClickView = null;
         while (nodeClickView == null) {
             nodeClickView = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
+                    service, nodeIdClickView, "");
         }
         service.mQuitTimes.add(System.currentTimeMillis() - mQuitTime);
         try {
@@ -127,10 +127,10 @@ public class ECloudPhoneStabilityService implements IStabilityService {
             try {
                 Thread.sleep(1000L);
                 AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                        NODE_ID_QUIT_PHONE, NODE_TEXT_QUIT_PHONE);
+                        nodeIdQuitPhone, nodeTextQuitPhone);
                 if (nodeBtnQuit != null) {
                     AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
-                            NODE_ID_NO_NOTICE, "");
+                            nodeIdNoNotice, "");
                     if (noNotionNode != null) {
                         AccessibilityUtil.performClick(noNotionNode);
                     }

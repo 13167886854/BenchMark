@@ -22,8 +22,6 @@ import java.util.Map;
  * 获取设备信息工具类
  */
 public class SDCardUtils {
-
-
     private static final int INTERNAL_STORAGE = 0;
     private static final int EXTERNAL_STORAGE = 1;
     private static final String TAG = "SDCardUtils";
@@ -32,28 +30,26 @@ public class SDCardUtils {
      * 获取 手机 RAM 信息
      */
     public static Map<String, String> getRAMInfo(Context context) {
-        long totalSize = 0;
-        long availableSize = 0;
-
-        ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(context.ACTIVITY_SERVICE);
-
-        MemoryInfo memoryInfo = new MemoryInfo();
-        activityManager.getMemoryInfo(memoryInfo);
-        totalSize = memoryInfo.totalMem;
-        availableSize = memoryInfo.availMem;
-
-        Map<String, String> map = new HashMap<>();
-        Log.d("TWT", "availableSize: "+availableSize);
-        Log.d("TWT", "Formatter.formatFileSize(context, availableSize): "+Formatter.formatFileSize(context, availableSize));
-        map.put("可用", Formatter.formatFileSize(context, availableSize));
-        map.put("总共", Formatter.formatFileSize(context, totalSize));
-
-        return map;
-
-        //return "可用/总共：" + Formatter.formatFileSize(context, availableSize)
-        //        + "/" + Formatter.formatFileSize(context, totalSize);
+        long totalSize = 0L;
+        long availableSize = 0L;
+        if (context.getSystemService(context.ACTIVITY_SERVICE) instanceof ActivityManager) {
+            ActivityManager activityManager = (ActivityManager) context
+                    .getSystemService(context.ACTIVITY_SERVICE);
+            MemoryInfo memoryInfo = new MemoryInfo();
+            activityManager.getMemoryInfo(memoryInfo);
+            totalSize = memoryInfo.totalMem;
+            availableSize = memoryInfo.availMem;
+            Map<String, String> map = new HashMap<>();
+            Log.d("TWT", "availableSize: " + availableSize);
+            Log.d("TWT", "Formatter.formatFileSize(context, availableSize): "
+                    + Formatter.formatFileSize(context, availableSize));
+            map.put("可用", Formatter.formatFileSize(context, availableSize));
+            map.put("总共", Formatter.formatFileSize(context, totalSize));
+            return map;
+        }
+        return new HashMap<>();
     }
+
     /**
      * 判断SD是否挂载
      */
@@ -72,14 +68,12 @@ public class SDCardUtils {
      * 外置SD卡： EXTERNAL_STORAGE = 1;
      **/
     public static Map<String, String> getStorageInfo(Context context, int type) {
-
         String path = getStoragePath(context, type);
         /**
          * 无外置SD 卡判断
          * **/
         if (isSDCardMount() == false || TextUtils.isEmpty(path) || path == null) {
             return (Map<String, String>) new HashMap<>().put("无外置SD卡", null);
-            //return "无外置SD卡";
         }
 
         File file = new File(path);
@@ -96,43 +90,40 @@ public class SDCardUtils {
         Map<String, String> res = new HashMap<>();
         res.put("可用", Formatter.formatFileSize(context, availableSpace));
         res.put("总共", Formatter.formatFileSize(context, totalSpace));
-        stotageInfo = "可用/总共："
-                + Formatter.formatFileSize(context, availableSpace) + "/"
+        stotageInfo = "可用" + File.separator + "总共："
+                + Formatter.formatFileSize(context, availableSpace) + File.separator
                 + Formatter.formatFileSize(context, totalSpace);
 
         return res;
-        //return stotageInfo;
-
     }
 
     /**
      * 使用反射方法 获取手机存储路径
      **/
     public static String getStoragePath(Context context, int type) {
-
-        StorageManager sm = (StorageManager) context
-                .getSystemService(Context.STORAGE_SERVICE);
-        try {
-            Method getPathsMethod = sm.getClass().getMethod("getVolumePaths",  new Class[0]);
-            String[] path = (String[]) getPathsMethod.invoke(sm, new Object[0]);
-
-            switch (type) {
-                case INTERNAL_STORAGE:
-                    return path[type];
-                case EXTERNAL_STORAGE:
-                    if (path.length > 1) {
+        if (context.getSystemService(Context.STORAGE_SERVICE) instanceof StorageManager) {
+            StorageManager sm = (StorageManager) context
+                    .getSystemService(Context.STORAGE_SERVICE);
+            try {
+                Method getPathsMethod = sm.getClass().getMethod("getVolumePaths", new Class[0]);
+                String[] path = (String[]) getPathsMethod.invoke(sm, new Object[0]);
+                switch (type) {
+                    case INTERNAL_STORAGE:
                         return path[type];
-                    } else {
-                        return null;
-                    }
-
-                default:
-                    break;
+                    case EXTERNAL_STORAGE:
+                        if (path.length > 1) {
+                            return path[type];
+                        } else {
+                            return null;
+                        }
+                    default:
+                        break;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "getStoragePath: ", e);
             }
-
-        } catch (Exception e) {
-            Log.e(TAG, "getStoragePath: ", e);
         }
+
         return null;
     }
 
@@ -140,13 +131,16 @@ public class SDCardUtils {
      * 获取 手机 RAM 信息 方法 一
      */
     public static String getTotalRAM(Context context) {
-        long size = 0;
-        ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(context.ACTIVITY_SERVICE);
-        MemoryInfo outInfo = new MemoryInfo();
-        activityManager.getMemoryInfo(outInfo);
-        size = outInfo.totalMem;
+        long size = 0L;
 
+        if (context.getSystemService(context.ACTIVITY_SERVICE) instanceof ActivityManager) {
+            ActivityManager activityManager = (ActivityManager) context
+                    .getSystemService(context.ACTIVITY_SERVICE);
+            MemoryInfo outInfo = new MemoryInfo();
+            activityManager.getMemoryInfo(outInfo);
+            size = outInfo.totalMem;
+            return Formatter.formatFileSize(context, size);
+        }
         return Formatter.formatFileSize(context, size);
     }
 
@@ -154,7 +148,7 @@ public class SDCardUtils {
      * 手机 RAM 信息 方法 二
      */
     public static String getTotalRAMOther(Context context) {
-        String path = "/proc/meminfo";
+        String path = File.separator + "proc" + File.separator + "meminfo";
         String firstLine = null;
         int totalRam = 0;
         try {
@@ -166,14 +160,10 @@ public class SDCardUtils {
             Log.e(TAG, "getTotalRAMOther: ", e);
         }
         if (firstLine != null) {
-
             totalRam = (int) Math.ceil((new Float(Float.valueOf(firstLine)
                     / (1024 * 1024)).doubleValue()));
-
-            long totalBytes = 0;
-
+            long totalBytes = 0L;
         }
-
         return Formatter.formatFileSize(context, totalRam);
     }
 
@@ -181,13 +171,15 @@ public class SDCardUtils {
      * 获取 手机 可用 RAM
      */
     public static String getAvailableRAM(Context context) {
-        long size = 0;
-        ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(context.ACTIVITY_SERVICE);
-        MemoryInfo outInfo = new MemoryInfo();
-        activityManager.getMemoryInfo(outInfo);
-        size = outInfo.availMem;
-
+        long size = 0L;
+        if (context.getSystemService(context.ACTIVITY_SERVICE) instanceof ActivityManager) {
+            ActivityManager activityManager = (ActivityManager) context
+                    .getSystemService(context.ACTIVITY_SERVICE);
+            MemoryInfo outInfo = new MemoryInfo();
+            activityManager.getMemoryInfo(outInfo);
+            size = outInfo.availMem;
+            return Formatter.formatFileSize(context, size);
+        }
         return Formatter.formatFileSize(context, size);
     }
 
@@ -256,11 +248,10 @@ public class SDCardUtils {
      */
 
     public static String getSDCardInfo() {
-
         SDCardInfo sd = new SDCardInfo();
-        if (!isSDCardMount())
+        if (!isSDCardMount()) {
             return "SD card 未挂载!";
-
+        }
         sd.isExist = true;
         StatFs sf = new StatFs(Environment.getExternalStorageDirectory()
                 .getPath());
@@ -297,7 +288,6 @@ public class SDCardUtils {
 
     // add start by wangjie for SDCard TotalStorage
     public static String getSDCardTotalStorage(long totalByte) {
-
         double byte2GB = totalByte / 1024.00 / 1024.00 / 1024.00;
         double totalStorage;
         if (byte2GB > 1) {
@@ -318,6 +308,8 @@ public class SDCardUtils {
                 return 64.0 + "GB";
             } else if (totalStorage >= 66 && totalStorage < 130) {
                 return 128.0 + "GB";
+            } else {
+                Log.e(TAG, "getSDCardTotalStorage: totalStorage >= 130");
             }
         } else {
             // below 1G return get values
@@ -333,12 +325,10 @@ public class SDCardUtils {
                 return 128 + "MB";
             } else if (totalStorage > 50 && totalStorage < 70) {
                 return 64 + "MB";
+            } else {
+                Log.e(TAG, "getSDCardTotalStorage: totalStorage >= 70 ");
             }
         }
-
         return totalStorage + "GB";
     }
-    // add end by wangjie for SDCard TotalStorage
-
-
 }

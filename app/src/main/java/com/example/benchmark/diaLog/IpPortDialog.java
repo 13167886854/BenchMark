@@ -161,7 +161,7 @@ public class IpPortDialog extends Dialog {
                 //    editor.putString("password", mPassWord.getText().toString());
                 //}
                 testPort = editable.toString();
-                Admin.password = testPort;
+                IpPort.port = testPort;
                 IpPort.ip = textIp;
                 //Log.d(TAG, "afterTextChanged: " + password);
             }
@@ -269,8 +269,8 @@ public class IpPortDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        yes = (Button) findViewById(R.id.yes);
-        no = (Button) findViewById(R.id.no);
+        yes = (Button) findViewById(R.id.yes2);
+        no = (Button) findViewById(R.id.no2);
         titleTv = (TextView) findViewById(R.id.title);
         messageTv = (TextView) findViewById(R.id.message);
         view = findViewById(R.id.view_dialog);

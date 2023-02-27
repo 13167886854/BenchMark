@@ -36,11 +36,11 @@ public class ShaderUtils {
     }
 
 
-    public static String readRawTextFile(Context context, int Rid){
+    public static String readRawTextFile(Context context, int rid){
         String result=null;
         try
         {
-            InputStream input = context.getResources().openRawResource(Rid);
+            InputStream input = context.getResources().openRawResource(rid);
             int ch=0;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             while((ch=input.read())!=-1)

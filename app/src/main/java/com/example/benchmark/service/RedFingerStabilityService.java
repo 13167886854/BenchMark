@@ -12,7 +12,6 @@ import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
 public class RedFingerStabilityService implements IStabilityService {
-
     private static final String TAG = "RedFingerStabilityService";
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
