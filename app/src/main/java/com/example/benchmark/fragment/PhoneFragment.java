@@ -127,23 +127,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
-
-            if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
-                // 检测华为云手机测试 提示用户输入ip地址加端口
-                Log.e(TAG, "onCreateView: hiahiasadsad" );
-                showDialog();
-
-            }
-
-            if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
-                Log.e(TAG, "onCreateView: hiahiasadsad" );
-                showDialog();
-
-            }
-
-
-
-
+            afterCode();
         });
         return view;
     }
@@ -151,6 +135,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     private void afterCode() {
         if (blue_wending_cheak.isChecked()) {
+            Log.e(TAG, "afterCode: 111111111111111111111111111" );
             if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
 //                    || !accessUtils.isIgnoringBatteryOptimizations()
                     || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
@@ -174,26 +159,22 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
             Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
             Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
-            //intent.setAction(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
             this.startActivity(intentToFloatPermission);
-            //startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName")), 0);
             return;
         }
-        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
-        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
-        Intent intent = new Intent(getActivity(), CePingActivity.class);
-        //传入cheakbox是否被选中
-        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
-        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blue_liuchang_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blue_wending_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blue_chukong_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blue_yinhua_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_CPU_INFO, blue_cpu_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_GPU_INFO, blue_gpu_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_ROM_INFO, blue_rom_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_RAM_INFO, blue_ram_cheak.isChecked());
-        intent.putExtra(CacheConst.KEY_PLATFORM_NAME, check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
-        startActivity(intent);
+
+        if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
+            // 检测华为云手机测试 提示用户输入ip地址加端口
+            Log.e(TAG, "onCreateView: hiahiasadsad" );
+            showDialog();
+
+        }
+
+        if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
+            Log.e(TAG, "onCreateView: hiahiasadsad" );
+            showDialog();
+
+        }
     }
 
 
@@ -695,8 +676,23 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onYesClick() {
                         myDialog.yes.setEnabled(false);
-                        Log.d(TAG, "点击登录: username---" + Admin.username + "---password---" + Admin.username);
-                        afterCode();
+                        myDialog.dismiss();
+                        Log.d(TAG, "输入IP地址");
+                        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
+                        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
+                        Intent intent = new Intent(getActivity(), CePingActivity.class);
+                        //传入cheakbox是否被选中
+                        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
+                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blue_liuchang_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blue_wending_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blue_chukong_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blue_yinhua_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_CPU_INFO, blue_cpu_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_GPU_INFO, blue_gpu_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_ROM_INFO, blue_rom_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_RAM_INFO, blue_ram_cheak.isChecked());
+                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME, check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
+                        startActivity(intent);
                     }
                 });
             }
