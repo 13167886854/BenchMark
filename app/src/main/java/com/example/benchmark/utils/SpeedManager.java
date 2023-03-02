@@ -1,7 +1,5 @@
 package com.example.benchmark.utils;
 
-import android.util.Log;
-
 public class SpeedManager {
 
     private static final String TAG = SpeedManager.class.getSimpleName();

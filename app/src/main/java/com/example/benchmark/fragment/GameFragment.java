@@ -485,9 +485,9 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
         res.put("CPUCores", cpuNumCores);
-        res.put("GPURenderer", GPURenderer.gl_renderer);
-        res.put("GPUVendor", GPURenderer.gl_vendor);
-        res.put("GPUVersion", GPURenderer.gl_version);
+        res.put("GPURenderer", GPURenderer.glRenderer);
+        res.put("GPUVendor", GPURenderer.glVendor);
+        res.put("GPUVersion", GPURenderer.glVersion);
         Log.d(TAG, "getInfo: res-----------+\n" + res);
         return res;
     }

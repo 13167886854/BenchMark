@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.benchmark.data.CepingData;
 import com.example.benchmark.R;
+import com.example.benchmark.data.CepingData;
 import com.example.benchmark.utils.CacheConst;
 
 import java.util.List;

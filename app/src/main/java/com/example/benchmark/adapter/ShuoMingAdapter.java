@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.benchmark.R;
 import com.example.benchmark.data.LiuChang;
 import com.example.benchmark.data.ShuoMingData;
-import com.example.benchmark.R;
 
 import java.util.List;
 

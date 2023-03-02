@@ -19,8 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.benchmark.data.Admin;
 import com.example.benchmark.R;
+import com.example.benchmark.data.Admin;
 
 
 /**
@@ -224,10 +224,18 @@ public class LoginDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        yes = (Button) findViewById(R.id.yes);
-        no = (Button) findViewById(R.id.no);
-        titleTv = (TextView) findViewById(R.id.title);
-        messageTv = (TextView) findViewById(R.id.message);
+        if (yes instanceof Button) {
+            yes = (Button) findViewById(R.id.yes);
+        }
+        if (no instanceof Button) {
+            no = (Button) findViewById(R.id.no);
+        }
+        if (titleTv instanceof TextView) {
+            titleTv = (TextView) findViewById(R.id.title);
+        }
+        if (messageTv instanceof TextView) {
+            messageTv = (TextView) findViewById(R.id.message);
+        }
         view = findViewById(R.id.view_dialog);
     }
 

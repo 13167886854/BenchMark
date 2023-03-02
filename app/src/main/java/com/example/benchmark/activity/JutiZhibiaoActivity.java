@@ -34,6 +34,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @version 1.0
+ * @description JutiZhibiaoActivity 具体指标
+ * @time 2023/3/2 09:45
+ */
 public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "JutiZhibiaoActivity";
 
@@ -64,7 +69,6 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         recyclerView.setAdapter(jutiAdapter);
     }
 
-
     private void initview() {
         back = findViewById(R.id.jutizhibiao_fanhui);
         juTiPhoneName = findViewById(R.id.juti_phone_name);
@@ -79,7 +83,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
     }
 
     @SuppressLint("SetTextI18n")
-    void initdata(Intent intent) {
+    private void initdata(Intent intent) {
         String select_plat = intent.getStringExtra("select_plat");
         Log.d(TAG, "initdata: select_plat-------" + select_plat);
         String select_item = intent.getStringExtra("select_item");
@@ -88,7 +92,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         int select_img = intent.getIntExtra("select_img", R.drawable.blue_liuchang);
         isCloudPhone = intent.getBooleanExtra("isCloudPhone", false);
         Log.d(TAG, "onCreate: isCloudPhone-----------" + isCloudPhone);
-        mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
+        if (mHashMapLocal instanceof HashMap) {
+            mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
+        }
         Log.d(TAG, "initdata: localMobileInfo--------" + mHashMapLocal);
         juTiImg.setImageResource(select_img);
         juTiText.setText(select_text);
@@ -157,9 +163,11 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 if (!isCloudPhone) {
-                    HashMap rom = (HashMap) mHashMapLocal.get("ROM");
-                    data.add(new JuTiData("可用ROM", rom.get("可用") + ""));
-                    data.add(new JuTiData("总共ROM", rom.get("总共") + ""));
+                    if (mHashMapLocal instanceof HashMap) {
+                        HashMap rom = (HashMap) mHashMapLocal.get("ROM");
+                        data.add(new JuTiData("可用ROM", rom.get("可用") + ""));
+                        data.add(new JuTiData("总共ROM", rom.get("总共") + ""));
+                    }
                 } else {
                     data.add(new JuTiData("可用ROM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
                     data.add(new JuTiData("总共ROM", CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
@@ -170,9 +178,11 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 mHeadScore.setVisibility(View.GONE);
                 data = new ArrayList<>();
                 if (!isCloudPhone) {
-                    HashMap ram = (HashMap) mHashMapLocal.get("RAM");
-                    data.add(new JuTiData("可用RAM", ram.get("可用") + ""));
-                    data.add(new JuTiData("总共RAM", ram.get("总共") + ""));
+                    if (mHashMapLocal instanceof HashMap) {
+                        HashMap ram = (HashMap) mHashMapLocal.get("RAM");
+                        data.add(new JuTiData("可用RAM", ram.get("可用") + ""));
+                        data.add(new JuTiData("总共RAM", ram.get("总共") + ""));
+                    }
                 } else {
                     data.add(new JuTiData("可用RAM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
                     data.add(new JuTiData("总共RAM", CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
@@ -184,8 +194,8 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.jutizhibiao_fanhui: {
                 finish();
                 break;
@@ -194,7 +204,6 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
                 startActivity(new Intent(JutiZhibiaoActivity.this, CePingActivity.class));
                 break;
             }
-
         }
     }
 
@@ -227,9 +236,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
         res.put("CPUCores", cpuNumCores);
-        res.put("GPURenderer", GPURenderer.gl_renderer);
-        res.put("GPUVendor", GPURenderer.gl_vendor);
-        res.put("GPUVersion", GPURenderer.gl_version);
+        res.put("GPURenderer", GPURenderer.glRenderer);
+        res.put("GPUVendor", GPURenderer.glVendor);
+        res.put("GPUVersion", GPURenderer.glVersion);
         Log.d(TAG, "getInfo: res-----------+\n" + res);
         return res;
     }

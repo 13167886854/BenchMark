@@ -19,7 +19,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.benchmark.R;
-import com.example.benchmark.data.Admin;
 import com.example.benchmark.data.IpPort;
 
 /**

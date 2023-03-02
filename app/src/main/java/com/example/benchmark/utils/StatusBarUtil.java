@@ -2,7 +2,6 @@ package com.example.benchmark.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 
 import java.lang.reflect.Method;
 

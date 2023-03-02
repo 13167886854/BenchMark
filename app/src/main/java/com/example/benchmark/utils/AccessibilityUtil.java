@@ -17,6 +17,11 @@ import androidx.annotation.RequiresApi;
 
 import java.util.List;
 
+/**
+ * @version 1.0
+ * @description AccessibilityUtil 无障碍服务
+ * @time 2023/3/2 09:28
+ */
 public class AccessibilityUtil {
 
     /**
@@ -354,8 +359,8 @@ public class AccessibilityUtil {
 
     /**
      * @param service  description
-     * @param x        description
-     * @param y        description
+     * @param xx        description
+     * @param yy        description
      * @param callback description
      * @return void
      * @throws null
@@ -365,15 +370,15 @@ public class AccessibilityUtil {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void tap(
             AccessibilityService service,
-            int x,
-            int y,
+            int xx,
+            int yy,
             AccessibilityCallback callback
     ) {
         Log.d("TWT", "tap:1212123 ");
         GestureDescription.Builder builder = new GestureDescription.Builder();
-        Path p = new Path();
-        p.moveTo(x, y);
-        builder.addStroke(new GestureDescription.StrokeDescription(p, 0L, 10L));
+        Path path = new Path();
+        path.moveTo(xx, yy);
+        builder.addStroke(new GestureDescription.StrokeDescription(path, 0L, 10L));
         GestureDescription gesture = builder.build();
         service.dispatchGesture(gesture, new AccessibilityService.GestureResultCallback() {
             @Override

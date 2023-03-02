@@ -118,7 +118,7 @@ public class OkhttpUtil {
                         SmoothData.jankCount = jsonObject.getString("jankCount");
                         SmoothData.stutterRate = jsonObject.getString("stutterRate");
                         SmoothData.date = jsonObject.getString("date");
-                        SmoothData.haveData = true;
+                        SmoothData.hasData = true;
                         Looper.prepare();
                         Toast.makeText(context,"获取流畅性测试数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();

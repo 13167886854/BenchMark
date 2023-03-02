@@ -5,8 +5,8 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.benchmark.service.MyAccessibilityService;
 import com.example.benchmark.service.GameTouchTestService;
+import com.example.benchmark.service.MyAccessibilityService;
 
 import org.jetbrains.annotations.NotNull;
 

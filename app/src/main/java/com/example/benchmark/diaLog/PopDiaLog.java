@@ -11,57 +11,68 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 
+import com.example.benchmark.BaseApp;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.AccessUtils;
-
-import com.example.benchmark.BaseApp;
 import com.example.benchmark.utils.AutoStartUtil;
 
-public class PopDiaLog extends Dialog  implements View.OnClickListener {
-    private RelativeLayout ibility,zidong,houtai;
-    private CheckBox ibility_cheak,zidong_cheak,houtai_cheak;
-    private Button queren,quxiao;
+/**
+ * @version 1.0
+ * @description PopDiaLog
+ * @time 2023/3/2 10:00
+ */
+public class PopDiaLog extends Dialog implements View.OnClickListener {
+    private RelativeLayout inability;
+    private RelativeLayout ziDoing;
+    private RelativeLayout houTai;
+    private CheckBox ibilityCheak;
+    private CheckBox houTaiCheak;
+    private Button queRen;
+    private Button quXiao;
     private Context context;
-    private  AccessUtils accessUtils;
-
+    private AccessUtils accessUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.access_popwindow);
-        initview();
-        boolean accessibilityServiceOpen = accessUtils.isAccessibilityServiceOpen();
-        if (accessibilityServiceOpen){
-            ibility_cheak.setChecked(true);
-        }else{
-            ibility_cheak.setChecked(false);
-
+        initView();
+        boolean isAccessibilityServiceOpen = accessUtils.isAccessibilityServiceOpen();
+        if (isAccessibilityServiceOpen) {
+            ibilityCheak.setChecked(true);
+        } else {
+            ibilityCheak.setChecked(false);
         }
-
-        if (accessUtils.isIgnoringBatteryOptimizations()){
-            houtai_cheak.setChecked(true);
-        }else {
-            houtai_cheak.setChecked(false);
+        if (accessUtils.isIgnoringBatteryOptimizations()) {
+            houTaiCheak.setChecked(true);
+        } else {
+            houTaiCheak.setChecked(false);
         }
-
-        ibility.setOnClickListener(this::onClick);
-        zidong.setOnClickListener(this::onClick);
-        houtai.setOnClickListener(this::onClick);
-        quxiao.setOnClickListener(this::onClick);
-        queren.setOnClickListener(this::onClick);
+        inability.setOnClickListener(this::onClick);
+        ziDoing.setOnClickListener(this::onClick);
+        houTai.setOnClickListener(this::onClick);
+        quXiao.setOnClickListener(this::onClick);
+        queRen.setOnClickListener(this::onClick);
         setCanceledOnTouchOutside(false);
     }
 
+    /**
+     * @description: PopDiaLog
+     * @param context description
+     * @return
+     * @throws null
+     * @date 2023/3/2 10:12
+     */
     public PopDiaLog(@NonNull Context context) {
         super(context);
-        this.context=context;
+        this.context = context;
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.access_ibility:{
+        switch (v.getId()) {
+            case R.id.access_ibility: {
                 accessUtils.openAccessibilityService();
                 dismiss();
                 break;
@@ -71,39 +82,29 @@ public class PopDiaLog extends Dialog  implements View.OnClickListener {
                 dismiss();
                 break;
             }
-            case R.id.access_houtai:{
+            case R.id.access_houtai: {
                 accessUtils.requestIgnoreBatteryOptimizations();
                 dismiss();
                 break;
             }
-            case R.id.dialog_queren:{
-//                Toast.makeText(context,"权限开启失败",Toast.LENGTH_LONG).show();
-//                context.startActivity(new Intent(context, MainActivity.class));
+            case R.id.dialog_queren: {
                 dismiss();
                 break;
             }
-            case R.id.dialog_quxiao:{
+            case R.id.dialog_quxiao: {
                 dismiss();
             }
-
         }
     }
 
-
-    void  initview(){
-        ibility=findViewById(R.id.access_ibility);
-        zidong = findViewById(R.id.access_ziqidong);
-        houtai = findViewById(R.id.access_houtai);
-
-        ibility_cheak=findViewById(R.id.access_ibility_cheak);
-        zidong_cheak=findViewById(R.id.access_ziqidong_cheak);
-        houtai_cheak = findViewById(R.id.access_houtai_cheak);
-
-        accessUtils=new AccessUtils(context);
-
-        queren=findViewById(R.id.dialog_queren);
-        quxiao=findViewById(R.id.dialog_quxiao);
-
+    private void initView() {
+        inability = findViewById(R.id.access_ibility);
+        ziDoing = findViewById(R.id.access_ziqidong);
+        houTai = findViewById(R.id.access_houtai);
+        ibilityCheak = findViewById(R.id.access_ibility_cheak);
+        houTaiCheak = findViewById(R.id.access_houtai_cheak);
+        accessUtils = new AccessUtils(context);
+        queRen = findViewById(R.id.dialog_queren);
+        quXiao = findViewById(R.id.dialog_quxiao);
     }
-
 }

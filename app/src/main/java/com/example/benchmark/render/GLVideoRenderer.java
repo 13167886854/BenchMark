@@ -22,6 +22,11 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * @version 1.0
+ * @description GLVideoRenderer
+ * @time 2023/3/2 09:39
+ */
 public class GLVideoRenderer implements GLSurfaceView.Renderer,
         SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
     private static final String TAG = "GLRenderer";
@@ -46,7 +51,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     private int textureId;
     private float[] mSTMatrix = new float[16];
     private int uSTMMatrixHandle;
-    private boolean updateSurface;
+    private boolean isUpdateSurface;
     private int screenWidth, screenHeight;
 
     private FpsUtils fpsUtils = FpsUtils.getFpsUtils();
@@ -57,16 +62,16 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     private MediaPlayer mediaPlayer;
 
     /**
-     * @description: GLVideoRenderer
      * @param context description
      * @return
      * @throws null
+     * @description: GLVideoRenderer
      * @date 2023/2/23 10:09
      */
     public GLVideoRenderer(Context context) {
         this.context = context;
         synchronized (this) {
-            updateSurface = false;
+            isUpdateSurface = false;
         }
         vertexBuffer = ByteBuffer.allocateDirect(vertexData.length * 4)
                 .order(ByteOrder.nativeOrder())
@@ -100,19 +105,18 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         ShaderUtils.checkGlError("glBindTexture mTextureID");
 
         /* GLES11Ext.GL_TEXTURE_EXTERNAL_OES的用处？
-            之前提到视频解码的输出格式是YUV的（YUV420p，应该是），
-            那么这个扩展纹理的作用就是实现YUV格式到RGB的自动转化，
-            我们就不需要再为此写YUV转RGB的代码了*/
+         *   之前提到视频解码的输出格式是YUV的（YUV420p，应该是），
+         *   那么这个扩展纹理的作用就是实现YUV格式到RGB的自动转化，
+         *  我们就不需要再为此写YUV转RGB的代码了
+         * */
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER,
                 GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER,
                 GLES20.GL_LINEAR);
-
         surfaceTexture = new SurfaceTexture(textureId);
 
         //监听是否有新的一帧数据到来
         surfaceTexture.setOnFrameAvailableListener(this);
-
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
 
@@ -142,14 +146,14 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         synchronized (this) {
-            if (updateSurface) {
+            if (isUpdateSurface) {
 
                 //获取新数据
                 surfaceTexture.updateTexImage();
 
                 //让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
                 surfaceTexture.getTransformMatrix(mSTMatrix);
-                updateSurface = false;
+                isUpdateSurface = false;
 
                 //编写测试FPS代码
                 Log.d("TWT", "UpdateTime:" + System.currentTimeMillis());
@@ -176,7 +180,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
 
     @Override
     synchronized public void onFrameAvailable(SurfaceTexture surface) {
-        updateSurface = true;
+        isUpdateSurface = true;
     }
 
     @Override
@@ -198,6 +202,12 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
                     screenRatio / videoRatio, -1f, 1f, -1f, 1f);
     }
 
+    /**
+     * @description: getMediaPlayer
+     * @return android.media.MediaPlayer
+     * @throws null
+     * @date 2023/3/2 09:32
+     */
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
