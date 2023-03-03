@@ -224,16 +224,16 @@ public class LoginDialog extends Dialog {
      * 初始化界面控件
      */
     private void initView() {
-        if (yes instanceof Button) {
+        if (findViewById(R.id.yes) instanceof Button) {
             yes = (Button) findViewById(R.id.yes);
         }
-        if (no instanceof Button) {
+        if (findViewById(R.id.no) instanceof Button) {
             no = (Button) findViewById(R.id.no);
         }
-        if (titleTv instanceof TextView) {
+        if (findViewById(R.id.title) instanceof TextView) {
             titleTv = (TextView) findViewById(R.id.title);
         }
-        if (messageTv instanceof TextView) {
+        if (findViewById(R.id.message) instanceof TextView) {
             messageTv = (TextView) findViewById(R.id.message);
         }
         view = findViewById(R.id.view_dialog);
