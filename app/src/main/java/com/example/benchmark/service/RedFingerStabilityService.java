@@ -15,14 +15,14 @@ public class RedFingerStabilityService implements IStabilityService {
     private static final String TAG = "RedFingerStabilityService";
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
-    private final String NODE_ID_CLICK_VIEW = "com.redfinger.app:id/click_view";
-    private final String NODE_ID_START_CONTROL = "com.redfinger.app:id/btnConfirm";
-    private final String NODE_TEXT_START_CONTROL = "开始控制";
-    private final String NODE_ID_NO_NOTICE = "com.redfinger.app:id/check_box";
-    private final String NODE_ID_CONTINUE_CONTROL = "com.redfinger.app:id/tv_ok";
-    private final String NODE_TEXT_CONTINUE_CONTROL = "继续控制";
-    private final String NODE_ID_QUIT_PHONE = "com.redfinger.app:id/tv_ok";
-    private final String NODE_TEXT_QUIT_PHONE = "确定";
+    private final String nodeIdClickView = "com.redfinger.app:id/click_view";
+    private final String nodeIdStartControl = "com.redfinger.app:id/btnConfirm";
+    private final String nodeTextStartControl = "开始控制";
+    private final String nodeIdNoNotice = "com.redfinger.app:id/check_box";
+    private final String nodeIdContinueControl = "com.redfinger.app:id/tv_ok";
+    private final String nodeTextContinueControl = "继续控制";
+    private final String nodeIdQuitPhone = "com.redfinger.app:id/tv_ok";
+    private final String nodeTextQuitPhone = "确定";
 
     private final MyAccessibilityService service;
 
@@ -43,7 +43,9 @@ public class RedFingerStabilityService implements IStabilityService {
 
     @Override
     public void onMonitor() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) {
+            return;
+        }
         if (isTapSuccess) {
             isConnectSuccess = true;
             startControlCloudPhone();
@@ -55,9 +57,13 @@ public class RedFingerStabilityService implements IStabilityService {
         }
         if (!isConnectSuccess) {
             AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
-            if (clickNode == null) return;
-            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1500L) return;
+                    service, nodeIdClickView, "");
+            if (clickNode == null) {
+                return;
+            }
+            if (mLastTapTime != 0L && System.currentTimeMillis() - mLastTapTime < 1500L) {
+                return;
+            }
             mLastTapTime = System.currentTimeMillis();
             service.startCaptureScreen();
             AccessibilityUtil.tap(service, screenWidth / 2, screenHeight / 2,
@@ -66,6 +72,7 @@ public class RedFingerStabilityService implements IStabilityService {
                         public void onSuccess() {
                             isTapSuccess = true;
                         }
+
                         @Override
                         public void onFailure() {
                             isTapSuccess = true;
@@ -79,18 +86,18 @@ public class RedFingerStabilityService implements IStabilityService {
         mStartTime = System.currentTimeMillis();
         closeDialogIfExistWhenStart();
         AccessibilityNodeInfo clickNode = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_CLICK_VIEW, "");
+                service, nodeIdClickView, "");
         AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,
-                NODE_ID_START_CONTROL, NODE_TEXT_START_CONTROL);
+                nodeIdStartControl, nodeTextStartControl);
         AccessibilityNodeInfo continueControlNode = AccessibilityUtil.findNodeInfo(service,
-                NODE_ID_CONTINUE_CONTROL, NODE_TEXT_CONTINUE_CONTROL);
+                nodeIdContinueControl, nodeTextContinueControl);
         while (clickNode != null || startControlNode != null || continueControlNode != null) {
             clickNode = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
+                    service, nodeIdClickView, "");
             startControlNode = AccessibilityUtil.findNodeInfo(service,
-                    NODE_ID_START_CONTROL, NODE_TEXT_START_CONTROL);
+                    nodeIdStartControl, nodeTextStartControl);
             continueControlNode = AccessibilityUtil.findNodeInfo(service,
-                    NODE_ID_CONTINUE_CONTROL, NODE_TEXT_CONTINUE_CONTROL);
+                    nodeIdContinueControl, nodeTextContinueControl);
         }
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
         try {
@@ -115,10 +122,10 @@ public class RedFingerStabilityService implements IStabilityService {
         mQuitTime = System.currentTimeMillis();
         closeDialogIfExistWhenQuit();
         AccessibilityNodeInfo nodeClickView = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_CLICK_VIEW, "");
+                service, nodeIdClickView, "");
         while (nodeClickView == null) {
             nodeClickView = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CLICK_VIEW, "");
+                    service, nodeIdClickView, "");
         }
         service.mQuitTimes.add(System.currentTimeMillis() - mQuitTime);
         try {
@@ -129,17 +136,21 @@ public class RedFingerStabilityService implements IStabilityService {
     }
 
     private void closeDialogIfExistWhenStart() {
-        if (isClickStartControl || isClickContinueControl) return;
+        if (isClickStartControl || isClickContinueControl) {
+            return;
+        }
         new Thread(() -> {
             try {
                 if (!isClickStartControl) {
                     Thread.sleep(1000L);
                     AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,
-                            NODE_ID_START_CONTROL, NODE_TEXT_START_CONTROL);
+                            nodeIdStartControl, nodeTextStartControl);
                     if (startControlNode != null) {
                         AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
-                                NODE_ID_NO_NOTICE, "");
-                        if (noNoticeNode != null) AccessibilityUtil.performClick(noNoticeNode);
+                                nodeIdNoNotice, "");
+                        if (noNoticeNode != null) {
+                            AccessibilityUtil.performClick(noNoticeNode);
+                        }
                         AccessibilityUtil.performClick(startControlNode);
                         mStartTime = System.currentTimeMillis();
                     }
@@ -148,11 +159,13 @@ public class RedFingerStabilityService implements IStabilityService {
                 if (!isClickContinueControl) {
                     Thread.sleep(1000L);
                     AccessibilityNodeInfo continueControlNode = AccessibilityUtil.findNodeInfo(service,
-                            NODE_ID_CONTINUE_CONTROL, NODE_TEXT_CONTINUE_CONTROL);
+                            nodeIdContinueControl, nodeTextContinueControl);
                     if (continueControlNode != null) {
                         AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
-                                NODE_ID_NO_NOTICE, "");
-                        if (noNoticeNode != null) AccessibilityUtil.performClick(noNoticeNode);
+                                nodeIdNoNotice, "");
+                        if (noNoticeNode != null) {
+                            AccessibilityUtil.performClick(noNoticeNode);
+                        }
                         AccessibilityUtil.performClick(continueControlNode);
                         mStartTime = System.currentTimeMillis();
                     }
@@ -165,16 +178,20 @@ public class RedFingerStabilityService implements IStabilityService {
     }
 
     private void closeDialogIfExistWhenQuit() {
-        if (isClickQuitNotice) return;
+        if (isClickQuitNotice) {
+            return;
+        }
         new Thread(() -> {
             try {
                 Thread.sleep(1000L);
                 AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                        NODE_ID_QUIT_PHONE, NODE_TEXT_QUIT_PHONE);
+                        nodeIdQuitPhone, nodeTextQuitPhone);
                 if (nodeBtnQuit != null) {
                     AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
-                            NODE_ID_NO_NOTICE, "");
-                    if (noNotionNode != null) AccessibilityUtil.performClick(noNotionNode);
+                            nodeIdNoNotice, "");
+                    if (noNotionNode != null) {
+                        AccessibilityUtil.performClick(noNotionNode);
+                    }
                     AccessibilityUtil.performClick(nodeBtnQuit);
                     mQuitTime = System.currentTimeMillis();
                 }

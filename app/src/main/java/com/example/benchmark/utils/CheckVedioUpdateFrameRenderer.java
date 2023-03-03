@@ -27,8 +27,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
     private static final String TAG = "GLRenderer";
-    private final int TIMER_RELAX = 1;
-    private final int TIMER_WORK = 2;
+    private final int timerRelax = 1;
+    private final int timerWork = 2;
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
     private boolean isTimerRelaxing = false;
 
@@ -36,11 +36,11 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
-                case TIMER_RELAX:
+                case timerRelax:
                     isTimerRelaxing = true;
-                    handler.sendEmptyMessageDelayed(TIMER_WORK, 1000);
+                    handler.sendEmptyMessageDelayed(timerWork, 1000);
                     break;
-                case TIMER_WORK:
+                case timerWork:
                     isTimerRelaxing = false;
                     break;
             }
@@ -78,14 +78,14 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
     private float[] mSTMatrix = new float[16];
     private int uSTMMatrixHandle;
 
-    private boolean updateSurface;
+    private boolean isUpdateSurface;
     private int screenWidth;
     private int screenHeight;
 
     public CheckVedioUpdateFrameRenderer(Context context) {
         this.context = context;
         synchronized (this) {
-            updateSurface = false;
+            isUpdateSurface = false;
         }
         vertexBuffer = ByteBuffer.allocateDirect(vertexData.length * 4)
                 .order(ByteOrder.nativeOrder())
@@ -114,27 +114,22 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         uTextureSamplerLocation = GLES20.glGetUniformLocation(programId, "sTexture");
         aTextureCoordLocation = GLES20.glGetAttribLocation(programId, "aTexCoord");
 
-
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures, 0);
 
         textureId = textures[0];
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
         ShaderUtils.checkGlError("glBindTexture mTextureID");
-   /*GLES11Ext.GL_TEXTURE_EXTERNAL_OES的用处？
-      之前提到视频解码的输出格式是YUV的（YUV420p，应该是），那么这个扩展纹理的作用就是实现YUV格式到RGB的自动转化，
-      我们就不需要再为此写YUV转RGB的代码了*/
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER,
                 GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER,
                 GLES20.GL_LINEAR);
 
         surfaceTexture = new SurfaceTexture(textureId);
-        surfaceTexture.setOnFrameAvailableListener(this);//监听是否有新的一帧数据到来
+        surfaceTexture.setOnFrameAvailableListener(this); // 监听是否有新的一帧数据到来
 
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
-
     }
 
     private void initMediaPlayer() {
@@ -155,38 +150,24 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         } catch (IllegalStateException e) {
             Log.e("TWT", "onSurfaceChanged: " + e.toString());
         }
-
-
-//        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mediaPlayer) {
-//                //mediaPlayer.start();
-//            }
-//        });
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         synchronized (this) {
-            if (updateSurface) {
-                surfaceTexture.updateTexImage();//获取新数据
+            if (isUpdateSurface) {
+                surfaceTexture.updateTexImage(); // 获取新数据
 
-                //让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
+                // 让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
                 surfaceTexture.getTransformMatrix(mSTMatrix);
-                updateSurface = false;
+                isUpdateSurface = false;
                 Log.d("TWT", "onDrawFrame: 画面更新！");
-                //编写测试FPS代码
+
+                // 编写测试FPS代码
                 if (!isTimerRelaxing) {
-                    //Log.d("TWT", "检测到1s内画面更新");
-                    //Log.d("TWT", "UpdateTime:"+System.currentTimeMillis());
-                    //handler.sendEmptyMessage(TIMER_RELAX);
                     gameTouchUtil.getUpdateTime(System.currentTimeMillis());
                 }
-
-                //gameTouchUtil.print();
-
-
             }
         }
         GLES20.glUseProgram(programId);
@@ -208,13 +189,11 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         GLES20.glUniform1i(uTextureSamplerLocation, 0);
         GLES20.glViewport(0, 0, screenWidth, screenHeight);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-
-
     }
 
     @Override
     public synchronized void onFrameAvailable(SurfaceTexture surface) {
-        updateSurface = true;
+        isUpdateSurface = true;
     }
 
     @Override
@@ -225,15 +204,12 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
 
     private void updateProjection(int videoWidth, int videoHeight) {
         float screenRatio = (float) screenWidth / screenHeight;
-        //float screenRatio = (float)  screenHeight/ screenWidth;
-        //float videoRatio = (float) videoWidth / videoHeight;
         float videoRatio = (float) videoHeight / videoWidth;
         if (videoRatio > screenRatio) {
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
-//            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -0.3f, 0.3f, -1f, 1f);
-        } else
+        } else {
             Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio, screenRatio / videoRatio, -1f, 1f, -1f, 1f);
-        //Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -0.8f, 0.8f, -1f, 1f);
+        }
     }
 
     public MediaPlayer getMediaPlayer() {

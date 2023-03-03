@@ -1,22 +1,14 @@
 package com.example.benchmark.utils;
 
-
 import android.util.Log;
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class LogUtils {
-
     public static final String TAG = "ZXingLite";
 
     public static final String VERTICAL = "|";
-
-    /** 是否显示Log日志 */
-    private static boolean isShowLog = true;
-
-    /** Log日志优先权 */
-    private static int priority = 1;
 
     /**
      * Priority constant for the println method;use System.out.println
@@ -55,198 +47,228 @@ public class LogUtils {
 
     public static final String TAG_FORMAT = "%s.%s(%s:%d)";
 
-    private LogUtils(){
+    /**
+     * 是否显示Log日志
+     */
+    private static boolean isShowLog = true;
+
+    /**
+     * Log日志优先权
+     */
+    private static int priority = 1;
+
+    private LogUtils() {
         throw new AssertionError();
     }
 
     public static void setShowLog(boolean isShowLog) {
-
         LogUtils.isShowLog = isShowLog;
     }
 
     public static boolean isShowLog() {
-
         return isShowLog;
     }
 
     public static int getPriority() {
-
         return priority;
     }
 
     public static void setPriority(int priority) {
-
         LogUtils.priority = priority;
     }
 
     /**
      * 根据堆栈生成TAG
+     *
      * @return TAG|className.methodName(fileName:lineNumber)
      */
     private static String generateTag(StackTraceElement caller) {
         String tag = TAG_FORMAT;
         String callerClazzName = caller.getClassName();
         callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
-        tag = String.format(tag,callerClazzName, caller.getMethodName(),caller.getFileName(),caller.getLineNumber());
+        tag = String.format(tag, callerClazzName, caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
         return new StringBuilder().append(TAG).append(VERTICAL).append(tag).toString();
     }
 
     /**
      * 获取堆栈
-     * @param n
-     * 		n=0		VMStack
-     * 		n=1		Thread
-     * 		n=3		CurrentStack
-     * 		n=4		CallerStack
-     * 		...
+     *
+     * @param num num=0		VMStack
+     *            num=1		Thread
+     *            num=3		CurrentStack
+     *            num=4		CallerStack
+     *            ...
      * @return
      */
-    public static StackTraceElement getStackTraceElement(int n) {
-        return Thread.currentThread().getStackTrace()[n];
+    public static StackTraceElement getStackTraceElement(int num) {
+        return Thread.currentThread().getStackTrace()[num];
     }
 
     /**
      * 获取调用方的堆栈TAG
+     *
      * @return
      */
-    private static String getCallerStackLogTag(){
+    private static String getCallerStackLogTag() {
         return generateTag(getStackTraceElement(5));
     }
 
     /**
-     *
-     * @param t
+     * @param th
      * @return
      */
-    private static String getStackTraceString(Throwable t){
-        return Log.getStackTraceString(t);
+    private static String getStackTraceString(Throwable th) {
+        return Log.getStackTraceString(th);
     }
 
     // -----------------------------------Log.v
 
     /**
      * Log.v
+     *
      * @param msg
      */
-    public static void v(String msg) {
-        if (isShowLog && priority <= VERBOSE)
+    public static void logV(String msg) {
+        if (isShowLog && priority <= VERBOSE) {
             Log.v(getCallerStackLogTag(), String.valueOf(msg));
-
+        }
     }
 
-    public static void v(Throwable t) {
-        if (isShowLog && priority <= VERBOSE)
-            Log.v(getCallerStackLogTag(), getStackTraceString(t));
+    public static void logV(Throwable th) {
+        if (isShowLog && priority <= VERBOSE) {
+            Log.v(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void v(String msg,Throwable t) {
-        if (isShowLog && priority <= VERBOSE)
-            Log.v(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void logV(String msg, Throwable th) {
+        if (isShowLog && priority <= VERBOSE) {
+            Log.v(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------Log.d
 
     /**
      * Log.d
+     *
      * @param msg
      */
-    public static void d(String msg) {
-        if (isShowLog && priority <= DEBUG)
+    public static void logD(String msg) {
+        if (isShowLog && priority <= DEBUG) {
             Log.d(getCallerStackLogTag(), String.valueOf(msg));
+        }
     }
 
-    public static void d(Throwable t) {
-        if (isShowLog && priority <= DEBUG)
-            Log.d(getCallerStackLogTag(), getStackTraceString(t));
+    public static void logD(Throwable th) {
+        if (isShowLog && priority <= DEBUG) {
+            Log.d(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void d(String msg,Throwable t) {
-        if (isShowLog && priority <= DEBUG)
-            Log.d(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void logD(String msg, Throwable th) {
+        if (isShowLog && priority <= DEBUG) {
+            Log.d(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------Log.i
 
     /**
      * Log.i
+     *
      * @param msg
      */
-    public static void i(String msg) {
-        if (isShowLog && priority <= INFO)
+    public static void logI(String msg) {
+        if (isShowLog && priority <= INFO) {
             Log.i(getCallerStackLogTag(), String.valueOf(msg));
+        }
     }
 
-    public static void i(Throwable t) {
-        if (isShowLog && priority <= INFO)
-            Log.i(getCallerStackLogTag(), getStackTraceString(t));
+    public static void logI(Throwable th) {
+        if (isShowLog && priority <= INFO) {
+            Log.i(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void i(String msg,Throwable t) {
-        if (isShowLog && priority <= INFO)
-            Log.i(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void logI(String msg, Throwable th) {
+        if (isShowLog && priority <= INFO) {
+            Log.i(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------Log.w
 
     /**
      * Log.w
+     *
      * @param msg
      */
-    public static void w(String msg) {
-        if (isShowLog && priority <= WARN)
+    public static void logW(String msg) {
+        if (isShowLog && priority <= WARN) {
             Log.w(getCallerStackLogTag(), String.valueOf(msg));
+        }
     }
 
-    public static void w(Throwable t) {
-        if (isShowLog && priority <= WARN)
-            Log.w(getCallerStackLogTag(), getStackTraceString(t));
+    public static void logW(Throwable th) {
+        if (isShowLog && priority <= WARN) {
+            Log.w(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void w(String msg,Throwable t) {
-        if (isShowLog && priority <= WARN)
-            Log.w(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void logW(String msg, Throwable th) {
+        if (isShowLog && priority <= WARN) {
+            Log.w(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------Log.e
 
     /**
      * Log.e
+     *
      * @param msg
      */
-    public static void e(String msg) {
-        if (isShowLog && priority <= ERROR)
+    public static void logE(String msg) {
+        if (isShowLog && priority <= ERROR) {
             Log.e(getCallerStackLogTag(), String.valueOf(msg));
+        }
     }
 
-    public static void e(Throwable t) {
-        if (isShowLog && priority <= ERROR)
-            Log.e(getCallerStackLogTag(), getStackTraceString(t));
+    public static void logE(Throwable th) {
+        if (isShowLog && priority <= ERROR) {
+            Log.e(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void e(String msg,Throwable t) {
-        if (isShowLog && priority <= ERROR)
-            Log.e(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void logE(String msg, Throwable th) {
+        if (isShowLog && priority <= ERROR) {
+            Log.e(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------Log.wtf
 
     /**
      * Log.wtf
+     *
      * @param msg
      */
     public static void wtf(String msg) {
-        if (isShowLog && priority <= ASSERT)
+        if (isShowLog && priority <= ASSERT) {
             Log.wtf(getCallerStackLogTag(), String.valueOf(msg));
+        }
     }
 
-    public static void wtf(Throwable t) {
-        if (isShowLog && priority <= ASSERT)
-            Log.wtf(getCallerStackLogTag(), getStackTraceString(t));
+    public static void wtf(Throwable th) {
+        if (isShowLog && priority <= ASSERT) {
+            Log.wtf(getCallerStackLogTag(), getStackTraceString(th));
+        }
     }
 
-    public static void wtf(String msg,Throwable t) {
-        if (isShowLog && priority <= ASSERT)
-            Log.wtf(getCallerStackLogTag(), String.valueOf(msg), t);
+    public static void wtf(String msg, Throwable th) {
+        if (isShowLog && priority <= ASSERT) {
+            Log.wtf(getCallerStackLogTag(), String.valueOf(msg), th);
+        }
     }
 
     // -----------------------------------System.out.print
@@ -257,13 +279,15 @@ public class LogUtils {
      * @param msg
      */
     public static void print(String msg) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.print(msg);
+        if (isShowLog && priority <= PRINTLN) {
+            Log.d(TAG, "msg: " + msg);
+        }
     }
 
     public static void print(Object obj) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.print(obj);
+        if (isShowLog && priority <= PRINTLN) {
+            Log.d(TAG, "obj: " + obj);
+        }
     }
 
     // -----------------------------------System.out.printf
@@ -274,8 +298,9 @@ public class LogUtils {
      * @param msg
      */
     public static void printf(String msg) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.printf(msg);
+        if (isShowLog && priority <= PRINTLN) {
+            Log.d(TAG, "msg: " + msg);
+        }
     }
 
     // -----------------------------------System.out.println
@@ -286,13 +311,14 @@ public class LogUtils {
      * @param msg
      */
     public static void println(String msg) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.println(msg);
+        if (isShowLog && priority <= PRINTLN) {
+            Log.d(TAG, "msg: " + msg);
+        }
     }
 
     public static void println(Object obj) {
-        if (isShowLog && priority <= PRINTLN)
-            System.out.println(obj);
+        if (isShowLog && priority <= PRINTLN) {
+            Log.d(TAG, "msg: " + obj);
+        }
     }
-
 }

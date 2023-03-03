@@ -209,7 +209,7 @@ public final class CodeUtils {
             }
             return bitmap;
         } catch (Exception e) {
-            LogUtils.w(e.getMessage());
+            LogUtils.logW(e.getMessage());
         }
         return null;
     }
@@ -258,7 +258,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            LogUtils.w(e.getMessage());
+            LogUtils.logW(e.getMessage());
         }
         return bitmap;
     }
@@ -432,7 +432,7 @@ public final class CodeUtils {
                 }
             }
         } catch (Exception e) {
-            LogUtils.w(e.getMessage());
+            LogUtils.logW(e.getMessage());
         } finally {
             reader.reset();
         }
@@ -695,7 +695,7 @@ public final class CodeUtils {
             }
             return bitmap;
         } catch (WriterException e) {
-            LogUtils.w(e.getMessage());
+            LogUtils.logW(e.getMessage());
         }
         return null;
     }
@@ -740,7 +740,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            LogUtils.w(e.getMessage());
+            LogUtils.logW(e.getMessage());
         }
         return bitmap;
     }

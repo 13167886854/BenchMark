@@ -108,7 +108,9 @@ public class GameSmoothTestService extends Service {
         wmParams = new LayoutParams();
 
         // 获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        }
 
         // 设置window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
@@ -136,8 +138,14 @@ public class GameSmoothTestService extends Service {
         LayoutInflater inflater = LayoutInflater.from(getApplication());
 
         // 获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.game_smooth_float, null);
-        mFloatView = (TextView) mFloatLayout.findViewById(R.id.textinfo);
+        if (inflater.inflate(R.layout.game_smooth_float, null) instanceof LinearLayout) {
+            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.game_smooth_float, null);
+        }
+
+        if (mFloatLayout.findViewById(R.id.textinfo) instanceof TextView) {
+            mFloatView = (TextView) mFloatLayout.findViewById(R.id.textinfo);
+        }
+
         mWindowManager.addView(mFloatLayout, wmParams);
 
         // 获取状态栏的高度
@@ -290,7 +298,8 @@ public class GameSmoothTestService extends Service {
 
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "ScreenRecorder" + "/";
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator + "ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {

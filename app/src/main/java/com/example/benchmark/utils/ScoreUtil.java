@@ -17,7 +17,6 @@ import java.util.TreeSet;
 
 import okhttp3.Call;
 
-
 /**
  * 计算分数
  */
@@ -43,7 +42,8 @@ public class ScoreUtil {
                     .async(new OkHttpUtils.ICallBack() {
                         @Override
                         public void onSuccessful(Call call, String data) {
-                            Log.d(TAG, "onSuccessful: cpu---" + data);
+                            Log.d(TAG, "onSuccessful: cpu---"
+                                    + data);
                         }
 
                         @Override
@@ -79,7 +79,8 @@ public class ScoreUtil {
                     .async(new OkHttpUtils.ICallBack() {
                         @Override
                         public void onSuccessful(Call call, String data) {
-                            Log.d(TAG, "onSuccessful: gpu---" + data);
+                            Log.d(TAG, "onSuccessful: gpu---"
+                                    + data);
                         }
 
                         @Override
@@ -112,7 +113,8 @@ public class ScoreUtil {
                     .async(new OkHttpUtils.ICallBack() {
                         @Override
                         public void onSuccessful(Call call, String data) {
-                            Log.d(TAG, "onSuccessful: ram---" + data);
+                            Log.d(TAG, "onSuccessful: ram---"
+                                    + data);
                         }
 
                         @Override
@@ -144,7 +146,8 @@ public class ScoreUtil {
                     .async(new OkHttpUtils.ICallBack() {
                         @Override
                         public void onSuccessful(Call call, String data) {
-                            Log.d(TAG, "onSuccessful: rom---" + data);
+                            Log.d(TAG, "onSuccessful: rom---"
+                                    + data);
                         }
 
                         @Override
@@ -164,20 +167,15 @@ public class ScoreUtil {
             float stutterRate,
             String eachFps
     ) {
-        lowFrameRate *= 100;
-        stutterRate *= 100;
-
         // 保存流畅性结果
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
-        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
+        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate*100);
         CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
-        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
+        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate*100);
 
         // 计算流畅性分数
-        lowFrameRate /= 100;
-        stutterRate /= 100;
         float averFpsScore = averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6;
         float frameShakeScore = frameShakeRate < 10 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate);
         float lowFrameScore = 100f * (1 - lowFrameRate) / 6;
@@ -205,7 +203,7 @@ public class ScoreUtil {
                     .addParam("frameInterval", frameInterval + "")
                     .addParam("stutterRate", stutterRate + "")
                     .addParam("fluencyScore", fluencyScore + "")
-                    .addParam("eachFps",eachFps)
+                    .addParam("eachFps", eachFps)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .post(true)
                     .async(new OkHttpUtils.ICallBack() {
@@ -347,8 +345,10 @@ public class ScoreUtil {
         String[] cloudDownTimeListArr = cloudDownTimeListSub.split(",");
         String[] cloudSpendTimeListArr = cloudSpendTimeListSub.split(",");
 
-        Log.d("zzl", "calcAndSaveTouchScores: cloudDownTimeListArr==>" + Arrays.toString(cloudDownTimeListArr));
-        Log.d("zzl", "calcAndSaveTouchScores: cloudSpendTimeListArr==>" + Arrays.toString(cloudSpendTimeListArr));
+        Log.d("zzl", "calcAndSaveTouchScores: cloudDownTimeListArr==>"
+                + Arrays.toString(cloudDownTimeListArr));
+        Log.d("zzl", "calcAndSaveTouchScores: cloudSpendTimeListArr==>"
+                + Arrays.toString(cloudSpendTimeListArr));
 
         for (int i = 0; i < cloudDownTimeListArr.length; i++) {
             cloudDownTimeListArr[i] = cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
@@ -366,22 +366,47 @@ public class ScoreUtil {
         TreeSet<String> localTapTimes = (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
         Log.d("zzl", "localTapTimes: " + localTapTimes);
 
+
+        long responseTime0;
+        responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
+                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
+        long responseTime1;
+        responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2")
+                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
+        long responseTime2;
+        responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3")
+                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
+        long responseTime3;
+        responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4")
+                + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
+        long responseTime4;
+        responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5")
+                + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
+        long responseTime5;
+        responseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6")
+                + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
+        long responseTime6;
+        responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
+                + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
+        long responseTime7;
+        responseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
+                + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
+        long responseTime8;
+        responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9")
+                + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
+        long responseTime9;
+        responseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10")
+                + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
+        long responseTime10;
+        responseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11")
+                + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
+
+        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal11") -
+                CacheUtil.getLong("tapTimeOnLocal1")));
+        ArrayList<Long> longs = new ArrayList<>();
+
         // 响应次数
         int responseNum = 0;
-        long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1") + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
-        long responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2") + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
-        long responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3") + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
-        long responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4") + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
-        long responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5") + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
-        long responseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6") + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
-        long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7") + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
-        long responseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8") + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
-        long responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9") + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
-        long responseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10") + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
-        long responseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11") + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
-
-        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal11") - CacheUtil.getLong("tapTimeOnLocal1")));
-        ArrayList<Long> longs = new ArrayList<>();
 
         if (responseTime0 != 0L) {
             responseNum++;

@@ -72,7 +72,11 @@ public class SDCardUtils {
         /**
          * 无外置SD 卡判断
          * **/
-        if (isSDCardMount() == false || TextUtils.isEmpty(path) || path == null) {
+        if (isSDCardMount() != true || TextUtils.isEmpty(path)) {
+            return (Map<String, String>) new HashMap<>().put("无外置SD卡", null);
+        }
+
+        if (path == null) {
             return (Map<String, String>) new HashMap<>().put("无外置SD卡", null);
         }
 
@@ -80,12 +84,16 @@ public class SDCardUtils {
         StatFs statFs = new StatFs(file.getPath());
         String stotageInfo;
 
-        long blockCount = statFs.getBlockCountLong();
-        long bloackSize = statFs.getBlockSizeLong();
-        long totalSpace = bloackSize * blockCount;
-
-        long availableBlocks = statFs.getAvailableBlocksLong();
-        long availableSpace = availableBlocks * bloackSize;
+        long blockCount;
+        long bloackSize;
+        long totalSpace;
+        long availableBlocks;
+        long availableSpace;
+        blockCount = statFs.getBlockCountLong();
+        bloackSize = statFs.getBlockSizeLong();
+        totalSpace = bloackSize * blockCount;
+        availableBlocks = statFs.getAvailableBlocksLong();
+        availableSpace = availableBlocks * bloackSize;
 
         Map<String, String> res = new HashMap<>();
         res.put("可用", Formatter.formatFileSize(context, availableSpace));
@@ -114,7 +122,7 @@ public class SDCardUtils {
                         if (path.length > 1) {
                             return path[type];
                         } else {
-                            return null;
+                            return "null";
                         }
                     default:
                         break;
@@ -124,7 +132,7 @@ public class SDCardUtils {
             }
         }
 
-        return null;
+        return "null";
     }
 
     /**
@@ -278,11 +286,13 @@ public class SDCardUtils {
 
         @Override
         public String toString() {
-            return "isExist=" + isExist + "\ntotalBlocks=" + totalBlocks
-                    + "\nfreeBlocks=" + freeBlocks + "\navailableBlocks="
-                    + availableBlocks + "\nblockByteSize=" + blockByteSize
-                    + "\ntotalBytes=" + totalBytes + "\nfreeBytes=" + freeBytes
-                    + "\navailableBytes=" + availableBytes;
+            return "isExist=" + isExist + System.getProperty("line.separator") + "totalBlocks=" + totalBlocks
+                    + System.getProperty("line.separator") + "freeBlocks=" + freeBlocks
+                    + System.getProperty("line.separator") + "availableBlocks="
+                    + availableBlocks + System.getProperty("line.separator") + "blockByteSize=" + blockByteSize
+                    + System.getProperty("line.separator") + "totalBytes=" + totalBytes
+                    + System.getProperty("line.separator") + "freeBytes=" + freeBytes
+                    + System.getProperty("line.separator") + "availableBytes=" + availableBytes;
         }
     }
 

@@ -17,8 +17,8 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final String NODE_ID_BTN_START_CONNECT = "com.huawei.instructionstream.appui:id/btn_startGame";
-    private final String NODE_ID_QUIT_PHONE = "com.huawei.instructionstream.appui:id/rotate_exit";
-    private final String NODE_TEXT_QUIT_PHONE = "退出云手机";
+    private final String nodeIdQuitPhone = "com.huawei.instructionstream.appui:id/rotate_exit";
+    private final String nodeTextQuitPhone = "退出云手机";
     private final String NODE_ID_CONNECT_SUCCESS_VIEW = "com.huawei.instructionstream.appui:id/total_view";
     private final String NODE_ID_CONNECT_FAIL_EXIT = "android:id/button1";
     private final String NODE_TEXT_CONNECT_FAIL_EXIT = "退出云手机";
@@ -82,7 +82,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
                 break;
             }
             AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_QUIT_PHONE, NODE_TEXT_QUIT_PHONE);
+                    service, nodeIdQuitPhone, nodeTextQuitPhone);
             if (nodeBtnQuit != null) {
                 service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
                 AccessibilityUtil.performClick(nodeBtnQuit);
