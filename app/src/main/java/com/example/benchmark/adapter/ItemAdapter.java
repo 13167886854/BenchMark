@@ -14,19 +14,20 @@ import com.example.benchmark.data.LiuChang;
 
 import java.util.List;
 
-public class ItemAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    List<LiuChang> data;
 
     private Context context;
-    List<LiuChang> data;
+
     public ItemAdapter(Context context, List<LiuChang> data) {
         this.context = context;
         this.data = data;
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_item, parent, false);
-
         return new RecyclerViewHolder(view);
     }
 
@@ -34,7 +35,7 @@ public class ItemAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
         LiuChang liuChang = data.get(position);
-        recyclerViewHolder.item_item.setText(liuChang.getItem_item());
+        recyclerViewHolder.itemOfItem.setText(liuChang.getItemOfItem());
         recyclerViewHolder.item_ceshifangfa.setText(liuChang.getCeshifangfa());
         recyclerViewHolder.item_pingjiazhibiao.setText(liuChang.getPingpanbiaozhun());
     }
@@ -44,12 +45,13 @@ public class ItemAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return data.size();
     }
 
-    class RecyclerViewHolder extends RecyclerView.ViewHolder{
-        public TextView item_item,item_ceshifangfa,item_pingjiazhibiao;
+    class RecyclerViewHolder extends RecyclerView.ViewHolder {
+        public TextView itemOfItem, item_ceshifangfa, item_pingjiazhibiao;
+
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
-            item_item=itemView.findViewById(R.id.item_item);
-            item_ceshifangfa=itemView.findViewById(R.id.item_ceshifangfa);
+            itemOfItem = itemView.findViewById(R.id.item_item);
+            item_ceshifangfa = itemView.findViewById(R.id.item_ceshifangfa);
             item_pingjiazhibiao = itemView.findViewById(R.id.item_pingpanbiaozhun);
         }
     }

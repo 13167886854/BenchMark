@@ -4,25 +4,25 @@ package com.example.benchmark.data;
  * 流畅类
  */
 public class LiuChang {
-    private String item_item;
+    private String itemOfItem;
     private String ceshifangfa;
     private String pingpanbiaozhun;
 
     public LiuChang() {
     }
 
-    public LiuChang(String item_item, String ceshifangfa, String pingpanbiaozhun) {
-        this.item_item = item_item;
+    public LiuChang(String itemOfItem, String ceshifangfa, String pingpanbiaozhun) {
+        this.itemOfItem = itemOfItem;
         this.ceshifangfa = ceshifangfa;
         this.pingpanbiaozhun = pingpanbiaozhun;
     }
 
-    public String getItem_item() {
-        return item_item;
+    public String getItemOfItem() {
+        return itemOfItem;
     }
 
-    public void setItem_item(String item_item) {
-        this.item_item = item_item;
+    public void setItemOfItem(String itemOfItem) {
+        this.itemOfItem = itemOfItem;
     }
 
     public String getCeshifangfa() {

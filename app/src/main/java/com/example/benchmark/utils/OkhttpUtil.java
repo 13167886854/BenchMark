@@ -215,7 +215,7 @@ public class OkhttpUtil {
                         AudioVideoData.resolution = jsonObject.getString("resolution");
                         AudioVideoData.maxdifferencevalue = jsonObject.getString("maxdifferencevalue");
                         AudioVideoData.date = jsonObject.getString("date");
-                        AudioVideoData.haveData = true;
+                        AudioVideoData.hasData = true;
                         Looper.prepare();
                         Toast.makeText(context,"获取音画测试数据成功", Toast.LENGTH_SHORT).show();
                         Looper.loop();

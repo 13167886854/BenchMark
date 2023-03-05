@@ -1,7 +1,8 @@
 package com.example.benchmark.utils;
 
-public class SpeedManager {
+import android.util.Log;
 
+public class SpeedManager {
     private static final String TAG = SpeedManager.class.getSimpleName();
 
     private static final boolean CHECK_SLEEP_TIME = false;
@@ -18,9 +19,7 @@ public class SpeedManager {
     }
 
     public void preRender(long presentationTimeUsec) {
-
         if (mPrevMonoUsec == 0) {
-
             mPrevMonoUsec = System.nanoTime() / 1000;
             mPrevPresentUsec = presentationTimeUsec;
         } else {
@@ -35,21 +34,18 @@ public class SpeedManager {
                 frameDelta = mFixedFrameDurationUsec;
             } else {
                 frameDelta = presentationTimeUsec - mPrevPresentUsec;
-                //Log.d(TAG," frameDelta: "+frameDelta);
+                // Log.d(TAG," frameDelta: "+frameDelta);
             }
             if (frameDelta < 0) {
-
                 frameDelta = 0;
             } else if (frameDelta == 0) {
-
+                Log.e(TAG, "preRender: frameDelta == 0");
             } else if (frameDelta > 10 * ONE_MILLION) {
-
                 frameDelta = 5 * ONE_MILLION;
             }
-
             long desiredUsec = mPrevMonoUsec + frameDelta;  // when we want to wake up
             long nowUsec = System.nanoTime() / 1000;
-            while (nowUsec < (desiredUsec - 100) /*&& mState == RUNNING*/) {
+            while (nowUsec < (desiredUsec - 100)) {
                 long sleepTimeUsec = desiredUsec - nowUsec;
                 if (sleepTimeUsec > 500000) {
                     sleepTimeUsec = 500000;
@@ -61,21 +57,16 @@ public class SpeedManager {
                         long actualSleepNsec = System.nanoTime() - startNsec;
                     } else {
                         long time = sleepTimeUsec / 1000;
-                        //Log.d(TAG," time: "+time);
                         Thread.sleep(time, (int) (sleepTimeUsec % 1000) * 1000);
                     }
                 } catch (InterruptedException ie) {
+                    Log.e(TAG, "InterruptedException: " + ie);
                 }
                 nowUsec = System.nanoTime() / 1000;
             }
-
             mPrevMonoUsec += frameDelta;
             mPrevPresentUsec += frameDelta;
         }
-    }
-
-
-    public void postRender() {
     }
 
     public void loopReset() {

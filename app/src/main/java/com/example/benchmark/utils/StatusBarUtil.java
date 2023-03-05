@@ -15,15 +15,16 @@ public class StatusBarUtil {
         return result;
     }
 
-
     public static int getNavigationBarHeight(Context context) {
-        if (!checkDeviceHasNavigationBar(context)) return 0;
+        if (!checkDeviceHasNavigationBar(context)) {
+            return 0;
+        }
         Resources resources = context.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
 
-    //获取是否存在NavigationBar
+    // 获取是否存在NavigationBar
     public static boolean checkDeviceHasNavigationBar(Context context) {
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();

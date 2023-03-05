@@ -27,7 +27,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Recorder {
-
     static final String TAG = "Recorder";
     public boolean isRecording = false;
     private AudioRecord mRecorder;
@@ -46,15 +45,13 @@ public class Recorder {
     private File cache;
     private File rawOutput;
 
-
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
         // 判断平台
         String platformKind = YinHuaData.platformType;
-        //file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
 
-        //如果是云手机平台
+        // 如果是云手机平台
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
                 platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
                 platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
@@ -112,12 +109,8 @@ public class Recorder {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void createAudioFile(Context context) {
-        //root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC), "/Audio Capture");
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
         CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
-        //Log.d("zzl", "createAudioFile: CacheConst.audioPath" + CacheConst.audioPath);
-        //root = new File("/sdcard/Music", "/Audio Capture");
-        //Log.e(TAG, "Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC): "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC));
         Log.e(TAG, "root: " + root);
         cache = new File(context.getCacheDir().getAbsolutePath(), "/RawData");
         if (!root.exists()) {
@@ -158,8 +151,6 @@ public class Recorder {
         DataOutputStream output = null;
         try {
             output = new DataOutputStream(new FileOutputStream(waveFile));
-
-            // WAVE header
             writeString(output, "RIFF"); // chunk id
             writeInt(output, 36 + rawData.length); // chunk size
             writeString(output, "WAVE"); // format
@@ -173,6 +164,7 @@ public class Recorder {
             writeShort(output, (short) 16); // bits per sample
             writeString(output, "data"); // subchunk 2 id
             writeInt(output, rawData.length); // subchunk 2 size
+
             // Audio data (conversion big endian -> little endian)
             short[] shorts = new short[rawData.length / 2];
             ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
@@ -189,11 +181,11 @@ public class Recorder {
         }
     }
 
-    byte[] fullyReadFileToBytes(File f) throws IOException {
-        int size = (int) f.length();
+    byte[] fullyReadFileToBytes(File file) throws IOException {
+        int size = (int) file.length();
         byte bytes[] = new byte[size];
         byte tmpBuff[] = new byte[size];
-        FileInputStream fis = new FileInputStream(f);
+        FileInputStream fis = new FileInputStream(file);
         try {
 
             int read = fis.read(bytes, 0, size);
@@ -205,8 +197,8 @@ public class Recorder {
                     remain -= read;
                 }
             }
-        } catch (IOException e) {
-            Log.e(TAG, "fullyReadFileToBytes: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "fullyReadFileToBytes: ", ex);
         } finally {
             fis.close();
         }
@@ -274,9 +266,9 @@ public class Recorder {
         isRecording = false;
         mRecorder.stop();
         mRecorder.release();
-        //String file = new SimpleDateFormat("yyyy-MM-dd hh-mm").format(new Date());
         String fileName = file + ".mp3";
-        //Convert To mp3 from raw data i.e pcm
+
+        // Convert To mp3 from raw data i.e pcm
         File output = new File(root, fileName);
         try {
             output.createNewFile();

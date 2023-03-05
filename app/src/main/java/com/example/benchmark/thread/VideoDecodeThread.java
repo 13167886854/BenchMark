@@ -30,13 +30,11 @@ public class VideoDecodeThread extends Thread implements Runnable {
     private long videocurtime;
 
 
-    public VideoDecodeThread(String path,Context context) {
-        this.context=context;
+    public VideoDecodeThread(String path, Context context) {
+        this.context = context;
         mMp4FilePath = path;
         mMediaExtractor = new MediaExtractor();
-        //AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.minions);
         try {
-            //mMediaExtractor.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
             mMediaExtractor.setDataSource(mMp4FilePath);
         } catch (IOException e) {
             Log.e(TAG, "VideoDecodeThread: ", e);
@@ -65,34 +63,30 @@ public class VideoDecodeThread extends Thread implements Runnable {
                 return;
             }
             final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
-            //Log.e(TAG, "视频编码器 run: " + videoFormat.toString());
             String videoMime = videoFormat.getString(MediaFormat.KEY_MIME);
-            int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);//24
-            int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);//45591
+            int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
+            int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
 
-
-            //如果设置为SurfaceView，那就动态调整它的高度，保持原视频的宽高比
+            // 如果设置为SurfaceView，那就动态调整它的高度，保持原视频的宽高比
             if (mSurfaceView != null) {
                 Context context = mSurfaceView.getContext();
                 if (context instanceof Activity) {
                     ((Activity) context).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //按视频大小动态调整SurfaceView的高度
+                            // 按视频大小动态调整SurfaceView的高度
                             Resources resources = mSurfaceView.getResources();
 
-                            final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);//1920
-                            final int videoHeight = videoFormat.getInteger(MediaFormat.KEY_HEIGHT);//1080
+                            final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);
+                            final int videoHeight = videoFormat.getInteger(MediaFormat.KEY_HEIGHT);
 
-                            int measuredWidth = mSurfaceView.getMeasuredWidth();//2064
-                            int measuredHeight = mSurfaceView.getMeasuredHeight();//912
+                            int measuredWidth = mSurfaceView.getMeasuredWidth();
+                            int measuredHeight = mSurfaceView.getMeasuredHeight();
 
-
-
-
-                            //纵屏，宽充满，高按比例缩放
+                            // 纵屏，宽充满，高按比例缩放
                             int showVideoHeight = videoHeight * measuredWidth / videoWith;
-                            //横屏，高充满，宽按比例缩放
+
+                            // 横屏，高充满，宽按比例缩放
                             int showVideoWidth = videoWith * measuredHeight / videoHeight;
 
                             if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -110,23 +104,21 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mVideoDecoder = MediaCodec.createDecoderByType(videoMime);
             mVideoDecoder.configure(videoFormat, mSurfaceView.getHolder().getSurface(), null, 0);
             mVideoDecoder.start();
-            //
-            //Log.e("TWT", "run: ////start!!!!!" );
             videocurtime = mMediaExtractor.getSampleTime();
 
             ByteBuffer byteBuffer = ByteBuffer.allocate(maxInputSize);
             int sampleSize = 0;
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             mMediaExtractor.selectTrack(mVideoTrackIndex);
-            SpeedManager mSpeedManager = new SpeedManager();//音视频同步器
-            //Log.e("TWT", "AudioVideoActivity.isTestOver: "+AudioVideoActivity.isTestOver );
+            SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器
             while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
-                //填充要解码的数据
+
+                // 填充要解码的数据
                 if (sampleSize != -1) {
                     if (sampleSize >= 0) {
                         long sampleTime = mMediaExtractor.getSampleTime();
-                        videocurtime=mMediaExtractor.getSampleTime();
+                        videocurtime = mMediaExtractor.getSampleTime();
                         if (sampleTime >= 0) {
                             int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
                             if (inputBufferIndex >= 0) {
@@ -138,16 +130,15 @@ public class VideoDecodeThread extends Thread implements Runnable {
                                     mSpeedManager.preRender(sampleTime);
 
                                     mMediaExtractor.advance();
-                                   // Log.e("TWT", "sampleTime="+sampleTime+"sampleSize="+sampleSize+ "  when AudioVideoActivity.isTestOver is "+AudioVideoActivity.isTestOver );
                                 }
                             }
                         }
                     }
                 }
-                //解码已填充的数据
+                // 解码已填充的数据
                 int outputBufferIndex = mVideoDecoder.dequeueOutputBuffer(bufferInfo, 0);
                 if (outputBufferIndex >= 0) {
-                   // Thread.sleep(frameRate);//控制帧率在24帧左右
+                    // 控制帧率在24帧左右
                     mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
                 }
             }
@@ -157,16 +148,15 @@ public class VideoDecodeThread extends Thread implements Runnable {
 
             mVideoDecoder.stop();
             mVideoDecoder.release();
-       // } catch (IOException | InterruptedException e) {
         } catch (IOException e) {
             Log.e(TAG, "run: ", e);
         }
     }
+
     /**
      * 获取当前帧时间戳
      */
-    public long getcurTime(){
-//        return mMediaExtractor.getSampleTime();
-        return  videocurtime;
+    public long getcurTime() {
+        return videocurtime;
     }
 }

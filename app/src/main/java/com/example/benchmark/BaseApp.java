@@ -7,7 +7,6 @@ import android.content.Context;
 import com.example.benchmark.utils.CacheUtil;
 
 public class BaseApp extends Application {
-
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 
