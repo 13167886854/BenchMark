@@ -85,7 +85,6 @@ public class GameTouchTestService extends Service {
     private long startTime;
     private long endTime;
 
-    // private boolean isColor=true;
     private boolean isRecording = false;
     private int statusBarHeight;
 
@@ -99,7 +98,6 @@ public class GameTouchTestService extends Service {
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case START_RECORD:
-                    // mFloatView.setText("停止");
                     isRecording =! isRecording;
                     startRecord();
 
@@ -196,16 +194,17 @@ public class GameTouchTestService extends Service {
                         startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
-                        //Log.d("TWT", "onTouch: "+MainActivity.);
-                        //刷新
+
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
-                        //小于0.2秒被判断为点击
+
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -242,7 +241,6 @@ public class GameTouchTestService extends Service {
                         // 主线程中调用：
                         handler.postDelayed(runnable, 1000); // 延时1000毫秒
                     }
-                    // Toast.makeText(mContext, "点击了", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }

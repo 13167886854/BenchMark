@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -50,7 +51,7 @@ public class IpPortDialog extends Dialog {
     private String textIp = "";
     private String testPort = "";
     private SharedPreferences sharedPreferences;
-    private boolean mIsChecked=false;
+    private boolean mIsChecked = false;
     private Thread mThread;
     private Message mMessage;
     private static final String TAG = "Login";
@@ -58,7 +59,7 @@ public class IpPortDialog extends Dialog {
     private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
     private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -67,6 +68,7 @@ public class IpPortDialog extends Dialog {
             }
         }
     };
+
     public IpPortDialog(@NonNull Context context) {
         super(context);
     }
@@ -184,74 +186,10 @@ public class IpPortDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 if (yesOnclickListener != null) {
-                    //Toast.makeText(getContext(), (username + "---" + password), Toast.LENGTH_SHORT).show();
-                        // 点击登录后禁用登录按钮
-                        //yes.setEnabled(false);
-                        //Log.d(TAG, "点击登录: username---" + username + "---password---" + password);
-                        //if (username.length() < 5 || username.length() > 15) {
-                        //    Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
-                        //    yes.setEnabled(true);
-                        //    if (password.length() < 5 || password.length() > 15) {
-                        //        Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
-                        //        yes.setEnabled(true);
-                        //    }
-                        //} else {
-                        //    // 发送后端登录验证请求
-                        //    mThread = new Thread(new Runnable() {
-                        //        @Override
-                        //        public void run() {
-                        //            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP+"/admin/loginAndReg")
-                        //                    .addParam("adminName", username)
-                        //                    .addParam("adminPasswd", password)
-                        //                    .addHeader("Content-Type", "application/json; charset=utf-8")
-                        //                    .post(true)
-                        //                    .async(new OkHttpUtils.ICallBack() {
-                        //                        @Override
-                        //                        public void onSuccessful(Call call, String data) {
-                        //                            Log.d(TAG, "onSuccessful: data--" + data);
-                        //                            if (data.endsWith("成功")) {
-                        //                                Admin.adminName = data.split(" ")[1];
-                        //                                Log.d(TAG, "onSuccessful: Admin.adminName==" + Admin.adminName);
-                        //                                Admin.STATUS = "Success";
-                        //                                mMessage = mHandler.obtainMessage();
-                        //                                mMessage.what = 1;
-                        //                                mHandler.sendMessage(mMessage);
-                        //                                Looper.prepare();
-                        //                                Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                        //                                // 验证成功后，跳转到主界面
-                        //                                //startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        //                                Looper.loop();
-                        //                            } else {
-                        //                                Log.d(TAG, "onSuccessful: data==>" + data);
-                        //                                mMessage = mHandler.obtainMessage();
-                        //                                mMessage.what = 1;
-                        //                                mHandler.sendMessage(mMessage);
-                        //
-                        //                                Looper.prepare();
-                        //                                Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                        //                                Looper.loop();
-                        //                            }
-                        //                        }
-                        //
-                        //                        @Override
-                        //                        public void onFailure(Call call, String errorMsg) {
-                        //                            Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
-                        //                            mMessage = mHandler.obtainMessage();
-                        //                            mMessage.what = 1;
-                        //                            mHandler.sendMessage(mMessage);
-                        //
-                        //                            Looper.prepare();
-                        //                            Toast.makeText(getContext(), "遇见未知异常! 请检查网络后重新启动应用🙂 ", Toast.LENGTH_SHORT).show();
-                        //                            Looper.loop();
-                        //                        }
-                        //                    });
-                        //        }
-                        //    });
-                        //    mThread.start();
-                        //}
-                    }
-                    yesOnclickListener.onYesClick();
+                    Log.d(TAG, "onClick: ");
                 }
+                yesOnclickListener.onYesClick();
+            }
         });
         //设置取消按钮被点击后，向外界提供监听
         no.setOnClickListener(new View.OnClickListener() {

@@ -81,7 +81,7 @@ public class TishiFragment extends Fragment {
 
         history = new HistoryFragment();
 
-        if (!Admin.STATUS.equals("Success")) {
+        if (!Admin.status.equals("Success")) {
             showDialog();
         }
 
@@ -202,7 +202,7 @@ public class TishiFragment extends Fragment {
                                                         Log.e(TAG, "hiahiahia222222222222222222222222222222222222222222222: " + Admin.adminName );
                                                         Log.d(TAG, "onSuccessful: Admin.adminName=="
                                                                 + Admin.adminName);
-                                                        Admin.STATUS = "Success";
+                                                        Admin.status = "Success";
                                                         mMessage = mHandler.obtainMessage();
                                                         mMessage.what = 2;
                                                         mHandler.sendMessage(mMessage);

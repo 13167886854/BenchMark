@@ -24,18 +24,39 @@ public class JuTiData {
         juTiItemGrade = itemGrade;
     }
 
+    /**
+     * @description: getJutiItem
+     * @return java.lang.String
+     * @date 2023/3/5 16:47
+     */
     public String getJutiItem() {
         return jutiItem;
     }
 
+    /**
+     * @description: setJutiItem
+     * @param:  * @param item 具体字符串
+     * @date 2023/3/5 16:52
+     */
     public void setJutiItem(String item) {
         jutiItem = item;
     }
 
+    /**
+     * @description: getJuTiItemGrade
+     * @param:
+     * @return java.lang.String
+     * @date 2023/3/5 16:53
+     */
     public String getJuTiItemGrade() {
         return juTiItemGrade;
     }
 
+    /**
+     * @description: setJuTiItemGrade
+     * @param:  * @param itemGrade description
+     * @date 2023/3/5 16:53 
+     */
     public void setJuTiItemGrade(String itemGrade) {
         juTiItemGrade = itemGrade;
     }

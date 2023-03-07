@@ -17,9 +17,9 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class GameTouchUtil {
-
     // 测试次数
     public static final int testNum = 10;
+    private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
     // readyToTapTime
     public long readyToTapTime = 0;
@@ -29,9 +29,7 @@ public class GameTouchUtil {
     private ArrayList<Long> autoTapTime = new ArrayList<>();
     private ArrayList<Long> testTime = new ArrayList<>();
 
-    //单例模式
-    private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
-
+    // 单例模式
     private GameTouchUtil() {
     }
 
@@ -200,34 +198,34 @@ public class GameTouchUtil {
     }
 
     /**
-     * @param TestNum description
+     * @param testNum description
      * @return void
      * @throws null
      * @description: printAvgTime
      * @date 2023/3/2 09:55
      */
-    public void printAvgTime(int TestNum) {
+    public void printAvgTime(int testNum) {
         long sum = 0;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / TestNum;
+        float avgtime = (float) sum / testNum;
         Log.d("TWT", "printAvgTime: 平均自动点击响应时间为：" + avgtime);
     }
 
     /**
-     * @param TestNum description
+     * @param testNum description
      * @return float
      * @throws null
      * @description: getAvgTime
      * @date 2023/3/2 09:55
      */
-    public float getAvgTime(int TestNum) {
+    public float getAvgTime(int testNum) {
         long sum = 0;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / TestNum;
+        float avgtime = (float) sum / testNum;
         Log.e("TWT", "getAvgTime:+frameUpdateTime.size " + frameUpdateTime.size());
         Log.e("TWT", "getAvgTime:+autoTapTime.size " + autoTapTime.size());
         return avgtime;

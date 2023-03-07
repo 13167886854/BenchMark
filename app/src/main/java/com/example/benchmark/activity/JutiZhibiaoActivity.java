@@ -228,13 +228,15 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
             ramInfo.put("可用", MemInfoUtil.getMemAvailable());
         }
         for (Map.Entry<String, String> entry : ramInfo.entrySet()) {
-            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0]
+                    + "GB") : entry.getValue();
             entry.setValue(value);
         }
         Log.d(TAG, "getInfo: " + ramInfo);
         Map<String, String> storageInfo = SDCardUtils.getStorageInfo(this, 0);
         for (Map.Entry<String, String> entry : storageInfo.entrySet()) {
-            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            String value = entry.getValue().endsWith("吉字节") ? (entry.getValue().split("吉字节")[0]
+                    + "GB") : entry.getValue();
             entry.setValue(value);
         }
         Log.d(TAG, "getInfo: " + storageInfo);

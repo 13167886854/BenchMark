@@ -91,8 +91,8 @@ public class FxService extends Service {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
-    private final int STOP_RECORD = 111;
-    private final int COMPUTE_PESQ = 222;
+    private final int stopRecord = 111;
+    private final int computePesq = 222;
     private boolean codeTouchAble = true;
     private boolean running;
     public static String path = "";
@@ -114,16 +114,16 @@ public class FxService extends Service {
     private FxService service;
     private TapUtil tapUtil;
 
-    //视频音频录制变量初始化
+    // 视频音频录制变量初始化
     private Recorder mRecorder;
     private VirtualDisplay virtualDisplay;
     private MediaRecorder mediaRecorder;
 
-    //定义浮动窗口布局
+    // 定义浮动窗口布局
     private LinearLayout mFloatLayout;
     private LayoutParams wmParams;
 
-    //创建浮动窗口设置布局参数的对象
+    // 创建浮动窗口设置布局参数的对象
     private WindowManager mWindowManager;
     private Context mContext;
     private TextView mFloatView;
@@ -138,12 +138,12 @@ public class FxService extends Service {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case STOP_RECORD:
+                case stopRecord:
                     btnToRecord.setClickable(false);
                     btnMenu.setVisibility(View.VISIBLE);
                     Toast.makeText(mContext, "录制结束，请耐心等待音频质量计算结果~",
                             Toast.LENGTH_SHORT).show();
-                case COMPUTE_PESQ:
+                case computePesq:
                     if (YinHuaData.pesq != null) {
                         Toast.makeText(mContext, (YinHuaData.platformType + "音频质量计算完成~"),
                                 Toast.LENGTH_SHORT).show();
@@ -192,7 +192,10 @@ public class FxService extends Service {
         wmParams = new LayoutParams();
 
         // 获取WindowManagerImpl.CompatModeWrapper
-        mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        }
+
 
         // 设置window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
@@ -207,8 +210,6 @@ public class FxService extends Service {
         // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
         wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        // LayoutParams.FLAG_NOT_TOUCH_MODAL |
-        // LayoutParams.FLAG_NOT_TOUCHABLE
         // 调整悬浮窗显示的停靠位置为左侧置顶
         wmParams.gravity = Gravity.START | Gravity.TOP;
 
@@ -221,22 +222,26 @@ public class FxService extends Service {
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
 
-        //获取浮动窗口视图所在布局
-        mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
+        // 获取浮动窗口视图所在布局
+        if (inflater.inflate(R.layout.float_layout, null) instanceof LinearLayout) {
+            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
+        }
 
-        //LinearLayout btnMenu = (LinearLayout) inflater.inflate(R.id.btnMenu,null);
         btnMenu = mFloatLayout.findViewById(R.id.btnMenu);
         btnMenu.setVisibility(View.GONE);
-        mFloatView = (TextView) mFloatLayout.findViewById(R.id.textinfo);
+
+        if (mFloatLayout.findViewById(R.id.textinfo) instanceof TextView) {
+            mFloatView = (TextView) mFloatLayout.findViewById(R.id.textinfo);
+        }
+
         mWindowManager.addView(mFloatLayout, wmParams);
 
-        //获取状态栏的高度
+        // 获取状态栏的高度
         int resourceId = getResources().getIdentifier("status_bar_height",
                 "dimen", "android");
         statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // handler.sendEmptyMessage(1);
-        //浮动窗口按钮
+        // 浮动窗口按钮
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -250,18 +255,18 @@ public class FxService extends Service {
                         break;
                     case MotionEvent.ACTION_MOVE:
 
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() -
-                                mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
+                        wmParams.y = (int) event.getRawY()
+                                - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
 
-                        //刷新
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        //小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
                         } else {
@@ -270,14 +275,14 @@ public class FxService extends Service {
                         break;
                 }
 
-                //响应点击事件
-                //点击按钮进行截屏bitmap形式
+                // 响应点击事件
+                // 点击按钮进行截屏bitmap形式
                 if (isclick) {
                     mFloatView.setVisibility(View.GONE);
                     btnMenu.setVisibility(View.VISIBLE);
                 }
 
-                //设置监听浮动窗口的触摸移动
+                // 设置监听浮动窗口的触摸移动
                 return true;
             }
         });
@@ -302,18 +307,18 @@ public class FxService extends Service {
                         break;
                     case MotionEvent.ACTION_MOVE:
 
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - btnToPrCode.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() -
-                                btnToPrCode.getMeasuredHeight() - statusBarHeight;
+                        wmParams.y = (int) event.getRawY()
+                                - btnToPrCode.getMeasuredHeight() - statusBarHeight;
 
-                        //刷新
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        //小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
                         } else {
@@ -322,17 +327,15 @@ public class FxService extends Service {
                         break;
                 }
 
-                //响应点击事件
+                // 响应点击事件
                 if (isclick) {
                     if (codeTouchAble) {
                         toCatchScreen();
                     }
-
-                    //点击按钮进行截屏bitmap形式
                 }
                 return true;
             }
-        });//设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动
 
         btnToTap = btnMenu.findViewById(R.id.btnToTap);
         btnToTap.setOnTouchListener(new OnTouchListener() {
@@ -344,18 +347,17 @@ public class FxService extends Service {
                         startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
-
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - btnToTap.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY() - btnToTap.getMeasuredHeight() - statusBarHeight;
 
-                        //刷新
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        //小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
                         } else {
@@ -363,20 +365,16 @@ public class FxService extends Service {
                         }
                         break;
                 }
-
-                //响应触控点击事件
+                // 响应触控点击事件
                 if (isclick) {
-
-                    //这里写开启触控服务
+                    // 这里写开启触控服务
                     Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onTouch: 点击了开启触控服务");
-
-                    //startAutoTapService();
                     tapUtil.phoneTouchTap();
                 }
                 return true;
             }
-        });//设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动
 
         btnToTap.setVisibility(isCheckTouch ? View.VISIBLE : View.GONE);
         btnToBack = btnMenu.findViewById(R.id.btnToBack);
@@ -390,19 +388,18 @@ public class FxService extends Service {
                         startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
-
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() -
-                                btnToBack.getMeasuredHeight() - statusBarHeight;
+                        wmParams.y = (int) event.getRawY()
+                                - btnToBack.getMeasuredHeight() - statusBarHeight;
 
-                        //刷新
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        //小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
                         } else {
@@ -410,15 +407,14 @@ public class FxService extends Service {
                         }
                         break;
                 }
-
-                //响应返回点击事件
+                // 响应返回点击事件
                 if (isclick) {
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
                 }
                 return true;
             }
-        });//设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动
 
         btnToRecord = btnMenu.findViewById(R.id.btnToRecord);
         btnToRecord.setOnTouchListener(new OnTouchListener() {
@@ -431,18 +427,17 @@ public class FxService extends Service {
                         startTime = System.currentTimeMillis();
                         break;
                     case MotionEvent.ACTION_MOVE:
-
-                        //getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
                         wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight() - statusBarHeight;
 
-                        //刷新
+                        // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        //小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isclick = false;
                         } else {
@@ -450,8 +445,7 @@ public class FxService extends Service {
                         }
                         break;
                 }
-
-                //响应返回点击事件
+                // 响应返回点击事件
                 if (isclick) {
 
                     tapUtil.tap(screenWidth / 2, screenHeight / 2);
@@ -464,14 +458,14 @@ public class FxService extends Service {
                         public void run() {
                             stopAudioRecord();
                             stopVideoRecord();
-                            handler.sendEmptyMessage(STOP_RECORD);
+                            handler.sendEmptyMessage(stopRecord);
                         }
                     };
                     timer.schedule(task, 45000);
                 }
                 return true;
             }
-        });//设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动
 
         btnToRecord.setVisibility(isCheckSoundFrame ? View.VISIBLE : View.GONE);
     }
@@ -507,10 +501,10 @@ public class FxService extends Service {
                 imageReader.getSurface(), null, null);
         SystemClock.sleep(1000);
 
-        //取最新的图片
+        // 取最新的图片
         Image image = imageReader.acquireLatestImage();
 
-        //释放 virtualDisplay,不释放会报错
+        // 释放 virtualDisplay,不释放会报错
         virtualDisplay.release();
         return image2Bitmap(image);
     }
@@ -561,16 +555,24 @@ public class FxService extends Service {
     private JSONArray getListFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         Log.d("getIntDataFromJson", "getIntDataFromJson: ==>" + target);
-        Log.d("getIntDataFromJson", "getIntDataFromJson: ==>" +
-                jsonObject.get("endTimeList"));
+        Log.d("getIntDataFromJson", "getIntDataFromJson: ==>"
+                + jsonObject.get("endTimeList"));
         if (target == null) return null;
         else return JSON.parseArray(String.valueOf(target));
     }
 
     private String getCloudListDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
-        if (target == null) return null;
-        else return (String) target;
+        if (target == null) {
+            return null;
+        } else {
+            if(target instanceof String){
+                return (String) target;
+            }else {
+                return "";
+            }
+
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -581,51 +583,50 @@ public class FxService extends Service {
         Log.e("QT-1", result + "---123");
         Log.e("QT-1", "123---" + result);
         if ("{}".equals(result)) {
-
             // 空数据，点击无效
             return;
         }
-        JSONObject JsonData = JSON.parseObject(result);
+        JSONObject jsonData = JSON.parseObject(result);
 
         // 信息获取
-        Log.e("QT-2", JsonData.toJSONString());
+        Log.e("QT-2", jsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
-                getIntDataFromJson(JsonData, "cpuCores")
+                getIntDataFromJson(jsonData, "cpuCores")
         );
         ScoreUtil.calcAndSaveGPUScores(
-                (String) JsonData.get("gpuVendor"),
-                (String) JsonData.get("gpuRenderer"),
-                (String) JsonData.get("gpuVersion")
+                jsonData.get("gpuVendor") instanceof String ? (String) jsonData.get("gpuVendor"):"",
+                jsonData.get("gpuRenderer") instanceof String ? (String) jsonData.get("gpuRenderer"):"",
+                jsonData.get("gpuVersion") instanceof String ? (String) jsonData.get("gpuVersion"):""
         );
         ScoreUtil.calcAndSaveRAMScores(
-                (String) JsonData.get("availRam"),
-                (String) JsonData.get("totalRam")
+                jsonData.get("availRam") instanceof String ? (String) jsonData.get("availRam"):"",
+                jsonData.get("totalRam") instanceof String ? (String) jsonData.get("totalRam"):""
         );
         ScoreUtil.calcAndSaveROMScores(
-                (String) JsonData.get("availStorage"),
-                (String) JsonData.get("totalStorage")
+                jsonData.get("availStorage") instanceof  String ?(String) jsonData.get("availStorage"):"",
+                jsonData.get("totalStorage") instanceof String ? (String) jsonData.get("totalStorage"):""
 
         );
         ScoreUtil.calcAndSaveFluencyScores(
-                getFloatDataFromJson(JsonData, "avergeFPS"),
-                getFloatDataFromJson(JsonData, "frameShakingRate"),
-                getFloatDataFromJson(JsonData, "lowFrameRate"),
-                getFloatDataFromJson(JsonData, "frameInterval"),
-                getFloatDataFromJson(JsonData, "jankCount"),
-                getFloatDataFromJson(JsonData, "stutterRate"),
-                JsonData.getString("eachFps")
+                getFloatDataFromJson(jsonData, "avergeFPS"),
+                getFloatDataFromJson(jsonData, "frameShakingRate"),
+                getFloatDataFromJson(jsonData, "lowFrameRate"),
+                getFloatDataFromJson(jsonData, "frameInterval"),
+                getFloatDataFromJson(jsonData, "jankCount"),
+                getFloatDataFromJson(jsonData, "stutterRate"),
+                jsonData.getString("eachFps")
         );
 
         // 触控测试数据
         ScoreUtil.calcAndSaveTouchScores(
-                getCloudListDataFromJson(JsonData, "cloudDownTimeList"),
-                getCloudListDataFromJson(JsonData, "cloudSpendTimeList")
+                getCloudListDataFromJson(jsonData, "cloudDownTimeList"),
+                getCloudListDataFromJson(jsonData, "cloudSpendTimeList")
         );
-        Log.d("TWT", "云端测试数据JSON: " + JsonData);
-        if (JsonData.get("resolution") != null) {
+        Log.d("TWT", "云端测试数据JSON: " + jsonData);
+        if (jsonData.get("resolution") != null) {
             ScoreUtil.calcAndSaveSoundFrameScores(
-                    (String) JsonData.get("resolution"),
-                    getFloatDataFromJson(JsonData, "maxdifferencevalue")
+                    jsonData.get("resolution") instanceof String ? (String) jsonData.get("resolution"):"",
+                    getFloatDataFromJson(jsonData, "maxdifferencevalue")
             );
         }
         CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, true);
@@ -669,16 +670,19 @@ public class FxService extends Service {
             return;
         }
         DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        width = metrics.widthPixels;
-        height = metrics.heightPixels;
-        dpi = metrics.densityDpi;
-        Log.d("TWT", "startRecord: start");
-        initRecorder();
-        createVirtualDisplay();
-        mediaRecorder.start();
-        running = true;
+        if(this.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager){
+            WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+            width = metrics.widthPixels;
+            height = metrics.heightPixels;
+            dpi = metrics.densityDpi;
+            Log.d("TWT", "startRecord: start");
+            initRecorder();
+            createVirtualDisplay();
+            mediaRecorder.start();
+            running = true;
+        }
+
     }
 
     /**
@@ -702,9 +706,9 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机
-        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             OkHttpClient client = new OkHttpClient.Builder()
 
                     // 连接超时
@@ -717,12 +721,11 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            // "text/xml;charset=utf-8"
             MediaType type = MediaType.parse("application/octet-stream");
 
             // file是要上传的文件 File() "/"
-            File file = new File(CacheConst.videoPath +
-                    File.separator + CacheConst.VIDEO_PHONE_NAME);
+            File file = new File(CacheConst.videoPath
+                    + File.separator + CacheConst.VIDEO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
                     (MediaType.parse("multipart/form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
@@ -730,10 +733,10 @@ public class FxService extends Service {
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" +
-                    CacheConst.videoPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" +
-                    CacheConst.VIDEO_PHONE_NAME);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                    + CacheConst.videoPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
+                    + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
                     .post(multipartBody)
@@ -758,9 +761,9 @@ public class FxService extends Service {
                             YinHuaData.ssim = resArr[3];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                            if (YinHuaData.psnr != null &&
-                                    YinHuaData.ssim != null &&
-                                    YinHuaData.pesq != null) {
+                            if (YinHuaData.psnr != null
+                                    && YinHuaData.ssim != null
+                                    && YinHuaData.pesq != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -770,8 +773,8 @@ public class FxService extends Service {
                             }
                         }
                     });
-        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             OkHttpClient client = new OkHttpClient.Builder()
 
                     // 连接超时
@@ -784,12 +787,11 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            //"text/xml;charset=utf-8"
             MediaType type = MediaType.parse("application/octet-stream");
 
             // file是要上传的文件 File() "/"
-            File file = new File(CacheConst.videoPath + File.separator +
-                    CacheConst.VIDEO_PHONE_NAME);
+            File file = new File(CacheConst.videoPath + File.separator
+                    + CacheConst.VIDEO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
                     (MediaType.parse("multipart/form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
@@ -797,10 +799,10 @@ public class FxService extends Service {
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" +
-                    CacheConst.videoPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" +
-                    CacheConst.VIDEO_PHONE_NAME);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                    + CacheConst.videoPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
+                    + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.HUAWEI_IP + "/AudioVideo/VideoRecord")
                     .post(multipartBody)
@@ -825,9 +827,9 @@ public class FxService extends Service {
                             YinHuaData.ssim = resArr[3];
                             Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
                             Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                            if (YinHuaData.psnr != null &&
-                                    YinHuaData.ssim != null &&
-                                    YinHuaData.pesq != null) {
+                            if (YinHuaData.psnr != null
+                                    && YinHuaData.ssim != null
+                                    && YinHuaData.pesq != null) {
                                 codeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
@@ -837,6 +839,8 @@ public class FxService extends Service {
                             }
                         }
                     });
+        } else {
+            Log.d(TAG, "stopVideoRecord: lastElse");
         }
     }
 
@@ -880,7 +884,6 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            // "text/xml;charset=utf-8"
             MediaType type = MediaType.parse("application/octet-stream");
             File file = new File(CacheConst.audioPath + File.separator +
                     CacheConst.AUDIO_PHONE_NAME);
@@ -916,7 +919,7 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
-                            handler.sendEmptyMessage(COMPUTE_PESQ);
+                            handler.sendEmptyMessage(computePesq);
                             if (YinHuaData.psnr != null &&
                                     YinHuaData.ssim != null &&
                                     YinHuaData.pesq != null) {
@@ -977,7 +980,7 @@ public class FxService extends Service {
                             Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
-                            handler.sendEmptyMessage(COMPUTE_PESQ);
+                            handler.sendEmptyMessage(computePesq);
                             if (YinHuaData.psnr != null &&
                                     YinHuaData.ssim != null &&
                                     YinHuaData.pesq != null) {
@@ -990,6 +993,8 @@ public class FxService extends Service {
                             }
                         }
                     });
+        } else {
+            Log.d(TAG, "stopAudioRecord: lastElse");
         }
     }
 

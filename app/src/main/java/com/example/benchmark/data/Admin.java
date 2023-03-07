@@ -13,12 +13,19 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:09
  */
 public class Admin {
+    /** 全局变量记录管理员 */
     public static String adminName;
-    public static String username;
-    public static String password;
-    public static String platformName;
-    public static String testTime;
 
-    // 登录状态
-    public static String STATUS = "Failure";
+    /** 全局变量记录用户名 */
+    public static String username;
+
+    /** 全局变量记录登录密码 */
+    public static String password;
+
+    /** 全局变量记录测试平台 */
+    public static String platformName;
+
+    /** 全局变量记录测试时间 */
+    public static String testTime;
+    public static String STATUS = "Failure"; // 登录状态
 }
