@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.fragment;
 
 import android.annotation.SuppressLint;
@@ -46,9 +52,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * GameFragment
+ *
  * @version 1.0
- * @description 云游戏Fragment
- * @date 2023/2/15 16:14
+ * @since 2023/3/7 15:14
  */
 public class GameFragment extends Fragment implements View.OnClickListener,
         RadioGroup.OnCheckedChangeListener, CheckBox.OnCheckedChangeListener {

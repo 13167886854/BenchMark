@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.content.Context;
@@ -15,7 +21,10 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * 获取设备信息工具类
+ * DeviceInfoUtils
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:24
  */
 public class DeviceInfoUtils {
     private static final String TAG = "DeviceInfoUtils";

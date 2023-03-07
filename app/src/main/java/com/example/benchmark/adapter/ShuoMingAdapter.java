@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.adapter;
 
 import android.content.Context;
@@ -16,6 +22,12 @@ import com.example.benchmark.data.ShuoMingData;
 
 import java.util.List;
 
+/**
+ * ShuoMingAdapter
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:09
+ */
 public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<ShuoMingData> data;
 

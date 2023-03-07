@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import android.annotation.SuppressLint;
@@ -73,6 +79,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * FxService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:20
+ */
 public class FxService extends Service {
     private static final String TAG = "TWT";
 

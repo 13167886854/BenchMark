@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.accessibilityservice.AccessibilityService;
@@ -18,9 +24,10 @@ import androidx.annotation.RequiresApi;
 import java.util.List;
 
 /**
+ * AccessibilityUtil
+ *
  * @version 1.0
- * @description AccessibilityUtil 无障碍服务
- * @time 2023/3/2 09:28
+ * @since 2023/3/7 17:22
  */
 public class AccessibilityUtil {
 

@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.InitbenchMarkData;
 
 import com.example.benchmark.data.LiuChang;
@@ -5,6 +11,12 @@ import com.example.benchmark.data.LiuChang;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * InitShuomingItem
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:19
+ */
 public class InitShuomingItem {
     private List<LiuChang> list;
     public List<LiuChang> InitLiuchang(){

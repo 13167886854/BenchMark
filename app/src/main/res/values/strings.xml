@@ -1,3 +1,9 @@
+<!--
+  ~ 版权所有 (c) 华为技术有限公司 2022-2023
+  ~ Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+  ~
+  -->
+
 <resources>
     <string name="app_name">云手机测评</string>
     <string name="ceping">云平台测评</string>

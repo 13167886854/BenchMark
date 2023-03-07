@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import android.app.Activity;
@@ -12,9 +18,10 @@ import com.example.benchmark.InitbenchMarkData.InitShuoming;
 import com.example.benchmark.R;
 
 /**
+ * ShuoMingActivity
+ *
  * @version 1.0
- * @description 说明页面
- * @time 2022/6/14 15:30
+ * @since 2023/3/7 15:07
  */
 public class ShuoMingActivity extends Activity {
 

@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.render;
 
 import android.content.Context;
@@ -23,9 +29,10 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
+ * GLVideoRenderer
+ *
  * @version 1.0
- * @description GLVideoRenderer
- * @time 2023/3/2 09:39
+ * @since 2023/3/7 17:19
  */
 public class GLVideoRenderer implements GLSurfaceView.Renderer,
         SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {

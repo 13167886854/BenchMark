@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import android.Manifest;
@@ -33,6 +39,12 @@ import com.example.benchmark.utils.ScoreUtil;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * AudioVideoActivity
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:05
+ */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static boolean isTestOver = false;
@@ -46,7 +58,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     private long lastVideoCurtime = -1;
     private long lastAudioCurtime = -1;
     private int heightPixels;
-    private int  widthPixels;
+    private int widthPixels;
     private long maxDifferenceValue;
     private boolean isCompleted = false;
     private VideoDecodeThread videoDecodeThread;

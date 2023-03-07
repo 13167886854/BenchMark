@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
@@ -11,6 +17,12 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
+/**
+ * RedFingerStabilityService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:21
+ */
 public class RedFingerStabilityService implements IStabilityService {
     private static final String TAG = "RedFingerStabilityService";
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);

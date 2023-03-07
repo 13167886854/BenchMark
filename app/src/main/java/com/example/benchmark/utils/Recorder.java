@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.annotation.SuppressLint;
@@ -26,6 +32,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+/**
+ * Recorder
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:28
+ */
 public class Recorder {
     static final String TAG = "Recorder";
     public boolean isRecording = false;
@@ -108,7 +120,7 @@ public class Recorder {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
-    void createAudioFile(Context context) {
+    private void createAudioFile(Context context) {
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
         CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
         Log.e(TAG, "root: " + root);
@@ -181,7 +193,7 @@ public class Recorder {
         }
     }
 
-    byte[] fullyReadFileToBytes(File file) throws IOException {
+    private byte[] fullyReadFileToBytes(File file) throws IOException {
         int size = (int) file.length();
         byte bytes[] = new byte[size];
         byte tmpBuff[] = new byte[size];
@@ -235,26 +247,23 @@ public class Recorder {
         return bytes;
     }
 
-    void writeAudioFile() {
+    private void writeAudioFile() {
         try {
-            String absolutePath = rawOutput.getAbsolutePath();
-            FileOutputStream outputStream = new FileOutputStream(absolutePath);
-            short[] data = new short[bufferElements2Rec];
 
+            // String absolutePath = rawOutput.getAbsolutePath();
+            String canonicalPath = rawOutput.getCanonicalPath();
+
+            FileOutputStream outputStream = new FileOutputStream(canonicalPath);
+            short[] data = new short[bufferElements2Rec];
             while (isRecording) {
                 mRecorder.read(data, 0, bufferElements2Rec);
-
                 Log.d(TAG, "AUDIO: writeAudioFile: " + data.toString());
                 ByteBuffer buffer = ByteBuffer.allocate(8 * 1024);
-
                 outputStream.write(shortToByte(data),
                         0,
                         bufferElements2Rec * bytesPerElement);
-
             }
-
             outputStream.close();
-
         } catch (FileNotFoundException e) {
             Log.e(TAG, "File Not Found: " + e.toString());
         } catch (IOException e) {
@@ -262,6 +271,12 @@ public class Recorder {
         }
     }
 
+    /**
+     * @description: startProcessing
+     * @return void
+     * @throws null
+     * @date 2023/3/7 14:55
+     */
     public void startProcessing() throws IOException {
         isRecording = false;
         mRecorder.stop();
@@ -275,19 +290,10 @@ public class Recorder {
         } catch (IOException e) {
             Log.e(TAG, "startProcessing: " + e);
         }
-
         try {
             rawToWave(rawOutput, output);
         } catch (IOException e) {
             Log.e(TAG, "startProcessing: ", e);
         }
     }
-
-    void stop() {
-        if (mRecorder != null) {
-            mRecorder = null;
-            recordingThread = null;
-        }
-    }
-
 }

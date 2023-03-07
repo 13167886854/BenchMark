@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -60,6 +66,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * GameVATestService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:20
+ */
 public class GameVATestService extends Service {
     private static final String TAG = "TWT";
     private static final int START_RECORD = 1;

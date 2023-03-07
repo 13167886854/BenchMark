@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.fragment;
 
 import android.annotation.SuppressLint;
@@ -18,6 +24,12 @@ import com.example.benchmark.R;
 
 import java.util.Objects;
 
+/**
+ * ZhuyeFragment
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:17
+ */
 public class ZhuyeFragment extends Fragment {
     private FragmentManager fragmentManager;
     private RadioGroup mainSelectPlat;
@@ -51,6 +63,7 @@ public class ZhuyeFragment extends Fragment {
         });
         return view;
     }
+
 
     public void changeFragment(Fragment fragment, boolean isFisrt) {
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();

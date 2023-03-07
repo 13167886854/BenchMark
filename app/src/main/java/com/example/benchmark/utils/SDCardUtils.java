@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 
@@ -19,7 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 获取设备信息工具类
+ * SDCardUtils
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:28
  */
 public class SDCardUtils {
     private static final int INTERNAL_STORAGE = 0;

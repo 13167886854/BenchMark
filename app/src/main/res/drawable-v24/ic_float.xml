@@ -1,3 +1,9 @@
+<!--
+  ~ 版权所有 (c) 华为技术有限公司 2022-2023
+  ~ Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+  ~
+  -->
+
 <vector android:height="30dp" android:tint="#6A00FE"
     android:viewportHeight="30" android:viewportWidth="30"
     android:width="30dp" xmlns:android="http://schemas.android.com/apk/res/android">

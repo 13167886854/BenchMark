@@ -1,5 +1,17 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
+/**
+ * CacheConst
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:23
+ */
 public class CacheConst {
     public static final String KEY_SCREEN_WIDTH = "SCREEN_WIDTH";
     public static final String KEY_SCREEN_HEIGHT = "SCREEN_HEIGHT";

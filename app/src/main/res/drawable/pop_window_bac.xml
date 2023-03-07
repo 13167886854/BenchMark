@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ 版权所有 (c) 华为技术有限公司 2022-2023
+  ~ Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+  ~
+  -->
+
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <corners android:radius="20dp"/>
     <solid android:color="#FFF8DC"/>

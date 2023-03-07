@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.util.Log;
@@ -26,13 +32,13 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 /**
- * @Author: ranzili
- * @Time: 2022/9/8 16:02
- * @Description:
+ * OkHttpUtils
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:26
  */
-
-
 public class OkHttpUtils {
     private static final String TAG = "MyOkHttpUtils";
     private static volatile OkHttpClient okHttpClient = null;

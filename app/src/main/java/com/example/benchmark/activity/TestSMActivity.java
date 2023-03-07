@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -25,9 +31,10 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
+ * TestSMActivity
+ *
  * @version 1.0
- * @description TestSMActivity
- * @time 2022/6/14 15:30
+ * @since 2023/3/7 15:08
  */
 public class TestSMActivity extends AppCompatActivity {
     private static final int FILE_REQUEST_CODE = 50;

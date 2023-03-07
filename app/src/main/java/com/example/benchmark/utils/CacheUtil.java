@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.content.Context;
@@ -7,9 +13,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
+ * CacheUtil
+ *
  * @version 1.0
- * @description 缓存工具类
- * @time 2023/2/22 14:41
+ * @since 2023/3/7 17:23
  */
 public class CacheUtil {
     private static SharedPreferences mSp;

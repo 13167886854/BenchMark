@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.os.Build;
@@ -18,7 +24,10 @@ import java.util.TreeSet;
 import okhttp3.Call;
 
 /**
- * 计算分数
+ * ScoreUtil
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:28
  */
 public class ScoreUtil {
     private static final String TAG = "ScoreUtil";

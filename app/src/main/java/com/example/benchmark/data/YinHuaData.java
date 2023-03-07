@@ -1,7 +1,16 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.data;
 
 /**
- * 音画类
+ * YinHuaData
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:13
  */
 public class YinHuaData {
     // 平台类型

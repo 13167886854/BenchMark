@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import androidx.annotation.NonNull;
@@ -25,6 +31,12 @@ import java.util.Map;
 
 import okhttp3.Call;
 
+/**
+ * TestInfoActivity
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:08
+ */
 public class TestInfoActivity extends AppCompatActivity {
     TextView testInfo;
 

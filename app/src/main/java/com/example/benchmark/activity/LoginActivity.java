@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import androidx.annotation.NonNull;
@@ -25,6 +31,12 @@ import com.example.benchmark.data.Admin;
 import com.example.benchmark.diaLog.LoginDialog;
 import com.example.benchmark.R;
 
+/**
+ * LoginActivity
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:05
+ */
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 

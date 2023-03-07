@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.util.Log;
@@ -5,9 +11,10 @@ import android.util.Log;
 import java.util.ArrayList;
 
 /**
+ * GameTouchUtil
+ *
  * @version 1.0
- * @description GameTouchUtil
- * @time 2023/3/2 09:52
+ * @since 2023/3/7 17:24
  */
 public class GameTouchUtil {
 

@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.content.ComponentName;
@@ -9,9 +15,10 @@ import android.provider.Settings;
 import android.util.Log;
 
 /**
- * Created by HaiyuKing
- * Used 自启动设置工具类
- * 来源于：https://www.cnblogs.com/whycxb/p/10115566.html
+ * AutoStartUtil
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:23
  */
 public class AutoStartUtil {
     // 是否已经打开过设置自启动界面的标记，存储起来

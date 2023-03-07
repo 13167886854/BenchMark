@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.util.Log;
@@ -13,9 +19,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Author: ranzili
- * @Time: 2022/8/24 15:11
- * @Description:
+ * MemInfoUtil
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:25
  */
 public class MemInfoUtil {
     // 定义GB的计算常量

@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.thread;
 
 import android.content.Context;
@@ -16,6 +22,12 @@ import com.example.benchmark.activity.AudioVideoActivity;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+/**
+ * AudioDecodeThread
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:22
+ */
 public class AudioDecodeThread extends Thread implements Runnable {
     private static final String TAG = AudioDecodeThread.class.getSimpleName();
     private MediaExtractor mMediaExtractor;

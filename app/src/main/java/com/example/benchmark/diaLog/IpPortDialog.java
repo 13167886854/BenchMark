@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.diaLog;
 
 import android.app.Dialog;
@@ -21,12 +27,13 @@ import androidx.annotation.NonNull;
 import com.example.benchmark.R;
 import com.example.benchmark.data.IpPort;
 
-/**
- * @Author: ranzili
- * @Time: 2022/9/15 20:49
- * @Description:
- */
 
+/**
+ * IpPortDialog
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:14
+ */
 public class IpPortDialog extends Dialog {
     public Button yes;//确定按钮
     private Button no;//取消按钮

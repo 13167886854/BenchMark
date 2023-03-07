@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import android.Manifest;
@@ -45,6 +51,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * CePingActivity
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:05
+ */
 public class CePingActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "CePingActivity";
     private final int requestStability = 0;

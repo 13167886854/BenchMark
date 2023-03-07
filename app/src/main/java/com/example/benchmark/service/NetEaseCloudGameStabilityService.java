@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import static android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK;
@@ -8,6 +14,12 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.TapUtil;
 
+/**
+ * NetEaseCloudGameStabilityService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:21
+ */
 public class NetEaseCloudGameStabilityService implements IStabilityService {
     private static final String TAG = "NetEaseCloudGameStabilityService";
 

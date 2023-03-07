@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.diaLog;
 
 import android.app.Dialog;
@@ -24,9 +30,10 @@ import com.example.benchmark.data.Admin;
 
 
 /**
+ * LoginDialog
+ *
  * @version 1.0
- * @description LoginDialog 登录DigLog
- * @time 2023/2/23 09:41
+ * @since 2023/3/7 15:14
  */
 public class LoginDialog extends Dialog {
     private static final String TAG = "Login";

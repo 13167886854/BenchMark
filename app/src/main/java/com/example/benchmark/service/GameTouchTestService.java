@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -43,6 +49,12 @@ import com.example.benchmark.utils.TapUtil;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * GameTouchTestService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:20
+ */
 public class GameTouchTestService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;

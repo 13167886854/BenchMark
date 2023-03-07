@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import android.app.Service;
@@ -39,6 +45,12 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * GameSmoothTestService
+ *
+ * @version 1.0
+ * @since 2023/3/7 17:20
+ */
 public class GameSmoothTestService extends Service {
     private static final String TAG = "GameSmoothTestService";
 

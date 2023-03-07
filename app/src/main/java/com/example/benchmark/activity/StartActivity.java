@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import android.app.Activity;
@@ -20,6 +26,12 @@ import java.io.File;
 
 import okhttp3.MediaType;
 
+/**
+ * StartActivity
+ *
+ * @version 1.0
+ * @since 2023/3/7 15:07
+ */
 public class StartActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,7 +41,7 @@ public class StartActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
-        int num = sharedPreferences.getInt("TestNum",5);
+        int num = sharedPreferences.getInt("TestNum", 5);
         TapUtil.mWholeMonitorNum = num;
 
         // 去除状态栏

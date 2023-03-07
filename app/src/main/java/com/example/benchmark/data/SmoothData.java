@@ -1,9 +1,16 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.data;
 
 /**
+ * SmoothData
+ *
  * @version 1.0
- * @description SmoothData 流畅性数据
- * @time 2023/3/2 10:02
+ * @since 2023/3/7 15:13
  */
 public class SmoothData {
     public static boolean hasData = false;

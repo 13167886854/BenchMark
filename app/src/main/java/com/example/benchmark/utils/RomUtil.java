@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.os.Build;
@@ -9,11 +15,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
+ * RomUtil
+ *
  * @version 1.0
- * @description Created by HaiyuKing
- * * Used 判断手机ROM,检测ROM是MIUI、EMUI还是Flyme
- * * 来源于：https://www.cnblogs.com/whycxb/p/10095758.html
- * @time 2023/3/1 14:58
+ * @since 2023/3/7 17:28
  */
 public class RomUtil {
 

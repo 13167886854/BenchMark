@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.utils;
 
 import android.accessibilityservice.AccessibilityService;
@@ -17,9 +23,10 @@ import com.example.benchmark.activity.CePingActivity;
 import com.example.benchmark.service.FxService;
 
 /**
+ * ServiceUtil
+ *
  * @version 1.0
- * @description ServiceUtil
- * @time 2023/2/22 14:52
+ * @since 2023/3/7 17:28
  */
 public class ServiceUtil {
 

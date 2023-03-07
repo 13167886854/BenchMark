@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.activity;
 
 import android.annotation.SuppressLint;
@@ -35,9 +41,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * JutiZhibiaoActivity
+ *
  * @version 1.0
- * @description JutiZhibiaoActivity 具体指标
- * @time 2023/3/2 09:45
+ * @since 2023/3/7 15:05
  */
 public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "JutiZhibiaoActivity";

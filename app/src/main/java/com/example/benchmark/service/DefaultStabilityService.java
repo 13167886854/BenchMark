@@ -1,3 +1,9 @@
+/*
+ * 版权所有 (c) 华为技术有限公司 2022-2023
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2023. All rights reserved.
+ *
+ */
+
 package com.example.benchmark.service;
 
 import android.util.Log;
@@ -5,9 +11,10 @@ import android.util.Log;
 import com.example.benchmark.utils.TapUtil;
 
 /**
+ * DefaultStabilityService
+ *
  * @version 1.0
- * @description DefaultStabilityService 稳定性Service
- * @time 2023/2/22 14:35
+ * @since 2023/3/7 17:20
  */
 public class DefaultStabilityService implements IStabilityService {
     @Override
