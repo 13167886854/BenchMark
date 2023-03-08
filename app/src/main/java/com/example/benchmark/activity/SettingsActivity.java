@@ -25,13 +25,11 @@ import com.example.benchmark.utils.TapUtil;
  * @since 2023/3/7 15:05
  */
 public class SettingsActivity extends AppCompatActivity {
-
     private static final String TAG = "TWT";
     Button num;
     SharedPreferences.Editor editor;
     SharedPreferences sharedPreferences;
-    private int TestNum;
-
+    private int testNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,34 +39,26 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        TestNum = sharedPreferences.getInt("TestNum", 5);
-        num.setText(String.valueOf(TestNum));
+        testNum = sharedPreferences.getInt("testNum", 5);
+        num.setText(String.valueOf(testNum));
         Log.e(TAG, "onCreate+num: " + num);
-
-
     }
-
-
     public void sub(View view) {
         Log.d(TAG, "sub");
-        if (TestNum == 1) {
+        if(testNum == 1) {
             return;
         }
-        TestNum--;
-        num.setText(String.valueOf(TestNum));
+        testNum--;
+        num.setText(String.valueOf(testNum));
     }
-
-
     public void add(View view) {
         Log.d(TAG, "add: add");
-        TestNum++;
-        num.setText(String.valueOf(TestNum));
-
+        testNum++;
+        num.setText(String.valueOf(testNum));
     }
-
     public void save(View view) {
-        TapUtil.mWholeMonitorNum = TestNum;
-        editor.putInt("TestNum", TestNum);
+        TapUtil.mWholeMonitorNum = testNum;
+        editor.putInt("testNum", testNum);
         editor.apply();
         Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
     }

@@ -25,7 +25,6 @@ import com.example.benchmark.utils.FpsUtils;
 import com.example.benchmark.render.GLVideoRenderer;
 import com.example.benchmark.utils.ScoreUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -106,7 +105,7 @@ public class TestSMActivity extends AppCompatActivity {
             Log.e("TestSMActivity: ", e.toString());
         }
 
-        //自动开始
+        // 自动开始
         try {
             doTest();
         } catch (IOException e) {
@@ -143,10 +142,9 @@ public class TestSMActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private float getRoundNumber(float a) {
-        BigDecimal bd = new BigDecimal(a);
-        float res = bd.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-        return res;
+    private float getRoundNumber(float aaa) {
+        BigDecimal bd = new BigDecimal(aaa);
+        return bd.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
     }
 
     @Override
@@ -193,7 +191,7 @@ public class TestSMActivity extends AppCompatActivity {
             );
             fpsUtil.updateAfterGetInfo();
 
-            //记录绘制次数和绘制时间，用于计算FPS
+            // 记录绘制次数和绘制时间，用于计算FPS
             FpsUtils.mainHandler.postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
         }
     }

@@ -328,7 +328,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.bule_liuchangxing: {
-
                 boolean checked = blue_liuchang_cheak.isChecked();
                 if (checked) {
                     blue_liuchang_cheak.setVisibility(View.INVISIBLE);
@@ -347,7 +346,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
             }
             case R.id.bule_wendinxing: {
-
                 boolean checked = blue_wending_cheak.isChecked();
                 if (checked) {
                     blue_wending_cheak.setVisibility(View.INVISIBLE);
@@ -365,7 +363,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.bule_chukong: {
-
                 boolean checked = blue_chukong_cheak.isChecked();
                 if (checked) {
                     blue_chukong_cheak.setVisibility(View.INVISIBLE);
@@ -383,7 +380,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.bule_yinhua: {
-
                 boolean checked = blue_yinhua_cheak.isChecked();
                 if (checked) {
                     blue_yinhua_cheak.setVisibility(View.INVISIBLE);
@@ -400,10 +396,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             }
-
-
             case R.id.bule_cpu: {
-
                 boolean checked = blue_cpu_cheak.isChecked();
                 if (checked) {
                     blue_cpu_cheak.setVisibility(View.INVISIBLE);
@@ -425,7 +418,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blue_rom_cheak.setChecked(false);
                     phone_select_all.setChecked(false);
                     mCheckCounts--;
-
 
                 } else {
                     blue_cpu_cheak.setVisibility(View.VISIBLE);
@@ -625,8 +617,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
                         phone_select_all.setChecked(true);
                     }
-
-
                 }
                 break;
             }
@@ -635,7 +625,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 if (isCheckedAll) {
                     blue_liuchang_cheak.setChecked(true);
                     blue_liuchang_cheak.setVisibility(View.VISIBLE);
-
 
                     blue_wending_cheak.setVisibility(View.VISIBLE);
                     blue_wending_cheak.setChecked(true);
@@ -648,7 +637,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
                     blue_cpu_cheak.setVisibility(View.VISIBLE);
                     blue_cpu_cheak.setChecked(true);
-
 
                     blue_gpu_cheak.setVisibility(View.VISIBLE);
                     blue_gpu_cheak.setChecked(true);
