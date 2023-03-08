@@ -36,13 +36,15 @@ import com.example.benchmark.data.IpPort;
  * @since 2023/3/7 15:14
  */
 public class IpPortDialog extends Dialog {
-    public Button yes;//确定按钮
-    private Button no;//取消按钮
-    private TextView titleTv;//消息标题文本
-    private TextView messageTv;//消息提示文本
-    private String titleStr;//从外界设置的title文本
-    private String messageStr;//从外界设置的消息文本
+    /** 确定按钮 */
+    public Button yes;
+    private Button no; // 取消按钮
+    private TextView titleTv; // 消息标题文本
+    private TextView messageTv; // 消息提示文本
+    private String titleStr; // 从外界设置的title文本
+    private String messageStr; // 从外界设置的消息文本
     private View view;
+
     //确定文本和取消文本的显示内容
     private String yesStr, noStr;
 
@@ -56,8 +58,8 @@ public class IpPortDialog extends Dialog {
     private Message mMessage;
     private static final String TAG = "Login";
 
-    private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
-    private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
+    private onNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器
+    private onYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器
 
     private Handler mHandler = new Handler() {
         @Override
@@ -105,43 +107,37 @@ public class IpPortDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ip_port_dialog);
-        //设置背景透明，不然会出现白色直角问题
+
+        // 设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //按空白处不能取消动画
+
+        // 按空白处不能取消动画
         setCanceledOnTouchOutside(false);
-        //初始化界面控件
+
+        // 初始化界面控件
         initView();
-        //初始化界面数据
+
+        // 初始化界面数据
         initData();
-        //初始化界面控件的事件
+
+        // 初始化界面控件的事件
         initEvent();
         ipAddress = findViewById(R.id.ip_address); // 用户名
         ipAddress.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "beforeTextChanged: ");
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "onTextChanged: " + charSequence);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //Log.d(TAG, "afterTextChanged: " + editable);
-                //在文本改变之后记录用户账号
-                //if (mIsChecked){
-                //    if (sharedPreferences == null)
-                //        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
-                //    SharedPreferences.Editor editor = sharedPreferences.edit();
-                //    editor.putString("username", mUserName.getText().toString());
-                //}
                 textIp = editable.toString();
                 IpPort.ip = textIp;
-                //Log.d(TAG, "afterTextChanged: " + username);ad
             }
         });
 
@@ -150,28 +146,17 @@ public class IpPortDialog extends Dialog {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "beforeTextChanged: ");
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Log.d(TAG, "onTextChanged: " + charSequence);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                //Log.d(TAG, "afterTextChanged: " + editable);
-                //在文本改变之后记录用户密码
-                //if (mIsChecked){
-                //    if (sharedPreferences == null)
-                //        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
-                //    SharedPreferences.Editor editor = sharedPreferences.edit();
-                //    editor.putString("password", mPassWord.getText().toString());
-                //}
                 testPort = editable.toString();
                 IpPort.port = testPort;
                 IpPort.ip = textIp;
-                //Log.d(TAG, "afterTextChanged: " + password);
             }
         });
 
@@ -181,7 +166,7 @@ public class IpPortDialog extends Dialog {
      * 初始化界面的确定和取消监听器
      */
     private void initEvent() {
-        //设置确定按钮被点击后，向外界提供监听
+        // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +176,7 @@ public class IpPortDialog extends Dialog {
                 yesOnclickListener.onYesClick();
             }
         });
-        //设置取消按钮被点击后，向外界提供监听
+        // 设置取消按钮被点击后，向外界提供监听
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
