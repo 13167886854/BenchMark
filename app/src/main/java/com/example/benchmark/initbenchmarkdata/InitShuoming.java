@@ -25,8 +25,6 @@ public class InitShuoming {
     /**
      * InitShuoming
      *
-     * @return
-     * @throws null
      * @date 2023/3/7 17:33
      */
     public InitShuoming() {
@@ -42,7 +40,6 @@ public class InitShuoming {
      * getList
      *
      * @return java.util.List<com.example.benchmark.data.ShuoMingData>
-     * @throws null
      * @date 2023/3/8 08:43
      */
     public List<ShuoMingData> getList() {

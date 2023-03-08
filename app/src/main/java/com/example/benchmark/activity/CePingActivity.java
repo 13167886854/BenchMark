@@ -172,9 +172,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         isCheckRAM = intent.getBooleanExtra(CacheConst.KEY_RAM_INFO, false);
         isCheckROM = intent.getBooleanExtra(CacheConst.KEY_ROM_INFO, false);
 
-        if (checkedPlat.equals(CacheConst.PLATFORM_NAME_MI_GU_GAME) ||
-                checkedPlat.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME) ||
-                checkedPlat.equals(CacheConst.PLATFORM_NAME_TENCENT_GAME)) {
+        if (checkedPlat.equals(CacheConst.PLATFORM_NAME_MI_GU_GAME)
+                || checkedPlat.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_GAME)
+                || checkedPlat.equals(CacheConst.PLATFORM_NAME_TENCENT_GAME)) {
             if (isCheckCPU || isCheckGPU || isCheckRAM || isCheckROM) {
                 if (intent.getSerializableExtra("localMobileInfo") instanceof HashMap) {
                     mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");

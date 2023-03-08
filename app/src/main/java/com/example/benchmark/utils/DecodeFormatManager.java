@@ -93,21 +93,11 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 二维码
-     * 包括如下几种格式：
-     * {@link BarcodeFormat#CODABAR}
-     * {@link BarcodeFormat#CODE_39}
-     * {@link BarcodeFormat#CODE_93}
-     * {@link BarcodeFormat#CODE_128}
-     * {@link BarcodeFormat#EAN_8}
-     * {@link BarcodeFormat#EAN_13}
-     * {@link BarcodeFormat#ITF}
-     * {@link BarcodeFormat#RSS_14}
-     * {@link BarcodeFormat#RSS_EXPANDED}
-     * {@link BarcodeFormat#UPC_A}
-     * {@link BarcodeFormat#UPC_E}
-     * {@link BarcodeFormat#UPC_EAN_EXTENSION}
-     */
+     * getOneDimensionalFormats
+     *
+     * @return java.util.List<com.google.zxing.BarcodeFormat>
+     * @date 2023/3/8 14:28
+    */
     private static List<BarcodeFormat> getOneDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.CODABAR);
@@ -126,14 +116,11 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 二维码
-     * 包括如下几种格式：
-     * {@link BarcodeFormat#AZTEC}
-     * {@link BarcodeFormat#DATA_MATRIX}
-     * {@link BarcodeFormat#MAXICODE}
-     * {@link BarcodeFormat#PDF_417}
-     * {@link BarcodeFormat#QR_CODE}
-     */
+     * getTwoDimensionalFormats
+     *
+     * @return java.util.List<com.google.zxing.BarcodeFormat>
+     * @date 2023/3/8 14:28
+    */
     private static List<BarcodeFormat> getTwoDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.AZTEC);
@@ -144,14 +131,13 @@ public final class DecodeFormatManager {
         return list;
     }
 
+
     /**
-     * 默认支持的格式
-     * 包括如下几种格式：
-     * {@link BarcodeFormat#QR_CODE}
-     * {@link BarcodeFormat#UPC_A}
-     * {@link BarcodeFormat#EAN_13}
-     * {@link BarcodeFormat#CODE_128}
-     */
+     * getDefaultFormats
+     *
+     * @return java.util.List<com.google.zxing.BarcodeFormat>
+     * @date 2023/3/8 14:28
+    */
     private static List<BarcodeFormat> getDefaultFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.QR_CODE);
@@ -170,7 +156,6 @@ public final class DecodeFormatManager {
      *
      * @param barcodeFormats description
      * @return java.util.Map<com.google.zxing.DecodeHintType, java.lang.Object>
-     * @throws null
      * @date 2023/3/8 09:24
      */
     public static Map<DecodeHintType, Object> createDecodeHints(@NonNull BarcodeFormat... barcodeFormats) {
@@ -184,7 +169,6 @@ public final class DecodeFormatManager {
      *
      * @param barcodeFormat description
      * @return java.util.Map<com.google.zxing.DecodeHintType, java.lang.Object>
-     * @throws null
      * @date 2023/3/8 09:24
      */
     public static Map<DecodeHintType, Object> createDecodeHint(@NonNull BarcodeFormat barcodeFormat) {

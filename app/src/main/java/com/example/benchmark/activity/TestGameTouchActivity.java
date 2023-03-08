@@ -33,7 +33,7 @@ import com.example.benchmark.utils.ScoreUtil;
  */
 public class TestGameTouchActivity extends AppCompatActivity {
     private static final String TAG = "TWT";
-    //private RetrieverUtil util = RetrieverUtil.getUtil();
+
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
 
     private final int HANDLING_FRAME = 111;
@@ -59,7 +59,6 @@ public class TestGameTouchActivity extends AppCompatActivity {
                     try {
                         float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.testNum);
                         handling_tv.setText(gameTouchUtil.getDelayTime() + "\navgTime:" + delayTime);
-
                         ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(), delayTime);
                         Log.d(TAG, "gameTouchUtil.getDetectNum(): " + gameTouchUtil.getDetectNum());
                         Log.d(TAG, "delayTime): " + delayTime);
@@ -71,7 +70,6 @@ public class TestGameTouchActivity extends AppCompatActivity {
                     Intent intent = new Intent(TestGameTouchActivity.this, CePingActivity.class);
                     intent.putExtra("isGameTouchTested", true);
                     startActivity(intent);
-
             }
         }
     };
@@ -90,12 +88,10 @@ public class TestGameTouchActivity extends AppCompatActivity {
             requestPermissions(permissions, 1);
         }
 
-
         new Thread(new Runnable() {
             @Override
             public void run() {
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//                String path = "/storage/emulated/0/ScreenRecorder/dotest.mp4";
                 path = getIntent().getStringExtra("path");
                 retriever.setDataSource(path);
                 String count_s = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_FRAME_COUNT);
@@ -145,16 +141,9 @@ public class TestGameTouchActivity extends AppCompatActivity {
                         last_rgb = this_rgb;
                     }
                 }
-
                 gameTouchUtil.printTestTime();
-
                 handler.sendEmptyMessage(TEST_COMPLETED);
-
-
             }
         }).start();
-        ;
-
-
     }
 }

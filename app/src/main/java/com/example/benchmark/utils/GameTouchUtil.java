@@ -34,8 +34,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * GameTouchUtil
+     *
      * @return com.example.benchmark.utils.GameTouchUtil
-     * @throws null
      * @description: getGameTouchUtil
      * @date 2023/3/2 09:52
      */
@@ -47,8 +48,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getVideoStartTime
+     *
      * @return long
-     * @throws null
      * @description: getVideoStartTime
      * @date 2023/3/2 09:54
      */
@@ -57,8 +59,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getVideoEndTime
+     *
      * @return long
-     * @throws null
      * @description: getVideoEndTime
      * @date 2023/3/2 09:54
      */
@@ -67,9 +70,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * setVideoStartTime
+     *
      * @param time description
-     * @return void
-     * @throws null
      * @description: setVideoStartTime
      * @date 2023/3/2 09:54
      */
@@ -78,9 +81,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * setVideoEndTime
+     *
      * @param time description
-     * @return void
-     * @throws null
      * @description: setVideoEndTime
      * @date 2023/3/2 09:54
      */
@@ -89,9 +92,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getUpdateTime
+     *
      * @param time description
-     * @return void
-     * @throws null
      * @description: getUpdateTime
      * @date 2023/3/2 09:54
      */
@@ -100,9 +103,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getTapTime
+     *
      * @param time description
-     * @return void
-     * @throws null
      * @description: getTapTime
      * @date 2023/3/2 09:54
      */
@@ -111,9 +114,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getTestTime
+     *
      * @param time description
-     * @return void
-     * @throws null
      * @description: getTestTime
      * @date 2023/3/2 09:54
      */
@@ -122,8 +125,8 @@ public class GameTouchUtil {
     }
 
     /**
-     * @return void
-     * @throws null
+     * printFrameUpdateTime
+     *
      * @description: printFrameUpdateTime
      * @date 2023/3/2 09:54
      */
@@ -134,8 +137,8 @@ public class GameTouchUtil {
     }
 
     /**
-     * @return void
-     * @throws null
+     * printTestTime
+     *
      * @description: printTestTime
      * @date 2023/3/2 09:54
      */
@@ -146,8 +149,8 @@ public class GameTouchUtil {
     }
 
     /**
-     * @return void
-     * @throws null
+     * printAutoTapTime
+     *
      * @description: printAutoTapTime
      * @date 2023/3/2 09:54
      */
@@ -159,8 +162,8 @@ public class GameTouchUtil {
     }
 
     /**
-     * @return void
-     * @throws null
+     * printDelayTime
+     *
      * @description: printDelayTime
      * @date 2023/3/2 09:54
      */
@@ -172,8 +175,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getDelayTime
+     *
      * @return java.lang.String
-     * @throws null
      * @description: getDelayTime
      * @date 2023/3/2 09:55
      */
@@ -187,8 +191,8 @@ public class GameTouchUtil {
     }
 
     /**
-     * @return void
-     * @throws null
+     * clear
+     *
      * @description: clear
      * @date 2023/3/2 09:55
      */
@@ -198,9 +202,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * printAvgTime
+     *
      * @param testNum description
-     * @return void
-     * @throws null
      * @description: printAvgTime
      * @date 2023/3/2 09:55
      */
@@ -214,9 +218,10 @@ public class GameTouchUtil {
     }
 
     /**
+     * getAvgTime
+     *
      * @param testNum description
      * @return float
-     * @throws null
      * @description: getAvgTime
      * @date 2023/3/2 09:55
      */
@@ -232,8 +237,9 @@ public class GameTouchUtil {
     }
 
     /**
+     * getDetectNum
+     *
      * @return int
-     * @throws null
      * @description: getDetectNum
      * @date 2023/3/2 09:55
      */

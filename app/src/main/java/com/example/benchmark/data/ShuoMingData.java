@@ -25,29 +25,70 @@ public class ShuoMingData {
         this.list = list;
     }
 
+    /**
+     * ShuoMingData
+     *
+     * @date 2023/3/8 16:04
+    */
     public ShuoMingData() {
     }
 
+    /**
+     * getItemInfo
+     *
+     * @return java.lang.String
+     * @date 2023/3/8 16:04
+    */
     public String getItemInfo() {
         return itemInfo;
     }
 
+    /**
+     * setItemInfo
+     *
+     * @param itemInfo description
+     * @date 2023/3/8 16:05
+    */
     public void setItemInfo(String itemInfo) {
         this.itemInfo = itemInfo;
     }
 
+    /**
+     * getInfoImage
+     *
+     * @return java.lang.Integer
+     * @date 2023/3/8 16:05
+    */
     public Integer getInfoImage() {
         return infoImage;
     }
 
+    /**
+     * setInfoImage
+     *
+     * @param infoImage description
+     * @date 2023/3/8 16:05
+    */
     public void setInfoImage(Integer infoImage) {
         this.infoImage = infoImage;
     }
 
+    /**
+     * getList
+     *
+     * @return java.util.List<com.example.benchmark.data.LiuChang>
+     * @date 2023/3/8 16:05
+    */
     public List<LiuChang> getList() {
         return list;
     }
 
+    /**
+     * setList
+     *
+     * @param list description
+     * @date 2023/3/8 16:05
+    */
     public void setList(List<LiuChang> list) {
         this.list = list;
     }

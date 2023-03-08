@@ -21,6 +21,7 @@ import com.example.benchmark.utils.AccessibilityUtil;
  */
 public class HuaweiCloudGameStabilityService implements IStabilityService {
     private static final String TAG = "HuaweiCloudGameStabilityService";
+
     private final String nodeIdBtnTest = "com.huawei.cloudphonedaily:id/btn_test";
     private final String nodeIdBtnStartGame = "com.huawei.cloudphonedaily:id/btn_startGame";
     private final String nodeIdBtnContinueGame = "android:id/button1";

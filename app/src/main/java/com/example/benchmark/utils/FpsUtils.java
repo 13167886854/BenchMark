@@ -65,7 +65,6 @@ public class FpsUtils {
      * getFpsUtils
      *
      * @return com.example.benchmark.utils.FpsUtils
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public static FpsUtils getFpsUtils() {
@@ -75,7 +74,12 @@ public class FpsUtils {
         return fpsUtils;
     }
 
-    // 开始监听
+    /**
+     * startMonitor
+     *
+     * @param runnable description
+     * @date 2023/3/8 16:02
+     */
     public void startMonitor(Runnable runnable) {
         init();
         startTime = System.currentTimeMillis();
@@ -90,8 +94,6 @@ public class FpsUtils {
      * stopMonitor
      *
      * @param runnable description
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public void stopMonitor(Runnable runnable) {
@@ -104,8 +106,6 @@ public class FpsUtils {
     /**
      * init
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public void init() {
@@ -123,8 +123,6 @@ public class FpsUtils {
     /**
      * addFrame
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public void addFrame() {
@@ -148,7 +146,6 @@ public class FpsUtils {
      * getCount
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public int getCount() {
@@ -159,7 +156,6 @@ public class FpsUtils {
      * getTotalCount
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:02
      */
     public int getTotalCount() {
@@ -169,20 +165,15 @@ public class FpsUtils {
     /**
      * updateBeforeGetInfo
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public void updateBeforeGetInfo() {
         countPerSecond.add(count);
-
     }
 
     /**
      * updateAfterGetInfo
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public void updateAfterGetInfo() {
@@ -193,8 +184,6 @@ public class FpsUtils {
     /**
      * getDurationTime
      *
-     * @return long
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public long getDurationTime() {
@@ -206,7 +195,6 @@ public class FpsUtils {
      * getAvergeFps
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public double getAvergeFps() {
@@ -217,7 +205,6 @@ public class FpsUtils {
      * getFrameShakingRate
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public double getFrameShakingRate() {
@@ -234,7 +221,6 @@ public class FpsUtils {
      * getFrameIntervalTime
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public double getFrameIntervalTime() {
@@ -245,7 +231,6 @@ public class FpsUtils {
      * getLowCount
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public int getLowCount() {
@@ -256,7 +241,6 @@ public class FpsUtils {
      * getLowFrameRate
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public double getLowFrameRate() {
@@ -268,7 +252,6 @@ public class FpsUtils {
      *
      * @param time description
      * @return boolean
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public boolean isJank(int time) {
@@ -294,7 +277,6 @@ public class FpsUtils {
      * getJankCount
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public int getJankCount() {
@@ -305,7 +287,6 @@ public class FpsUtils {
      * getJankRate
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public double getJankRate() {
@@ -316,7 +297,6 @@ public class FpsUtils {
      * getIntervalTime
      *
      * @return long
-     * @throws null
      * @date 2023/3/8 09:03
      */
     public long getIntervalTime() {
@@ -328,7 +308,6 @@ public class FpsUtils {
      *
      * @param list description
      * @return int
-     * @throws null
      * @date 2023/3/8 09:04
      */
     public static int max(ArrayList<Integer> list) {
@@ -346,7 +325,6 @@ public class FpsUtils {
      * getShutterTime
      *
      * @return long
-     * @throws null
      * @date 2023/3/8 09:04
      */
     public long getShutterTime() {
@@ -357,7 +335,6 @@ public class FpsUtils {
      * getShtutterRate
      *
      * @return double
-     * @throws null
      * @date 2023/3/8 09:04
      */
     public double getShtutterRate() {
@@ -368,7 +345,6 @@ public class FpsUtils {
      * getSizeOfCountArray
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:04
      */
     public int getSizeOfCountArray() {

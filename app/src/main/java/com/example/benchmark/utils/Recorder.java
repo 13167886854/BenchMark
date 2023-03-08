@@ -39,24 +39,34 @@ import java.nio.ByteOrder;
  * @since 2023/3/7 17:28
  */
 public class Recorder {
-    static final String TAG = "Recorder";
-    public boolean isRecording = false;
-    private AudioRecord mRecorder;
-
+    /**
+     * Recorder TAG标签
+     */
+    public static final String TAG = "Recorder";
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
+    public boolean isRecording = false;
+
+    private AudioRecord mRecorder;
     private Thread recordingThread;
     private int bufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
     private int bytesPerElement = 2; // 2 bytes in 16bit format
-
     private String file;
-
     private File root;
     private File cache;
     private File rawOutput;
 
+
+    /**
+     * start
+     *
+     * context description
+     * @param mProjection description
+     * @return boolean
+     * @date 2023/3/8 15:31
+    */
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
@@ -64,12 +74,12 @@ public class Recorder {
         String platformKind = YinHuaData.platformType;
 
         // 如果是云手机平台
-        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
-
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
+            file = CacheConst.AUDIO_PHONE_NAME;
+        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             file = CacheConst.AUDIO_PHONE_NAME;
         } else {
             file = CacheConst.AUDIO_GAME_NAME;
@@ -83,10 +93,9 @@ public class Recorder {
                         .addMatchingUsage(AudioAttributes.USAGE_GAME)
                         .addMatchingUsage(AudioAttributes.USAGE_UNKNOWN)
                         .build();
-
             } catch (NoClassDefFoundError e) {
-                Toast.makeText(context, "System Audio Capture is not Supported on this Device", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(context,
+                        "System Audio Capture is not Supported on this Device", Toast.LENGTH_LONG).show();
                 return false;
             }
             AudioFormat format = new AudioFormat.Builder()
@@ -94,7 +103,6 @@ public class Recorder {
                     .setSampleRate(RECORDER_SAMPLERATE)
                     .setChannelMask(RECORDER_CHANNELS)
                     .build();
-
 
             mRecorder = new AudioRecord.Builder()
                     .setAudioFormat(format)
@@ -112,19 +120,25 @@ public class Recorder {
                     writeAudioFile();
                 }
             }, "System Audio Capture");
-
             recordingThread.start();
-
         }
         return true;
     }
 
+    /**
+     * createAudioFile
+     *
+     * @param context description
+     * @date 2023/3/8 15:31
+    */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void createAudioFile(Context context) {
-        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder");
-        CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "AudioRecorder";
+        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + "AudioRecorder");
+        CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                + File.separator + "AudioRecorder";
         Log.e(TAG, "root: " + root);
-        cache = new File(context.getCacheDir().getAbsolutePath(), "/RawData");
+        cache = new File(context.getCacheDir().getAbsolutePath(), File.separator+"RawData");
         if (!root.exists()) {
             root.mkdir();
             root.setWritable(true);
@@ -134,21 +148,17 @@ public class Recorder {
             cache.setWritable(true);
             cache.setReadable(true);
         }
-
         rawOutput = new File(root, file);
         rawOutput.setWritable(true);
         rawOutput.setReadable(true);
-
         try {
             rawOutput.createNewFile();
         } catch (IOException e) {
             Log.e(TAG, "createAudioFile: " + e.toString());
         }
-
     }
 
     private void rawToWave(final File rawFile, final File waveFile) throws IOException {
-
         byte[] rawData = new byte[(int) rawFile.length()];
         DataInputStream input = null;
         try {
@@ -181,10 +191,9 @@ public class Recorder {
             short[] shorts = new short[rawData.length / 2];
             ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shorts);
             ByteBuffer bytes = ByteBuffer.allocate(shorts.length * 2);
-            for (short s : shorts) {
-                bytes.putShort(s);
+            for (short ss : shorts) {
+                bytes.putShort(ss);
             }
-
             output.write(fullyReadFileToBytes(rawFile));
         } finally {
             if (output != null) {
@@ -195,11 +204,10 @@ public class Recorder {
 
     private byte[] fullyReadFileToBytes(File file) throws IOException {
         int size = (int) file.length();
-        byte bytes[] = new byte[size];
-        byte tmpBuff[] = new byte[size];
+        byte[] bytes = new byte[size];
+        byte[] tmpBuff = new byte[size];
         FileInputStream fis = new FileInputStream(file);
         try {
-
             int read = fis.read(bytes, 0, size);
             if (read < size) {
                 int remain = size - read;
@@ -214,7 +222,6 @@ public class Recorder {
         } finally {
             fis.close();
         }
-
         return bytes;
     }
 
@@ -249,10 +256,8 @@ public class Recorder {
 
     private void writeAudioFile() {
         try {
-
             // String absolutePath = rawOutput.getAbsolutePath();
             String canonicalPath = rawOutput.getCanonicalPath();
-
             FileOutputStream outputStream = new FileOutputStream(canonicalPath);
             short[] data = new short[bufferElements2Rec];
             while (isRecording) {
@@ -272,9 +277,9 @@ public class Recorder {
     }
 
     /**
-     * @description: startProcessing
      * @return void
      * @throws null
+     * @description: startProcessing
      * @date 2023/3/7 14:55
      */
     public void startProcessing() throws IOException {

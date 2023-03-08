@@ -141,7 +141,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         return view;
     }
 
-    private void check(){
+    private void check() {
         if (cheak_game_map.get("cheaked_game") == null) {
             Toast.makeText(getActivity(), "请选择需要测评的云游戏平台", Toast.LENGTH_LONG).show();
             return;
@@ -211,7 +211,6 @@ public class GameFragment extends Fragment implements View.OnClickListener,
 
         accessUtils = new AccessUtils(getContext());
         popDiaLog = new PopDiaLog(getActivity());
-
     }
 
     private void initGameBtn() {
@@ -240,6 +239,12 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    /**
+     * onClick
+     *
+     * @param vi description
+     * @date 2023/3/8 15:23
+    */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View vi) {
@@ -343,6 +348,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    /**
+     * onCheckedChanged
+     *
+     * @param group description
+     * @param checkedId description
+     * @date 2023/3/8 15:23
+    */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -383,6 +395,13 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    /**
+     * onCheckedChanged
+     *
+     * @param buttonView description
+     * @param isChecked description
+     * @date 2023/3/8 15:23
+    */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
@@ -436,7 +455,12 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
+    /**
+     * getInfo
+     *
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @date 2023/3/8 15:23
+    */
     public Map<String, Object> getInfo() {
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
         Map<String, String> ramInfo = SDCardUtils.getRAMInfo(getContext());
@@ -444,8 +468,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             ramInfo.put("可用", MemInfoUtil.getMemAvailable());
         }
         for (Map.Entry<String, String> entry : ramInfo.entrySet()) {
-            String value = entry.getValue().endsWith("吉字节") ?
-                    (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
+            String value = entry.getValue().endsWith("吉字节")
+                    ? (entry.getValue().split("吉字节")[0] + "GB") : entry.getValue();
             entry.setValue(value);
         }
         Log.d(TAG, "getInfo: " + ramInfo);

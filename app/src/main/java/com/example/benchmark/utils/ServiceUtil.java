@@ -31,10 +31,11 @@ import com.example.benchmark.service.FxService;
 public class ServiceUtil {
 
     /**
+     * isServiceRunning
+     *
      * @param context     description
      * @param serviceName description
      * @return boolean
-     * @throws null
      * @description: isServiceRunning  校验某个服务是否还存在
      * @date 2023/2/22 14:52
      */
@@ -51,9 +52,9 @@ public class ServiceUtil {
     }
 
     /**
+     * backToCePingActivity
+     *
      * @param serviceName description
-     * @return void
-     * @throws null
      * @description: backToCePingActivity
      * @date 2023/2/22 14:53
      */
@@ -69,14 +70,14 @@ public class ServiceUtil {
     }
 
     /**
+     * startFxService
+     *
      * @param context           description
      * @param checked_plat      description
      * @param resultCode        description
      * @param data              description
      * @param isCheckTouch      description
      * @param isCheckSoundFrame description
-     * @return void
-     * @throws null
      * @description: startFxService
      * @date 2023/2/22 14:53
      */
@@ -101,13 +102,12 @@ public class ServiceUtil {
     }
 
     private static void toFloatGetPermission(Context context) {
-
         Toast.makeText(context, "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:" + context.getPackageName()));
 
-        Log.d("TWT", "toFloatGetPermission: " +
-                Uri.parse("package:" + context.getPackageName()));
+        Log.d("TWT", "toFloatGetPermission: "
+                + Uri.parse("package:" + context.getPackageName()));
         context.startActivity(intent);
     }
 }

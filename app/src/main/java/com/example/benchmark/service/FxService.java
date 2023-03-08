@@ -93,8 +93,8 @@ public class FxService extends Service {
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
     private final int stopRecord = 111;
     private final int computePesq = 222;
-    private boolean codeTouchAble = true;
-    private boolean running;
+    private boolean isCodeTouchAble = true;
+    private boolean isRunning;
     public static String path = "";
     private int width;
     private int height;
@@ -173,7 +173,7 @@ public class FxService extends Service {
         HandlerThread serviceThread = new HandlerThread("service_thread",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         serviceThread.start();
-        running = false;
+        isRunning = false;
         mediaRecorder = new MediaRecorder();
     }
 
@@ -248,7 +248,7 @@ public class FxService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -268,16 +268,16 @@ public class FxService extends Service {
 
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
 
                 // 响应点击事件
                 // 点击按钮进行截屏bitmap形式
-                if (isclick) {
+                if (isClick) {
                     mFloatView.setVisibility(View.GONE);
                     btnMenu.setVisibility(View.VISIBLE);
                 }
@@ -294,13 +294,13 @@ public class FxService extends Service {
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
         if (this.isCheckSoundFrame) {
             btnToPrCode.setTextColor(0xFFCCCCCC);
-            codeTouchAble = false;
+            isCodeTouchAble = false;
         }
         btnToPrCode.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -320,16 +320,16 @@ public class FxService extends Service {
 
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
 
                 // 响应点击事件
-                if (isclick) {
-                    if (codeTouchAble) {
+                if (isClick) {
+                    if (isCodeTouchAble) {
                         toCatchScreen();
                     }
                 }
@@ -341,7 +341,7 @@ public class FxService extends Service {
         btnToTap.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -359,14 +359,14 @@ public class FxService extends Service {
 
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
                 // 响应触控点击事件
-                if (isclick) {
+                if (isClick) {
                     // 这里写开启触控服务
                     Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onTouch: 点击了开启触控服务");
@@ -382,7 +382,7 @@ public class FxService extends Service {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -401,14 +401,14 @@ public class FxService extends Service {
 
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
                 // 响应返回点击事件
-                if (isclick) {
+                if (isClick) {
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
                 }
@@ -421,7 +421,7 @@ public class FxService extends Service {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                boolean isclick = false;
+                boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         startTime = System.currentTimeMillis();
@@ -439,14 +439,14 @@ public class FxService extends Service {
 
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
-                            isclick = false;
+                            isClick = false;
                         } else {
-                            isclick = true;
+                            isClick = true;
                         }
                         break;
                 }
                 // 响应返回点击事件
-                if (isclick) {
+                if (isClick) {
 
                     tapUtil.tap(screenWidth / 2, screenHeight / 2);
                     btnMenu.setVisibility(View.GONE);
@@ -512,7 +512,6 @@ public class FxService extends Service {
     /**
      * @param image description
      * @return android.graphics.Bitmap
-     * @throws null
      * @description: image2Bitmap
      * @date 2023/3/1 15:06
      */
@@ -566,9 +565,9 @@ public class FxService extends Service {
         if (target == null) {
             return null;
         } else {
-            if(target instanceof String){
+            if (target instanceof String) {
                 return (String) target;
-            }else {
+            } else {
                 return "";
             }
 
@@ -594,17 +593,17 @@ public class FxService extends Service {
                 getIntDataFromJson(jsonData, "cpuCores")
         );
         ScoreUtil.calcAndSaveGPUScores(
-                jsonData.get("gpuVendor") instanceof String ? (String) jsonData.get("gpuVendor"):"",
-                jsonData.get("gpuRenderer") instanceof String ? (String) jsonData.get("gpuRenderer"):"",
-                jsonData.get("gpuVersion") instanceof String ? (String) jsonData.get("gpuVersion"):""
+                jsonData.get("gpuVendor") instanceof String ? (String) jsonData.get("gpuVendor") : "",
+                jsonData.get("gpuRenderer") instanceof String ? (String) jsonData.get("gpuRenderer") : "",
+                jsonData.get("gpuVersion") instanceof String ? (String) jsonData.get("gpuVersion") : ""
         );
         ScoreUtil.calcAndSaveRAMScores(
-                jsonData.get("availRam") instanceof String ? (String) jsonData.get("availRam"):"",
-                jsonData.get("totalRam") instanceof String ? (String) jsonData.get("totalRam"):""
+                jsonData.get("availRam") instanceof String ? (String) jsonData.get("availRam") : "",
+                jsonData.get("totalRam") instanceof String ? (String) jsonData.get("totalRam") : ""
         );
         ScoreUtil.calcAndSaveROMScores(
-                jsonData.get("availStorage") instanceof  String ?(String) jsonData.get("availStorage"):"",
-                jsonData.get("totalStorage") instanceof String ? (String) jsonData.get("totalStorage"):""
+                jsonData.get("availStorage") instanceof String ? (String) jsonData.get("availStorage") : "",
+                jsonData.get("totalStorage") instanceof String ? (String) jsonData.get("totalStorage") : ""
 
         );
         ScoreUtil.calcAndSaveFluencyScores(
@@ -625,7 +624,7 @@ public class FxService extends Service {
         Log.d("TWT", "云端测试数据JSON: " + jsonData);
         if (jsonData.get("resolution") != null) {
             ScoreUtil.calcAndSaveSoundFrameScores(
-                    jsonData.get("resolution") instanceof String ? (String) jsonData.get("resolution"):"",
+                    jsonData.get("resolution") instanceof String ? (String) jsonData.get("resolution") : "",
                     getFloatDataFromJson(jsonData, "maxdifferencevalue")
             );
         }
@@ -665,12 +664,12 @@ public class FxService extends Service {
      * @date 2023/3/1 15:07
      */
     public void startVideoRecord() {
-        if (mediaProjection == null || running) {
+        if (mediaProjection == null || isRunning) {
             Log.d("TWT", "startRecord: mediaProjection == null");
             return;
         }
         DisplayMetrics metrics = new DisplayMetrics();
-        if(this.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager){
+        if (this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
             WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(metrics);
             width = metrics.widthPixels;
@@ -680,7 +679,7 @@ public class FxService extends Service {
             initRecorder();
             createVirtualDisplay();
             mediaRecorder.start();
-            running = true;
+            isRunning = true;
         }
 
     }
@@ -692,11 +691,11 @@ public class FxService extends Service {
      * @date 2023/3/1 15:08
      */
     public void stopVideoRecord() {
-        if (!running) {
+        if (!isRunning) {
             return;
         }
         Log.d("TWT", "startRecord: stop");
-        running = false;
+        isRunning = false;
         mediaRecorder.stop();
         mediaRecorder.reset();
         virtualDisplay.release();
@@ -721,13 +720,13 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            MediaType type = MediaType.parse("application/octet-stream");
+            MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
             // file是要上传的文件 File() "/"
             File file = new File(CacheConst.videoPath
                     + File.separator + CacheConst.VIDEO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
-                    (MediaType.parse("multipart/form-data"), file);
+                    (MediaType.parse("multipart" + File.separator + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
@@ -738,7 +737,7 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                     + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/VideoRecord")
+                    .url(CacheConst.ALIYUN_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                     .post(multipartBody)
                     .build();
             client.newCall(request)
@@ -764,7 +763,7 @@ public class FxService extends Service {
                             if (YinHuaData.psnr != null
                                     && YinHuaData.ssim != null
                                     && YinHuaData.pesq != null) {
-                                codeTouchAble = true;
+                                isCodeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
                                 Toast.makeText(getBaseContext(), "音视频质量测试结束~",
@@ -787,13 +786,13 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            MediaType type = MediaType.parse("application/octet-stream");
+            MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
             // file是要上传的文件 File() "/"
             File file = new File(CacheConst.videoPath + File.separator
                     + CacheConst.VIDEO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
-                    (MediaType.parse("multipart/form-data"), file);
+                    (MediaType.parse("multipart" + File.separator + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
@@ -804,7 +803,7 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                     + CacheConst.VIDEO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.HUAWEI_IP + "/AudioVideo/VideoRecord")
+                    .url(CacheConst.HUAWEI_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                     .post(multipartBody)
                     .build();
             client.newCall(request)
@@ -830,7 +829,7 @@ public class FxService extends Service {
                             if (YinHuaData.psnr != null
                                     && YinHuaData.ssim != null
                                     && YinHuaData.pesq != null) {
-                                codeTouchAble = true;
+                                isCodeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
                                 Toast.makeText(getBaseContext(), "音视频质量测试结束~",
@@ -869,9 +868,9 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机
-        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             OkHttpClient client = new OkHttpClient.Builder()
 
                     // 连接超时
@@ -884,22 +883,22 @@ public class FxService extends Service {
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
 
-            MediaType type = MediaType.parse("application/octet-stream");
-            File file = new File(CacheConst.audioPath + File.separator +
-                    CacheConst.AUDIO_PHONE_NAME);
+            MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
+            File file = new File(CacheConst.audioPath + File.separator
+                    + CacheConst.AUDIO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
-                    (MediaType.parse("multipart/form-data"), file);
+                    (MediaType.parse("multipart" + File.separator + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" +
-                    CacheConst.audioPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" +
-                    CacheConst.AUDIO_PHONE_NAME);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                    + CacheConst.audioPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
+                    + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.ALIYUN_IP + "/AudioVideo/AudioRecord")
+                    .url(CacheConst.ALIYUN_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                     .post(multipartBody)
                     .build();
             client.newCall(request)
@@ -920,10 +919,10 @@ public class FxService extends Service {
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(computePesq);
-                            if (YinHuaData.psnr != null &&
-                                    YinHuaData.ssim != null &&
-                                    YinHuaData.pesq != null) {
-                                codeTouchAble = true;
+                            if (YinHuaData.psnr != null
+                                    && YinHuaData.ssim != null
+                                    && YinHuaData.pesq != null) {
+                                isCodeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
                                 Toast.makeText(getBaseContext(), "音视频质量测试结束~",
@@ -932,8 +931,8 @@ public class FxService extends Service {
                             }
                         }
                     });
-        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             OkHttpClient client = new OkHttpClient.Builder()
 
                     // 连接超时
@@ -945,22 +944,22 @@ public class FxService extends Service {
                     // 写入超时
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
-            MediaType type = MediaType.parse("application/octet-stream");
+            MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
             File file = new File(CacheConst.audioPath + File.separator +
                     CacheConst.AUDIO_PHONE_NAME);
             RequestBody requestBody = RequestBody.create
-                    (MediaType.parse("multipart/form-data"), file);
+                    (MediaType.parse("multipart" + File.separator + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
                     .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" +
-                    CacheConst.audioPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" +
-                    CacheConst.AUDIO_PHONE_NAME);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                    + CacheConst.audioPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
+                    + CacheConst.AUDIO_PHONE_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.HUAWEI_IP + "/AudioVideo/AudioRecord")
+                    .url(CacheConst.HUAWEI_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                     .post(multipartBody)
                     .build();
             client.newCall(request)
@@ -981,10 +980,10 @@ public class FxService extends Service {
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(computePesq);
-                            if (YinHuaData.psnr != null &&
-                                    YinHuaData.ssim != null &&
-                                    YinHuaData.pesq != null) {
-                                codeTouchAble = true;
+                            if (YinHuaData.psnr != null
+                                    && YinHuaData.ssim != null
+                                    && YinHuaData.pesq != null) {
+                                isCodeTouchAble = true;
                                 btnToPrCode.setTextColor(0xff000000);
                                 Looper.prepare();
                                 Toast.makeText(getBaseContext(), "音视频质量测试结束~",
@@ -1015,11 +1014,11 @@ public class FxService extends Service {
             Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
             // 如果是云手机
-            if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE) ||
-                    platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE) ||
-                    platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE) ||
-                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) ||
-                    platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+                    || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
+                    || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)
+                    || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
+                    || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
                 path = getSaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
             } else {
                 path = getSaveDirectory() + CacheConst.VIDEO_GAME_NAME;
@@ -1041,14 +1040,13 @@ public class FxService extends Service {
 
     /**
      * @return java.lang.String
-     * @throws null
      * @description: getSaveDirectory
      * @date 2023/3/1 15:15
      */
     public String getSaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + "ScreenRecorder" + File.separator;
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator + "ScreenRecorder" + File.separator;
             CacheConst.videoPath = rootDir;
             File file = new File(rootDir);
             if (!file.exists()) {

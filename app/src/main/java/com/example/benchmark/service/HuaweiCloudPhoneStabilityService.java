@@ -24,18 +24,15 @@ import com.example.benchmark.utils.TapUtil;
  * @since 2023/3/7 17:21
  */
 public class HuaweiCloudPhoneStabilityService implements IStabilityService {
-
     private static final String TAG = "HuaweiCloudPhoneStabilityService";
+
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final String NODE_ID_BTN_START_CONNECT = "com.huawei.instructionstream.appui:id/btn_startGame";
     private final String nodeIdQuitPhone = "com.huawei.instructionstream.appui:id/rotate_exit";
     private final String nodeTextQuitPhone = "退出云手机";
-    private final String NODE_ID_CONNECT_SUCCESS_VIEW = "com.huawei.instructionstream.appui:id/total_view";
-    private final String NODE_ID_CONNECT_FAIL_EXIT = "android:id/button1";
-    private final String NODE_TEXT_CONNECT_FAIL_EXIT = "退出云手机";
-    private final String NODE_ID_RECONNECT = "android:id/button2";
-    private final String NODE_TEXT_RECONNECT = "重连云手机";
+    private final String nodeIdConnectFailExit = "android:id/button1";
+    private final String nodeTextConnectFailExit = "退出云手机";
 
     private final MyAccessibilityService service;
 
@@ -87,7 +84,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
         long startTime = System.currentTimeMillis();
         while (!isConnectSuccess) {
             AccessibilityNodeInfo nodeConnectFail = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_CONNECT_FAIL_EXIT, NODE_TEXT_CONNECT_FAIL_EXIT);
+                    service, nodeIdConnectFailExit, nodeTextConnectFailExit);
             if (nodeConnectFail != null) {
                 mFailMonitorNum++;
                 AccessibilityUtil.performClick(nodeConnectFail);

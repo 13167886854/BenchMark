@@ -31,12 +31,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.benchmark.activity.CePingActivity;
 import com.example.benchmark.data.Admin;
-import com.example.benchmark.data.CepingData;
 import com.example.benchmark.dialog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.dialog.IpPortDialog;
 import com.example.benchmark.utils.AccessUtils;
-
 
 import com.example.benchmark.BaseApp;
 import com.example.benchmark.service.MyAccessibilityService;
@@ -48,7 +46,6 @@ import com.example.benchmark.utils.ServiceUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * PhoneFragment
@@ -58,19 +55,17 @@ import java.util.List;
  */
 public class PhoneFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "PhoneFragment";
-    private Button blue_liuchang;
-    private Button blue_wending;
-    private Button blue_chukong;
-    private Button blue_yinhua;
-    private List<CepingData> data;
+    private Button blueLiuChang;
+    private Button blueWenDing;
+    private Button blueChuKong;
+    private Button blueYinHua;
 
-    private CheckBox blue_liuchang_cheak;
-    private CheckBox blue_wending_cheak;
-    private CheckBox blue_chukong_cheak;
-    private CheckBox blue_yinhua_cheak;
+    private CheckBox blueLiuChangCheck;
+    private CheckBox blueWenDingCheck;
+    private CheckBox blueChuKongCheck;
+    private CheckBox blueYinHuaCheck;
 
     private IpPortDialog myDialog;
-    private Message mMessage;
     private Thread mThread;
     private Handler mHandler = new Handler() {
         @Override
@@ -81,28 +76,30 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             } else if (msg.what == 2) {
                 myDialog.yes.setEnabled(true);
                 myDialog.dismiss();
+            }else{
+                Log.d(TAG, "handleMessage: ");
             }
         }
     };
 
-    private CheckBox blue_cpu_cheak;
-    private CheckBox blue_gpu_cheak;
-    private CheckBox blue_ram_cheak;
-    private CheckBox blue_rom_cheak;
-    private CheckBox phone_select_all;
+    private CheckBox blueCpuCheck;
+    private CheckBox blueGpuCheck;
+    private CheckBox blueRamCheck;
+    private CheckBox blueRomCheck;
+    private CheckBox phoneSelectAll;
 
-    private Button blue_cpu;
-    private Button blue_gpu;
-    private Button blue_ram;
-    private Button blue_rom;
+    private Button blueCpu;
+    private Button blueGpu;
+    private Button blueRam;
+    private Button blueRom;
 
-    private Button phone_start_ceping;
+    private Button phoneStartCePing;
 
-    private Button kunpeng_phone;
-    private Button huawei_data_phone;
-    private Button redfingure_phone;
-    private Button yiodng_phone;
-    private Button wangyiyun_phone;
+    private Button kunPengPhone;
+    private Button huaWeiDataPhone;
+    private Button redFingerPhone;
+    private Button yiDongPhone;
+    private Button wangYiYUnPhone;
 
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
@@ -114,26 +111,27 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_fragment, container, false);
         initview(view);
-        kunpeng_phone.setOnClickListener(this);
-        huawei_data_phone.setOnClickListener(this);
-        redfingure_phone.setOnClickListener(this);
-        yiodng_phone.setOnClickListener(this);
-        wangyiyun_phone.setOnClickListener(this);
-        blue_liuchang.setOnClickListener(this::onClick);
-        blue_wending.setOnClickListener(this::onClick);
-        blue_chukong.setOnClickListener(this::onClick);
-        blue_yinhua.setOnClickListener(this::onClick);
+        kunPengPhone.setOnClickListener(this);
+        huaWeiDataPhone.setOnClickListener(this);
+        redFingerPhone.setOnClickListener(this);
+        yiDongPhone.setOnClickListener(this);
+        wangYiYUnPhone.setOnClickListener(this);
+        blueLiuChang.setOnClickListener(this::onClick);
+        blueWenDing.setOnClickListener(this::onClick);
+        blueChuKong.setOnClickListener(this::onClick);
+        blueYinHua.setOnClickListener(this::onClick);
 
-        blue_cpu.setOnClickListener(this::onClick);
-        blue_gpu.setOnClickListener(this::onClick);
-        blue_ram.setOnClickListener(this::onClick);
-        blue_rom.setOnClickListener(this::onClick);
-        phone_select_all.setOnClickListener(this::onClick);
+        blueCpu.setOnClickListener(this::onClick);
+        blueGpu.setOnClickListener(this::onClick);
+        blueRam.setOnClickListener(this::onClick);
+        blueRom.setOnClickListener(this::onClick);
+        phoneSelectAll.setOnClickListener(this::onClick);
 
-        phone_start_ceping.setOnClickListener(v -> {
+        phoneStartCePing.setOnClickListener(v -> {
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(date);
@@ -150,7 +148,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
 
 
     private void afterCode() {
-        if (blue_wending_cheak.isChecked()) {
+        if (blueWenDingCheck.isChecked()) {
             Log.e(TAG, "afterCode: 111111111111111111111111111");
             if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
                     || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
@@ -158,13 +156,13 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 return;
             }
         }
-        if (blue_chukong_cheak.isChecked()) {
+        if (blueChuKongCheck.isChecked()) {
             if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         }
-        if (blue_yinhua_cheak.isChecked()) {
+        if (blueYinHuaCheck.isChecked()) {
             if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
@@ -172,65 +170,59 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         }
         if (!Settings.canDrawOverlays(getContext())) {
             Toast.makeText(getContext(), "请允许本应用显示悬浮窗！", Toast.LENGTH_SHORT).show();
-            Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getContext().getPackageName()));
+            Intent intentToFloatPermission = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"
+                    + getContext().getPackageName()));
             Log.d("TWT", "toFloatGetPermission: " + Uri.parse("package:" + getContext().getPackageName()));
             this.startActivity(intentToFloatPermission);
             return;
         }
-
         if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
             // 检测华为云手机测试 提示用户输入ip地址加端口
             Log.e(TAG, "onCreateView: hiahiasadsad");
             showDialog();
-
         }
-
         if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
             Log.e(TAG, "onCreateView: hiahiasadsad");
             showDialog();
-
         }
     }
 
 
     private void initview(View view) {
-        blue_liuchang = view.findViewById(R.id.bule_liuchangxing);
-        blue_wending = view.findViewById(R.id.bule_wendinxing);
-        blue_chukong = view.findViewById(R.id.bule_chukong);
-        blue_yinhua = view.findViewById(R.id.bule_yinhua);
+        blueLiuChang = view.findViewById(R.id.bule_liuchangxing);
+        blueWenDing = view.findViewById(R.id.bule_wendinxing);
+        blueChuKong = view.findViewById(R.id.bule_chukong);
+        blueYinHua = view.findViewById(R.id.bule_yinhua);
 
+        blueCpu = view.findViewById(R.id.bule_cpu);
+        blueGpu = view.findViewById(R.id.bule_gpu);
+        blueRam = view.findViewById(R.id.bule_ram);
+        blueRom = view.findViewById(R.id.bule_rom);
 
-        blue_cpu = view.findViewById(R.id.bule_cpu);
-        blue_gpu = view.findViewById(R.id.bule_gpu);
-        blue_ram = view.findViewById(R.id.bule_ram);
-        blue_rom = view.findViewById(R.id.bule_rom);
+        blueLiuChangCheck = view.findViewById(R.id.blue_liuchang_cheak);
+        blueWenDingCheck = view.findViewById(R.id.blue_wending_cheak);
+        blueChuKongCheck = view.findViewById(R.id.blue_chukong_cheak);
+        blueYinHuaCheck = view.findViewById(R.id.blue_yinhua_cheak);
 
-        blue_liuchang_cheak = view.findViewById(R.id.blue_liuchang_cheak);
-        blue_wending_cheak = view.findViewById(R.id.blue_wending_cheak);
-        blue_chukong_cheak = view.findViewById(R.id.blue_chukong_cheak);
-        blue_yinhua_cheak = view.findViewById(R.id.blue_yinhua_cheak);
+        blueCpuCheck = view.findViewById(R.id.blue_cpu_cheak);
+        blueGpuCheck = view.findViewById(R.id.blue_gpu_cheak);
+        blueRamCheck = view.findViewById(R.id.blue_ram_cheak);
+        blueRomCheck = view.findViewById(R.id.blue_rom_cheak);
 
-        blue_cpu_cheak = view.findViewById(R.id.blue_cpu_cheak);
-        blue_gpu_cheak = view.findViewById(R.id.blue_gpu_cheak);
-        blue_ram_cheak = view.findViewById(R.id.blue_ram_cheak);
-        blue_rom_cheak = view.findViewById(R.id.blue_rom_cheak);
+        phoneSelectAll = view.findViewById(R.id.phone_select_all);
 
-        phone_select_all = view.findViewById(R.id.phone_select_all);
+        phoneStartCePing = view.findViewById(R.id.blue_start_test);
 
-        phone_start_ceping = view.findViewById(R.id.blue_start_test);
-
-
-        kunpeng_phone = view.findViewById(R.id.kunpeng_phone);
-        huawei_data_phone = view.findViewById(R.id.kunpeng_data_phone);
-        redfingure_phone = view.findViewById(R.id.redfigure_phone);
-        yiodng_phone = view.findViewById(R.id.yidong_phone);
-        wangyiyun_phone = view.findViewById(R.id.wangyiyun_phone);
+        kunPengPhone = view.findViewById(R.id.kunpeng_phone);
+        huaWeiDataPhone = view.findViewById(R.id.kunpeng_data_phone);
+        redFingerPhone = view.findViewById(R.id.redfigure_phone);
+        yiDongPhone = view.findViewById(R.id.yidong_phone);
+        wangYiYUnPhone = view.findViewById(R.id.wangyiyun_phone);
         accessUtils = new AccessUtils(getContext());
         popDiaLog = new PopDiaLog(requireActivity());
-
     }
 
-    public void initPhoneBtn() {
+    private void initPhoneBtn() {
         // 移动云
         if (getActivity().findViewById(R.id.yidong_phone) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.yidong_phone);
@@ -277,420 +269,404 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * onClick
+     *
+     * @param vi description
+     * @date 2023/3/8 16:22
+    */
     @SuppressLint("NonConstantResourceId")
     @Override
-    public void onClick(View v) {
+    public void onClick(View vi) {
         Log.d("mCheckCounts", "onClick: mCheckCounts==>  " + mCheckCounts);
-        switch (v.getId()) {
+        switch (vi.getId()) {
             case R.id.kunpeng_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
                 initPhoneBtn();
-                Button btn = (Button) v;
-                Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                if(vi instanceof Button){
+                    Button btn = (Button) vi;
+                    Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                }
                 break;
             }
             case R.id.kunpeng_data_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
                 initPhoneBtn();
-                Button btn = (Button) v;
-                Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                if(vi instanceof Button){
+                    Button btn = (Button) vi;
+                    Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                }
                 break;
             }
             case R.id.redfigure_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
                 initPhoneBtn();
-                Button btn = (Button) v;
-                Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                if(vi instanceof Button){
+                    Button btn = (Button) vi;
+                    Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                }
                 break;
             }
             case R.id.yidong_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
                 initPhoneBtn();
-                Button btn = (Button) v;
-                Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                if(vi instanceof Button){
+                    Button btn = (Button) vi;
+                    Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                }
                 break;
             }
             case R.id.wangyiyun_phone: {
                 check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
                 initPhoneBtn();
-                Button btn = (Button) v;
-                Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                if(vi instanceof Button){
+                    Button btn = (Button) vi;
+                    Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                }
                 break;
             }
             case R.id.bule_liuchangxing: {
-
-                boolean checked = blue_liuchang_cheak.isChecked();
-                if (checked) {
-                    blue_liuchang_cheak.setVisibility(View.INVISIBLE);
-                    blue_liuchang_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueLiuChangCheck.isChecked();
+                if (isChecked) {
+                    blueLiuChangCheck.setVisibility(View.INVISIBLE);
+                    blueLiuChangCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
                 } else {
-                    blue_liuchang_cheak.setChecked(true);
-                    blue_liuchang_cheak.setVisibility(View.VISIBLE);
+                    blueLiuChangCheck.setChecked(true);
+                    blueLiuChangCheck.setVisibility(View.VISIBLE);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
                 }
                 break;
-
             }
             case R.id.bule_wendinxing: {
-
-                boolean checked = blue_wending_cheak.isChecked();
-                if (checked) {
-                    blue_wending_cheak.setVisibility(View.INVISIBLE);
-                    blue_wending_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueWenDingCheck.isChecked();
+                if (isChecked) {
+                    blueWenDingCheck.setVisibility(View.INVISIBLE);
+                    blueWenDingCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
                 } else {
-                    blue_wending_cheak.setVisibility(View.VISIBLE);
-                    blue_wending_cheak.setChecked(true);
+                    blueWenDingCheck.setVisibility(View.VISIBLE);
+                    blueWenDingCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
                 }
                 break;
             }
             case R.id.bule_chukong: {
-
-                boolean checked = blue_chukong_cheak.isChecked();
-                if (checked) {
-                    blue_chukong_cheak.setVisibility(View.INVISIBLE);
-                    blue_chukong_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueChuKongCheck.isChecked();
+                if (isChecked) {
+                    blueChuKongCheck.setVisibility(View.INVISIBLE);
+                    blueChuKongCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
                 } else {
-                    blue_chukong_cheak.setVisibility(View.VISIBLE);
-                    blue_chukong_cheak.setChecked(true);
+                    blueChuKongCheck.setVisibility(View.VISIBLE);
+                    blueChuKongCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
                 }
                 break;
             }
             case R.id.bule_yinhua: {
-
-                boolean checked = blue_yinhua_cheak.isChecked();
-                if (checked) {
-                    blue_yinhua_cheak.setVisibility(View.INVISIBLE);
-                    blue_yinhua_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueYinHuaCheck.isChecked();
+                if (isChecked) {
+                    blueYinHuaCheck.setVisibility(View.INVISIBLE);
+                    blueYinHuaCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
                 } else {
-                    blue_yinhua_cheak.setVisibility(View.VISIBLE);
-                    blue_yinhua_cheak.setChecked(true);
+                    blueYinHuaCheck.setVisibility(View.VISIBLE);
+                    blueYinHuaCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
                 }
                 break;
             }
-
-
             case R.id.bule_cpu: {
-
-                boolean checked = blue_cpu_cheak.isChecked();
-                if (checked) {
-                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_cpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueCpuCheck.isChecked();
+                if (isChecked) {
+                    blueCpuCheck.setVisibility(View.INVISIBLE);
+                    blueCpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_gpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueGpuCheck.setVisibility(View.INVISIBLE);
+                    blueGpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_ram_cheak.setVisibility(View.INVISIBLE);
-                    blue_ram_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRamCheck.setVisibility(View.INVISIBLE);
+                    blueRamCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_rom_cheak.setVisibility(View.INVISIBLE);
-                    blue_rom_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRomCheck.setVisibility(View.INVISIBLE);
+                    blueRomCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
-
-
                 } else {
-                    blue_cpu_cheak.setVisibility(View.VISIBLE);
-                    blue_cpu_cheak.setChecked(true);
+                    blueCpuCheck.setVisibility(View.VISIBLE);
+                    blueCpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_gpu_cheak.setVisibility(View.VISIBLE);
-                    blue_gpu_cheak.setChecked(true);
+                    blueGpuCheck.setVisibility(View.VISIBLE);
+                    blueGpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_ram_cheak.setVisibility(View.VISIBLE);
-                    blue_ram_cheak.setChecked(true);
+                    blueRamCheck.setVisibility(View.VISIBLE);
+                    blueRamCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_rom_cheak.setVisibility(View.VISIBLE);
-                    blue_rom_cheak.setChecked(true);
+                    blueRomCheck.setVisibility(View.VISIBLE);
+                    blueRomCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
                 }
                 break;
             }
             case R.id.bule_gpu: {
-
-                boolean checked = blue_gpu_cheak.isChecked();
-                if (checked) {
-                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_gpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueGpuCheck.isChecked();
+                if (isChecked) {
+                    blueGpuCheck.setVisibility(View.INVISIBLE);
+                    blueGpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_cpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueCpuCheck.setVisibility(View.INVISIBLE);
+                    blueCpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_ram_cheak.setVisibility(View.INVISIBLE);
-                    blue_ram_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRamCheck.setVisibility(View.INVISIBLE);
+                    blueRamCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_rom_cheak.setVisibility(View.INVISIBLE);
-                    blue_rom_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRomCheck.setVisibility(View.INVISIBLE);
+                    blueRomCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
-
                 } else {
-                    blue_gpu_cheak.setVisibility(View.VISIBLE);
-                    blue_gpu_cheak.setChecked(true);
+                    blueGpuCheck.setVisibility(View.VISIBLE);
+                    blueGpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-                    blue_cpu_cheak.setVisibility(View.VISIBLE);
-                    blue_cpu_cheak.setChecked(true);
+                    blueCpuCheck.setVisibility(View.VISIBLE);
+                    blueCpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-                    blue_ram_cheak.setVisibility(View.VISIBLE);
-                    blue_ram_cheak.setChecked(true);
+                    blueRamCheck.setVisibility(View.VISIBLE);
+                    blueRamCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-                    blue_rom_cheak.setVisibility(View.VISIBLE);
-                    blue_rom_cheak.setChecked(true);
+                    blueRomCheck.setVisibility(View.VISIBLE);
+                    blueRomCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
                 }
                 break;
             }
             case R.id.bule_ram: {
-
-                boolean checked = blue_ram_cheak.isChecked();
-                if (checked) {
-                    blue_ram_cheak.setVisibility(View.INVISIBLE);
-                    blue_ram_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueRamCheck.isChecked();
+                if (isChecked) {
+                    blueRamCheck.setVisibility(View.INVISIBLE);
+                    blueRamCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_cpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueCpuCheck.setVisibility(View.INVISIBLE);
+                    blueCpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_gpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueGpuCheck.setVisibility(View.INVISIBLE);
+                    blueGpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-
-                    blue_rom_cheak.setVisibility(View.INVISIBLE);
-                    blue_rom_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRomCheck.setVisibility(View.INVISIBLE);
+                    blueRomCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
-
                 } else {
-                    blue_ram_cheak.setVisibility(View.VISIBLE);
-                    blue_ram_cheak.setChecked(true);
+                    blueRamCheck.setVisibility(View.VISIBLE);
+                    blueRamCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-                    blue_cpu_cheak.setVisibility(View.VISIBLE);
-                    blue_cpu_cheak.setChecked(true);
+                    blueCpuCheck.setVisibility(View.VISIBLE);
+                    blueCpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-                    blue_gpu_cheak.setVisibility(View.VISIBLE);
-                    blue_gpu_cheak.setChecked(true);
+                    blueGpuCheck.setVisibility(View.VISIBLE);
+                    blueGpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
 
-
-                    blue_rom_cheak.setVisibility(View.VISIBLE);
-                    blue_rom_cheak.setChecked(true);
+                    blueRomCheck.setVisibility(View.VISIBLE);
+                    blueRomCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
                 }
                 break;
             }
             case R.id.bule_rom: {
-
-                boolean checked = blue_rom_cheak.isChecked();
-                if (checked) {
-                    blue_rom_cheak.setVisibility(View.INVISIBLE);
-                    blue_rom_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                boolean isChecked = blueRomCheck.isChecked();
+                if (isChecked) {
+                    blueRomCheck.setVisibility(View.INVISIBLE);
+                    blueRomCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_cpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueCpuCheck.setVisibility(View.INVISIBLE);
+                    blueCpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_gpu_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueGpuCheck.setVisibility(View.INVISIBLE);
+                    blueGpuCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
 
-                    blue_ram_cheak.setVisibility(View.INVISIBLE);
-                    blue_ram_cheak.setChecked(false);
-                    phone_select_all.setChecked(false);
+                    blueRamCheck.setVisibility(View.INVISIBLE);
+                    blueRamCheck.setChecked(false);
+                    phoneSelectAll.setChecked(false);
                     mCheckCounts--;
-
                 } else {
-                    blue_rom_cheak.setVisibility(View.VISIBLE);
-                    blue_rom_cheak.setChecked(true);
+                    blueRomCheck.setVisibility(View.VISIBLE);
+                    blueRomCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_cpu_cheak.setVisibility(View.VISIBLE);
-                    blue_cpu_cheak.setChecked(true);
+                    blueCpuCheck.setVisibility(View.VISIBLE);
+                    blueCpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_gpu_cheak.setVisibility(View.VISIBLE);
-                    blue_gpu_cheak.setChecked(true);
+                    blueGpuCheck.setVisibility(View.VISIBLE);
+                    blueGpuCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-                    blue_ram_cheak.setVisibility(View.VISIBLE);
-                    blue_ram_cheak.setChecked(true);
+                    blueRamCheck.setVisibility(View.VISIBLE);
+                    blueRamCheck.setChecked(true);
                     mCheckCounts++;
                     if (mCheckCounts == ALL_CHECK_COUNTS) {
-                        phone_select_all.setChecked(true);
+                        phoneSelectAll.setChecked(true);
                     }
-
-
                 }
                 break;
             }
             case R.id.phone_select_all: {
-                boolean isCheckedAll = phone_select_all.isChecked();
+                boolean isCheckedAll = phoneSelectAll.isChecked();
                 if (isCheckedAll) {
-                    blue_liuchang_cheak.setChecked(true);
-                    blue_liuchang_cheak.setVisibility(View.VISIBLE);
+                    blueLiuChangCheck.setChecked(true);
+                    blueLiuChangCheck.setVisibility(View.VISIBLE);
+                    blueWenDingCheck.setVisibility(View.VISIBLE);
+                    blueWenDingCheck.setChecked(true);
+                    blueChuKongCheck.setVisibility(View.VISIBLE);
+                    blueChuKongCheck.setChecked(true);
+                    blueYinHuaCheck.setVisibility(View.VISIBLE);
+                    blueYinHuaCheck.setChecked(true);
+                    blueCpuCheck.setVisibility(View.VISIBLE);
+                    blueCpuCheck.setChecked(true);
 
+                    blueGpuCheck.setVisibility(View.VISIBLE);
+                    blueGpuCheck.setChecked(true);
 
-                    blue_wending_cheak.setVisibility(View.VISIBLE);
-                    blue_wending_cheak.setChecked(true);
+                    blueRamCheck.setVisibility(View.VISIBLE);
+                    blueRamCheck.setChecked(true);
 
-                    blue_chukong_cheak.setVisibility(View.VISIBLE);
-                    blue_chukong_cheak.setChecked(true);
-
-                    blue_yinhua_cheak.setVisibility(View.VISIBLE);
-                    blue_yinhua_cheak.setChecked(true);
-
-                    blue_cpu_cheak.setVisibility(View.VISIBLE);
-                    blue_cpu_cheak.setChecked(true);
-
-
-                    blue_gpu_cheak.setVisibility(View.VISIBLE);
-                    blue_gpu_cheak.setChecked(true);
-
-                    blue_ram_cheak.setVisibility(View.VISIBLE);
-                    blue_ram_cheak.setChecked(true);
-
-                    blue_rom_cheak.setVisibility(View.VISIBLE);
-                    blue_rom_cheak.setChecked(true);
+                    blueRomCheck.setVisibility(View.VISIBLE);
+                    blueRomCheck.setChecked(true);
                     mCheckCounts = 8;
                 } else {
-                    blue_liuchang_cheak.setChecked(false);
-                    blue_liuchang_cheak.setVisibility(View.INVISIBLE);
+                    blueLiuChangCheck.setChecked(false);
+                    blueLiuChangCheck.setVisibility(View.INVISIBLE);
 
-                    blue_wending_cheak.setChecked(false);
-                    blue_wending_cheak.setVisibility(View.INVISIBLE);
+                    blueWenDingCheck.setChecked(false);
+                    blueWenDingCheck.setVisibility(View.INVISIBLE);
 
+                    blueChuKongCheck.setChecked(false);
+                    blueChuKongCheck.setVisibility(View.INVISIBLE);
 
-                    blue_chukong_cheak.setChecked(false);
-                    blue_chukong_cheak.setVisibility(View.INVISIBLE);
+                    blueYinHuaCheck.setVisibility(View.INVISIBLE);
+                    blueYinHuaCheck.setChecked(false);
 
+                    blueCpuCheck.setVisibility(View.INVISIBLE);
+                    blueCpuCheck.setChecked(false);
 
-                    blue_yinhua_cheak.setVisibility(View.INVISIBLE);
-                    blue_yinhua_cheak.setChecked(false);
+                    blueGpuCheck.setVisibility(View.INVISIBLE);
+                    blueGpuCheck.setChecked(false);
 
-                    blue_cpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_cpu_cheak.setChecked(false);
+                    blueRamCheck.setVisibility(View.INVISIBLE);
+                    blueRamCheck.setChecked(false);
 
-                    blue_gpu_cheak.setVisibility(View.INVISIBLE);
-                    blue_gpu_cheak.setChecked(false);
-
-                    blue_ram_cheak.setVisibility(View.INVISIBLE);
-                    blue_ram_cheak.setChecked(false);
-
-                    blue_rom_cheak.setVisibility(View.INVISIBLE);
-                    blue_rom_cheak.setChecked(false);
+                    blueRomCheck.setVisibility(View.INVISIBLE);
+                    blueRomCheck.setChecked(false);
                     mCheckCounts = 0;
                 }
             }
         }
     }
 
+    /**
+     * showDialog
+     *
+     * @date 2023/3/8 16:22
+    */
     public void showDialog() {
         Log.e(TAG, "PhoneFragement-showDialog: ");
         myDialog = new IpPortDialog(getContext());
@@ -713,17 +689,18 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                         CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
                         Intent intent = new Intent(getActivity(), CePingActivity.class);
 
-                        // 传入cheakbox是否被选中
+                        // 传入checkbox是否被选中
                         intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
-                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blue_liuchang_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blue_wending_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blue_chukong_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blue_yinhua_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_CPU_INFO, blue_cpu_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_GPU_INFO, blue_gpu_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_ROM_INFO, blue_rom_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_RAM_INFO, blue_ram_cheak.isChecked());
-                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME, check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
+                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blueChuKongCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blueYinHuaCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_CPU_INFO, blueCpuCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_GPU_INFO, blueGpuCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
+                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
+                                check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
                         startActivity(intent);
                     }
                 });
@@ -732,11 +709,11 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         mThread.start();
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
-        WindowManager m = getActivity().getWindowManager();
-        Display d = m.getDefaultDisplay(); // 获取屏幕宽、高度
-        WindowManager.LayoutParams p = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        p.height = (int) (d.getHeight() * 0.9); // 高度设置为屏幕的0.6，根据实际情况调整
-        p.width = (int) (d.getWidth() * 0.9); // 宽度设置为屏幕的0.65，根据实际情况调整
-        dialogWindow.setAttributes(p);
+        WindowManager manager = getActivity().getWindowManager();
+        Display display = manager.getDefaultDisplay(); // 获取屏幕宽、高度
+        WindowManager.LayoutParams params = dialogWindow.getAttributes(); // 获取对话框当前的参数值
+        params.height = (int) (display.getHeight() * 0.9); // 高度设置为屏幕的0.6，根据实际情况调整
+        params.width = (int) (display.getWidth() * 0.9); // 宽度设置为屏幕的0.65，根据实际情况调整
+        dialogWindow.setAttributes(params);
     }
 }

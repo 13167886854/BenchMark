@@ -60,7 +60,6 @@ public class VideoDecodeThread extends Thread implements Runnable {
     @Override
     public void run() {
         try {
-
             int trackCount = mMediaExtractor.getTrackCount();
             for (int i = 0; i < trackCount; i++) {
                 MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
@@ -75,15 +74,13 @@ public class VideoDecodeThread extends Thread implements Runnable {
                 return;
             }
             final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
-            String videoMime = videoFormat.getString(MediaFormat.KEY_MIME);
             int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
-            int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
 
             // 如果设置为SurfaceView，那就动态调整它的高度，保持原视频的宽高比
             if (mSurfaceView != null) {
-                Context context = mSurfaceView.getContext();
-                if (context instanceof Activity) {
-                    ((Activity) context).runOnUiThread(new Runnable() {
+                Context contextTemp = mSurfaceView.getContext();
+                if (contextTemp instanceof Activity) {
+                    ((Activity) contextTemp).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             // 按视频大小动态调整SurfaceView的高度
@@ -102,22 +99,28 @@ public class VideoDecodeThread extends Thread implements Runnable {
                             int showVideoWidth = videoWith * measuredHeight / videoHeight;
 
                             if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                mSurfaceView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, showVideoHeight));
-                            } else if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(showVideoWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+                                mSurfaceView.setLayoutParams(new FrameLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT, showVideoHeight));
+                            } else if (resources.getConfiguration()
+                                    .orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                                        showVideoWidth, ViewGroup.LayoutParams.MATCH_PARENT);
                                 params.gravity = Gravity.CENTER;
                                 mSurfaceView.setLayoutParams(params);
+                            }else {
+                                Log.d(TAG, "run: lastElse");
                             }
                         }
                     });
                 }
             }
-
+            String videoMime = videoFormat.getString(MediaFormat.KEY_MIME);
             mVideoDecoder = MediaCodec.createDecoderByType(videoMime);
             mVideoDecoder.configure(videoFormat, mSurfaceView.getHolder().getSurface(), null, 0);
             mVideoDecoder.start();
             videocurtime = mMediaExtractor.getSampleTime();
 
+            int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
             ByteBuffer byteBuffer = ByteBuffer.allocate(maxInputSize);
             int sampleSize = 0;
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
@@ -138,7 +141,8 @@ public class VideoDecodeThread extends Thread implements Runnable {
                                 if (inputBuffer != null) {
                                     inputBuffer.clear();
                                     inputBuffer.put(byteBuffer);
-                                    mVideoDecoder.queueInputBuffer(inputBufferIndex, 0, sampleSize, sampleTime, 0);
+                                    mVideoDecoder.queueInputBuffer(inputBufferIndex,
+                                            0, sampleSize, sampleTime, 0);
                                     mSpeedManager.preRender(sampleTime);
 
                                     mMediaExtractor.advance();
@@ -166,8 +170,11 @@ public class VideoDecodeThread extends Thread implements Runnable {
     }
 
     /**
-     * 获取当前帧时间戳
-     */
+     * getcurTime
+     *
+     * @return long
+     * @date 2023/3/8 15:38
+    */
     public long getcurTime() {
         return videocurtime;
     }

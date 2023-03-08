@@ -36,6 +36,14 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.data = data;
     }
 
+    /**
+     * onCreateViewHolder
+     *
+     * @param parent description
+     * @param viewType description
+     * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
+     * @date 2023/3/8 15:15
+    */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,28 +51,56 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new RecyclerViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder
+     *
+     * @param holder description
+     * @param position description
+     * @date 2023/3/8 15:15
+    */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
-        LiuChang liuChang = data.get(position);
-        recyclerViewHolder.itemOfItem.setText(liuChang.getItemOfItem());
-        recyclerViewHolder.item_ceshifangfa.setText(liuChang.getCeshifangfa());
-        recyclerViewHolder.item_pingjiazhibiao.setText(liuChang.getPingpanbiaozhun());
+        if(holder instanceof RecyclerViewHolder){
+            RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
+            LiuChang liuChang = data.get(position);
+            recyclerViewHolder.itemOfItem.setText(liuChang.getItemOfItem());
+            recyclerViewHolder.itemTestMethod.setText(liuChang.getCeshifangfa());
+            recyclerViewHolder.itemEvaluationIndex.setText(liuChang.getPingpanbiaozhun());
+        }
     }
 
+    /**
+     * getItemCount
+     *
+     * @return int
+     * @date 2023/3/8 15:15
+    */
     @Override
     public int getItemCount() {
         return data.size();
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public TextView itemOfItem, item_ceshifangfa, item_pingjiazhibiao;
+        /** itemOfItem */
+        public TextView itemOfItem;
 
+        /** itemTestMethod */
+        public TextView itemTestMethod;
+
+        /** itemEvaluationIndex */
+        public TextView itemEvaluationIndex;
+
+        /**
+         * RecyclerViewHolder
+         *
+         * @param itemView description
+         * @date 2023/3/8 15:16
+        */
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             itemOfItem = itemView.findViewById(R.id.item_item);
-            item_ceshifangfa = itemView.findViewById(R.id.item_ceshifangfa);
-            item_pingjiazhibiao = itemView.findViewById(R.id.item_pingpanbiaozhun);
+            itemTestMethod = itemView.findViewById(R.id.item_ceshifangfa);
+            itemEvaluationIndex = itemView.findViewById(R.id.item_pingpanbiaozhun);
         }
     }
 }

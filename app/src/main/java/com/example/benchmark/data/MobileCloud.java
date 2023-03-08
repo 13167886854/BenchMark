@@ -13,15 +13,15 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class MobileCloud {
-    public static final String BASE_URL = "https://ecloud.10086.cn";
-    public static final String PATH = "/api/cloudphone/api/getpayorderlist";
-    public static String accessKey = "";
-    public static String secretKey = "";
-    public static String productID = "";
-    public static String num = "";
+    /** name */
     public static String name = "";
+
+    /** storage */
     public static String storage = "";
-    public static String runningMemory = "";
+
+    /** spec */
     public static String spec = "";
+
+    /** cpuCoreNum */
     public static String cpuCoreNum = "";
 }

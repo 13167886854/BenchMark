@@ -16,12 +16,13 @@ import android.util.Log;
  */
 public class SpeedManager {
     private static final String TAG = SpeedManager.class.getSimpleName();
-    private static final boolean CHECK_SLEEP_TIME = false;
+    private static final boolean IS_SLEEP = false;
     private static final long ONE_MILLION = 1000000L;
+
     private long mPrevPresentUsec;
     private long mPrevMonoUsec;
     private long mFixedFrameDurationUsec;
-    private boolean mLoopReset;
+    private boolean isLoopReset;
 
     /**
      * setFixedPlaybackRate
@@ -51,12 +52,11 @@ public class SpeedManager {
 
             // Compute the desired time delta between the previous frame and this frame.
             long frameDelta;
-            if (mLoopReset) {
+            if (isLoopReset) {
                 mPrevPresentUsec = presentationTimeUsec - ONE_MILLION / 30;
-                mLoopReset = false;
+                isLoopReset = false;
             }
             if (mFixedFrameDurationUsec != 0) {
-
                 // Caller requested a fixed frame rate.  Ignore PTS.
                 frameDelta = mFixedFrameDurationUsec;
             } else {
@@ -68,8 +68,9 @@ public class SpeedManager {
                 Log.e(TAG, "preRender: frameDelta == 0");
             } else if (frameDelta > 10 * ONE_MILLION) {
                 frameDelta = 5 * ONE_MILLION;
+            }else {
+                Log.d(TAG, "preRender: LastElse");
             }
-
             // when we want to wake up
             long desiredUsec = mPrevMonoUsec + frameDelta;
             long nowUsec = System.nanoTime() / 1000;
@@ -79,7 +80,7 @@ public class SpeedManager {
                     sleepTimeUsec = 500000;
                 }
                 try {
-                    if (CHECK_SLEEP_TIME) {
+                    if (IS_SLEEP) {
                         long startNsec = System.nanoTime();
                         Thread.sleep(sleepTimeUsec / 1000
                                 , (int) (sleepTimeUsec % 1000) * 1000);
@@ -101,25 +102,21 @@ public class SpeedManager {
     /**
      * loopReset
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:34
      */
     public void loopReset() {
-        mLoopReset = true;
+        isLoopReset = true;
     }
 
     /**
      * reset
      *
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:34
      */
     public void reset() {
         mPrevPresentUsec = 0;
         mPrevMonoUsec = 0;
         mFixedFrameDurationUsec = 0;
-        mLoopReset = false;
+        isLoopReset = false;
     }
 }

@@ -231,6 +231,5 @@ public class CacheUtil {
     public static Set<String> getSet(String key) {
         return mSp.getStringSet(key, new TreeSet<>());
     }
-
 }
 

@@ -33,7 +33,6 @@ public class DeviceInfoUtils {
      * getCpuNumCores
      *
      * @return int
-     * @throws null
      * @date 2023/3/8 09:33
      */
     public static int getCpuNumCores() {
@@ -57,12 +56,9 @@ public class DeviceInfoUtils {
 
             // Return the number of cores (virtual CPU devices)
             return files.length;
-        } catch (Exception e) {
-            Log.e(TAG, "getCpuNumCores: ", e);
+        } catch (Exception exception) {
+            Log.e(TAG, "getCpuNumCores: ", exception);
             return 1;
         }
     }
-
-
-
 }

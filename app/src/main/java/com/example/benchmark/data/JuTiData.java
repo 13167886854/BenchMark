@@ -25,8 +25,10 @@ public class JuTiData {
     }
 
     /**
-     * @description: getJutiItem
+     * getJutiItem
+     *
      * @return java.lang.String
+     * @description: getJutiItem
      * @date 2023/3/5 16:47
      */
     public String getJutiItem() {
@@ -34,8 +36,10 @@ public class JuTiData {
     }
 
     /**
+     * setJutiItem
+     *
      * @description: setJutiItem
-     * @param:  * @param item 具体字符串
+     * @param: * @param item 具体字符串
      * @date 2023/3/5 16:52
      */
     public void setJutiItem(String item) {
@@ -43,9 +47,11 @@ public class JuTiData {
     }
 
     /**
+     * getJuTiItemGrade
+     *
+     * @return java.lang.String
      * @description: getJuTiItemGrade
      * @param:
-     * @return java.lang.String
      * @date 2023/3/5 16:53
      */
     public String getJuTiItemGrade() {
@@ -53,13 +59,13 @@ public class JuTiData {
     }
 
     /**
+     * setJuTiItemGrade
+     *
      * @description: setJuTiItemGrade
-     * @param:  * @param itemGrade description
-     * @date 2023/3/5 16:53 
+     * @param: * @param itemGrade description
+     * @date 2023/3/5 16:53
      */
     public void setJuTiItemGrade(String itemGrade) {
         juTiItemGrade = itemGrade;
     }
-
-
 }

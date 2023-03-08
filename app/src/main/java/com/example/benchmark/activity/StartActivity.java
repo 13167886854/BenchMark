@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -21,10 +20,6 @@ import androidx.annotation.Nullable;
 
 import com.example.benchmark.R;
 import com.example.benchmark.utils.TapUtil;
-
-import java.io.File;
-
-import okhttp3.MediaType;
 
 /**
  * StartActivity

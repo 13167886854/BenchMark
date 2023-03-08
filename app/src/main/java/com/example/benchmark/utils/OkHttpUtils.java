@@ -78,7 +78,6 @@ public class OkHttpUtils {
      * getSemaphoreInstance
      *
      * @return java.util.concurrent.Semaphore
-     * @throws null
      * @date 2023/3/8 09:11
      */
     private static Semaphore getSemaphoreInstance() {
@@ -96,7 +95,6 @@ public class OkHttpUtils {
      * builder
      *
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public static OkHttpUtils builder() {
@@ -108,7 +106,6 @@ public class OkHttpUtils {
      *
      * @param url description
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public OkHttpUtils url(String url) {
@@ -122,7 +119,6 @@ public class OkHttpUtils {
      * @param key   description
      * @param value description
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public OkHttpUtils addParam(String key, String value) {
@@ -139,7 +135,6 @@ public class OkHttpUtils {
      * @param key   description
      * @param value description
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public OkHttpUtils addHeader(String key, String value) {
@@ -154,7 +149,6 @@ public class OkHttpUtils {
      * get
      *
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public OkHttpUtils get() {
@@ -169,8 +163,8 @@ public class OkHttpUtils {
                             append(URLEncoder.encode(entry.getValue(), "utf-8")).
                             append("&");
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "get: ", e);
+            } catch (Exception ex) {
+                Log.e(TAG, "get: ", ex);
             }
             urlBuilder.deleteCharAt(urlBuilder.length() - 1);
         }
@@ -183,7 +177,6 @@ public class OkHttpUtils {
      *
      * @param isJsonPost description
      * @return com.example.benchmark.utils.OkHttpUtils
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public OkHttpUtils post(boolean isJsonPost) {
@@ -210,7 +203,6 @@ public class OkHttpUtils {
      * sync
      *
      * @return java.lang.String
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public String sync() {
@@ -220,9 +212,9 @@ public class OkHttpUtils {
             if (response.body() != null) {
                 return response.body().toString();
             }
-        } catch (IOException e) {
-            Log.e(TAG, "sync: ", e);
-            return "请求失败：" + e.getMessage();
+        } catch (IOException ex) {
+            Log.e(TAG, "sync: ", ex);
+            return "请求失败：" + ex.getMessage();
         }
         return "未收到数据";
     }
@@ -231,7 +223,6 @@ public class OkHttpUtils {
      * async
      *
      * @return java.lang.String
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public String async() {
@@ -253,8 +244,8 @@ public class OkHttpUtils {
         });
         try {
             getSemaphoreInstance().acquire();
-        } catch (InterruptedException e) {
-            Log.e(TAG, "async: ", e);
+        } catch (InterruptedException ex) {
+            Log.e(TAG, "async: ", ex);
         }
         return buffer.toString();
     }
@@ -263,8 +254,6 @@ public class OkHttpUtils {
      * async
      *
      * @param callBack description
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:11
      */
     public void async(ICallBack callBack) {
@@ -298,8 +287,8 @@ public class OkHttpUtils {
                 for (Map.Entry<String, String> entry : headerMap.entrySet()) {
                     request.addHeader(entry.getKey(), entry.getValue());
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "setHeader: ", e);
+            } catch (Exception ex) {
+                Log.e(TAG, "setHeader: ", ex);
             }
         }
     }
@@ -319,8 +308,8 @@ public class OkHttpUtils {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new SecureRandom());
             ssfFactory = sc.getSocketFactory();
-        } catch (Exception e) {
-            Log.e(TAG, "createSSLSocketFactory: ", e);
+        } catch (Exception ex) {
+            Log.e(TAG, "createSSLSocketFactory: ", ex);
         }
         return ssfFactory;
     }
