@@ -46,7 +46,7 @@ import okhttp3.Response;
  * @since 2023/3/7 15:17
  */
 public class SettingFragment extends Fragment {
-    private String tmp_url = "https://1d2f09a7.r2.cpolar.top";
+    private String tmpUrl = "https://1d2f09a7.r2.cpolar.top";
     private String latestVersion = null;
     private Handler handler = new Handler() {
         @Override
@@ -78,7 +78,7 @@ public class SettingFragment extends Fragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                openBrowser(getContext(), tmp_url
+                                openBrowser(getContext(), tmpUrl
                                         + "/upgrade/update?version="
                                         + latestVersion + "&platform=Local");
                                 dialog.dismiss();
@@ -87,6 +87,9 @@ public class SettingFragment extends Fragment {
                 dialog.show();
                 Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。"
                         , Toast.LENGTH_SHORT).show();
+            }
+            else {
+                System.out.println(";");
             }
         }
     };
@@ -128,7 +131,7 @@ public class SettingFragment extends Fragment {
         Log.e("TWT", "localVersion: " + localVersion);
 
         OkHttpClient client = new OkHttpClient().newBuilder().build();
-        String url = tmp_url + "/upgrade/hint?version=" + localVersion + "&platform=Local";
+        String url = tmpUrl + "/upgrade/hint?version=" + localVersion + "&platform=Local";
 
         // 创建一个request对象
         Request request = new Request.Builder()

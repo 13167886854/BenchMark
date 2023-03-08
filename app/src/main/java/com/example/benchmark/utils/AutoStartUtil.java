@@ -35,11 +35,11 @@ public class AutoStartUtil {
             ComponentName componentName = new ComponentName("com.huawei.systemmanager",
                     "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity");
             intent.setComponent(componentName);
-        } else if(RomUtil.isMiui()) { // 小米
+        } else if (RomUtil.isMiui()) { // 小米
             ComponentName componentName = new ComponentName("com.miui.securitycenter",
                     "com.miui.permcenter.autostart.AutoStartManagementActivity");
             intent.setComponent(componentName);
-        } else if(RomUtil.isOppo()) { // oppo
+        } else if (RomUtil.isOppo()) { // oppo
             ComponentName componentName = null;
             if (Build.VERSION.SDK_INT >= 26) {
                 componentName = new ComponentName("com.coloros.safecenter",
@@ -50,7 +50,7 @@ public class AutoStartUtil {
             }
             intent.setComponent(componentName);
             // 上面的代码不管用了，因为oppo手机也是手机管家进行自启动管理
-        } else if(RomUtil.isVivo()) { // Vivo
+        } else if (RomUtil.isVivo()) { // Vivo
             ComponentName componentName = null;
             if (Build.VERSION.SDK_INT >= 26) {
                 componentName = new ComponentName("com.vivo.permissionmanager",
@@ -60,7 +60,7 @@ public class AutoStartUtil {
                         "com.iqoo.secure.ui.phoneoptimize.SoftwareManagerActivity");
             }
             intent.setComponent(componentName);
-        } else if(RomUtil.isFlyme()) {
+        } else if (RomUtil.isFlyme()) {
             // 魅族
             // 通过测试，发现魅族是真恶心，也是够了，之前版本还能查看到关于设置自启动这一界面，
             // 系统更新之后，完全找不到了，心里默默Fuck！
@@ -83,7 +83,7 @@ public class AutoStartUtil {
                 intent.putExtra("com.android.settings.ApplicationPkgName",
                         context.getPackageName());
             } else {
-                Log.e("TAG", "openStart: SDK-VERSION-ERROR" );
+                Log.e("TAG", "openStart: SDK-VERSION-ERROR");
             }
             intent = new Intent(Settings.ACTION_SETTINGS);
         }

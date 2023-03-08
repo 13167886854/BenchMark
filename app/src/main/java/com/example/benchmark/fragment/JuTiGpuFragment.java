@@ -31,8 +31,7 @@ public class JuTiGpuFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_gpu_fragment, container, false);
         mGpuInfo = mView.findViewById(R.id.juti_gpu_info);
         return mView;

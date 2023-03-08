@@ -61,14 +61,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @since 2023/3/7 17:21
  */
 public class MyAccessibilityService extends AccessibilityService {
-
     private final int MSG_CONTINUE_MONITOR = 0;
     private final int MSG_MONITOR_OVER = 1;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
 
-    //自动点击
+    // 自动点击
     private TapUtil tapUtil;
 
     private int resultCode;
@@ -101,10 +100,8 @@ public class MyAccessibilityService extends AccessibilityService {
         @Override
         public boolean handleMessage(@NonNull Message message) {
             if (message.what == MSG_CONTINUE_MONITOR) {
-                //Log.e("TWT", "handleMessage: "+"tteesstt" );
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-                //ServiceUtil.backToCePingActivity(MyAccessibilityService.this);
                  ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch,isCheckSoundFrame);
             } else if (message.what == MSG_MONITOR_OVER) {
                 Toast.makeText(MyAccessibilityService.this,
@@ -119,7 +116,7 @@ public class MyAccessibilityService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Notification notification = createForegroundNotification();
-        //启动前台服务
+        // 启动前台服务
         startForeground(1,notification);
         tapUtil = TapUtil.getUtil();
         tapUtil.setService(this);
@@ -132,38 +129,30 @@ public class MyAccessibilityService extends AccessibilityService {
     }
 
     private Notification createForegroundNotification(){
-        //前台通知的id名，任意
+        // 前台通知的id名，任意
         String channelId = "ForegroundService";
-        //前台通知的名称，任意
+        // 前台通知的名称，任意
         String channelName = "Service";
-        //发送通知的等级，此处为高，根据业务情况而定
+        // 发送通知的等级，此处为高，根据业务情况而定
         int importance = NotificationManager.IMPORTANCE_HIGH;
-        //判断Android版本，不同的Android版本请求不一样，以下代码为官方写法
+        // 判断Android版本，不同的Android版本请求不一样，以下代码为官方写法
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(channelId,channelName,importance);
             channel.setLightColor(Color.BLUE);
-            //channel.setLockscreenVisiability(Notification.VISIBILITY_PRIVATE);
             NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
-        //点击通知时可进入的Activity
+        // 点击通知时可进入的Activity
         Intent notificationIntent = new Intent(this, CePingActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        //最终创建的通知，以下代码为官方写法
-        //注释部分是可扩展的参数，根据自己的功能需求添加
-        return new NotificationCompat.Builder(this,channelId)
+        // 最终创建的通知，以下代码为官方写法
+        // 注释部分是可扩展的参数，根据自己的功能需求添加
+        return new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("AccessibilityService")
                 .setContentText("Benchmark无障碍服务工作中")
-                //.setSmallIcon(Icon)//通知显示的图标
                 .setContentIntent(pendingIntent)//点击通知进入Activity
-                //.setTicker("通知的提示语")
                 .build();
-        //.setOngoing(true)
-        //.setPriority(NotificationCompat.PRIORITY_MAX)
-        //.setCategory(Notification.CATEGORY_TRANSPORT)
-        //.setLargeIcon(Icon)
-        //.setWhen(System.currentTimeMillis())
     }
 
     @SuppressLint("WrongConstant")
@@ -224,12 +213,13 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        //Log.e("QT", "onAccessibilityEvent");
         if (service == null){
             return;
         }
         if (service.isFinished()) {
-            if (!isDealResult && !isCheckTouch) dealWithResult();
+            if (!isDealResult && !isCheckTouch){
+                dealWithResult();
+            }
             return;
         }
         service.onMonitor();
@@ -237,7 +227,9 @@ public class MyAccessibilityService extends AccessibilityService {
 
     private void captureScreen() {
         while (!service.isFinished()) {
-            if (!isStartCaptureScreen) continue;
+            if (!isStartCaptureScreen){
+                continue;
+            }
             try (Image image = mImageReader.acquireLatestImage()) {
                 if (image != null) {
                     Image.Plane[] planes = image.getPlanes();
@@ -264,7 +256,9 @@ public class MyAccessibilityService extends AccessibilityService {
             boolean isBlackOrWhiteExist = false;
             while (dealIndex < mStartTimes.size()) {
                 bitmapWithTime = mBitmapWithTime.poll();
-                if (bitmapWithTime == null) break;
+                if (bitmapWithTime == null){
+                    break;
+                }
                 long startTime = mStartTimes.get(dealIndex);
                 if (Math.abs(startTime - bitmapWithTime.second) < 1000L) {
                     if (!isBlackOrWhiteExist && isBitmapBlackOrWhite(bitmapWithTime.first)) {
@@ -347,18 +341,17 @@ public class MyAccessibilityService extends AccessibilityService {
         int height = bitmap.getHeight();
         int invalidPixelCount = 0;
         for (int i = 0; i < Math.min(width, height); i++) {
-            if (invalidPixelCount > Math.min(width, height) * 3 / 4) return true;
+            if (invalidPixelCount > Math.min(width, height) * 3 / 4) {
+                return true;
+            }
             int pixel = bitmap.getPixel(secureRandom.nextInt(width), secureRandom.nextInt(height));
-            if ((Color.red(pixel) == 0 && Color.green(pixel) == 0 && Color.blue(pixel) == 0) /*Black*/
-                    || (Color.red(pixel) == 255 && Color.green(pixel) == 255 && Color.blue(pixel) == 255 /*White*/)) {
+            if ((Color.red(pixel) == 0 && Color.green(pixel) == 0 && Color.blue(pixel) == 0)
+                    || (Color.red(pixel) == 255 && Color.green(pixel) == 255 && Color.blue(pixel) == 255)) {
                 invalidPixelCount++;
             }
         }
         return false;
     }
-
-
-
     private boolean isGamePlatform() {
         return CacheConst.PLATFORM_NAME_TENCENT_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_MI_GU_GAME.equals(checkPlatform)
@@ -384,5 +377,4 @@ public class MyAccessibilityService extends AccessibilityService {
     @Override
     public void onInterrupt() {
     }
-
 }

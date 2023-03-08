@@ -26,9 +26,8 @@ import com.example.benchmark.R;
 public class JuTiLiuChangFragment extends Fragment {
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.juti_liuchang_fragment, container, false);
-        return view;
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.juti_liuchang_fragment, container, false);
+        return inflater.inflate(R.layout.juti_liuchang_fragment, container, false);
     }
 }

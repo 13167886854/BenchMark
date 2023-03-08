@@ -79,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sp2 = getSharedPreferences("Login", MODE_PRIVATE);
         mUserName = findViewById(R.id.et_username);
         mUserName.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
                 Log.d(TAG, "beforeTextChanged: ");

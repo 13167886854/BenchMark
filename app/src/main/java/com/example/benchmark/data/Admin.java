@@ -7,10 +7,9 @@
 package com.example.benchmark.data;
 
 /**
- * Admin
- *
- * @version 1.0
- * @since 2023/3/7 15:09
+ * @Author: ranzili
+ * @Time: 2022/9/9 16:03
+ * @Description:
  */
 public class Admin {
     /** 全局变量记录管理员 */

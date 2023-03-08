@@ -219,35 +219,35 @@ public class ScoreUtil {
     public static void calcAndSaveFluencyScores(
             float averageFPS,
             float frameShakeRate,
-            float lowFrameRate,
+            BigDecimal lowFrameRate,
             float frameInterval,
             float jankCount,
-            float stutterRate,
+            BigDecimal stutterRate,
             String eachFps
     ) {
         // 保存流畅性结果
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
-        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate * 100);
+        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, (Set<String>) lowFrameRate.scaleByPowerOfTen(2));
         CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
-        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate * 100);
+        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, (Set<String>) stutterRate.scaleByPowerOfTen(2));
 
         // 计算流畅性分数
-        float averFpsScore = averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6;
-        float frameShakeScore = frameShakeRate < 10 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate);
-        float lowFrameScore = 100f * (1 - lowFrameRate) / 6;
-        float frameIntervalScore = frameInterval < 50 ? 100f / 6 : 100f * 50 / (6 * frameInterval);
-        float jankCountScore = 100f / (6 * (1 + jankCount));
-        float stutterRateScore = 100f / (6 * (1 - stutterRate));
-        int fluencyScore = (int) (averFpsScore + frameShakeScore + lowFrameScore
-                + frameIntervalScore + jankCountScore + stutterRateScore);
-
+        BigDecimal averFpsScore = BigDecimal.valueOf(averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6);
+        BigDecimal frameShakeScore = BigDecimal.valueOf(frameShakeRate < 10 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate));
+        BigDecimal lowFrameScore = BigDecimal.valueOf(100f * (1 - lowFrameRate.intValue()) / 6);
+        BigDecimal frameIntervalScore = BigDecimal.valueOf(frameInterval < 50 ? 100f / 6 : 100f * 50 / (6 * frameInterval));
+        BigDecimal jankCountScore = BigDecimal.valueOf(100f / (6 * (1 + jankCount)));
+        BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate.intValue())));
+//        int fluencyScore = (int) (averFpsScore + frameShakeScore + lowFrameScore
+//                + frameIntervalScore + jankCountScore + stutterRateScore);
+        int fluencyScore = (averFpsScore.add(frameShakeScore.add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
 
         // 判断数据是否为空
-        if (averageFPS + frameShakeRate + lowFrameRate + jankCount + stutterRate != 0.0f) {
+        if (averageFPS + frameShakeRate + lowFrameRate.add(stutterRate).intValue() + jankCount != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
@@ -377,12 +377,11 @@ public class ScoreUtil {
 
         // 计算稳定性分数
         startSuccessRate /= 100;
-        float startSuccessScore = 100f * startSuccessRate / 3;
-        float averageStartScore =
-                averageStartTime < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3;
-        float averageQuitScore =
-                averageQuitTime < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3;
-        int stabilityScores = (int) (startSuccessScore + averageStartScore + averageQuitScore);
+        BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRate / 3);
+        BigDecimal averageStartScore = new BigDecimal(averageStartTime < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3);
+        BigDecimal averageQuitScore = new BigDecimal(averageQuitTime < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3);
+//        int stabilityScores = (int) (startSuccessScore + averageStartScore + averageQuitScore);
+        int stabilityScores = (startSuccessScore.add(averageStartScore.add(averageQuitScore))).intValue();
 
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
@@ -472,9 +471,11 @@ public class ScoreUtil {
         Log.e("TWT", "GameTouchUtil.testNum: " + GameTouchUtil.testNum);
         Log.e("TWT", "testNum: " + testNum);
         Log.e("TWT", "time: " + time);
-        float averAccuracyScore = 100f * averageAccuracy / 2;
-        float responseTimeScore = time < 50 ? 50 : 100f * 50 / (2 * time);
-        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+
+        BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy / 2) ;
+        BigDecimal responseTimeScore = new BigDecimal(time < 50 ? 50 : 100f * 50 / (2 * time));
+//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+        int touchScore = (int) (averAccuracyScore.add(responseTimeScore)).intValue();
 
         // 保存触控体验分数
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
@@ -497,7 +498,6 @@ public class ScoreUtil {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void calcAndSaveTouchScores(
             String cloudDownTimeList, String cloudSpendTimeList) {
-
         //没有进行触控测试 没有数据时 直接返回
         if (cloudDownTimeList == null || cloudSpendTimeList == null) {
             return;
@@ -517,6 +517,7 @@ public class ScoreUtil {
                     cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
             Log.d("zzll", "calcAndSaveTouchScores: --" + cloudDownTimeListArr[i]);
         }
+
         for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
             cloudSpendTimeListArr[i] =
                     cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
@@ -529,49 +530,28 @@ public class ScoreUtil {
         TreeSet<String> localTapTimes =
                 (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
         Log.d("zzl", "localTapTimes: " + localTapTimes);
-        long responseTime0;
-        responseTime0 = (Long.parseLong(cloudDownTimeListArr[0])
-                - CacheUtil.getLong("tapTimeOnLocal1")
-                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
-        long responseTime1;
-        responseTime1 = (Long.parseLong(cloudDownTimeListArr[1])
-                - CacheUtil.getLong("tapTimeOnLocal2")
-                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
-        long responseTime2;
-        responseTime2 = (Long.parseLong(cloudDownTimeListArr[2])
-                - CacheUtil.getLong("tapTimeOnLocal3")
-                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
-        long responseTime3;
-        responseTime3 = (Long.parseLong(cloudDownTimeListArr[3])
-                - CacheUtil.getLong("tapTimeOnLocal4")
+
+        long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
+                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;;
+        long responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2")
+                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;;
+        long responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3")
+                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;;
+        long responseTime3 = responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4")
                 + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
-        long responseTime4;
-        responseTime4 = (Long.parseLong(cloudDownTimeListArr[4])
-                - CacheUtil.getLong("tapTimeOnLocal5")
+        long responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5")
                 + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
-        long responseTime5;
-        responseTime5 = (Long.parseLong(cloudDownTimeListArr[5])
-                - CacheUtil.getLong("tapTimeOnLocal6")
+        long responseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6")
                 + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
-        long responseTime6;
-        responseTime6 = (Long.parseLong(cloudDownTimeListArr[6])
-                - CacheUtil.getLong("tapTimeOnLocal7")
+        long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
                 + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
-        long responseTime7;
-        responseTime7 = (Long.parseLong(cloudDownTimeListArr[7])
-                - CacheUtil.getLong("tapTimeOnLocal8")
+        long responseTime7 =  (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
                 + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
-        long responseTime8;
-        responseTime8 = (Long.parseLong(cloudDownTimeListArr[8])
-                - CacheUtil.getLong("tapTimeOnLocal9")
+        long responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9")
                 + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
-        long responseTime9;
-        responseTime9 = (Long.parseLong(cloudDownTimeListArr[9])
-                - CacheUtil.getLong("tapTimeOnLocal10")
+        long responseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10")
                 + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
-        long responseTime10;
-        responseTime10 = (Long.parseLong(cloudDownTimeListArr[10])
-                - CacheUtil.getLong("tapTimeOnLocal11")
+        long responseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11")
                 + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
         Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal11")
                 - CacheUtil.getLong("tapTimeOnLocal1")));
@@ -638,20 +618,24 @@ public class ScoreUtil {
         for (Long aLong : longs) {
             allResponseTime += aLong;
         }
-        float avgResponseTime = allResponseTime / longs.size();
+        BigDecimal avgResponseTime = new BigDecimal(allResponseTime / longs.size());
 
         // 正确率
-        float averageAccuracy = (float) (responseNum - 4) / longs.size();
-        float averAccuracyScore = 100f * averageAccuracy / 2;
-        float responseTimeScore = avgResponseTime < 50 ? 50 : 100f * 50 / (2 * avgResponseTime);
-        int touchScore = (int) (averAccuracyScore + responseTimeScore);
-
+//        float averageAccuracy = (float) (responseNum - 4) / longs.size();
+        BigDecimal averageAccuracy = new BigDecimal((responseNum - 4) / longs.size());
+        BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy.intValue() / 2);
+        BigDecimal responseTimeScore = new BigDecimal(avgResponseTime.intValue() < 50 ? 50 : 100f * 50 / (2 * avgResponseTime.intValue()));
+//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
+        int touchScore =(averAccuracyScore.add(responseTimeScore)).intValue();
         // 保存触控体验分数
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
-        averageAccuracy *= 100;
-        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
-        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, avgResponseTime);
-        if (avgResponseTime + averageAccuracy != 0.0f) {
+
+        averageAccuracy = averageAccuracy.scaleByPowerOfTen(2);
+//        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
+        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, (Set<String>) averageAccuracy);
+//        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, avgResponseTime);
+        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, (Set<String>) avgResponseTime);
+        if (avgResponseTime.add(averageAccuracy).intValue() != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
@@ -748,15 +732,15 @@ public class ScoreUtil {
 
         // 计算音画质量分数
         String[] resolutionArray = resolution.split("X");
-        float resolutionValue =
-                Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]);
-        float resolutionScore = 100f * resolutionValue / (4 * 1920 * 1080);
-        float maxDiffValueScore = maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue);
+        BigDecimal resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]));
+        BigDecimal resolutionScore = new BigDecimal(100f * resolutionValue.floatValue() / (4 * 1920 * 1080));
+        BigDecimal maxDiffValueScore = new BigDecimal(maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue));
         psnr = psnr > 40 ? 40 : psnr;
-        float d3 = (100 * ((psnr / 40) + ssim)) / 8;
-        float d4 = (float) ((100 * pesq) / (4.5 * 4));
-        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + d3 + d4);
-
+        BigDecimal d3 = new BigDecimal((100 * ((psnr / 40) + ssim)) / 8);
+        BigDecimal d4 = new BigDecimal(((100 * pesq) / (4.5 * 4)));
+//        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + d3 + d4);
+//        int soundFrameScore = (resolutionScore + maxDiffValueScore + (d3.add(d4)).intValue())
+          int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
         if (YinHuaData.pesq != null && YinHuaData.ssim != null && YinHuaData.psnr != null) {

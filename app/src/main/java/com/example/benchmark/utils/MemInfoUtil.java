@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,8 @@ public class MemInfoUtil {
 
         try {
             String line;
-            BufferedReader br = new BufferedReader(new FileReader(File.separator + "proc" + File.separator + "meminfo"));
+            BufferedReader br = new BufferedReader(
+                    new FileReader(File.separator + "proc" + File.separator + "meminfo"));
             while ((line = br.readLine()) != null) {
                 result.add(line);
             }
@@ -100,17 +102,22 @@ public class MemInfoUtil {
      * @param bytes
      * @return
      */
-    public static String bytes2kb(float bytes) {
+    public static String bytes2kb(BigDecimal bytes) {
+        int numGb = bytes.divide(BigDecimal.valueOf(GB)).intValue();
+        int numMb = bytes.divide(BigDecimal.valueOf(MB)).intValue();
+        int numKb = bytes.divide(BigDecimal.valueOf(KB)).intValue();
         // 格式化小数
         DecimalFormat format = new DecimalFormat("###.00");
-        if (bytes / GB >= 1) {
-            return format.format(bytes / GB) + " GB";
-        } else if (bytes / MB >= 1) {
-            return format.format(bytes / MB) + " MB";
-        } else if (bytes / KB >= 1) {
-            return format.format(bytes / KB) + " KB";
+        if (numGb >= 1) {
+            return format.format(numGb) + " GB";
+        } else if (numMb >= 1) {
+            return format.format(numMb) + " MB";
         } else {
-            return bytes + " B";
+            if (numKb >= 1) {
+                return format.format(numKb) + " KB";
+            } else {
+                return bytes + " B";
+            }
         }
     }
 }
