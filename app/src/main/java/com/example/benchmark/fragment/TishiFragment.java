@@ -225,7 +225,7 @@ public class TishiFragment extends Fragment {
                                                         Admin.adminName = data.split(" ")[1];
                                                         Log.d(TAG, "onSuccessful: Admin.adminName=="
                                                                 + Admin.adminName);
-                                                        Admin.STATUS = "Success";
+                                                        Admin.status = "Success";
                                                         mMessage = mHandler.obtainMessage();
                                                         mMessage.what = 2;
                                                         mHandler.sendMessage(mMessage);

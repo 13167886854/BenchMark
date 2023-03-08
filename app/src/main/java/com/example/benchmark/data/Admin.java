@@ -27,5 +27,5 @@ public class Admin {
 
     /** 全局变量记录测试时间 */
     public static String testTime;
-    public static String STATUS = "Failure"; // 登录状态
+    public static String status = "Failure"; // 登录状态
 }
