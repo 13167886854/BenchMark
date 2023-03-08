@@ -33,7 +33,8 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnBenchmarkResultItemClickListener onClickListener;
 
-    public CePingAdapter(List<CepingData> data, OnBenchmarkResultItemClickListener onClickListener) {
+    public CePingAdapter(List<CepingData> data
+            , OnBenchmarkResultItemClickListener onClickListener) {
         this.data = data;
         this.onClickListener = onClickListener;
     }
@@ -41,7 +42,8 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ceping_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ceping_item
+                , parent, false);
         return new RecyclerViewHolder(view);
     }
 

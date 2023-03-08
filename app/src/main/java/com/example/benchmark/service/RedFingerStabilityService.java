@@ -42,13 +42,20 @@ public class RedFingerStabilityService implements IStabilityService {
     private long mStartTime = 0L;
     private long mQuitTime = 0L;
     private long mLastTapTime = 0L;
-
     private boolean isClickStartControl = false;
     private boolean isClickContinueControl = false;
     private boolean isClickQuitNotice = false;
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
 
+    /**
+     * RedFingerStabilityService
+     *
+     * @param service description
+     * @return
+     * @throws null
+     * @date 2023/3/8 11:02
+     */
     public RedFingerStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
@@ -123,6 +130,7 @@ public class RedFingerStabilityService implements IStabilityService {
 
     @Override
     public void startQuitCloudPhone() {
+
         // 双击返回键退出云手机
         service.performGlobalAction(GLOBAL_ACTION_BACK);
         try {

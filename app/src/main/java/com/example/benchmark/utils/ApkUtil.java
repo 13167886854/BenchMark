@@ -25,16 +25,26 @@ import java.util.List;
 public class ApkUtil {
 
     /**
-     * judge whether the apk is installed
+     * isApkInstalled
+     *
+     * @param context     context
+     * @param packageName packageName
+     * @return boolean
+     * @throws null
+     * @date 2023/3/8 08:54
      */
     private static boolean isApkInstalled(Context context, String packageName) {
-        if (packageName == null || packageName.isEmpty()) return false;
+        if (packageName == null || packageName.isEmpty()) {
+            return false;
+        }
         final PackageManager packageManager = context.getPackageManager();
         @SuppressLint("QueryPermissionsNeeded")
         List<PackageInfo> info = packageManager.getInstalledPackages(0);
-        if(info == null || info.isEmpty()) return false;
-        for ( int i = 0; i < info.size(); i++ ) {
-            if(packageName.equals(info.get(i).packageName)) {
+        if (info == null || info.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < info.size(); i++) {
+            if (packageName.equals(info.get(i).packageName)) {
                 return true;
             }
         }
@@ -42,18 +52,33 @@ public class ApkUtil {
     }
 
     /**
-     * Go to App market to see the app's details
+     * launchAppDetailInMarket
      *
-     * @param packageName target App package name
+     * @param context     context
+     * @param packageName packageName
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:54
      */
     private static void launchAppDetailInMarket(Context context, String packageName) {
-        if (packageName == null || packageName.isEmpty()) return;
+        if (packageName == null || packageName.isEmpty()) {
+            return;
+        }
         Intent toAppMarketIntent = new Intent(Intent.ACTION_VIEW);
         toAppMarketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         toAppMarketIntent.setData(Uri.parse("market://details?id=" + packageName));
         context.startActivity(toAppMarketIntent);
     }
 
+    /**
+     * launchApp
+     *
+     * @param context     context
+     * @param packageName packageName
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:46
+     */
     public static void launchApp(Context context, String packageName) {
         if (isApkInstalled(context, packageName)) {
             Intent launchAppIntent = context.getPackageManager()
@@ -62,13 +87,12 @@ public class ApkUtil {
                 launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(launchAppIntent);
             } else {
-                Toast.makeText(context, "Launch " + packageName + " Fail.",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Launch " + packageName + " Fail."
+                        , Toast.LENGTH_SHORT).show();
             }
         } else {
             launchAppDetailInMarket(context, packageName);
         }
     }
-
 }
 

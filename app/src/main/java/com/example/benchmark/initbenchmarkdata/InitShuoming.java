@@ -4,7 +4,7 @@
  *
  */
 
-package com.example.benchmark.InitbenchMarkData;
+package com.example.benchmark.initbenchmarkdata;
 
 import com.example.benchmark.data.ShuoMingData;
 import com.example.benchmark.R;
@@ -22,14 +22,29 @@ public class InitShuoming {
     private List<ShuoMingData> list;
     private InitShuomingItem initLiuchang;
 
+    /**
+     * InitShuoming
+     *
+     * @return
+     * @throws null
+     * @date 2023/3/7 17:33
+     */
     public InitShuoming() {
         list = new ArrayList<>();
         initLiuchang = new InitShuomingItem();
-        initLiuchang.InitLiuchang();
-        ShuoMingData data = new ShuoMingData(R.drawable.blue_liuchang, "流畅性", initLiuchang.getList());
+        initLiuchang.initLiuchang();
+        ShuoMingData data = new ShuoMingData(R.drawable.blue_liuchang, "流畅性"
+                , initLiuchang.getList());
         list.add(data);
     }
 
+    /**
+     * getList
+     *
+     * @return java.util.List<com.example.benchmark.data.ShuoMingData>
+     * @throws null
+     * @date 2023/3/8 08:43
+     */
     public List<ShuoMingData> getList() {
         return list;
     }

@@ -41,8 +41,39 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
     private static final String TAG = "GLRenderer";
     private final int timerRelax = 1;
     private final int timerWork = 2;
-    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
+    private final float[] projectionMatrix = new float[16];
+    private final float[] textureVertexData = {
+            1f, 0f,
+            0f, 0f,
+            1f, 1f,
+            0f, 1f
+    };
+    private final float[] vertexData = {
+            1f, -1f, 0f,
+            -1f, -1f, 0f,
+            1f, 1f, 0f,
+            -1f, 1f, 0f
+    };
+
+    private float[] mSTMatrix = new float[16];
+    private int uSTMMatrixHandle;
+    private boolean isUpdateSurface;
+    private int screenWidth;
+    private int screenHeight;
     private boolean isTimerRelaxing = false;
+    private int aPositionLocation;
+    private int programId;
+    private int uTextureSamplerLocation;
+    private int aTextureCoordLocation;
+    private int textureId;
+    private int uMatrixLocation;
+
+    private Context context;
+    private FloatBuffer vertexBuffer;
+    private FloatBuffer textureVertexBuffer;
+    private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
+    private SurfaceTexture surfaceTexture;
+    private MediaPlayer mediaPlayer;
 
     private Handler handler = new Handler() {
         @Override
@@ -60,40 +91,14 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         }
     };
 
-    private Context context;
-    private int aPositionLocation;
-    private int programId;
-    private FloatBuffer vertexBuffer;
-    private final float[] vertexData = {
-            1f, -1f, 0f,
-            -1f, -1f, 0f,
-            1f, 1f, 0f,
-            -1f, 1f, 0f
-    };
-
-    private final float[] projectionMatrix = new float[16];
-    private int uMatrixLocation;
-
-    private final float[] textureVertexData = {
-            1f, 0f,
-            0f, 0f,
-            1f, 1f,
-            0f, 1f
-    };
-    private FloatBuffer textureVertexBuffer;
-    private int uTextureSamplerLocation;
-    private int aTextureCoordLocation;
-    private int textureId;
-
-    private SurfaceTexture surfaceTexture;
-    private MediaPlayer mediaPlayer;
-    private float[] mSTMatrix = new float[16];
-    private int uSTMMatrixHandle;
-
-    private boolean isUpdateSurface;
-    private int screenWidth;
-    private int screenHeight;
-
+    /**
+     * CheckVedioUpdateFrameRenderer
+     *
+     * @param context description
+     * @return
+     * @throws null
+     * @date 2023/3/8 10:02
+     */
     public CheckVedioUpdateFrameRenderer(Context context) {
         this.context = context;
         synchronized (this) {
@@ -110,7 +115,6 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
                 .asFloatBuffer()
                 .put(textureVertexData);
         textureVertexBuffer.position(0);
-
         initMediaPlayer();
     }
 
@@ -120,15 +124,12 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         String fragmentShader = ShaderUtils.readRawTextFile(context, R.raw.fragment_sharder);
         programId = ShaderUtils.createProgram(vertexShader, fragmentShader);
         aPositionLocation = GLES20.glGetAttribLocation(programId, "aPosition");
-
         uMatrixLocation = GLES20.glGetUniformLocation(programId, "uMatrix");
         uSTMMatrixHandle = GLES20.glGetUniformLocation(programId, "uSTMatrix");
         uTextureSamplerLocation = GLES20.glGetUniformLocation(programId, "sTexture");
         aTextureCoordLocation = GLES20.glGetAttribLocation(programId, "aTexCoord");
-
         int[] textures = new int[1];
         GLES20.glGenTextures(1, textures, 0);
-
         textureId = textures[0];
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
         ShaderUtils.checkGlError("glBindTexture mTextureID");
@@ -136,10 +137,10 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
                 GLES20.GL_NEAREST);
         GLES20.glTexParameterf(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER,
                 GLES20.GL_LINEAR);
-
         surfaceTexture = new SurfaceTexture(textureId);
-        surfaceTexture.setOnFrameAvailableListener(this); // 监听是否有新的一帧数据到来
 
+        // 监听是否有新的一帧数据到来
+        surfaceTexture.setOnFrameAvailableListener(this);
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
     }
@@ -158,7 +159,6 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         screenHeight = height;
         try {
             mediaPlayer.prepareAsync();
-
         } catch (IllegalStateException e) {
             Log.e("TWT", "onSurfaceChanged: " + e.toString());
         }
@@ -169,7 +169,9 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         synchronized (this) {
             if (isUpdateSurface) {
-                surfaceTexture.updateTexImage(); // 获取新数据
+
+                // 获取新数据
+                surfaceTexture.updateTexImage();
 
                 // 让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
                 surfaceTexture.getTransformMatrix(mSTMatrix);
@@ -183,21 +185,20 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
             }
         }
         GLES20.glUseProgram(programId);
-        GLES20.glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0);
-        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1, false, mSTMatrix, 0);
-
+        GLES20.glUniformMatrix4fv(uMatrixLocation, 1
+                , false, projectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1
+                , false, mSTMatrix, 0);
         vertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aPositionLocation);
         GLES20.glVertexAttribPointer(aPositionLocation, 3, GLES20.GL_FLOAT, false,
                 12, vertexBuffer);
-
         textureVertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aTextureCoordLocation);
-        GLES20.glVertexAttribPointer(aTextureCoordLocation, 2, GLES20.GL_FLOAT, false, 8, textureVertexBuffer);
-
+        GLES20.glVertexAttribPointer(aTextureCoordLocation, 2
+                , GLES20.GL_FLOAT, false, 8, textureVertexBuffer);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
-
         GLES20.glUniform1i(uTextureSamplerLocation, 0);
         GLES20.glViewport(0, 0, screenWidth, screenHeight);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
@@ -218,12 +219,22 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         float screenRatio = (float) screenWidth / screenHeight;
         float videoRatio = (float) videoHeight / videoWidth;
         if (videoRatio > screenRatio) {
-            Matrix.orthoM(projectionMatrix, 0, -1f, 1f, -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -1f, 1f
+                    , -videoRatio / screenRatio, videoRatio / screenRatio
+                    , -1f, 1f);
         } else {
-            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio, screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio
+                    , screenRatio / videoRatio, -1f, 1f, -1f, 1f);
         }
     }
 
+    /**
+     * getMediaPlayer
+     *
+     * @return android.media.MediaPlayer
+     * @throws null
+     * @date 2023/3/8 10:03
+     */
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }

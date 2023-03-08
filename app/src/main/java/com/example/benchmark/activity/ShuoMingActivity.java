@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.benchmark.adapter.ShuoMingAdapter;
-import com.example.benchmark.InitbenchMarkData.InitShuoming;
+import com.example.benchmark.initbenchmarkdata.InitShuoming;
 import com.example.benchmark.R;
 
 /**

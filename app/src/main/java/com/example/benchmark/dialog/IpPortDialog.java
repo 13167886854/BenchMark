@@ -4,7 +4,7 @@
  *
  */
 
-package com.example.benchmark.diaLog;
+package com.example.benchmark.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

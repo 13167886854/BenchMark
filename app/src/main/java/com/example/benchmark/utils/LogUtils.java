@@ -6,6 +6,7 @@
 
 package com.example.benchmark.utils;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 /**
@@ -15,8 +16,11 @@ import android.util.Log;
  * @since 2023/3/7 17:24
  */
 public class LogUtils {
+
+    // TAG
     public static final String TAG = "ZXingLite";
 
+    // VERTICAL
     public static final String VERTICAL = "|";
 
     /**
@@ -54,6 +58,7 @@ public class LogUtils {
      */
     public static final int ASSERT = 7;
 
+    // TAG_FORMAT
     public static final String TAG_FORMAT = "%s.%s(%s:%d)";
 
     /**
@@ -70,18 +75,48 @@ public class LogUtils {
         throw new AssertionError();
     }
 
+    /**
+     * setShowLog
+     *
+     * @param isShowLog description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:01
+     */
     public static void setShowLog(boolean isShowLog) {
         LogUtils.isShowLog = isShowLog;
     }
 
+    /**
+     * isShowLog
+     *
+     * @return boolean
+     * @throws null
+     * @date 2023/3/8 09:01
+     */
     public static boolean isShowLog() {
         return isShowLog;
     }
 
+    /**
+     * getPriority
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:01
+     */
     public static int getPriority() {
         return priority;
     }
 
+    /**
+     * setPriority
+     *
+     * @param priority description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:01
+     */
     public static void setPriority(int priority) {
         LogUtils.priority = priority;
     }
@@ -91,51 +126,58 @@ public class LogUtils {
      *
      * @return TAG|className.methodName(fileName:lineNumber)
      */
+    @SuppressLint("DefaultLocale")
     private static String generateTag(StackTraceElement caller) {
         String tag = TAG_FORMAT;
         String callerClazzName = caller.getClassName();
         callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
-        tag = String.format(tag, callerClazzName, caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
+        tag = String.format(tag, callerClazzName, caller.getMethodName(), caller.getFileName()
+                , caller.getLineNumber());
         return new StringBuilder().append(TAG).append(VERTICAL).append(tag).toString();
     }
 
     /**
-     * 获取堆栈
+     * getStackTraceElement
      *
-     * @param num num=0		VMStack
-     *            num=1		Thread
-     *            num=3		CurrentStack
-     *            num=4		CallerStack
-     *            ...
-     * @return
+     * @param num num
+     * @return java.lang.StackTraceElement
+     * @throws null
+     * @date 2023/3/8 09:00
      */
     public static StackTraceElement getStackTraceElement(int num) {
         return Thread.currentThread().getStackTrace()[num];
     }
 
     /**
-     * 获取调用方的堆栈TAG
+     * getCallerStackLogTag
      *
-     * @return
+     * @return java.lang.String
+     * @throws null
+     * @date 2023/3/8 09:00
      */
     private static String getCallerStackLogTag() {
         return generateTag(getStackTraceElement(5));
     }
 
     /**
-     * @param th
-     * @return
+     * getStackTraceString
+     *
+     * @param th description
+     * @return java.lang.String
+     * @throws null
+     * @date 2023/3/8 09:00
      */
     private static String getStackTraceString(Throwable th) {
         return Log.getStackTraceString(th);
     }
 
-    // -----------------------------------Log.v
-
     /**
-     * Log.v
+     * logV
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
      */
     public static void logV(String msg) {
         if (isShowLog && priority <= VERBOSE) {
@@ -143,24 +185,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * logV
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
+     */
     public static void logV(Throwable th) {
         if (isShowLog && priority <= VERBOSE) {
             Log.v(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * logV
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
+     */
     public static void logV(String msg, Throwable th) {
         if (isShowLog && priority <= VERBOSE) {
             Log.v(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------Log.d
-
     /**
-     * Log.d
+     * logD
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
      */
     public static void logD(String msg) {
         if (isShowLog && priority <= DEBUG) {
@@ -168,24 +228,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * logD
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
+     */
     public static void logD(Throwable th) {
         if (isShowLog && priority <= DEBUG) {
             Log.d(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * logD
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
+     */
     public static void logD(String msg, Throwable th) {
         if (isShowLog && priority <= DEBUG) {
             Log.d(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------Log.i
-
     /**
-     * Log.i
+     * logI
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:58
      */
     public static void logI(String msg) {
         if (isShowLog && priority <= INFO) {
@@ -193,24 +271,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * logI
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logI(Throwable th) {
         if (isShowLog && priority <= INFO) {
             Log.i(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * logI
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logI(String msg, Throwable th) {
         if (isShowLog && priority <= INFO) {
             Log.i(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------Log.w
-
     /**
-     * Log.w
+     * logW
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
      */
     public static void logW(String msg) {
         if (isShowLog && priority <= WARN) {
@@ -218,24 +314,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * logW
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logW(Throwable th) {
         if (isShowLog && priority <= WARN) {
             Log.w(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * logW
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logW(String msg, Throwable th) {
         if (isShowLog && priority <= WARN) {
             Log.w(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------Log.e
-
     /**
-     * Log.e
+     * logE
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
      */
     public static void logE(String msg) {
         if (isShowLog && priority <= ERROR) {
@@ -243,24 +357,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * logE
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logE(Throwable th) {
         if (isShowLog && priority <= ERROR) {
             Log.e(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * logE
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void logE(String msg, Throwable th) {
         if (isShowLog && priority <= ERROR) {
             Log.e(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------Log.wtf
-
     /**
-     * Log.wtf
+     * wtf
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
      */
     public static void wtf(String msg) {
         if (isShowLog && priority <= ASSERT) {
@@ -268,24 +400,42 @@ public class LogUtils {
         }
     }
 
+    /**
+     * wtf
+     *
+     * @param th description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void wtf(Throwable th) {
         if (isShowLog && priority <= ASSERT) {
             Log.wtf(getCallerStackLogTag(), getStackTraceString(th));
         }
     }
 
+    /**
+     * wtf
+     *
+     * @param msg description
+     * @param th  description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
+     */
     public static void wtf(String msg, Throwable th) {
         if (isShowLog && priority <= ASSERT) {
             Log.wtf(getCallerStackLogTag(), String.valueOf(msg), th);
         }
     }
 
-    // -----------------------------------System.out.print
-
     /**
-     * System.out.print
+     * print
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 08:59
      */
     public static void print(String msg) {
         if (isShowLog && priority <= PRINTLN) {
@@ -293,18 +443,27 @@ public class LogUtils {
         }
     }
 
+    /**
+     * print
+     *
+     * @param obj description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:00
+     */
     public static void print(Object obj) {
         if (isShowLog && priority <= PRINTLN) {
             Log.d(TAG, "obj: " + obj);
         }
     }
 
-    // -----------------------------------System.out.printf
-
     /**
-     * System.out.printf
+     * printf
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:00
      */
     public static void printf(String msg) {
         if (isShowLog && priority <= PRINTLN) {
@@ -312,12 +471,13 @@ public class LogUtils {
         }
     }
 
-    // -----------------------------------System.out.println
-
     /**
-     * System.out.println
+     * println
      *
-     * @param msg
+     * @param msg description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:00
      */
     public static void println(String msg) {
         if (isShowLog && priority <= PRINTLN) {
@@ -325,6 +485,14 @@ public class LogUtils {
         }
     }
 
+    /**
+     * println
+     *
+     * @param obj description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:00
+     */
     public static void println(Object obj) {
         if (isShowLog && priority <= PRINTLN) {
             Log.d(TAG, "msg: " + obj);

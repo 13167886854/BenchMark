@@ -56,20 +56,20 @@ public final class DecodeFormatManager {
     public static final Map<DecodeHintType, Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
 
     static {
+
         // all hints
         addDecodeHintTypes(ALL_HINTS, getAllFormats());
+
         // one dimension
         addDecodeHintTypes(ONE_DIMENSIONAL_HINTS, getOneDimensionalFormats());
+
         // Two dimension
         addDecodeHintTypes(TWO_DIMENSIONAL_HINTS, getTwoDimensionalFormats());
+
         // default hints
         addDecodeHintTypes(DEFAULT_HINTS, getDefaultFormats());
     }
 
-    /**
-     * 所有支持的{@link BarcodeFormat}
-     * @return
-     */
     private static List<BarcodeFormat> getAllFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.AZTEC);
@@ -95,19 +95,18 @@ public final class DecodeFormatManager {
     /**
      * 二维码
      * 包括如下几种格式：
-     *  {@link BarcodeFormat#CODABAR}
-     *  {@link BarcodeFormat#CODE_39}
-     *  {@link BarcodeFormat#CODE_93}
-     *  {@link BarcodeFormat#CODE_128}
-     *  {@link BarcodeFormat#EAN_8}
-     *  {@link BarcodeFormat#EAN_13}
-     *  {@link BarcodeFormat#ITF}
-     *  {@link BarcodeFormat#RSS_14}
-     *  {@link BarcodeFormat#RSS_EXPANDED}
-     *  {@link BarcodeFormat#UPC_A}
-     *  {@link BarcodeFormat#UPC_E}
-     *  {@link BarcodeFormat#UPC_EAN_EXTENSION}
-     * @return
+     * {@link BarcodeFormat#CODABAR}
+     * {@link BarcodeFormat#CODE_39}
+     * {@link BarcodeFormat#CODE_93}
+     * {@link BarcodeFormat#CODE_128}
+     * {@link BarcodeFormat#EAN_8}
+     * {@link BarcodeFormat#EAN_13}
+     * {@link BarcodeFormat#ITF}
+     * {@link BarcodeFormat#RSS_14}
+     * {@link BarcodeFormat#RSS_EXPANDED}
+     * {@link BarcodeFormat#UPC_A}
+     * {@link BarcodeFormat#UPC_E}
+     * {@link BarcodeFormat#UPC_EAN_EXTENSION}
      */
     private static List<BarcodeFormat> getOneDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -129,12 +128,11 @@ public final class DecodeFormatManager {
     /**
      * 二维码
      * 包括如下几种格式：
-     *  {@link BarcodeFormat#AZTEC}
-     *  {@link BarcodeFormat#DATA_MATRIX}
-     *  {@link BarcodeFormat#MAXICODE}
-     *  {@link BarcodeFormat#PDF_417}
-     *  {@link BarcodeFormat#QR_CODE}
-     * @return
+     * {@link BarcodeFormat#AZTEC}
+     * {@link BarcodeFormat#DATA_MATRIX}
+     * {@link BarcodeFormat#MAXICODE}
+     * {@link BarcodeFormat#PDF_417}
+     * {@link BarcodeFormat#QR_CODE}
      */
     private static List<BarcodeFormat> getTwoDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -149,11 +147,10 @@ public final class DecodeFormatManager {
     /**
      * 默认支持的格式
      * 包括如下几种格式：
-     *  {@link BarcodeFormat#QR_CODE}
-     *  {@link BarcodeFormat#UPC_A}
-     *  {@link BarcodeFormat#EAN_13}
-     *  {@link BarcodeFormat#CODE_128}
-     * @return
+     * {@link BarcodeFormat#QR_CODE}
+     * {@link BarcodeFormat#UPC_A}
+     * {@link BarcodeFormat#EAN_13}
+     * {@link BarcodeFormat#CODE_128}
      */
     private static List<BarcodeFormat> getDefaultFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -169,9 +166,12 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 支持解码的格式
-     * @param barcodeFormats {@link BarcodeFormat}
-     * @return
+     * createDecodeHints
+     *
+     * @param barcodeFormats description
+     * @return java.util.Map<com.google.zxing.DecodeHintType, java.lang.Object>
+     * @throws null
+     * @date 2023/3/8 09:24
      */
     public static Map<DecodeHintType, Object> createDecodeHints(@NonNull BarcodeFormat... barcodeFormats) {
         Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
@@ -180,9 +180,12 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 支持解码的格式
-     * @param barcodeFormat {@link BarcodeFormat}
-     * @return
+     * createDecodeHint
+     *
+     * @param barcodeFormat description
+     * @return java.util.Map<com.google.zxing.DecodeHintType, java.lang.Object>
+     * @throws null
+     * @date 2023/3/8 09:24
      */
     public static Map<DecodeHintType, Object> createDecodeHint(@NonNull BarcodeFormat barcodeFormat) {
         Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
@@ -190,16 +193,14 @@ public final class DecodeFormatManager {
         return hints;
     }
 
-    /**
-     *
-     * @param hints
-     * @param formats
-     */
-    private static void addDecodeHintTypes(Map<DecodeHintType,Object> hints, List<BarcodeFormat> formats) {
+    private static void addDecodeHintTypes(Map<DecodeHintType, Object> hints, List<BarcodeFormat> formats) {
+
         // Image is known to be of one of a few possible formats.
         hints.put(DecodeHintType.POSSIBLE_FORMATS, formats);
+
         // Spend more time to try to find a barcode; optimize for accuracy, not speed.
         hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+
         // Specifies what character encoding to use when decoding, where applicable (type String)
         hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
     }

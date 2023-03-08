@@ -19,6 +19,8 @@ import com.example.benchmark.utils.CacheUtil;
  * @since 2023/3/7 17:29
  */
 public class BaseApp extends Application {
+
+    // context
     @SuppressLint("StaticFieldLeak")
     public static Context context;
 

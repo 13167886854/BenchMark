@@ -30,21 +30,36 @@ import java.nio.ByteBuffer;
  */
 public class AudioDecodeThread extends Thread implements Runnable {
     private static final String TAG = AudioDecodeThread.class.getSimpleName();
-    private MediaExtractor mMediaExtractor;
     private int mAudioTrackIndex = -1;
-    private MediaCodec mAudioDecoder;
-
-    private String mMp4FilePath;
-
-    private int mSessionId;
-    private Context context;
     private long audiocurtime;
+    private String mMp4FilePath;
+    private int mSessionId;
 
+    private Context context;
+    private MediaCodec mAudioDecoder;
+    private MediaExtractor mMediaExtractor;
 
+    /**
+     * AudioDecodeThread
+     *
+     * @param name description
+     * @return
+     * @throws null
+     * @date 2023/3/8 09:42
+     */
     public AudioDecodeThread(String name) {
         super(name);
     }
 
+    /**
+     * AudioDecodeThread
+     *
+     * @param path    description
+     * @param context description
+     * @return
+     * @throws null
+     * @date 2023/3/8 09:42
+     */
     public AudioDecodeThread(String path, Context context) {
         mMp4FilePath = path;
         this.context = context;
@@ -56,6 +71,14 @@ public class AudioDecodeThread extends Thread implements Runnable {
         }
     }
 
+    /**
+     * setSessionId
+     *
+     * @param sessionId description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:42
+     */
     public void setSessionId(int sessionId) {
         this.mSessionId = sessionId;
     }
@@ -82,24 +105,22 @@ public class AudioDecodeThread extends Thread implements Runnable {
 
             MediaFormat format = mMediaExtractor.getTrackFormat(mAudioTrackIndex);
             Log.e(TAG, "音频编码器 run: " + format.toString());
-            String audioMime = format.getString(MediaFormat.KEY_MIME); // audio/mp4a-latm
+            String audioMime = format.getString(MediaFormat.KEY_MIME);
             Log.e(TAG, "音频mimeType： " + audioMime);
-            int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE); // 44100
+            int sampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
             Log.e(TAG, "采样率： " + sampleRate);
-            long duration = format.getLong(MediaFormat.KEY_DURATION); // 45000272
+            long duration = format.getLong(MediaFormat.KEY_DURATION);
             Log.e(TAG, "音频长度： " + duration);
-            int channelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT); // 2
+            int channelCount = format.getInteger(MediaFormat.KEY_CHANNEL_COUNT);
             Log.e(TAG, "通道数： " + channelCount);
-            String language = format.getString(MediaFormat.KEY_LANGUAGE); // und
+            String language = format.getString(MediaFormat.KEY_LANGUAGE);
             Log.e(TAG, "语言： " + language);
             int aacProfile = 0;
             if (format.containsKey(MediaFormat.KEY_AAC_PROFILE)) {
-                aacProfile = format.getInteger(MediaFormat.KEY_AAC_PROFILE); // 2
+                aacProfile = format.getInteger(MediaFormat.KEY_AAC_PROFILE);
             }
             Log.e(TAG, "AAC配置类型： " + aacProfile);
-
             getOptionalValue(format);
-
             mAudioDecoder = MediaCodec.createDecoderByType(audioMime);
             mAudioDecoder.configure(format, null, null, 0);
             mAudioDecoder.start();
@@ -114,7 +135,6 @@ public class AudioDecodeThread extends Thread implements Runnable {
                     audioFormat
             );
             AudioTrack audioTrack;
-
             if (mSessionId != 0) {
                 Log.e(TAG, "run: 新方式，初始化音频播放器");
                 AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -136,21 +156,20 @@ public class AudioDecodeThread extends Thread implements Runnable {
                 Log.e(TAG, "run: 旧方式，初始化音频播放器");
                 audioTrack = new AudioTrack(
                         AudioManager.STREAM_MUSIC,
-                        sampleRate, // 这里要乘声道数，否则声道不对
+                        sampleRate,
                         channelConfig,
                         audioFormat,
                         minBufferSize,
                         AudioTrack.MODE_STREAM
                 );
             }
-
             audioTrack.play();
-
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             ByteBuffer byteBuffer = ByteBuffer.allocate(minBufferSize);
             int sampleSize = 0;
             while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
+
                 // 填充要解码的数据
                 if (sampleSize != -1) {
                     int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
@@ -175,15 +194,12 @@ public class AudioDecodeThread extends Thread implements Runnable {
                         outputBuffer.position(0);
                         outputBuffer.get(bytes);
                         outputBuffer.clear();
-
                         audioTrack.write(bytes, 0, bufferInfo.size);
-
                         mAudioDecoder.releaseOutputBuffer(outputBufferIndex, false);
                     }
                 }
             }
             mMediaExtractor.unselectTrack(mAudioTrackIndex);
-
             mMediaExtractor.release();
             audioTrack.release();
         } catch (IOException e) {
@@ -194,31 +210,29 @@ public class AudioDecodeThread extends Thread implements Runnable {
     private void getOptionalValue(MediaFormat format) {
         int bitRate = 0;
         if (format.containsKey(MediaFormat.KEY_BIT_RATE)) {
-            bitRate = format.getInteger(MediaFormat.KEY_BIT_RATE); // 117640
+            bitRate = format.getInteger(MediaFormat.KEY_BIT_RATE);
         }
         Log.e(TAG, "比特率： " + bitRate);
         int profile = 0;
         if (format.containsKey(MediaFormat.KEY_PROFILE)) {
-            profile = format.getInteger(MediaFormat.KEY_PROFILE); // 2
+            profile = format.getInteger(MediaFormat.KEY_PROFILE);
         }
         Log.e(TAG, "音频配置类型： " + profile);
-
         int maxBitrate = 0;
         if (format.containsKey("max-bitrate")) {
-            maxBitrate = format.getInteger("max-bitrate"); // 32000
+            maxBitrate = format.getInteger("max-bitrate");
         }
         Log.e(TAG, "最大比特率： " + maxBitrate);
         int trackId = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            trackId = format.getInteger(MediaFormat.KEY_TRACK_ID); // 2
+            trackId = format.getInteger(MediaFormat.KEY_TRACK_ID);
         }
         Log.e(TAG, "轨道Id： " + trackId);
         int maxInputSize = 0;
         if (format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
-            maxInputSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE); // 267
+            maxInputSize = format.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
         }
         Log.e(TAG, "最大输入量： " + maxInputSize);
-
         ByteBuffer heapByteBuffer = format.getByteBuffer("csd-0");
         byte[] bytes = heapByteBuffer.array();
         int position = heapByteBuffer.position();
@@ -227,7 +241,11 @@ public class AudioDecodeThread extends Thread implements Runnable {
     }
 
     /**
-     * 获取当前帧时间戳
+     * getcurTime
+     *
+     * @return long
+     * @throws null
+     * @date 2023/3/8 09:43
      */
     public long getcurTime() {
         return audiocurtime;

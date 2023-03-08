@@ -61,6 +61,13 @@ public class FpsUtils {
     private FpsUtils() {
     }
 
+    /**
+     * getFpsUtils
+     *
+     * @return com.example.benchmark.utils.FpsUtils
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public static FpsUtils getFpsUtils() {
         if (fpsUtils == null) {
             fpsUtils = new FpsUtils();
@@ -79,7 +86,14 @@ public class FpsUtils {
         }
     }
 
-    // 结束监听
+    /**
+     * stopMonitor
+     *
+     * @param runnable description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public void stopMonitor(Runnable runnable) {
         endTime = System.currentTimeMillis();
         count = 0;
@@ -87,7 +101,13 @@ public class FpsUtils {
         isFpsOpen = false;
     }
 
-    // 初始化监听器
+    /**
+     * init
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public void init() {
         countPerSecond.clear();
         startTime = 0;
@@ -100,7 +120,13 @@ public class FpsUtils {
         shutterTime = 0;
     }
 
-    // 每一帧刷新时的更新操作
+    /**
+     * addFrame
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public void addFrame() {
         int time = (int) (System.currentTimeMillis() - lastTime);
         this.count++;
@@ -118,38 +144,82 @@ public class FpsUtils {
         this.lastTime = System.currentTimeMillis();
     }
 
-    // 获取单位时间帧计数
+    /**
+     * getCount
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public int getCount() {
         return this.count;
     }
 
+    /**
+     * getTotalCount
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:02
+     */
     public int getTotalCount() {
         return this.totalCount;
     }
 
-    // 单位时间结束更新操作
+    /**
+     * updateBeforeGetInfo
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public void updateBeforeGetInfo() {
         countPerSecond.add(count);
 
     }
 
+    /**
+     * updateAfterGetInfo
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public void updateAfterGetInfo() {
         // fps重新计数
         count = 0;
     }
 
-    // 获取测试时间间隔
+    /**
+     * getDurationTime
+     *
+     * @return long
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public long getDurationTime() {
         endTime = System.currentTimeMillis();
         return endTime - startTime;
     }
 
-    // 获取平均帧率
+    /**
+     * getAvergeFps
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public double getAvergeFps() {
         return (double) totalCount * 1000 / getDurationTime();
     }
 
-    // 获取帧抖动率
+    /**
+     * getFrameShakingRate
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public double getFrameShakingRate() {
         double fps = getAvergeFps();
         double res = 0d;
@@ -160,22 +230,47 @@ public class FpsUtils {
         return res;
     }
 
-    // 获取帧间隔
+    /**
+     * getFrameIntervalTime
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public double getFrameIntervalTime() {
         return (double) getDurationTime() / (totalCount - 1);
     }
 
-    // 获取低帧数
+    /**
+     * getLowCount
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public int getLowCount() {
         return lowCount;
     }
 
-    // 获取低帧率
+    /**
+     * getLowFrameRate
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public double getLowFrameRate() {
         return (double) lowCount / totalCount;
     }
 
-    // 判断是否为jank帧  (PerfDog Jank计算方法)
+    /**
+     * isJank
+     *
+     * @param time description
+     * @return boolean
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public boolean isJank(int time) {
         int size = last3FrameTimes.size();
         if (size < 3) {
@@ -195,21 +290,50 @@ public class FpsUtils {
         }
     }
 
+    /**
+     * getJankCount
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public int getJankCount() {
         return jankCount;
     }
 
+    /**
+     * getJankRate
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public double getJankRate() {
         return (double) jankCount / totalCount;
     }
 
+    /**
+     * getIntervalTime
+     *
+     * @return long
+     * @throws null
+     * @date 2023/3/8 09:03
+     */
     public long getIntervalTime() {
         return max(last3FrameTimes);
     }
 
+    /**
+     * max
+     *
+     * @param list description
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:04
+     */
     public static int max(ArrayList<Integer> list) {
         int maxList = list.get(0);
-        if (list == null || list.isEmpty()){
+        if (list == null || list.isEmpty()) {
             return 0;
         }
         for (Integer integer : list) {
@@ -218,14 +342,35 @@ public class FpsUtils {
         return maxList;
     }
 
+    /**
+     * getShutterTime
+     *
+     * @return long
+     * @throws null
+     * @date 2023/3/8 09:04
+     */
     public long getShutterTime() {
         return shutterTime;
     }
 
+    /**
+     * getShtutterRate
+     *
+     * @return double
+     * @throws null
+     * @date 2023/3/8 09:04
+     */
     public double getShtutterRate() {
         return (double) shutterTime / getDurationTime();
     }
 
+    /**
+     * getSizeOfCountArray
+     *
+     * @return int
+     * @throws null
+     * @date 2023/3/8 09:04
+     */
     public int getSizeOfCountArray() {
         return countPerSecond.size();
     }

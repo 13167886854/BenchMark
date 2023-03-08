@@ -58,10 +58,18 @@ public class SettingFragment extends Fragment {
                 Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 222) {
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setIcon(R.mipmap.icon) // 设置标题的图片
-                        .setTitle("checkUpdate") // 设置对话框的标题
-                        .setMessage("检测到应用有新版本，请前往浏览器更新") // 设置对话框的内容
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() { // 设置对话框的按钮
+
+                        // 设置标题的图片
+                        .setIcon(R.mipmap.icon)
+
+                        // 设置对话框的标题
+                        .setTitle("checkUpdate")
+
+                        // 设置对话框的内容
+                        .setMessage("检测到应用有新版本，请前往浏览器更新")
+
+                        // 设置对话框的按钮
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -77,7 +85,8 @@ public class SettingFragment extends Fragment {
                             }
                         }).create();
                 dialog.show();
-                Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。"
+                        , Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -101,19 +110,17 @@ public class SettingFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
             }
         });
-
         RelativeLayout set_system_update = view.findViewById(R.id.set_system_update);
         set_system_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // 打印信息 do nothing checkUpdate();
                 Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
             }
         });
-
         return view;
     }
-
 
     private void checkUpdate() throws IOException, PackageManager.NameNotFoundException {
         String localVersion = getContext().getPackageManager()
@@ -127,17 +134,33 @@ public class SettingFragment extends Fragment {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
-
-        // 执行和回调
         client.newCall(request).enqueue(new Callback() {
-            public void onFailure(Call call, IOException e) {
-                Log.e("TWT", "onFailure: " + e);
+
+            /**
+             * onFailure
+             *
+             * @param call description
+             * @param exception description
+             * @return void
+             * @throws null
+             * @date 2023/3/8 09:58
+             */
+            public void onFailure(Call call, IOException exception) {
+                Log.e("TWT", "onFailure: " + exception);
             }
 
+            /**
+             * onResponse
+             *
+             * @param call description
+             * @param response description
+             * @return void
+             * @throws null
+             * @date 2023/3/8 09:58
+             */
             public void onResponse(Call call, Response response)
                     throws IOException {
                 String str = response.body().string();
-                System.out.println("OkHttp的get()请求方式" + str);
                 if (str.equals("当前已是最新版本")) {
                     Message msg = new Message();
                     msg.what = 111;
@@ -152,6 +175,15 @@ public class SettingFragment extends Fragment {
         });
     }
 
+    /**
+     * openBrowser
+     *
+     * @param context description
+     * @param url     description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:58
+     */
     public static void openBrowser(Context context, String url) {
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -160,7 +192,8 @@ public class SettingFragment extends Fragment {
             final ComponentName componentName = intent.resolveActivity(context.getPackageManager());
             context.startActivity(Intent.createChooser(intent, "请选择浏览器"));
         } else {
-            Toast.makeText(context.getApplicationContext(), "请下载浏览器", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "请下载浏览器"
+                    , Toast.LENGTH_SHORT).show();
         }
     }
 }

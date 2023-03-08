@@ -30,6 +30,14 @@ import java.util.List;
 public class AccessUtils {
     private Context context;
 
+    /**
+     * AccessUtils
+     *
+     * @param context description
+     * @return
+     * @throws null
+     * @date 2023/3/8 10:57
+     */
     public AccessUtils(Context context) {
         this.context = context;
     }
@@ -52,7 +60,10 @@ public class AccessUtils {
      * @date 2023/2/23 15:25
      */
     public boolean isAccessibilityServiceOpen() {
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = null;
+        if (context.getSystemService(Context.ACTIVITY_SERVICE) instanceof ActivityManager) {
+            am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        }
         List<ActivityManager.RunningServiceInfo> services = am.getRunningServices(Short.MAX_VALUE);
         return false;
     }
@@ -66,7 +77,10 @@ public class AccessUtils {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean isIgnoringBatteryOptimizations() {
         boolean isIgnoring = false;
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager powerManager = null;
+        if (context.getSystemService(Context.POWER_SERVICE) instanceof PowerManager) {
+            powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        }
         if (powerManager != null) {
             isIgnoring = powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
         }

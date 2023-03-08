@@ -60,22 +60,29 @@ public class OkHttpUtils {
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(20, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)
-                            .sslSocketFactory(createSSLSocketFactory(trustManagers), (X509TrustManager) trustManagers[0])
+                            .sslSocketFactory(createSSLSocketFactory(trustManagers)
+                                    , (X509TrustManager) trustManagers[0])
                             .hostnameVerifier((hostName, session) -> true)
                             .retryOnConnectionFailure(true)
                             .build();
-                    addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+                    addHeader("User-Agent"
+                            , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
+                                    + "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                    + "Chrome/63.0.3239.132 Safari/537.36");
                 }
             }
         }
     }
 
     /**
-     * 用于异步请求时，控制访问线程数，返回结果
+     * getSemaphoreInstance
      *
-     * @return
+     * @return java.util.concurrent.Semaphore
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     private static Semaphore getSemaphoreInstance() {
+
         //只能1个线程同时访问
         synchronized (OkHttpUtils.class) {
             if (semaphore == null) {
@@ -86,19 +93,23 @@ public class OkHttpUtils {
     }
 
     /**
-     * 创建OkHttpUtils
+     * builder
      *
-     * @return
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public static OkHttpUtils builder() {
         return new OkHttpUtils();
     }
 
     /**
-     * 添加url
+     * url
      *
-     * @param url
-     * @return
+     * @param url description
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public OkHttpUtils url(String url) {
         this.url = url;
@@ -106,11 +117,13 @@ public class OkHttpUtils {
     }
 
     /**
-     * 添加参数
+     * addParam
      *
-     * @param key   参数名
-     * @param value 参数值
-     * @return
+     * @param key   description
+     * @param value description
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public OkHttpUtils addParam(String key, String value) {
         if (paramMap == null) {
@@ -121,11 +134,13 @@ public class OkHttpUtils {
     }
 
     /**
-     * 添加请求头
+     * addHeader
      *
-     * @param key   参数名
-     * @param value 参数值
-     * @return
+     * @param key   description
+     * @param value description
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public OkHttpUtils addHeader(String key, String value) {
         if (headerMap == null) {
@@ -136,9 +151,11 @@ public class OkHttpUtils {
     }
 
     /**
-     * 初始化get方法
+     * get
      *
-     * @return
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public OkHttpUtils get() {
         request = new Request.Builder().get();
@@ -162,11 +179,12 @@ public class OkHttpUtils {
     }
 
     /**
-     * 初始化post方法
+     * post
      *
-     * @param isJsonPost true等于json的方式提交数据，类似postman里post方法的raw
-     *                   false等于普通的表单提交
-     * @return
+     * @param isJsonPost description
+     * @return com.example.benchmark.utils.OkHttpUtils
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public OkHttpUtils post(boolean isJsonPost) {
         RequestBody requestBody;
@@ -175,7 +193,8 @@ public class OkHttpUtils {
             if (paramMap != null) {
                 json = JSON.toJSONString(paramMap);
             }
-            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8")
+                    , json);
         } else {
             FormBody.Builder formBody = new FormBody.Builder();
             if (paramMap != null) {
@@ -188,9 +207,11 @@ public class OkHttpUtils {
     }
 
     /**
-     * 同步请求
+     * sync
      *
-     * @return
+     * @return java.lang.String
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public String sync() {
         setHeader(request);
@@ -207,7 +228,11 @@ public class OkHttpUtils {
     }
 
     /**
-     * 异步请求，有返回值
+     * async
+     *
+     * @return java.lang.String
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public String async() {
         StringBuilder buffer = new StringBuilder("");
@@ -235,9 +260,12 @@ public class OkHttpUtils {
     }
 
     /**
-     * 异步请求，带有接口回调
+     * async
      *
-     * @param callBack
+     * @param callBack description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:11
      */
     public void async(ICallBack callBack) {
         setHeader(request);
@@ -257,9 +285,12 @@ public class OkHttpUtils {
     }
 
     /**
-     * 为request添加请求头
+     * setHeader
      *
-     * @param request
+     * @param request description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:12
      */
     private void setHeader(Request.Builder request) {
         if (headerMap != null) {
@@ -275,9 +306,12 @@ public class OkHttpUtils {
 
 
     /**
-     * 生成安全套接字工厂，用于https请求的证书跳过
+     * createSSLSocketFactory
      *
-     * @return
+     * @param trustAllCerts description
+     * @return javax.net.ssl.SSLSocketFactory
+     * @throws null
+     * @date 2023/3/8 09:12
      */
     private static SSLSocketFactory createSSLSocketFactory(TrustManager[] trustAllCerts) {
         SSLSocketFactory ssfFactory = null;
@@ -291,6 +325,13 @@ public class OkHttpUtils {
         return ssfFactory;
     }
 
+    /**
+     * buildTrustManagers
+     *
+     * @return javax.net.ssl.TrustManager[]
+     * @throws null
+     * @date 2023/3/8 09:12
+     */
     private static TrustManager[] buildTrustManagers() {
         return new TrustManager[]{
                 new X509TrustManager() {
@@ -311,12 +352,32 @@ public class OkHttpUtils {
     }
 
     /**
-     * 自定义一个接口回调
+     * @return
+     * @throws null
+     * @date 2023/3/8 09:12
      */
     public interface ICallBack {
 
+        /**
+         * onSuccessful
+         *
+         * @param call description
+         * @param data description
+         * @return void
+         * @throws null
+         * @date 2023/3/8 09:12
+         */
         void onSuccessful(Call call, String data);
 
+        /**
+         * onFailure
+         *
+         * @param call     description
+         * @param errorMsg description
+         * @return void
+         * @throws null
+         * @date 2023/3/8 09:12
+         */
         void onFailure(Call call, String errorMsg);
 
     }

@@ -4,7 +4,7 @@
  *
  */
 
-package com.example.benchmark.diaLog;
+package com.example.benchmark.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -59,7 +59,6 @@ public class LoginDialog extends Dialog {
     private String yesStr, noStr;
     private String username = "";
     private String password = "";
-    private boolean mIsChecked = false;
 
     //确定文本和取消文本的显示内容
     private EditText mUserName;
@@ -111,8 +110,8 @@ public class LoginDialog extends Dialog {
     }
 
     /**
-     * @param str                  description
-     * @param onYesOnclickListener description
+     * @param str                  str
+     * @param onYesOnclickListener onYesOnclickListener
      * @return void
      * @throws null
      * @description: 设置确定按钮的显示内容和监听
@@ -162,7 +161,6 @@ public class LoginDialog extends Dialog {
             public void afterTextChanged(Editable editable) {
                 username = editable.toString();
                 Admin.username = username;
-
             }
         });
 
@@ -184,7 +182,6 @@ public class LoginDialog extends Dialog {
                 Admin.password = password;
             }
         });
-
     }
 
     /**
@@ -268,14 +265,41 @@ public class LoginDialog extends Dialog {
         messageStr = message;
     }
 
+    /**
+     * OnYesOnclickListener
+     *
+     * @return
+     * @throws null
+     * @date 2023/3/8 09:44
+     */
     public interface OnYesOnclickListener {
+        /**
+         * onYesClick
+         *
+         * @return void
+         * @throws null
+         * @date 2023/3/8 09:44
+         */
         void onYesClick();
     }
 
+    /**
+     * OnNoOnclickListener
+     *
+     * @return
+     * @throws null
+     * @date 2023/3/8 09:44
+     */
     public interface OnNoOnclickListener {
+        /**
+         * onNoClick
+         *
+         * @return void
+         * @throws null
+         * @date 2023/3/8 09:44
+         */
         void onNoClick();
     }
-
 }
 
 

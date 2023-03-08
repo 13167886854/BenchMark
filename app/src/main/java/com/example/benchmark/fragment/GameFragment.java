@@ -30,7 +30,7 @@ import androidx.fragment.app.Fragment;
 import com.example.benchmark.activity.CePingActivity;
 import com.example.benchmark.BaseApp;
 import com.example.benchmark.data.Admin;
-import com.example.benchmark.diaLog.PopDiaLog;
+import com.example.benchmark.dialog.PopDiaLog;
 import com.example.benchmark.R;
 import com.example.benchmark.service.MyAccessibilityService;
 import com.example.benchmark.render.GPURenderer;
