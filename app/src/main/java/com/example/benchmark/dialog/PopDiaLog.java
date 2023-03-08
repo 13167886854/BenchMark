@@ -4,7 +4,7 @@
  *
  */
 
-package com.example.benchmark.diaLog;
+package com.example.benchmark.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -29,14 +29,15 @@ import com.example.benchmark.utils.AutoStartUtil;
  * @since 2023/3/7 15:14
  */
 public class PopDiaLog extends Dialog implements View.OnClickListener {
+
+    private Button queRen;
+    private Button quXiao;
+    private Context context;
     private RelativeLayout inability;
     private RelativeLayout ziDoing;
     private RelativeLayout houTai;
     private CheckBox ibilityCheak;
     private CheckBox houTaiCheak;
-    private Button queRen;
-    private Button quXiao;
-    private Context context;
     private AccessUtils accessUtils;
 
     @Override
@@ -64,10 +65,10 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
     }
 
     /**
-     * @description: PopDiaLog
      * @param context description
      * @return
      * @throws null
+     * @description: PopDiaLog
      * @date 2023/3/2 10:12
      */
     public PopDiaLog(@NonNull Context context) {
@@ -77,8 +78,8 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.access_ibility: {
                 accessUtils.openAccessibilityService();
                 dismiss();

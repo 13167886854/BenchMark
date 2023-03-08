@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
@@ -33,10 +32,9 @@ import androidx.fragment.app.Fragment;
 import com.example.benchmark.activity.CePingActivity;
 import com.example.benchmark.data.Admin;
 import com.example.benchmark.data.CepingData;
-import com.example.benchmark.diaLog.LoginDialog;
-import com.example.benchmark.diaLog.PopDiaLog;
+import com.example.benchmark.dialog.PopDiaLog;
 import com.example.benchmark.R;
-import com.example.benchmark.diaLog.IpPortDialog;
+import com.example.benchmark.dialog.IpPortDialog;
 import com.example.benchmark.utils.AccessUtils;
 
 
@@ -51,8 +49,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import okhttp3.Call;
 
 /**
  * PhoneFragment

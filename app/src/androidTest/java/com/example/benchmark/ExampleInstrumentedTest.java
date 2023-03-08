@@ -17,14 +17,24 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * ExampleInstrumentedTest
  *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * @version 1.0
+ * @since 2023/3/8 09:39
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    /**
+     * useAppContext
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:39
+     */
     @Test
     public void useAppContext() {
+
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertEquals("com.example.benchmark", appContext.getPackageName());

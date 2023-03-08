@@ -27,7 +27,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.benchmark.data.Admin;
-import com.example.benchmark.diaLog.LoginDialog;
+import com.example.benchmark.dialog.LoginDialog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
@@ -68,6 +68,16 @@ public class TishiFragment extends Fragment {
         }
     };
 
+    /**
+     * onCreateView
+     *
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
+     * @return android.view.View
+     * @throws null
+     * @date 2023/3/8 10:11
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -158,6 +168,13 @@ public class TishiFragment extends Fragment {
         return view;
     }
 
+    /**
+     * showDialog
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 10:11
+     */
     public void showDialog() {
         myDialog = new LoginDialog(getContext());
         myDialog.setNoOnclickListener("取消", new LoginDialog.OnNoOnclickListener() {
@@ -173,12 +190,15 @@ public class TishiFragment extends Fragment {
                     @Override
                     public void onYesClick() {
                         myDialog.yes.setEnabled(false);
-                        Log.d(TAG, "点击登录: username---" + Admin.username + "---password---" + Admin.username);
+                        Log.d(TAG, "点击登录: username---" + Admin.username
+                                + "---password---" + Admin.username);
                         if (Admin.username.length() < 5 || Admin.username.length() > 15) {
-                            Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "用户名长度为5~15位"
+                                    , Toast.LENGTH_SHORT).show();
                             myDialog.yes.setEnabled(true);
                             if (Admin.password.length() < 5 || Admin.password.length() > 15) {
-                                Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "密码长度为5~15位"
+                                        , Toast.LENGTH_SHORT).show();
                                 myDialog.yes.setEnabled(true);
                             }
                         } else {
@@ -186,23 +206,26 @@ public class TishiFragment extends Fragment {
                             mThread = new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/admin/loginAndReg")
+                                    OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
+                                            + "/admin/loginAndReg")
                                             .addParam("adminName", Admin.username)
                                             .addParam("adminPasswd", Admin.password)
-                                            .addHeader("Content-Type", "application/json; charset=utf-8")
+                                            .addHeader("Content-Type"
+                                                    , "application/json; charset=utf-8")
                                             .post(true)
                                             .async(new OkHttpUtils.ICallBack() {
                                                 @Override
                                                 public void onSuccessful(Call call, String data) {
-                                                    Log.e(TAG, "Admin.username: "+Admin.username );
-                                                    Log.e(TAG, "Admin.password: "+Admin.password );
+                                                    Log.e(TAG, "Admin.username: "
+                                                            + Admin.username);
+                                                    Log.e(TAG, "Admin.password: "
+                                                            + Admin.password);
                                                     Log.d(TAG, "onSuccessful: data--" + data);
                                                     if (data.endsWith("成功")) {
                                                         Admin.adminName = data.split(" ")[1];
-                                                        Log.e(TAG, "hiahiahia222222222222222222222222222222222222222222222: " + Admin.adminName );
                                                         Log.d(TAG, "onSuccessful: Admin.adminName=="
                                                                 + Admin.adminName);
-                                                        Admin.status = "Success";
+                                                        Admin.STATUS = "Success";
                                                         mMessage = mHandler.obtainMessage();
                                                         mMessage.what = 2;
                                                         mHandler.sendMessage(mMessage);
@@ -212,27 +235,31 @@ public class TishiFragment extends Fragment {
                                                         // 验证成功后，跳转到主界面
                                                         Looper.loop();
                                                     } else {
-                                                        Log.d(TAG, "onSuccessful: data==>" + data);
+                                                        Log.d(TAG, "onSuccessful: data==>"
+                                                                + data);
                                                         mMessage = mHandler.obtainMessage();
                                                         mMessage.what = 1;
                                                         mHandler.sendMessage(mMessage);
 
                                                         Looper.prepare();
-                                                        Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getContext(), data
+                                                                , Toast.LENGTH_SHORT).show();
                                                         Looper.loop();
                                                     }
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call call, String errorMsg) {
-                                                    Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
+                                                    Log.d(TAG, "onFailure: errorMsg ==>"
+                                                            + errorMsg);
                                                     mMessage = mHandler.obtainMessage();
                                                     mMessage.what = 1;
                                                     mHandler.sendMessage(mMessage);
 
                                                     Looper.prepare();
                                                     Toast.makeText(getContext(),
-                                                            "遇见未知异常! 请检查网络后重新启动应用🙂 ",
+                                                            "遇见未知异常! " +
+                                                                    "请检查网络后重新启动应用🙂 ",
                                                             Toast.LENGTH_SHORT).show();
                                                     Looper.loop();
                                                 }

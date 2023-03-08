@@ -85,7 +85,6 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
                 .asFloatBuffer()
                 .put(vertexData);
         vertexBuffer.position(0);
-
         textureVertexBuffer = ByteBuffer.allocateDirect(textureVertexData.length * 4)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer()
@@ -168,8 +167,10 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
             }
         }
         GLES20.glUseProgram(programId);
-        GLES20.glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0);
-        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1, false, mSTMatrix, 0);
+        GLES20.glUniformMatrix4fv(uMatrixLocation, 1, false
+                , projectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1, false
+                , mSTMatrix, 0);
         vertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aPositionLocation);
         GLES20.glVertexAttribPointer(aPositionLocation, 3, GLES20.GL_FLOAT, false,
@@ -210,9 +211,9 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     }
 
     /**
-     * @description: getMediaPlayer
      * @return android.media.MediaPlayer
      * @throws null
+     * @description: getMediaPlayer
      * @date 2023/3/2 09:32
      */
     public MediaPlayer getMediaPlayer() {

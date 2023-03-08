@@ -50,15 +50,20 @@ public class TencentGamerStabilityService implements IStabilityService {
     private final String nodeIdConfirmQuit = "com.tencent.gamereva:id/main_button";
     private final String nodeTextCloseAfterQuit = "关闭";
     private final String nodeIdCloseAfterQuit = "com.tencent.gamereva:id/delete_device_record";
-
-    private int mCurrentMonitorNum = 0;
-
     private final MyAccessibilityService service;
-
+    private int mCurrentMonitorNum = 0;
     private boolean isClickHome = false;
     private boolean isClickRank = false;
     private boolean isClickInstantPlay = false;
-
+    
+    /**
+     * TencentGamerStabilityService 
+     *
+     * @param service description
+     * @return 
+     * @throws null
+     * @date 2023/3/8 10:15
+     */
     public TencentGamerStabilityService(MyAccessibilityService service) {
         this.service = service;
     }

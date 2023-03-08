@@ -13,6 +13,8 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 /**
  * RomUtil
@@ -175,7 +177,7 @@ public class RomUtil {
             sName = ROM_SMARTISAN;
         } else {
             sVersion = Build.DISPLAY;
-            if (sVersion.toUpperCase().contains(ROM_FLYME)) {
+            if (sVersion.toUpperCase(Locale.ROOT).contains(ROM_FLYME)) {
                 sName = ROM_FLYME;
             } else {
                 sVersion = Build.UNKNOWN;
@@ -196,8 +198,8 @@ public class RomUtil {
         String line = null;
         BufferedReader input = null;
         try {
-            Process p = Runtime.getRuntime().exec("getprop " + name);
-            input = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
+            Process process = Runtime.getRuntime().exec("getprop " + name);
+            input = new BufferedReader(new InputStreamReader(process.getInputStream()), 1024);
             line = input.readLine();
             input.close();
         } catch (IOException ex) {

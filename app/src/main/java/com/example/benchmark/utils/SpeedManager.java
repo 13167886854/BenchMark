@@ -16,25 +16,39 @@ import android.util.Log;
  */
 public class SpeedManager {
     private static final String TAG = SpeedManager.class.getSimpleName();
-
     private static final boolean CHECK_SLEEP_TIME = false;
-
     private static final long ONE_MILLION = 1000000L;
-
     private long mPrevPresentUsec;
     private long mPrevMonoUsec;
     private long mFixedFrameDurationUsec;
     private boolean mLoopReset;
 
+    /**
+     * setFixedPlaybackRate
+     *
+     * @param fps description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:34
+     */
     public void setFixedPlaybackRate(int fps) {
         mFixedFrameDurationUsec = ONE_MILLION / fps;
     }
 
+    /**
+     * preRender
+     *
+     * @param presentationTimeUsec description
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:34
+     */
     public void preRender(long presentationTimeUsec) {
         if (mPrevMonoUsec == 0) {
             mPrevMonoUsec = System.nanoTime() / 1000;
             mPrevPresentUsec = presentationTimeUsec;
         } else {
+
             // Compute the desired time delta between the previous frame and this frame.
             long frameDelta;
             if (mLoopReset) {
@@ -42,11 +56,11 @@ public class SpeedManager {
                 mLoopReset = false;
             }
             if (mFixedFrameDurationUsec != 0) {
+
                 // Caller requested a fixed frame rate.  Ignore PTS.
                 frameDelta = mFixedFrameDurationUsec;
             } else {
                 frameDelta = presentationTimeUsec - mPrevPresentUsec;
-                // Log.d(TAG," frameDelta: "+frameDelta);
             }
             if (frameDelta < 0) {
                 frameDelta = 0;
@@ -55,7 +69,9 @@ public class SpeedManager {
             } else if (frameDelta > 10 * ONE_MILLION) {
                 frameDelta = 5 * ONE_MILLION;
             }
-            long desiredUsec = mPrevMonoUsec + frameDelta;  // when we want to wake up
+
+            // when we want to wake up
+            long desiredUsec = mPrevMonoUsec + frameDelta;
             long nowUsec = System.nanoTime() / 1000;
             while (nowUsec < (desiredUsec - 100)) {
                 long sleepTimeUsec = desiredUsec - nowUsec;
@@ -65,7 +81,8 @@ public class SpeedManager {
                 try {
                     if (CHECK_SLEEP_TIME) {
                         long startNsec = System.nanoTime();
-                        Thread.sleep(sleepTimeUsec / 1000, (int) (sleepTimeUsec % 1000) * 1000);
+                        Thread.sleep(sleepTimeUsec / 1000
+                                , (int) (sleepTimeUsec % 1000) * 1000);
                         long actualSleepNsec = System.nanoTime() - startNsec;
                     } else {
                         long time = sleepTimeUsec / 1000;
@@ -81,10 +98,24 @@ public class SpeedManager {
         }
     }
 
+    /**
+     * loopReset
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:34
+     */
     public void loopReset() {
         mLoopReset = true;
     }
 
+    /**
+     * reset
+     *
+     * @return void
+     * @throws null
+     * @date 2023/3/8 09:34
+     */
     public void reset() {
         mPrevPresentUsec = 0;
         mPrevMonoUsec = 0;

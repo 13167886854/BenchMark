@@ -25,12 +25,16 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:15
  */
 public class JuTiGpuFragment extends Fragment {
+
+    private TextView mGpuInfo;
+    private View mView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.juti_gpu_fragment, container, false);
-        TextView gpuInfo = view.findViewById(R.id.juti_gpu_info);
-        return view;
+        mView = inflater.inflate(R.layout.juti_gpu_fragment, container, false);
+        mGpuInfo = mView.findViewById(R.id.juti_gpu_info);
+        return mView;
     }
 }

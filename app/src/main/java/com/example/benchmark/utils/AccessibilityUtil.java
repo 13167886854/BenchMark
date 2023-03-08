@@ -128,8 +128,9 @@ public class AccessibilityUtil {
             return null;
         }
         for (AccessibilityNodeInfo node : nodeInfoList) {
-            if (className.equals(node.getClassName().toString()))
+            if (className.equals(node.getClassName().toString())) {
                 return node;
+            }
         }
         return null;
     }
@@ -366,8 +367,8 @@ public class AccessibilityUtil {
 
     /**
      * @param service  description
-     * @param xx        description
-     * @param yy        description
+     * @param xx       description
+     * @param yy       description
      * @param callback description
      * @return void
      * @throws null
@@ -466,8 +467,8 @@ public class AccessibilityUtil {
             return;
         }
         String nodeClassName = nodeInfo.getClassName().toString();
-        Log.e("AccessibilityUtil", index + ":" + nodeClassName +
-                (nodeInfo.getText() != null ? nodeInfo.getText().toString() : ""));
+        Log.e("AccessibilityUtil", index + ":" + nodeClassName
+                + (nodeInfo.getText() != null ? nodeInfo.getText().toString() : ""));
         for (int i = 0; i < nodeInfo.getChildCount(); i++) {
             AccessibilityNodeInfo childNode = nodeInfo.getChild(i);
             if (childNode == null) {
@@ -521,8 +522,12 @@ public class AccessibilityUtil {
      * @date 2023/2/23 10:03
      */
     public static boolean isAccessibilityServiceEnabled(Context context) {
-        AccessibilityManager accessibilityManager = (AccessibilityManager)
-                context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE);
+        AccessibilityManager accessibilityManager = null;
+        if (context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE)
+                instanceof AccessibilityManager) {
+            accessibilityManager = (AccessibilityManager)
+                    context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE);
+        }
         return accessibilityManager.isEnabled();
     }
 
