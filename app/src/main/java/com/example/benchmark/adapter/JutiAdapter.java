@@ -28,12 +28,30 @@ import java.util.List;
  */
 public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<JuTiData> data;
+
     private Context context;
+
+    /**
+     * JutiAdapter
+     *
+     * @param context description
+     * @param data    description
+     * @return
+     * @date 2023/3/9 19:47
+     */
     public JutiAdapter(Context context, List<JuTiData> data) {
         this.context = context;
         this.data = data;
     }
 
+    /**
+     * onCreateViewHolder
+     *
+     * @param parent   description
+     * @param viewType description
+     * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
+     * @date 2023/3/9 19:47
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,6 +59,14 @@ public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return new RecyclerViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder
+     *
+     * @param holder   description
+     * @param position description
+     * @return void
+     * @date 2023/3/9 19:47
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecyclerViewHolder) {
@@ -51,6 +77,12 @@ public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
+    /**
+     * getItemCount
+     *
+     * @return int
+     * @date 2023/3/9 19:47
+     */
     @Override
     public int getItemCount() {
         return data.size();
@@ -59,6 +91,7 @@ public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
         public TextView juTiItemZhiBiao;
         public TextView juTiItemGrade;
+
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             juTiItemZhiBiao = itemView.findViewById(R.id.juti_item_zhibiao);

@@ -13,18 +13,28 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:13
  */
 public class YinHuaData {
-    // 平台类型
+    /**
+     * 平台类型
+     */
     public static String platformType;
 
-    // 音频得分
+    /**
+     * 音频得分
+     */
     public static String pesq;
 
-    // 视频得分
+    /**
+     * 视频得分
+     */
     public static String ssim;
 
-    // psnr
+    /**
+     * psnr
+     */
     public static String psnr;
 
-    // resolution
+    /**
+     * resolution
+     */
     public static String resolution;
 }

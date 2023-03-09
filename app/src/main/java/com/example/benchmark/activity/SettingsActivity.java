@@ -26,10 +26,19 @@ import com.example.benchmark.utils.TapUtil;
  */
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "TWT";
+
     Button num;
     SharedPreferences.Editor editor;
     SharedPreferences sharedPreferences;
     private int testNum;
+
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/9 19:50
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +52,14 @@ public class SettingsActivity extends AppCompatActivity {
         num.setText(String.valueOf(testNum));
         Log.e(TAG, "onCreate+num: " + num);
     }
+
+    /**
+     * sub
+     *
+     * @param view description
+     * @return void
+     * @date 2023/3/9 19:50
+     */
     public void sub(View view) {
         Log.d(TAG, "sub");
         if (testNum == 1) {
@@ -51,11 +68,27 @@ public class SettingsActivity extends AppCompatActivity {
         testNum--;
         num.setText(String.valueOf(testNum));
     }
+
+    /**
+     * add
+     *
+     * @param view description
+     * @return void
+     * @date 2023/3/9 19:50
+     */
     public void add(View view) {
         Log.d(TAG, "add: add");
         testNum++;
         num.setText(String.valueOf(testNum));
     }
+
+    /**
+     * save
+     *
+     * @param view description
+     * @return void
+     * @date 2023/3/9 19:50
+     */
     public void save(View view) {
         TapUtil.mWholeMonitorNum = testNum;
         editor.putInt("testNum", testNum);
@@ -63,6 +96,13 @@ public class SettingsActivity extends AppCompatActivity {
         Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * back
+     *
+     * @param view description
+     * @return void
+     * @date 2023/3/9 19:50
+     */
     public void back(View view) {
         onBackPressed();
     }

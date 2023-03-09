@@ -84,13 +84,7 @@ public class AccessibilityUtil {
             String text
     ) {
         AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
-        if (rootInfo == null) {
-            return null;
-        }
         List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByViewId(id);
-        if (nodeInfoList.isEmpty()) {
-            return null;
-        }
         if (text == null || text.isEmpty()) {
             return nodeInfoList.get(0);
         }
@@ -99,7 +93,7 @@ public class AccessibilityUtil {
                 return node;
             }
         }
-        return null;
+        return rootInfo;
     }
 
     /**
@@ -118,18 +112,18 @@ public class AccessibilityUtil {
     ) {
         AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
         if (rootInfo == null) {
-            return null;
+            return rootInfo;
         }
         List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByViewId(id);
         if (nodeInfoList.isEmpty()) {
-            return null;
+            return rootInfo;
         }
         for (AccessibilityNodeInfo node : nodeInfoList) {
             if (className.equals(node.getClassName().toString())) {
                 return node;
             }
         }
-        return null;
+        return rootInfo;
     }
 
     /**
@@ -148,18 +142,18 @@ public class AccessibilityUtil {
     ) {
         AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
         if (rootInfo == null) {
-            return null;
+            return rootInfo;
         }
         List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByText(text);
         if (nodeInfoList.isEmpty()) {
-            return null;
+            return rootInfo;
         }
         for (AccessibilityNodeInfo node : nodeInfoList) {
             if (className.equals(node.getClassName().toString())) {
                 return node;
             }
         }
-        return null;
+        return rootInfo;
     }
 
     /**
@@ -176,9 +170,6 @@ public class AccessibilityUtil {
             String className,
             String text
     ) {
-        if (parent == null) {
-            return null;
-        }
         if (parent.getText() != null && parent.getText().toString().equals(text)
                 && className.equals(parent.getClassName().toString())) {
             return parent;
@@ -189,7 +180,7 @@ public class AccessibilityUtil {
                 return findNode;
             }
         }
-        return null;
+        return parent;
     }
 
     /**
@@ -321,7 +312,7 @@ public class AccessibilityUtil {
     ) {
         AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
         if (rootInfo == null) {
-            return null;
+            return "null";
         }
         List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByViewId(id);
         for (AccessibilityNodeInfo node : nodeInfoList) {
@@ -330,7 +321,7 @@ public class AccessibilityUtil {
                 return text;
             }
         }
-        return null;
+        return "null";
     }
 
     /**
@@ -429,7 +420,7 @@ public class AccessibilityUtil {
             AccessibilityClassFindCallback callback
     ) {
         if (rootInfo == null || TextUtils.isEmpty(rootInfo.getClassName())) {
-            return null;
+            return rootInfo;
         }
         if (className.equals(rootInfo.getClassName().toString()) && callback.caterTo(rootInfo)) {
             return rootInfo;
@@ -441,7 +432,7 @@ public class AccessibilityUtil {
                 return findNode;
             }
         }
-        return null;
+        return rootInfo;
     }
 
     /**
@@ -456,6 +447,14 @@ public class AccessibilityUtil {
         logAllChildNodesClass(service.getRootInActiveWindow(), index);
     }
 
+    /**
+     * logAllChildNodesClass
+     *
+     * @param nodeInfo description
+     * @param index description
+     * @return void
+     * @date 2023/3/9 16:38
+     */
     public static void logAllChildNodesClass(AccessibilityNodeInfo nodeInfo, int index) {
         if (nodeInfo == null) {
             return;
@@ -473,6 +472,8 @@ public class AccessibilityUtil {
     }
 
     /**
+     * logAllChildNodesClass
+     *
      * @param service description
      * @param index   description
      * @return void

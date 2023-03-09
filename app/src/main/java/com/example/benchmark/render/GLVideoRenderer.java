@@ -37,6 +37,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class GLVideoRenderer implements GLSurfaceView.Renderer,
         SurfaceTexture.OnFrameAvailableListener, MediaPlayer.OnVideoSizeChangedListener {
     private static final String TAG = "GLRenderer";
+
     private final float[] projectionMatrix = new float[16];
     private final float[] textureVertexData = {
             1f, 0f,
@@ -69,6 +70,8 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     private MediaPlayer mediaPlayer;
 
     /**
+     * GLVideoRenderer
+     *
      * @param context description
      * @return
      * @throws null
@@ -94,6 +97,14 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         initMediaPlayer();
     }
 
+    /**
+     * onSurfaceCreated
+     *
+     * @param gl description
+     * @param config description 
+     * @return void
+     * @date 2023/3/9 19:27
+     */
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         String vertexShader = ShaderUtils.readRawTextFile(context, R.raw.vetext_sharder);
@@ -126,6 +137,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
     }
+
     private void initMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -133,6 +145,15 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         mediaPlayer.setOnVideoSizeChangedListener(this);
     }
 
+    /**
+     * onSurfaceChanged
+     *
+     * @param gl description
+     * @param width description
+     * @param height description 
+     * @return void
+     * @date 2023/3/9 19:27
+     */
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         Log.d(TAG, "onSurfaceChanged: " + width + " " + height);
@@ -145,6 +166,13 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         }
     }
 
+    /**
+     * onDrawFrame
+     *
+     * @param gl description 
+     * @return void
+     * @date 2023/3/9 19:28
+     */
     @Override
     public void onDrawFrame(GL10 gl) {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
@@ -182,11 +210,27 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
 
+    /**
+     * onFrameAvailable
+     *
+     * @param surface description 
+     * @return void
+     * @date 2023/3/9 19:28
+     */
     @Override
-    synchronized public void onFrameAvailable(SurfaceTexture surface) {
+    public synchronized void onFrameAvailable(SurfaceTexture surface) {
         isUpdateSurface = true;
     }
 
+    /**
+     * onVideoSizeChanged
+     *
+     * @param mp description
+     * @param width description
+     * @param height description 
+     * @return void
+     * @date 2023/3/9 19:29
+     */
     @Override
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
         Log.d(TAG, "onVideoSizeChanged: " + width + " " + height);
@@ -200,13 +244,17 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
                     -videoRatio / screenRatio,
                     videoRatio / screenRatio, -1f, 1f);
-        } else
+        } else{
             Matrix.orthoM(projectionMatrix, 0,
                     -screenRatio / videoRatio,
                     screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+        }
+
     }
 
     /**
+     * getMediaPlayer
+     *
      * @return android.media.MediaPlayer
      * @throws null
      * @description: getMediaPlayer

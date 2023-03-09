@@ -226,9 +226,20 @@ public class HistoryFragment extends Fragment {
             super.handleMessage(msg);
         }
     };
+
+    /**
+     * onCreateView
+     *
+     * @param inflater description
+ * @param container description
+ * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:44
+     */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.history_fragment, container, false);
 
         historyBack = view.findViewById(R.id.history_back);

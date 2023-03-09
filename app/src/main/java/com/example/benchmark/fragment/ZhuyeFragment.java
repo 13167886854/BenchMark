@@ -33,9 +33,19 @@ public class ZhuyeFragment extends Fragment {
     private FragmentManager fragmentManager;
     private RadioGroup mainSelectPlat;
 
+    /**
+     * onCreateView
+     *
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:31
+     */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.zhuye_fragment, container, false);
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -62,7 +72,14 @@ public class ZhuyeFragment extends Fragment {
         return view;
     }
 
-
+    /**
+     * changeFragment
+     *
+     * @param fragment description
+     * @param isFisrt  description
+     * @return void
+     * @date 2023/3/9 19:31
+     */
     public void changeFragment(Fragment fragment, boolean isFisrt) {
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
 
@@ -75,6 +92,13 @@ public class ZhuyeFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/9 19:31
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

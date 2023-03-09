@@ -15,8 +15,10 @@ import com.example.benchmark.data.Admin;
 import com.example.benchmark.data.IpPort;
 import com.example.benchmark.data.YinHuaData;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
@@ -219,33 +221,37 @@ public class ScoreUtil {
     public static void calcAndSaveFluencyScores(
             float averageFPS,
             float frameShakeRate,
-            BigDecimal lowFrameRate,
+            float lowFrameRate,
             float frameInterval,
             float jankCount,
-            BigDecimal stutterRate,
+            float stutterRate,
             String eachFps
     ) {
         // 保存流畅性结果
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
-        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, (Set<String>) lowFrameRate.scaleByPowerOfTen(2));
+        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
         CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
-        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, (Set<String>) stutterRate.scaleByPowerOfTen(2));
+        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
 
         // 计算流畅性分数
         BigDecimal averFpsScore = BigDecimal.valueOf(averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6);
-        BigDecimal frameShakeScore = BigDecimal.valueOf(frameShakeRate < 10 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate));
-        BigDecimal lowFrameScore = BigDecimal.valueOf(100f * (1 - lowFrameRate.intValue()) / 6);
-        BigDecimal frameIntervalScore = BigDecimal.valueOf(frameInterval < 50 ? 100f / 6 : 100f * 50 / (6 * frameInterval));
+        BigDecimal frameShakeScore = BigDecimal.valueOf(frameShakeRate < 10
+                ? 100f / 6 : 100f * 10 / (6 * frameShakeRate));
+        BigDecimal lowFrameScore = BigDecimal.valueOf(100f * (1 - lowFrameRate) / 6);
+        BigDecimal frameIntervalScore = BigDecimal.valueOf(frameInterval < 50
+                ? 100f / 6 : 100f * 50 / (6 * frameInterval));
         BigDecimal jankCountScore = BigDecimal.valueOf(100f / (6 * (1 + jankCount)));
-        BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate.intValue())));
-        int fluencyScore = (averFpsScore.add(frameShakeScore.add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
+        BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate)));
+        int fluencyScore = (averFpsScore.add(frameShakeScore.
+                add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
+
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
 
         // 判断数据是否为空
-        if (averageFPS + frameShakeRate + lowFrameRate.add(stutterRate).intValue() + jankCount != 0.0f) {
+        if (averageFPS + frameShakeRate + lowFrameRate + stutterRate + jankCount != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
                     .addParam("adminName", Admin.adminName)
                     .addParam("platformName", Admin.platformName)
@@ -459,14 +465,12 @@ public class ScoreUtil {
      *
      * @param testNum description
      * @param time    description
-     * @return void
-     * @throws null
      * @date 2023/3/8 09:52
      */
     public static void calaAndSaveGameTouchScores(int testNum, float time) {
         // 正确率
-        float averageAccuracy = (float) (testNum) / GameTouchUtil.testNum;
-        Log.e("TWT", "GameTouchUtil.testNum: " + GameTouchUtil.testNum);
+        float averageAccuracy = (float) (testNum) / GameTouchUtil.TEST_NUM;
+        Log.e("TWT", "GameTouchUtil.testNum: " + GameTouchUtil.TEST_NUM);
         Log.e("TWT", "testNum: " + testNum);
         Log.e("TWT", "time: " + time);
 
@@ -731,7 +735,8 @@ public class ScoreUtil {
         psnr = psnr > 40 ? 40 : psnr;
         BigDecimal d3 = new BigDecimal((100 * ((psnr / 40) + ssim)) / 8);
         BigDecimal d4 = new BigDecimal(((100 * pesq) / (4.5 * 4)));
-          int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
+        int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
+
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
         if (YinHuaData.pesq != null && YinHuaData.ssim != null && YinHuaData.psnr != null) {

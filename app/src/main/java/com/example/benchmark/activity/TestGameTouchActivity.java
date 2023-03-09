@@ -53,22 +53,19 @@ public class TestGameTouchActivity extends AppCompatActivity {
                     handlingTv.setText("测试中----(" + msg.arg1 + "/" + count + ")");
                     break;
                 case testCompleted:
-                    try {
-                        float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.testNum);
-                        handlingTv.setText(gameTouchUtil.getDelayTime() + "\navgTime:" + delayTime);
-                        ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(), delayTime);
-                        Log.d(TAG, "gameTouchUtil.getDetectNum(): " + gameTouchUtil.getDetectNum());
-                        Log.d(TAG, "delayTime): " + delayTime);
-                    } catch (Exception e) {
-                        Log.d(TAG, "Error:" + e.toString());
-                        Toast.makeText(TestGameTouchActivity.this, "检测到游戏中点击次数少于测试次数.", Toast.LENGTH_SHORT).show();
-                    }
+                    float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.TEST_NUM);
+                    handlingTv.setText(gameTouchUtil.getDelayTime() + "\navgTime:" + delayTime);
+                    ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(), delayTime);
+                    Log.d(TAG, "gameTouchUtil.getDetectNum(): " + gameTouchUtil.getDetectNum());
+                    Log.d(TAG, "delayTime): " + delayTime);
+
                     Intent intent = new Intent(TestGameTouchActivity.this, CePingActivity.class);
                     intent.putExtra("isGameTouchTested", true);
                     startActivity(intent);
             }
         }
     };
+
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {

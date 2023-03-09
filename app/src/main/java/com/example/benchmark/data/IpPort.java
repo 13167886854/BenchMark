@@ -13,6 +13,13 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class IpPort {
+    /**
+     * ip地址
+     */
     public static String ip = "0.0.0.0";
+
+    /**
+     * 端口号
+     */
     public static String port = "0000";
 }

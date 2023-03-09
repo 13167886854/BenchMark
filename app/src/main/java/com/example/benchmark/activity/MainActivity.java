@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private String tmpUrl = "https://1d2f09a7.r2.cpolar.top";
     private String latestVersion = null;
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -85,14 +85,13 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                openBrowser(mContext, tmpUrl+"/upgrade/update?version=" + latestVersion + "&platform=Local");
+                                openBrowser(mContext, tmpUrl + "/upgrade/update?version=" + latestVersion + "&platform=Local");
                                 dialog.dismiss();
                             }
                         }).create();
                 dialog.show();
                 Toast.makeText(mContext, "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 System.out.println("else");
             }
         }
@@ -121,10 +120,12 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         menu = findViewById(R.id.menu);
         qrCode = findViewById(R.id.qr_code);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         }
     }
+
     public void changeFragment(Fragment fragment, boolean isFisrt) {
         fragmentManager = getSupportFragmentManager();
         // 开启事务
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
         fragmentTransaction.commit();
     }
+
     private void checkUpdate() throws IOException, PackageManager.NameNotFoundException {
         String localVersion = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
         Log.e("TWT", "localVersion: " + localVersion);
@@ -164,9 +167,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 .build();
         // 执行和回调
         client.newCall(request).enqueue(new Callback() {
-            public void onFailure(Call call, IOException e) {
-                Log.e("TWT", "onFailure: " + e);
+            public void onFailure(Call call, IOException ex) {
+                Log.e("TWT", "onFailure: " + ex);
             }
+
             public void onResponse(Call call, Response response)
                     throws IOException {
                 String str = response.body().string();
@@ -184,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         });
     }
+
     private void downApk() {
         final String downUrl = tmpUrl + "/upgrade/update?version=" + latestVersion + "&platform=Local";
         final Message msg = new Message();
@@ -195,9 +200,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException ex) {
                 bundle.putString("result", "下载失败！");
             }
+
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Sink sink = null;
@@ -218,13 +224,11 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                     sink.close();
                     bundle.putString("result", "下载成功！");
                     installApk(fapk);
-                } catch (Exception e) {
-                    bundle.putString("result", "error: " + e.getMessage());
                 } finally {
                     if (bufferedSink != null) {
                         bufferedSink.close();
                     }
-                    if(sink != null) {
+                    if (sink != null) {
                         sink.close();
                     }
                     msg.setData(bundle);
@@ -233,7 +237,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             }
         });
     }
-    public static void openBrowser(Context context,String url){
+
+    public static void openBrowser(Context context, String url) {
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
     }
 
-    private void installApk(File fapk){
+    private void installApk(File fapk) {
         if (!fapk.exists()) {
             return;
         }
@@ -259,14 +264,14 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             // 如果SDK版本>=24，即：Build.VERSION.SDK_INT >= 24，使用FileProvider兼容安装apk
             String packageName = mContext.getApplicationContext().getPackageName();
             String authority = new StringBuilder(packageName).append(".fileprovider").toString();
-            Log.e("TWT", "authority: "+authority);
+            Log.e("TWT", "authority: " + authority);
             Uri apkUri = FileProvider.getUriForFile(mContext, authority, fapk);
-            Log.e("TWT", "apkUri: "+apkUri);
+            Log.e("TWT", "apkUri: " + apkUri);
             intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
         } else {
             intent.setDataAndType(Uri.fromFile(fapk), "application/vnd.android.package-archive");
         }
-        Log.e("TWT", "intent: "+intent.toString());
+        Log.e("TWT", "intent: " + intent.toString());
         Log.e("TWT", " mContext.startActivity(intent);");
         mContext.startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid()); // 安装完之后会提示”完成”“打开”。

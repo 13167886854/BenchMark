@@ -95,7 +95,7 @@ public final class DecodeFormatManager {
      *
      * @return java.util.List<com.google.zxing.BarcodeFormat>
      * @date 2023/3/8 14:28
-    */
+     */
     private static List<BarcodeFormat> getOneDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.CODABAR);
@@ -118,7 +118,7 @@ public final class DecodeFormatManager {
      *
      * @return java.util.List<com.google.zxing.BarcodeFormat>
      * @date 2023/3/8 14:28
-    */
+     */
     private static List<BarcodeFormat> getTwoDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.AZTEC);
@@ -134,7 +134,7 @@ public final class DecodeFormatManager {
      *
      * @return java.util.List<com.google.zxing.BarcodeFormat>
      * @date 2023/3/8 14:28
-    */
+     */
     private static List<BarcodeFormat> getDefaultFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
         list.add(BarcodeFormat.QR_CODE);

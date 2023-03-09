@@ -80,7 +80,8 @@ public class TishiFragment extends Fragment {
      */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tishi_fragment, container, false);
         infoFluency = view.findViewById(R.id.info_fluency);
         infoStability = view.findViewById(R.id.info_stability);

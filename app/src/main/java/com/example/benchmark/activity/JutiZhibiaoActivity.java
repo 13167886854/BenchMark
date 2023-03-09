@@ -202,6 +202,13 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    /**
+     * onClick
+     *
+     * @param view description 
+     * @return void
+     * @date 2023/3/9 20:03
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {

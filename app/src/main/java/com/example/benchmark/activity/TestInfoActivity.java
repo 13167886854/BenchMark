@@ -52,7 +52,6 @@ public class TestInfoActivity extends AppCompatActivity {
     private JSONArray audioVideo;
     private JSONArray touch;
 
-
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {

@@ -86,17 +86,25 @@ public class SettingFragment extends Fragment {
                         }).create();
                 dialog.show();
                 Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 System.out.println(";");
             }
         }
     };
 
+    /**
+     * onCreateView
+     *
+     * @param inflater description
+ * @param container description
+ * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:36
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-        @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_fragment, container, false);
         RelativeLayout relativeLayout = view.findViewById(R.id.set_shiyongshuom);
         relativeLayout.setOnClickListener(new View.OnClickListener() {

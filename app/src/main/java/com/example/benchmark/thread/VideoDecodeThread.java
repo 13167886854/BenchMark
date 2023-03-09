@@ -41,7 +41,13 @@ public class VideoDecodeThread extends Thread implements Runnable {
     private Context context;
     private long videocurtime;
 
-
+    /**
+     * VideoDecodeThread
+     *
+     * @param path description
+     * @param context description
+     * @date 2023/3/9 16:40
+     */
     public VideoDecodeThread(String path, Context context) {
         this.context = context;
         mMp4FilePath = path;
@@ -53,10 +59,23 @@ public class VideoDecodeThread extends Thread implements Runnable {
         }
     }
 
+    /**
+     * setSurfaceView
+     *
+     * @param surfaceView description
+     * @return void
+     * @date 2023/3/9 16:40
+     */
     public void setSurfaceView(SurfaceView surfaceView) {
         this.mSurfaceView = surfaceView;
     }
 
+    /**
+     * run
+     *
+     * @return void
+     * @date 2023/3/9 16:41
+     */
     @Override
     public void run() {
         try {

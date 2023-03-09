@@ -16,10 +16,14 @@ import android.util.Log;
  * @since 2023/3/7 17:24
  */
 public class LogUtils {
-    // TAG
+    /**
+     * TAG
+     */
     public static final String TAG = "ZXingLite";
 
-    // VERTICAL
+    /**
+     * VERTICAL
+     */
     public static final String VERTICAL = "|";
 
     /**
@@ -57,7 +61,9 @@ public class LogUtils {
      */
     public static final int ASSERT = 7;
 
-    // TAG_FORMAT
+    /**
+     * TAG_FORMAT
+     */
     public static final String TAG_FORMAT = "%s.%s(%s:%d)";
 
     /**
@@ -121,9 +127,11 @@ public class LogUtils {
     }
 
     /**
-     * 根据堆栈生成TAG
+     * generateTag
      *
-     * @return TAG|className.methodName(fileName:lineNumber)
+     * @param caller description
+     * @return java.lang.String
+     * @date 2023/3/9 15:56
      */
     @SuppressLint("DefaultLocale")
     private static String generateTag(StackTraceElement caller) {

@@ -37,7 +37,8 @@ import com.example.benchmark.data.Admin;
  */
 public class LoginDialog extends Dialog {
     private static final String TAG = "Login";
-    // 确定按钮
+
+    /** 确定按钮 */
     public Button yes;
 
     // 取消按钮
@@ -124,6 +125,13 @@ public class LoginDialog extends Dialog {
         this.yesOnclickListener = onYesOnclickListener;
     }
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/9 19:43
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -91,6 +91,15 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
 
+    /**
+     * onCreateView
+     *
+     * @param inflater description
+ * @param container description
+ * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:44
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

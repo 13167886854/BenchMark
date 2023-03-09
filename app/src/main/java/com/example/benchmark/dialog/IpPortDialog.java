@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import com.example.benchmark.R;
 import com.example.benchmark.data.IpPort;
 
-
 /**
  * IpPortDialog
  *
@@ -66,6 +65,14 @@ public class IpPortDialog extends Dialog {
             }
         }
     };
+    
+    /**
+     * IpPortDialog
+     *
+     * @param context description 
+     * @return 
+     * @date 2023/3/9 19:46
+     */
     public IpPortDialog(@NonNull Context context) {
         super(context);
     }
@@ -113,6 +120,16 @@ public class IpPortDialog extends Dialog {
         ipAddress = findViewById(R.id.ip_address); // 用户名
         ipAddress.addTextChangedListener(new TextWatcher() {
             @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
             public void afterTextChanged(Editable editable) {
                 textIp = editable.toString();
                 IpPort.ip = textIp;
@@ -120,6 +137,16 @@ public class IpPortDialog extends Dialog {
         });
         port = findViewById(R.id.port); // 密码
         port.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 testPort = editable.toString();

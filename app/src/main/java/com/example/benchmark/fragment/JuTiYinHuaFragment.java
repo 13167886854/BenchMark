@@ -26,10 +26,19 @@ import com.example.benchmark.R;
 public class JuTiYinHuaFragment extends Fragment {
     private View mView;
 
+    /**
+     * onCreateView
+     *
+     * @param inflater description
+ * @param container description
+ * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:41
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-        @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_yinhua_fragment, container, false);
         return mView;
     }

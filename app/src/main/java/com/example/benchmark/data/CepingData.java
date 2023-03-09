@@ -50,6 +50,7 @@ public class CepingData {
         this.cepingItem = cepingItem;
         this.cepingText = cepingText;
     }
+
     /**
      * CepingData
      *
@@ -67,6 +68,7 @@ public class CepingData {
         this.cepingItem = cepingItem;
         this.cepingText = cepingText;
     }
+
     /**
      * getGrade
      *

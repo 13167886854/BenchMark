@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
                 Log.d(TAG, "onTextChanged: " + charSequence);
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 // 在文本改变之后记录用户密码

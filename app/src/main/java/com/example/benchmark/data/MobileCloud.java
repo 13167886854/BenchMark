@@ -13,15 +13,23 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class MobileCloud {
-    /** name */
+    /**
+     * name
+     */
     public static String name = "";
 
-    /** storage */
+    /**
+     * storage
+     */
     public static String storage = "";
 
-    /** spec */
+    /**
+     * spec
+     */
     public static String spec = "";
 
-    /** cpuCoreNum */
+    /**
+     * cpuCoreNum
+     */
     public static String cpuCoreNum = "";
 }

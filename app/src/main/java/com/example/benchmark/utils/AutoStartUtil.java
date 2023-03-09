@@ -21,11 +21,16 @@ import android.util.Log;
  * @since 2023/3/7 17:23
  */
 public class AutoStartUtil {
-    // 是否已经打开过设置自启动界面的标记，存储起来
+    /** 是否已经打开过设置自启动界面的标记，存储起来 */
     public static final String HAS_OPEN_SETTING_AUTO_START = "hasOpenSettingAutoStart";
 
-
-    /* 打开自启动管理页 */
+    /**
+     * openStart打开自启动管理页
+     *
+     *  * @param context description
+     * @return void
+     * @date 2023/3/9 16:34
+     */
     public static void openStart(Context context) {
         if (Build.VERSION.SDK_INT < 23) {
             return;
@@ -87,12 +92,7 @@ public class AutoStartUtil {
             }
             intent = new Intent(Settings.ACTION_SETTINGS);
         }
-        try {
-            context.startActivity(intent);
-        } catch (Exception e) { // 抛出异常就直接打开设置页面
-            Intent intent1 = new Intent(Settings.ACTION_SETTINGS);
-            context.startActivity(intent1);
-        }
+        context.startActivity(intent);
     }
 }
 

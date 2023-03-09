@@ -65,6 +65,13 @@ public class TestSMActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description 
+     * @return void
+     * @date 2023/3/9 19:48
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,8 +98,9 @@ public class TestSMActivity extends AppCompatActivity {
                 Log.d("TWT", "onCompletion: 播放结束");
                 try {
                     stopTest();
-                } catch (IOException e) {
-                    Log.e("TestSMActivity: ", e.toString());
+                } catch (IOException exception) {
+                    Log.e("TestSMActivity: ", exception.toString());
+
                 }
             }
         });
@@ -101,8 +109,8 @@ public class TestSMActivity extends AppCompatActivity {
             glVideoRenderer.getMediaPlayer().reset();
             glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this, Uri.parse(path));
             glVideoRenderer.getMediaPlayer().prepare();
-        } catch (IOException e) {
-            Log.e("TestSMActivity: ", e.toString());
+        } catch (IOException ex) {
+            Log.e("TestSMActivity: ", ex.toString());
         }
 
         // 自动开始
@@ -147,6 +155,13 @@ public class TestSMActivity extends AppCompatActivity {
         return bd.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
     }
 
+    /**
+     * onPause
+     *
+     
+     * @return void
+     * @date 2023/3/9 19:48
+     */
     @Override
     protected void onPause() {
         super.onPause();
@@ -156,12 +171,19 @@ public class TestSMActivity extends AppCompatActivity {
             glVideoRenderer.getMediaPlayer().stop();
             try {
                 stopTest();
-            } catch (IOException e) {
-                Log.e("TestSMActivity: ", e.toString());
+            } catch (IOException ex) {
+                Log.e("TestSMActivity: ", ex.toString());
             }
         }
     }
 
+    /**
+     * onResume
+     *
+     
+     * @return void
+     * @date 2023/3/9 19:48
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -196,6 +218,15 @@ public class TestSMActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * onActivityResult
+     *
+     * @param requestCode description
+     * @param resultCode description
+     * @param data description 
+     * @return void
+     * @date 2023/3/9 19:48
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,8 +238,8 @@ public class TestSMActivity extends AppCompatActivity {
                     glVideoRenderer.getMediaPlayer().reset();
                     glVideoRenderer.getMediaPlayer().setDataSource(TestSMActivity.this, uri);
                     glVideoRenderer.getMediaPlayer().prepare();
-                } catch (IOException e) {
-                    Log.e("TestSMActivity: ", e.toString());
+                } catch (IOException ex) {
+                    Log.e("TestSMActivity: ", ex.toString());
                 }
             }
         }

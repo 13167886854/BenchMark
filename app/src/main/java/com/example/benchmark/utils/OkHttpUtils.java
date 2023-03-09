@@ -11,7 +11,10 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashMap;
@@ -43,6 +46,7 @@ public class OkHttpUtils {
     private static final String TAG = "MyOkHttpUtils";
     private static volatile OkHttpClient okHttpClient = null;
     private static volatile Semaphore semaphore = null;
+
     private Map<String, String> headerMap;
     private Map<String, String> paramMap;
     private String url;
@@ -60,12 +64,14 @@ public class OkHttpUtils {
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(20, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)
-                            .sslSocketFactory(createSSLSocketFactory(trustManagers),
-                                    (X509TrustManager) trustManagers[0])
+                            .sslSocketFactory(createSSLSocketFactory(trustManagers)
+                                    , trustManagers[0] instanceof X509TrustManager
+                                            ? (X509TrustManager) trustManagers[0] : null)
                             .hostnameVerifier((hostName, session) -> true)
                             .retryOnConnectionFailure(true)
                             .build();
-                    addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
+                    addHeader("User-Agent"
+                            , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
                                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
                                     + "Chrome/63.0.3239.132 Safari/537.36");
                 }
@@ -161,8 +167,8 @@ public class OkHttpUtils {
                             .append(URLEncoder.encode(entry.getValue(), "utf-8"))
                             .append("&");
                 }
-            } catch (Exception ex) {
-                Log.e(TAG, "get: ", ex);
+            } catch (UnsupportedEncodingException ex) {
+                Log.e(TAG, "UnsupportedEncodingException: "+ex);
             }
             urlBuilder.deleteCharAt(urlBuilder.length() - 1);
         }
@@ -227,8 +233,8 @@ public class OkHttpUtils {
         setHeader(request);
         okHttpClient.newCall(request.build()).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                buffer.append("请求出错：").append(e.getMessage());
+            public void onFailure(Call call, IOException ex) {
+                buffer.append("请求出错：").append(ex.getMessage());
             }
 
             @Override
@@ -257,8 +263,8 @@ public class OkHttpUtils {
         setHeader(request);
         okHttpClient.newCall(request.build()).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callBack.onFailure(call, e.getMessage());
+            public void onFailure(Call call, IOException ex) {
+                callBack.onFailure(call, ex.getMessage());
             }
 
             @Override
@@ -280,12 +286,8 @@ public class OkHttpUtils {
      */
     private void setHeader(Request.Builder request) {
         if (headerMap != null) {
-            try {
-                for (Map.Entry<String, String> entry : headerMap.entrySet()) {
-                    request.addHeader(entry.getKey(), entry.getValue());
-                }
-            } catch (Exception ex) {
-                Log.e(TAG, "setHeader: ", ex);
+            for (Map.Entry<String, String> entry : headerMap.entrySet()) {
+                request.addHeader(entry.getKey(), entry.getValue());
             }
         }
     }
@@ -305,8 +307,10 @@ public class OkHttpUtils {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new SecureRandom());
             ssfFactory = sc.getSocketFactory();
-        } catch (Exception ex) {
-            Log.e(TAG, "createSSLSocketFactory: ", ex);
+        } catch (NoSuchAlgorithmException ex) {
+            Log.e(TAG, "createSSLSocketFactory: "+ex);
+        } catch (KeyManagementException ex) {
+            Log.e(TAG, "createSSLSocketFactory: "+ex);
         }
         return ssfFactory;
     }

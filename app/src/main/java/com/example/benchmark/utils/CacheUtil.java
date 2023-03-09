@@ -23,11 +23,11 @@ public class CacheUtil {
     private static SharedPreferences.Editor mEditor;
 
     /**
+     * init
+     *
      * @param context description
      * @return void
-     * @throws null
-     * @description: init 初始化
-     * @date 2023/2/22 14:47
+     * @date 2023/3/9 16:32
      */
     public static void init(Context context) {
         mSp = context.getSharedPreferences("CacheFile", Context.MODE_PRIVATE);
@@ -35,6 +35,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param value description
      * @return void
@@ -47,6 +49,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param value description
      * @return void
@@ -59,6 +63,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param value description
      * @return void
@@ -71,6 +77,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param value description
      * @return void
@@ -83,6 +91,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param isValue description
      * @return void
@@ -95,6 +105,8 @@ public class CacheUtil {
     }
 
     /**
+     * put
+     *
      * @param key   description
      * @param value description
      * @return void
@@ -107,6 +119,8 @@ public class CacheUtil {
     }
 
     /**
+     * getString
+     *
      * @param key      description
      * @param defValue description
      * @return java.lang.String
@@ -119,6 +133,8 @@ public class CacheUtil {
     }
 
     /**
+     * getString
+     *
      * @param key description
      * @return java.lang.String
      * @throws null
@@ -130,6 +146,8 @@ public class CacheUtil {
     }
 
     /**
+     * getInt
+     *
      * @param key      description
      * @param defValue description
      * @return int
@@ -142,6 +160,8 @@ public class CacheUtil {
     }
 
     /**
+     * getInt
+     *
      * @param key description
      * @return int
      * @throws null
@@ -153,6 +173,8 @@ public class CacheUtil {
     }
 
     /**
+     * getLong
+     *
      * @param key      description
      * @param defValue description
      * @return long
@@ -165,6 +187,8 @@ public class CacheUtil {
     }
 
     /**
+     * getLong
+     *
      * @param key description
      * @return long
      * @throws null
@@ -176,6 +200,8 @@ public class CacheUtil {
     }
 
     /**
+     * getFloat
+     *
      * @param key      description
      * @param defValue description
      * @return float
@@ -188,6 +214,8 @@ public class CacheUtil {
     }
 
     /**
+     * getFloat
+     *
      * @param key description
      * @return float
      * @throws null
@@ -199,6 +227,8 @@ public class CacheUtil {
     }
 
     /**
+     * getBoolean
+     *
      * @param key      description
      * @param isValue description
      * @return boolean
@@ -211,6 +241,8 @@ public class CacheUtil {
     }
 
     /**
+     * getBoolean
+     *
      * @param key description
      * @return boolean
      * @throws null
@@ -222,6 +254,8 @@ public class CacheUtil {
     }
 
     /**
+     * getSet
+     *
      * @param key description
      * @return java.util.Set<java.lang.String>
      * @throws null

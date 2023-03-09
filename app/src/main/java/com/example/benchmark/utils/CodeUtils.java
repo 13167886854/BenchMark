@@ -35,9 +35,9 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
-
 
 /**
  * CodeUtils
@@ -113,8 +113,8 @@ public final class CodeUtils {
      * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
      * @return Bitmap
      */
-    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
-        @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo
+            ,@FloatRange(from = 0.0f, to = 1.0f) float ratio) {
         // 配置参数
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
@@ -151,6 +151,17 @@ public final class CodeUtils {
         return createQRCode(content, heightPix, logo, ratio, hints, codeColor);
     }
 
+    /**
+     * createQRCode
+     *
+     * @param content description
+     * @param heightPix description
+     * @param logo description
+     * @param ratio description
+     * @param hints description
+     * @return android.graphics.Bitmap
+     * @date 2023/3/9 16:21
+     */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
         @FloatRange(from = 0.0f, to = 1.0f) float ratio, Map<EncodeHintType, ?> hints) {
         return createQRCode(content, heightPix, logo, ratio, hints, Color.BLACK);
@@ -192,10 +203,10 @@ public final class CodeUtils {
                 bitmap = addLogo(bitmap, logo, ratio);
             }
             return bitmap;
-        } catch (Exception e) {
-            LogUtils.logW(e.getMessage());
+        } catch (WriterException ex) {
+            Log.e("WriterException", "createQRCode: "+ex);
         }
-        return null;
+        return Bitmap.createBitmap(heightPix, heightPix, Bitmap.Config.ARGB_8888);
     }
 
     /**
@@ -209,7 +220,7 @@ public final class CodeUtils {
     private static Bitmap addLogo(Bitmap src, Bitmap logo,
         @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
         if (src == null) {
-            return null;
+            return src;
         }
         if (logo == null) {
             return src;
@@ -220,28 +231,24 @@ public final class CodeUtils {
         int logoWidth = logo.getWidth();
         int logoHeight = logo.getHeight();
         if (srcWidth == 0 || srcHeight == 0) {
-            return null;
+            return src;
         }
         if (logoWidth == 0 || logoHeight == 0) {
             return src;
         }
         // logo大小为二维码整体大小
-        BigDecimal scaleFactor = new BigDecimal(srcWidth * ratio / logoWidth);
+        float scaleFactor = srcWidth * ratio / logoWidth;
         Bitmap bitmap;
-        try {
-            bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            canvas.drawBitmap(src, 0, 0, null);
-            canvas.scale(scaleFactor, scaleFactor,
-                    srcWidth / 2, srcHeight / 2);
-            canvas.drawBitmap(logo,
-                    (srcWidth - logoWidth) / 2, (srcHeight - logoHeight) / 2, null);
-            canvas.save();
-            canvas.restore();
-        } catch (Exception e) {
-            bitmap = null;
-            LogUtils.logW(e.getMessage());
-        }
+        bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(src, 0, 0, null);
+        canvas.scale(scaleFactor, scaleFactor,
+                srcWidth / 2, srcHeight / 2);
+        canvas.drawBitmap(logo,
+                (srcWidth - logoWidth) / 2, (srcHeight - logoHeight) / 2, null);
+        canvas.save();
+        canvas.restore();
+
         return bitmap;
     }
 
@@ -256,7 +263,7 @@ public final class CodeUtils {
         if (result != null) {
             return result.getText();
         }
-        return null;
+        return "null";
     }
 
     /**
@@ -305,7 +312,7 @@ public final class CodeUtils {
         if (result != null) {
             return result.getText();
         }
-        return null;
+        return "null";
     }
 
     /**
@@ -329,18 +336,19 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * parseCode
      *
-     * @param bitmap 解析的图片
-     * @param hints  解析编码类型
-     * @return
+     * @param bitmap description
+     * @param hints description
+     * @return java.lang.String
+     * @date 2023/3/9 16:28
      */
     public static String parseCode(Bitmap bitmap, Map<DecodeHintType, Object> hints) {
         Result result = parseCodeResult(bitmap, hints);
         if (result != null) {
             return result.getText();
         }
-        return null;
+        return "null";
     }
 
     /**
@@ -413,9 +421,7 @@ public final class CodeUtils {
                     result = decodeInternal(reader, source.rotateCounterClockwise());
                 }
             }
-        } catch (Exception e) {
-            LogUtils.logW(e.getMessage());
-        } finally {
+        }finally {
             reader.reset();
         }
         return result;
@@ -426,8 +432,8 @@ public final class CodeUtils {
         try {
             // 采用HybridBinarizer解析
             result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
-        } catch (NotFoundException e) {
-            Log.e("decodeInternal", "decodeInternal: ", e);
+        } catch (NotFoundException ex) {
+            Log.e("TAG", "decodeInternal: "+ex);
         }
         if (result == null) {
             // 如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
@@ -443,10 +449,13 @@ public final class CodeUtils {
     }
 
     /**
-     * 压缩图片
+     * compressBitmap
      *
-     * @param path 解析的图片路径
-     * @return Bitmap
+     * @param path description
+     * @param reqWidth description
+     * @param reqHeight description
+     * @return android.graphics.Bitmap
+     * @date 2023/3/9 16:30
      */
     private static Bitmap compressBitmap(String path, int reqWidth, int reqHeight) {
         if (reqWidth > 0 && reqHeight > 0) {
@@ -532,7 +541,7 @@ public final class CodeUtils {
         return createBarCode(content, format, desiredWidth, desiredHeight, null);
     }
     public static Bitmap createBarCode(String content, int desiredWidth,
-        int desiredHeight, boolean isShowText) {
+            int desiredHeight, boolean isShowText) {
         return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
                 desiredHeight, null, isShowText, 40, Color.BLACK);
     }
@@ -598,7 +607,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-        int desiredWidth, int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
+            int desiredWidth, int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
         return createBarCode(content, format, desiredWidth, desiredHeight,
                 null, isShowText, 40, codeColor);
     }
@@ -635,9 +644,6 @@ public final class CodeUtils {
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth,
         int desiredHeight, Map<EncodeHintType, ?> hints, boolean isShowText, int textSize, @ColorInt int codeColor) {
-        if (TextUtils.isEmpty(content)) {
-            return null;
-        }
         final int white = Color.WHITE;
         final int black = codeColor;
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -665,7 +671,8 @@ public final class CodeUtils {
         } catch (WriterException e) {
             LogUtils.logW(e.getMessage());
         }
-        return null;
+        return Bitmap.createBitmap(100, 100,
+                Bitmap.Config.ARGB_8888);
     }
 
     /**
@@ -679,9 +686,6 @@ public final class CodeUtils {
      */
     private static Bitmap addCode(Bitmap src, String code, int textSize,
         @ColorInt int textColor, int offset) {
-        if (src == null) {
-            return null;
-        }
         if (TextUtils.isEmpty(code)) {
             return src;
         }
@@ -689,26 +693,19 @@ public final class CodeUtils {
         int srcWidth = src.getWidth();
         int srcHeight = src.getHeight();
 
-        if (srcWidth <= 0 || srcHeight <= 0) {
-            return null;
-        }
         Bitmap bitmap;
-        try {
-            bitmap = Bitmap.createBitmap(srcWidth, srcHeight + textSize + offset * 2,
+        bitmap = Bitmap.createBitmap(srcWidth, srcHeight + textSize + offset * 2,
                     Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            canvas.drawBitmap(src, 0, 0, null);
-            TextPaint paint = new TextPaint();
-            paint.setTextSize(textSize);
-            paint.setColor(textColor);
-            paint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(code, srcWidth / 2, srcHeight + textSize / 2 + offset, paint);
-            canvas.save();
-            canvas.restore();
-        } catch (Exception e) {
-            bitmap = null;
-            LogUtils.logW(e.getMessage());
-        }
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawBitmap(src, 0, 0, null);
+        TextPaint paint = new TextPaint();
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText(code, srcWidth / 2, srcHeight + textSize / 2 + offset, paint);
+        canvas.save();
+        canvas.restore();
+
         return bitmap;
     }
 }

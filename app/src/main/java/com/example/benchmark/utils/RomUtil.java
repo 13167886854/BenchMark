@@ -22,34 +22,43 @@ import java.util.Locale;
  * @since 2023/3/7 17:28
  */
 public class RomUtil {
-
-    // TAG
+    /** 输出TAG */
     private static final String TAG = "Rom";
 
-    // MIUI
+    /** MIUI */
     public static final String ROM_MIUI = "MIUI";
 
-    // EMUI
+    /** EMUI */
     public static final String ROM_EMUI = "EMUI";
 
-    // FLYME
+    /** FLYME */
     public static final String ROM_FLYME = "FLYME";
 
-    // OPPO
+    /** OPPO */
     public static final String ROM_OPPO = "OPPO";
 
-    // SMARTISAN
+    /** SMARTISAN */
     public static final String ROM_SMARTISAN = "SMARTISAN";
 
-    // VIVO
+    /** VIVO */
     public static final String ROM_VIVO = "VIVO";
 
-    // ROM_QIKU
+    /** QIKU */
     public static final String ROM_QIKU = "QIKU";
+
+    /** KEY_VERSION_MIUI */
     private static final String KEY_VERSION_MIUI = "ro.miui.ui.version.name";
+
+    /** KEY_VERSION_EMUI */
     private static final String KEY_VERSION_EMUI = "ro.build.version.emui";
+
+    /** KEY_VERSION_OPPO */
     private static final String KEY_VERSION_OPPO = "ro.build.version.opporom";
+
+    /** KEY_VERSION_SMARTISAN */
     private static final String KEY_VERSION_SMARTISAN = "ro.smartisan.version";
+
+    /** KEY_VERSION_VIVO */
     private static final String KEY_VERSION_VIVO = "ro.vivo.os.version";
 
     private static String sName;
@@ -57,8 +66,9 @@ public class RomUtil {
 
 
     /**
+     * isEmui
+     *
      * @return boolean
-     * @throws null
      * @description: isEmui 华为
      * @date 2023/3/1 14:55
      */
@@ -67,8 +77,9 @@ public class RomUtil {
     }
 
     /**
+     * isSmart
+     *
      * @return boolean
-     * @throws null
      * @description: isMiui 小米
      * @date 2023/3/1 14:55
      */
@@ -77,8 +88,9 @@ public class RomUtil {
     }
 
     /**
+     * isMiui
+     *
      * @return boolean
-     * @throws null
      * @description: isVivo
      * @date 2023/3/1 14:55
      */
@@ -87,8 +99,9 @@ public class RomUtil {
     }
 
     /**
+     * isVivo
+     *
      * @return boolean
-     * @throws null
      * @description: isOppo
      * @date 2023/3/1 14:55
      */
@@ -97,8 +110,9 @@ public class RomUtil {
     }
 
     /**
+     * isOppo
+     *
      * @return boolean
-     * @throws null
      * @description: isFlyme  魅族
      * @date 2023/3/1 14:56
      */
@@ -107,8 +121,9 @@ public class RomUtil {
     }
 
     /**
+     * isFlyme
+     *
      * @return boolean
-     * @throws null
      * @description: is360
      * @date 2023/3/1 14:56
      */
@@ -117,8 +132,9 @@ public class RomUtil {
     }
 
     /**
+     * is360
+     *
      * @return boolean
-     * @throws null
      * @description: isSmart
      * @date 2023/3/1 14:56
      */
@@ -127,8 +143,9 @@ public class RomUtil {
     }
 
     /**
+     * getVersion
+     *
      * @return java.lang.String
-     * @throws null
      * @description: getName
      * @date 2023/3/1 14:57
      */
@@ -140,8 +157,9 @@ public class RomUtil {
     }
 
     /**
+     * getName
+     *
      * @return java.lang.String
-     * @throws null
      * @description: getVersion
      * @date 2023/3/1 14:57
      */
@@ -153,9 +171,10 @@ public class RomUtil {
     }
 
     /**
+     * check
+     *
      * @param rom description
      * @return boolean
-     * @throws null
      * @description: check
      * @date 2023/3/1 14:57
      */
@@ -187,9 +206,10 @@ public class RomUtil {
     }
 
     /**
+     * getProp
+     *
      * @param name description
      * @return java.lang.String
-     * @throws null
      * @description: getProp
      * @date 2023/3/1 14:57
      */
@@ -203,7 +223,7 @@ public class RomUtil {
             input.close();
         } catch (IOException ex) {
             Log.e(TAG, "Unable to read prop " + name, ex);
-            return null;
+            return "null";
         } finally {
             if (input != null) {
                 try {

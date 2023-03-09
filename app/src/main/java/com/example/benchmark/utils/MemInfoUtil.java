@@ -36,6 +36,12 @@ public class MemInfoUtil {
     private static final int KB = 1024;
     private static final String TAG = "MemInfoUtil";
 
+    /**
+     * getMemInfo
+     *
+     * @return java.util.List<java.lang.String>
+     * @date 2023/3/9 15:53
+     */
     public static List<String> getMemInfo() {
         List<String> result = new ArrayList<>();
 
@@ -50,10 +56,16 @@ public class MemInfoUtil {
         } catch (IOException e) {
             Log.e(TAG, "getMemInfo: ", e);
         }
-
         return result;
     }
 
+    /**
+     * getFieldFromMeminfo
+     *
+     * @param field description
+     * @return java.lang.String
+     * @date 2023/3/9 15:53
+     */
     public static String getFieldFromMeminfo(String field) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(File.separator + "proc" + File.separator + "meminfo"));
         Pattern pa = Pattern.compile(field + "\\s*:\\s*(.*)");
@@ -69,10 +81,15 @@ public class MemInfoUtil {
         } finally {
             br.close();
         }
-
         return "null";
     }
 
+    /**
+     * getMemTotal
+     *
+     * @return java.lang.String
+     * @date 2023/3/9 15:54
+     */
     public static String getMemTotal() {
         String result = null;
 
@@ -85,39 +102,41 @@ public class MemInfoUtil {
         return result;
     }
 
-
+    /**
+     * getMemAvailable
+     *
+     * @return java.lang.String
+     * @date 2023/3/9 15:54
+     */
     public static String getMemAvailable() {
         String result = null;
 
         try {
             result = getFieldFromMeminfo("MemAvailable");
-        } catch (IOException e) {
-            Log.e(TAG, "getMemAvailable: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "getMemAvailable: ", ex);
         }
         return bytes2kb(Float.parseFloat(result.substring(0, result.length() - 3)) * 1024 + 282 * MB);
     }
 
     /**
-     * 转换单位
-     * @param bytes
-     * @return
+     * bytes2kb
+     *
+     * @param bytes description
+     * @return java.lang.String
+     * @date 2023/3/9 15:52
      */
-    public static String bytes2kb(BigDecimal bytes) {
-        int numGb = bytes.divide(BigDecimal.valueOf(GB)).intValue();
-        int numMb = bytes.divide(BigDecimal.valueOf(MB)).intValue();
-        int numKb = bytes.divide(BigDecimal.valueOf(KB)).intValue();
+    public static String bytes2kb(float bytes) {
         // 格式化小数
         DecimalFormat format = new DecimalFormat("###.00");
-        if (numGb >= 1) {
-            return format.format(numGb) + " GB";
-        } else if (numMb >= 1) {
-            return format.format(numMb) + " MB";
+        if (bytes / GB >= 1) {
+            return format.format(bytes / GB) + " GB";
+        } else if (bytes / MB >= 1) {
+            return format.format(bytes / MB) + " MB";
+        } else if (bytes / KB >= 1) {
+            return format.format(bytes / KB) + " KB";
         } else {
-            if (numKb >= 1) {
-                return format.format(numKb) + " KB";
-            } else {
-                return bytes + " B";
-            }
+            return bytes + " B";
         }
     }
 }

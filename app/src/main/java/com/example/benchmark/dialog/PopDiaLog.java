@@ -75,6 +75,13 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
         this.context = context;
     }
 
+    /**
+     * onClick
+     *
+     * @param view description 
+     * @return void
+     * @date 2023/3/9 19:47
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {

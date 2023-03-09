@@ -33,11 +33,27 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
 
+    /**
+     * ShuoMingAdapter
+     *
+     * @param context description
+     * @param data    description
+     * @return
+     * @date 2023/3/9 19:46
+     */
     public ShuoMingAdapter(Context context, List<ShuoMingData> data) {
         this.context = context;
         this.data = data;
     }
 
+    /**
+     * onCreateViewHolder
+     *
+     * @param parent   description
+     * @param viewType description
+     * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
+     * @date 2023/3/9 19:46
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -46,6 +62,14 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return new RecyclerViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder
+     *
+     * @param holder   description
+     * @param position description
+     * @return void
+     * @date 2023/3/9 19:47
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecyclerViewHolder) {
@@ -61,6 +85,12 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    /**
+     * getItemCount
+     *
+     * @return int
+     * @date 2023/3/9 19:47
+     */
     @Override
     public int getItemCount() {
         return data.size();

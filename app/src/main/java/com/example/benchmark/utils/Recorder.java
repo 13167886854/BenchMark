@@ -47,6 +47,7 @@ public class Recorder {
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
+    /** isRecording */
     public boolean isRecording = false;
 
     private AudioRecord mRecorder;
@@ -58,7 +59,6 @@ public class Recorder {
     private File cache;
     private File rawOutput;
 
-
     /**
      * start
      *
@@ -66,7 +66,7 @@ public class Recorder {
      * @param mProjection description
      * @return boolean
      * @date 2023/3/8 15:31
-    */
+     */
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
@@ -130,7 +130,7 @@ public class Recorder {
      *
      * @param context description
      * @date 2023/3/8 15:31
-    */
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void createAudioFile(Context context) {
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -276,8 +276,9 @@ public class Recorder {
     }
 
     /**
-     * @return void
-     * @throws null
+     * startProcessing
+     *
+     * @throws  IOException ex
      * @description: startProcessing
      * @date 2023/3/7 14:55
      */
@@ -291,13 +292,13 @@ public class Recorder {
         File output = new File(root, fileName);
         try {
             output.createNewFile();
-        } catch (IOException e) {
-            Log.e(TAG, "startProcessing: " + e);
+        } catch (IOException ex) {
+            Log.e(TAG, "startProcessing: " + ex);
         }
         try {
             rawToWave(rawOutput, output);
-        } catch (IOException e) {
-            Log.e(TAG, "startProcessing: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "startProcessing: ", ex);
         }
     }
 }

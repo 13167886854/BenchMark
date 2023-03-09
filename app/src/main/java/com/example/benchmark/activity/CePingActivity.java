@@ -59,8 +59,6 @@ import java.util.List;
  */
 public class CePingActivity extends Activity implements View.OnClickListener {
     private static final String TAG = "CePingActivity";
-    private final int requestStability = 0;
-    private final int requestFX = 1;
     private static final int RECORD_SM_REQUEST_CODE = 111;
     private static final int RECORD_VA_REQUEST_CODE = 222;
     private static final int RECORD_TOUCH_REQUEST_CODE = 333;
@@ -68,6 +66,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private static final int STORAGE_REQUEST_CODE = 555;
     private static final int AUDIO_REQUEST_CODE = 666;
     private static final int RECORD_REQUEST_CODE = 777;
+
+    private final int requestStability = 0;
+    private final int requestFX = 1;
 
     private ImageButton ceshi_fanhui;
     private RecyclerView recyclerView;
@@ -91,7 +92,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     private boolean isFluencyUntested;
     private boolean isGameTouchTested;
     private boolean isAudioVideoTested;
-
 
     private ServiceConnection smoothConnection;
     private ServiceConnection touchConnection;
@@ -142,6 +142,13 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         mMonitorProgress = findViewById(R.id.ceping_jindu);
     }
 
+    /**
+     * onClick
+     *
+     * @param view description 
+     * @return void
+     * @date 2023/3/9 19:54
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -152,6 +159,12 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * initData
+     *
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     void initData() {
         Intent intent = getIntent();
         checkedPlat = intent.getStringExtra(CacheConst.KEY_PLATFORM_NAME);
@@ -205,34 +218,42 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             startService(fxIntent);
             startFxService();
         }
-
         // 云游戏流畅性测试
         if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckFluency
                 && !isFluencyUntested
         ) {
-            // Toast.makeText(this,"准备测试云游戏流畅性！",Toast.LENGTH_SHORT).show();
             // 开启流畅性测试悬浮窗
             startGameSmoothService();
         } else if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME)
                 && isCheckSoundFrame && !isAudioVideoTested) {
             startGameVAService();
-            // Log.d("TWT", "initData: 开始测试游戏音画质量");
         } else if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME)
                 && isCheckTouch && !isGameTouchTested) {
             // 开始云游戏触控体验测试。。。
-            // Log.d("TWT", "开始云游戏触控体验测试");
             startGameTouchService();
         } else {
             Log.e(TAG, "非正常启动 ");
         }
     }
 
+    /**
+     * onStart
+     *
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     @Override
     protected void onStart() {
         updateListData();
         super.onStart();
     }
 
+    /**
+     * updateListData
+     *
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     private void updateListData() {
         Intent intent = getIntent();
         isCloudPhone = CacheConst.PLATFORM_KIND_CLOUD_PHONE.equals(
@@ -465,6 +486,15 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * onActivityResult
+     *
+     * @param requestCode description
+     * @param resultCode description
+     * @param data description 
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -572,19 +602,36 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         }
     }
 
-
+    /**
+     * onRestart
+     *
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
         updateListData();
     }
 
+    /**
+     * onResume
+     *
+     * @return void
+     * @date 2023/3/9 19:55
+     */
     @Override
     protected void onResume() {
         super.onResume();
         updateListData();
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/9 19:56
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

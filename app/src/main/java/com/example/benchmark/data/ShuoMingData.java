@@ -19,6 +19,15 @@ public class ShuoMingData {
     private String itemInfo;
     private List<LiuChang> list;
 
+    /**
+     * ShuoMingData
+     *
+     * @param infoImage description
+     * @param itemInfo  description
+     * @param list      description
+     * @return
+     * @date 2023/3/9 19:44
+     */
     public ShuoMingData(Integer infoImage, String itemInfo, List<LiuChang> list) {
         this.infoImage = infoImage;
         this.itemInfo = itemInfo;
@@ -29,7 +38,7 @@ public class ShuoMingData {
      * ShuoMingData
      *
      * @date 2023/3/8 16:04
-    */
+     */
     public ShuoMingData() {
     }
 
@@ -38,7 +47,7 @@ public class ShuoMingData {
      *
      * @return java.lang.String
      * @date 2023/3/8 16:04
-    */
+     */
     public String getItemInfo() {
         return itemInfo;
     }
@@ -48,7 +57,7 @@ public class ShuoMingData {
      *
      * @param itemInfo description
      * @date 2023/3/8 16:05
-    */
+     */
     public void setItemInfo(String itemInfo) {
         this.itemInfo = itemInfo;
     }
@@ -58,7 +67,7 @@ public class ShuoMingData {
      *
      * @return java.lang.Integer
      * @date 2023/3/8 16:05
-    */
+     */
     public Integer getInfoImage() {
         return infoImage;
     }
@@ -68,7 +77,7 @@ public class ShuoMingData {
      *
      * @param infoImage description
      * @date 2023/3/8 16:05
-    */
+     */
     public void setInfoImage(Integer infoImage) {
         this.infoImage = infoImage;
     }
@@ -78,7 +87,7 @@ public class ShuoMingData {
      *
      * @return java.util.List<com.example.benchmark.data.LiuChang>
      * @date 2023/3/8 16:05
-    */
+     */
     public List<LiuChang> getList() {
         return list;
     }
@@ -88,7 +97,7 @@ public class ShuoMingData {
      *
      * @param list description
      * @date 2023/3/8 16:05
-    */
+     */
     public void setList(List<LiuChang> list) {
         this.list = list;
     }

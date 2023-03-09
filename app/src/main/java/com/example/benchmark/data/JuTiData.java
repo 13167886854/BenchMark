@@ -16,9 +16,22 @@ public class JuTiData {
     private String jutiItem;
     private String juTiItemGrade;
 
+    /**
+     * JuTiData
+     *
+     * @return
+     * @date 2023/3/9 19:45
+     */
     public JuTiData() {
     }
 
+    /**
+     * JuTiData
+     *
+     * @param item      description
+     * @param itemGrade description
+     * @date 2023/3/9 19:45
+     */
     public JuTiData(String item, String itemGrade) {
         jutiItem = item;
         juTiItemGrade = itemGrade;

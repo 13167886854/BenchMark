@@ -151,6 +151,12 @@ public class GameVATestService extends Service {
         }
     };
 
+    /**
+     * onCreate
+     *
+     * @return void
+     * @date 2023/3/9 16:54
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -162,12 +168,28 @@ public class GameVATestService extends Service {
         createFloatView();
     }
 
+    /**
+     * onBind
+     *
+     * @param intent description
+     * @return android.os.IBinder
+     * @date 2023/3/9 16:54
+     */
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind:12132 ");
         return new RecordBinder();
     }
 
+    /**
+     * setConfig
+     *
+     * @param width  description
+     * @param height description
+     * @param dpi    description
+     * @return void
+     * @date 2023/3/9 16:54
+     */
     public void setConfig(int width, int height, int dpi) {
         this.width = width;
         this.height = height;
@@ -293,10 +315,23 @@ public class GameVATestService extends Service {
         });
     }
 
+    /**
+     * setMediaProject
+     *
+     * @param project description
+     * @return void
+     * @date 2023/3/9 16:54
+     */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
 
+    /**
+     * startVirtual
+     *
+     * @return void
+     * @date 2023/3/9 16:55
+     */
     public void startVirtual() {
         if (mediaProjection != null) {
             Log.i(TAG, "want to display virtual");
@@ -306,6 +341,12 @@ public class GameVATestService extends Service {
         }
     }
 
+    /**
+     * startRecord
+     *
+     * @return boolean
+     * @date 2023/3/9 16:55
+     */
     public boolean startRecord() {
         if (mediaProjection == null || isRunning) {
             return false;
@@ -327,6 +368,12 @@ public class GameVATestService extends Service {
         return false;
     }
 
+    /**
+     * stopRecord
+     *
+     * @return boolean
+     * @date 2023/3/9 16:55
+     */
     public boolean stopRecord() {
         if (!isRunning) {
             return false;
@@ -350,6 +397,12 @@ public class GameVATestService extends Service {
                 mediaRecorder.getSurface(), null, null);
     }
 
+    /**
+     * startVideoRecord
+     *
+     * @return void
+     * @date 2023/3/9 16:55
+     */
     public void startVideoRecord() {
         if (mediaProjection == null || isRunning) {
             Log.d("TWT", "startRecord: mediaProjection == null");
@@ -373,7 +426,10 @@ public class GameVATestService extends Service {
     }
 
     /**
-     * 停止视频录制
+     * stopVideoRecord
+     *
+     * @return void
+     * @date 2023/3/9 16:55
      */
     public void stopVideoRecord() {
         if (!isRunning) {
@@ -497,37 +553,34 @@ public class GameVATestService extends Service {
     }
 
     private void initRecorder() {
-        try {
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-            // 平台类型
-            String platformKind = YinHuaData.platformType;
-            Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
+        // 平台类型
+        String platformKind = YinHuaData.platformType;
+        Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-            // 如果是云手机
-            if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
-                    || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
-                    || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)
-            ) {
-                path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
-            } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
-                    || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
-                path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
-            } else {
-                path = getsaveDirectory() + CacheConst.VIDEO_GAME_NAME;
-            }
-
-            mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(width, height);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-            mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
-            mediaRecorder.setVideoFrameRate(60);
-        } catch (Exception ex) {
-            Log.e("TWT", "initRecorder: " + ex.toString());
+        // 如果是云手机
+        if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)
+        ) {
+            path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
+        } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
+                || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
+            path = getsaveDirectory() + CacheConst.VIDEO_PHONE_NAME;
+        } else {
+            path = getsaveDirectory() + CacheConst.VIDEO_GAME_NAME;
         }
+
+        mediaRecorder.setOutputFile(path);
+        mediaRecorder.setVideoSize(width, height);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+        mediaRecorder.setVideoFrameRate(60);
+
         try {
             mediaRecorder.prepare();
         } catch (IOException ex) {
@@ -535,6 +588,12 @@ public class GameVATestService extends Service {
         }
     }
 
+    /**
+     * getsaveDirectory
+     *
+     * @return java.lang.String
+     * @date 2023/3/9 16:55
+     */
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -552,6 +611,12 @@ public class GameVATestService extends Service {
         }
     }
 
+    /**
+     * record
+     *
+     * @return void
+     * @date 2023/3/9 16:55
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
         mRecorder = new Recorder();
@@ -562,13 +627,22 @@ public class GameVATestService extends Service {
         }
     }
 
+    /**
+     * startAudioRecord
+     *
+     * @return void
+     * @date 2023/3/9 16:55
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void startAudioRecord() {
         record();
     }
 
     /**
-     * 停止录音
+     * stopAudioRecord
+     *
+     * @return void
+     * @date 2023/3/9 16:56
      */
     public void stopAudioRecord() {
         if (mRecorder != null) {
@@ -674,16 +748,38 @@ public class GameVATestService extends Service {
         }
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/9 16:56
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * onStartCommand
+     *
+     * @param intent  description
+     * @param flags   description
+     * @param startId description
+     * @return int
+     * @date 2023/3/9 16:56
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    /**
+     * ClassName: RecordBinder
+     * Description:
+     *
+     * @Author benchmark
+     * Version 1.0
+     */
     public class RecordBinder extends Binder {
         public GameVATestService getRecordService() {
             return GameVATestService.this;

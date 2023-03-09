@@ -33,7 +33,10 @@ import okhttp3.Response;
  * @since 2023/3/7 17:29
  */
 public class TapUtil {
+    /** mWholeMonitorNum */
     public static int mWholeMonitorNum;
+
+    /** 点击次数 */
     public static final int TOTAL_TAP_NUM = 12;
 
     private static TapUtil util = new TapUtil();
@@ -42,10 +45,8 @@ public class TapUtil {
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final OkHttpClient client = new OkHttpClient();
 
-
     private MyAccessibilityService service;
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
-
 
     private int phoneCurrentTapNum = 0;
 
@@ -70,10 +71,18 @@ public class TapUtil {
         }
         return util;
     }
+
     public void setService(MyAccessibilityService service) {
         this.service = service;
     }
 
+    /**
+     * tap
+     *
+     * @param locationX description
+     * @param locationY description
+     * @date 2023/3/9 15:03
+    */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void tap(int locationX, int locationY) {
         if (service == null) {
@@ -93,7 +102,13 @@ public class TapUtil {
         );
     }
 
-    // 云手机触控体验
+    /**
+     * cloudPhoneTap云手机触控体验
+     *
+     *  * @param locationX description
+     * @param locationY description
+     * @date 2023/3/9 14:55
+    */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void cloudPhoneTap(int locationX, int locationY) {
         if (service == null) {
@@ -164,6 +179,12 @@ public class TapUtil {
         );
     }
 
+    /**
+     * gameTouchTap
+     *
+     * @param service description
+     * @date 2023/3/9 14:55
+    */
     public void gameTouchTap(GameTouchTestService service) {
         turn = 0;
         gameTouchUtil.clear();
@@ -191,6 +212,11 @@ public class TapUtil {
         timer.schedule(task, 1500, 750);
     }
 
+    /**
+     * phoneTouchTap
+     *
+     * @date 2023/3/9 14:56
+    */
     public void phoneTouchTap() {
         phoneCurrentTapNum = 0;
         TimerTask task = new TimerTask() {

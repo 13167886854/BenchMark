@@ -43,6 +43,8 @@ public class AccessUtils {
     }
 
     /**
+     * openAccessibilitySettings
+     *
      * @return void
      * @throws null
      * @description: 打开无障碍服务设置
@@ -54,6 +56,8 @@ public class AccessUtils {
     }
 
     /**
+     * isAccessibilityServiceOpen
+     *
      * @return boolean
      * @throws null
      * @description: 辅助服务是否开启
@@ -69,6 +73,8 @@ public class AccessUtils {
     }
 
     /**
+     * isIgnoringBatteryOptimizations
+     *
      * @return boolean
      * @throws null
      * @description: 判断后台权限是否已经开启
@@ -88,6 +94,8 @@ public class AccessUtils {
     }
 
     /**
+     * requestIgnoreBatteryOptimizations
+     *
      * @return void
      * @throws null
      * @description: 打开后台无限制运行，保证不会被杀死
@@ -105,6 +113,8 @@ public class AccessUtils {
     }
 
     /**
+     * openAccessibilityService
+     *
      * @return void
      * @throws null
      * @description: 开启无障碍服务权限

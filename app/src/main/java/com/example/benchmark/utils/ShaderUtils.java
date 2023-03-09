@@ -11,6 +11,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -87,8 +88,8 @@ public class ShaderUtils {
             input.close();
             result = new String(buff, "UTF-8");
             result = result.replaceAll("\\r\\n", "\n");
-        } catch (Exception e) {
-            Log.e("ShaderUtils", "readRawTextFile: ", e);
+        } catch (IOException ioe) {
+            Log.e("ShaderUtils", "readRawTextFile: ", ioe);
         }
         return result;
     }

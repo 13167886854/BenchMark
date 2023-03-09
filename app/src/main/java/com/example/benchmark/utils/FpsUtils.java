@@ -17,11 +17,16 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class FpsUtils {
-    // 监听时的刷新时间间隔,设置为1S
+    /** 监听时的刷新时间间隔,设置为1S */
     public static final long FPS_INTERVAL_TIME = 1000L;
 
-    // 低帧判断  fps<25判断为低帧
+    /** 低帧判断  fps<25判断为低帧 */
     public static final double LOW_FRAME_TIME = 1000.0 / 24; // 每帧传输时间超过fps25的判断为低帧
+
+    /** handler */
+    public static Handler mainHandler = new Handler();
+
+    private static FpsUtils fpsUtils = new FpsUtils();
 
     // 记录单位时间内帧数
     private int count = 0;
@@ -54,9 +59,10 @@ public class FpsUtils {
     private ArrayList<Integer> last3FrameTimes = new ArrayList();
 
     // 单例模式
-    private static FpsUtils fpsUtils = new FpsUtils();
+
     private boolean isFpsOpen = false;
-    public static Handler mainHandler = new Handler();
+
+
 
     private FpsUtils() {
     }
@@ -184,7 +190,8 @@ public class FpsUtils {
     /**
      * getDurationTime
      *
-     * @date 2023/3/8 09:03
+     * @return long
+     * @date 2023/3/9 16:13
      */
     public long getDurationTime() {
         endTime = System.currentTimeMillis();

@@ -17,12 +17,13 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class GameTouchUtil {
-    // 测试次数
+    /** 测试次数 */
     public static final int TEST_NUM = 10;
     private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
-    // readyToTapTime
+    /** readyToTapTime */
     public long readyToTapTime = 0L;
+
     private long videoStartTime = 0L;
     private long videoEndTime = 0L;
     private ArrayList<Long> frameUpdateTime = new ArrayList<>();

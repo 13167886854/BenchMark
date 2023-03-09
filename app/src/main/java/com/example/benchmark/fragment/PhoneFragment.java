@@ -55,6 +55,10 @@ import java.util.HashMap;
  */
 public class PhoneFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "PhoneFragment";
+
+    private final HashMap<String, String> checkPhoneMap = new HashMap<>();
+    private final int allCheckCount = 8;
+
     private Button blueLiuChang;
     private Button blueWenDing;
     private Button blueChuKong;
@@ -104,15 +108,21 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
 
-    private final HashMap<String, String> checkPhoneMap = new HashMap<>();
-
-    private final int allCheckCount = 8;
     private int mCheckCounts = allCheckCount;
 
+    /**
+     * onCreateView
+     *
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
+     * @return android.view.View
+     * @date 2023/3/9 19:34
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_fragment, container, false);
         initview(view);
         kunPengPhone.setOnClickListener(this);
@@ -274,7 +284,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
      *
      * @param vi description
      * @date 2023/3/8 16:22
-    */
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View vi) {
@@ -666,7 +676,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
      * showDialog
      *
      * @date 2023/3/8 16:22
-    */
+     */
     public void showDialog() {
         Log.e(TAG, "PhoneFragement-showDialog: ");
         myDialog = new IpPortDialog(getContext());

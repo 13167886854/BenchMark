@@ -46,7 +46,10 @@ import java.util.TimerTask;
  * @since 2023/3/7 15:05
  */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
+    /** isTestOver */
     public static boolean isTestOver = false;
+
+    /** mMp4FilePath */
     public static String mMp4FilePath;
 
     private SurfaceView mSurfaceView;
@@ -63,13 +66,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     private VideoDecodeThread videoDecodeThread;
     private AudioDecodeThread audioDecodeThread;
 
-    public static void start(Context context) {
-        Intent intent = new Intent(context, AudioVideoActivity.class);
-        intent.putExtra("isAudioVideoTested", true);
-        context.startActivity(intent);
-    }
-
-    Handler handler = new Handler() {
+    private Handler handler = new Handler() {
         @SuppressLint({"HandlerLeak", "SetTextI18n"})
         @Override
         public void handleMessage(Message msg) {
@@ -112,7 +109,26 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
+    /**
+     * start
+     *
+     * @param context description 
+     * @return void
+     * @date 2023/3/9 19:56
+     */
+    public static void start(Context context) {
+        Intent intent = new Intent(context, AudioVideoActivity.class);
+        intent.putExtra("isAudioVideoTested", true);
+        context.startActivity(intent);
+    }
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description 
+     * @return void
+     * @date 2023/3/9 19:57
+     */
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +147,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         timer.schedule(task, 1000);
     }
 
-    void init() {
+    private void init() {
         isCompleted = false;
         isTestOver = false;
         mSurfaceView = findViewById(R.id.surface_view);
@@ -150,6 +166,13 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /**
+     * onClick
+     *
+     * @param view description 
+     * @return void
+     * @date 2023/3/9 19:57
+     */
     @SuppressLint({"NonConstantResourceId", "SetTextI18n"})
     @Override
     public void onClick(View view) {
@@ -190,11 +213,23 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /**
+     * onBackPressed
+     *
+     * @return void
+     * @date 2023/3/9 19:57
+     */
     @Override
     public void onBackPressed() {
         super.onDestroy();
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/9 19:57
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
