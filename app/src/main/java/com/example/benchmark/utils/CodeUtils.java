@@ -46,7 +46,6 @@ import java.util.Map;
  * @since 2023/3/7 17:24
  */
 public final class CodeUtils {
-
     // 默认宽度要求
     public static final int DEFAULT_REQ_WIDTH = 480;
 
@@ -115,7 +114,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
-                                      @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
+        @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
         // 配置参数
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
@@ -455,15 +454,15 @@ public final class CodeUtils {
             BitmapFactory.Options newOpts = new BitmapFactory.Options();
 
             // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
-            newOpts.inJustDecodeBounds = true;//获取原始图片大小
+            newOpts.inJustDecodeBounds = true; // 获取原始图片大小
 
-            BitmapFactory.decodeFile(path, newOpts);// 此时返回bm为空
+            BitmapFactory.decodeFile(path, newOpts); // 此时返回bm为空
 
             BigDecimal width = new BigDecimal(newOpts.outWidth);
             BigDecimal height = new BigDecimal(newOpts.outHeight);
 
             // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
-            int wSize = 1;// wSize=1表示不缩放
+            int wSize = 1; // wSize=1表示不缩放
             if (width.intValue() > reqWidth) {
                 // 如果宽度大的话根据宽度固定大小缩放
                 wSize = (int) (width.intValue() / reqWidth);
@@ -476,10 +475,10 @@ public final class CodeUtils {
                 hSize = (int) (height.intValue() / reqHeight);
             }
             int size = Math.max(wSize, hSize);
-            if (size <= 0){
+            if (size <= 0) {
                 size = 1;
             }
-            newOpts.inSampleSize = size;// 设置缩放比例
+            newOpts.inSampleSize = size; // 设置缩放比例
 
             // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
             newOpts.inJustDecodeBounds = false;
@@ -533,7 +532,7 @@ public final class CodeUtils {
         return createBarCode(content, format, desiredWidth, desiredHeight, null);
     }
     public static Bitmap createBarCode(String content, int desiredWidth,
-                                       int desiredHeight, boolean isShowText) {
+        int desiredHeight, boolean isShowText) {
         return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
                 desiredHeight, null, isShowText, 40, Color.BLACK);
     }
@@ -599,8 +598,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                       int desiredWidth, int desiredHeight, boolean isShowText,
-                                       @ColorInt int codeColor) {
+        int desiredWidth, int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
         return createBarCode(content, format, desiredWidth, desiredHeight,
                 null, isShowText, 40, codeColor);
     }

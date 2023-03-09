@@ -167,8 +167,8 @@ public class FxService extends Service {
         try {
             Log.e("FxService", "1.PESQ:" + YinHuaData.pesq);
             Log.e("FxService", "1.PESQ==null:" + (YinHuaData.pesq == null));
-        } catch (Exception e) {
-            Log.e("FxService", "error: " + e.toString());
+        } catch (Exception err) {
+            Log.e("FxService", "error: " + err.toString());
         }
         HandlerThread serviceThread = new HandlerThread("service_thread",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -176,8 +176,6 @@ public class FxService extends Service {
         isRunning = false;
         mediaRecorder = new MediaRecorder();
     }
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     void createNotificationChannel() {
         NotificationChannel channel = new NotificationChannel("Benchmark 悬浮窗",
@@ -186,7 +184,6 @@ public class FxService extends Service {
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(channel);
     }
-
     @SuppressLint("ClickableViewAccessibility")
     private void createFloatView() {
         wmParams = new LayoutParams();
@@ -195,8 +192,6 @@ public class FxService extends Service {
         if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
             mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         }
-
-
         // 设置window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -247,7 +242,7 @@ public class FxService extends Service {
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -288,7 +283,7 @@ public class FxService extends Service {
         });
         mFloatView.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
             }
         });
         btnToPrCode = btnMenu.findViewById(R.id.btnToPrCode);
@@ -299,7 +294,7 @@ public class FxService extends Service {
         btnToPrCode.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -340,7 +335,7 @@ public class FxService extends Service {
         btnToTap = btnMenu.findViewById(R.id.btnToTap);
         btnToTap.setOnTouchListener(new OnTouchListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -381,7 +376,7 @@ public class FxService extends Service {
         btnToBack.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -392,13 +387,11 @@ public class FxService extends Service {
                         wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY()
                                 - btnToBack.getMeasuredHeight() - statusBarHeight;
-
                         // 刷新
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
-
                         // 小于0.2秒被判断为点击
                         if ((endTime - startTime) > 200) {
                             isClick = false;
@@ -420,7 +413,7 @@ public class FxService extends Service {
         btnToRecord.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -447,7 +440,6 @@ public class FxService extends Service {
                 }
                 // 响应返回点击事件
                 if (isClick) {
-
                     tapUtil.tap(screenWidth / 2, screenHeight / 2);
                     btnMenu.setVisibility(View.GONE);
                     startAudioRecord();
@@ -466,10 +458,8 @@ public class FxService extends Service {
                 return true;
             }
         }); // 设置监听浮动窗口的触摸移动
-
         btnToRecord.setVisibility(isCheckSoundFrame ? View.VISIBLE : View.GONE);
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -477,8 +467,8 @@ public class FxService extends Service {
             if (mFloatLayout != null) {
                 mWindowManager.removeView(mFloatLayout);
             }
-        } catch (Exception e) {
-            Log.d(TAG, "error: " + e.toString());
+        } catch (Exception err) {
+            Log.d(TAG, "error: " + err.toString());
         } finally {
             mediaProjection.stop();
             stopSelf();
@@ -532,25 +522,21 @@ public class FxService extends Service {
         image.close();
         return bitmap;
     }
-
     private float getFloatDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         if (target == null) return 0F;
         else return Float.parseFloat(target.toString().split("吉")[0]);
     }
-
     private long getLongDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         if (target == null) return 0;
         else return Long.parseLong(target.toString());
     }
-
     private int getIntDataFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         if (target == null) return 0;
         else return Integer.parseInt(target.toString());
     }
-
     private JSONArray getListFromJson(JSONObject jsonObject, String name) {
         Object target = jsonObject.getString(name);
         Log.d("getIntDataFromJson", "getIntDataFromJson: ==>" + target);
@@ -570,10 +556,8 @@ public class FxService extends Service {
             } else {
                 return "";
             }
-
         }
     }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void toCatchScreen() {
         Bitmap bitmap = screenShot();
@@ -648,9 +632,8 @@ public class FxService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
-        boolean isSupported;
         mRecorder = new Recorder();
-        isSupported = mRecorder.start(this, mediaProjection);
+        boolean isSupported = mRecorder.start(this, mediaProjection);
         if (!isSupported) {
             mediaProjection.stop();
             stopSelf();
@@ -681,7 +664,6 @@ public class FxService extends Service {
             mediaRecorder.start();
             isRunning = true;
         }
-
     }
 
     /**
@@ -709,17 +691,13 @@ public class FxService extends Service {
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             OkHttpClient client = new OkHttpClient.Builder()
-
                     // 连接超时
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 读取超时
                     .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 写入超时
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
-
             MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
             // file是要上传的文件 File() "/"
@@ -743,11 +721,10 @@ public class FxService extends Service {
             client.newCall(request)
                     .enqueue(new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
+                        public void onFailure(Call call, IOException err) {
                             Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + e.toString());
+                            Log.d(TAG, "onFailure: err" + err.toString());
                         }
-
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.d(TAG, "onResponse: response==>" + response);
@@ -775,17 +752,13 @@ public class FxService extends Service {
         } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             OkHttpClient client = new OkHttpClient.Builder()
-
                     // 连接超时
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 读取超时
                     .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 写入超时
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
-
             MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
             // file是要上传的文件 File() "/"
@@ -809,9 +782,9 @@ public class FxService extends Service {
             client.newCall(request)
                     .enqueue(new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
+                        public void onFailure(Call call, IOException err) {
                             Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + e.toString());
+                            Log.d(TAG, "onFailure: err" + err.toString());
                         }
 
                         @Override
@@ -842,7 +815,6 @@ public class FxService extends Service {
             Log.d(TAG, "stopVideoRecord: lastElse");
         }
     }
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void startAudioRecord() {
         record();
@@ -858,11 +830,10 @@ public class FxService extends Service {
         if (mRecorder != null) {
             try {
                 mRecorder.startProcessing();
-            } catch (IOException e) {
-                Log.e(TAG, "stopAudioRecord: ", e);
+            } catch (IOException err) {
+                Log.e(TAG, "stopAudioRecord: ", err);
             }
         }
-
         // 平台类型
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
@@ -872,17 +843,13 @@ public class FxService extends Service {
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
             OkHttpClient client = new OkHttpClient.Builder()
-
                     // 连接超时
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 读取超时
                     .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 写入超时
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
-
             MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
             File file = new File(CacheConst.audioPath + File.separator
                     + CacheConst.AUDIO_PHONE_NAME);
@@ -904,9 +871,9 @@ public class FxService extends Service {
             client.newCall(request)
                     .enqueue(new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
+                        public void onFailure(Call call, IOException err) {
                             Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + e.toString());
+                            Log.d(TAG, "onFailure: err" + err.toString());
                         }
 
                         @Override
@@ -934,13 +901,10 @@ public class FxService extends Service {
         } else if (platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME)) {
             OkHttpClient client = new OkHttpClient.Builder()
-
                     // 连接超时
                     .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 读取超时
                     .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
-
                     // 写入超时
                     .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                     .build();
@@ -965,18 +929,17 @@ public class FxService extends Service {
             client.newCall(request)
                     .enqueue(new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
+                        public void onFailure(Call call, IOException err) {
                             Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + e.toString());
+                            Log.d(TAG, "onFailure: err" + err.toString());
                         }
-
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.d(TAG, "onResponse: response==>" + response);
                             Log.d(TAG, "onResponse: response==>" + response.body());
                             String res = response.body().string();
                             String[] resArr = res.split(" ");
-                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                            Log.d(TAG, "onResponse: resArr " + Arrays.toString(resArr));
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(computePesq);
@@ -1008,7 +971,6 @@ public class FxService extends Service {
         try {
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-
             // 平台类型
             String platformKind = YinHuaData.platformType;
             Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
@@ -1028,13 +990,13 @@ public class FxService extends Service {
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
-        } catch (Exception e) {
-            Log.e("TWT", "initRecorder: " + e.toString());
+        } catch (Exception err) {
+            Log.e("TWT", "initRecorder: " + err.toString());
         }
         try {
             mediaRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(TAG, "initRecorder: ", e);
+        } catch (IOException err) {
+            Log.e(TAG, "initRecorder: ", err);
         }
     }
 

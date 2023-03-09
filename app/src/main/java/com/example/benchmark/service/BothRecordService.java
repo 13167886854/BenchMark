@@ -81,8 +81,7 @@ public class BothRecordService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
         mRecorder = new Recorder();
-        boolean isSupported;
-        isSupported = mRecorder.start(this, mProjection);
+        boolean isSupported = mRecorder.start(this, mProjection);
         if (!isSupported) {
             mProjection.stop();
             stopSelf();
@@ -131,7 +130,6 @@ public class BothRecordService extends Service {
                 mRecorder.startProcessing();
             } catch (IOException e) {
                 Log.e("BothRecordService", e.toString());
-
             }
         }
         stopSelf();
@@ -160,8 +158,8 @@ public class BothRecordService extends Service {
 
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                    File.separator + "ScreenRecorder" + File.separator;
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator + "ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {

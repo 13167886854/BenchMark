@@ -49,7 +49,6 @@ public class SpeedManager {
             mPrevMonoUsec = System.nanoTime() / 1000;
             mPrevPresentUsec = presentationTimeUsec;
         } else {
-
             // Compute the desired time delta between the previous frame and this frame.
             long frameDelta;
             if (isLoopReset) {

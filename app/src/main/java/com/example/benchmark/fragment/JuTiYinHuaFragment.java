@@ -24,13 +24,12 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:16
  */
 public class JuTiYinHuaFragment extends Fragment {
-
     private View mView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_yinhua_fragment, container, false);
         return mView;
     }

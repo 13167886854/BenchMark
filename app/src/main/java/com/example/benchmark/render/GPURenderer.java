@@ -19,17 +19,16 @@ import javax.microedition.khronos.opengles.GL10;
  * @since 2023/3/7 17:19
  */
 public class GPURenderer implements GLSurfaceView.Renderer {
-
-    //GPU 渲染器
+    // GPU渲染器
     public static String glRenderer;
 
-    //GPU 供应商
+    // GPU供应商
     public static String glVendor;
 
-    //GPU 版本
+    // GPU版本
     public static String glVersion;
 
-    //GPU  扩展名
+    // GPU扩展名
     public static String glExtensions;
 
     @Override

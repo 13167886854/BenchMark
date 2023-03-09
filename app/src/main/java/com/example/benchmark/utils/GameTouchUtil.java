@@ -18,13 +18,13 @@ import java.util.ArrayList;
  */
 public class GameTouchUtil {
     // 测试次数
-    public static final int testNum = 10;
+    public static final int TEST_NUM = 10;
     private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
     // readyToTapTime
-    public long readyToTapTime = 0;
-    private long videoStartTime = 0;
-    private long videoEndTime = 0;
+    public long readyToTapTime = 0L;
+    private long videoStartTime = 0L;
+    private long videoEndTime = 0L;
     private ArrayList<Long> frameUpdateTime = new ArrayList<>();
     private ArrayList<Long> autoTapTime = new ArrayList<>();
     private ArrayList<Long> testTime = new ArrayList<>();
@@ -204,33 +204,33 @@ public class GameTouchUtil {
     /**
      * printAvgTime
      *
-     * @param testNum description
+     * @param TEST_NUM description
      * @description: printAvgTime
      * @date 2023/3/2 09:55
      */
-    public void printAvgTime(int testNum) {
-        long sum = 0;
+    public void printAvgTime(int TEST_NUM) {
+        long sum = 0L;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / TEST_NUM;
         Log.d("TWT", "printAvgTime: 平均自动点击响应时间为：" + avgtime);
     }
 
     /**
      * getAvgTime
      *
-     * @param testNum description
+     * @param TEST_NUM description
      * @return float
      * @description: getAvgTime
      * @date 2023/3/2 09:55
      */
-    public float getAvgTime(int testNum) {
-        long sum = 0;
+    public float getAvgTime(int TEST_NUM) {
+        long sum = 0L;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / TEST_NUM;
         Log.e("TWT", "getAvgTime:+frameUpdateTime.size " + frameUpdateTime.size());
         Log.e("TWT", "getAvgTime:+autoTapTime.size " + autoTapTime.size());
         return avgtime;

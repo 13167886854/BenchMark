@@ -192,12 +192,10 @@ public class TishiFragment extends Fragment {
                         Log.d(TAG, "点击登录: username---" + Admin.username
                                 + "---password---" + Admin.username);
                         if (Admin.username.length() < 5 || Admin.username.length() > 15) {
-                            Toast.makeText(getContext(), "用户名长度为5~15位"
-                                    , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
                             myDialog.yes.setEnabled(true);
                             if (Admin.password.length() < 5 || Admin.password.length() > 15) {
-                                Toast.makeText(getContext(), "密码长度为5~15位"
-                                        , Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
                                 myDialog.yes.setEnabled(true);
                             }
                         } else {
@@ -209,8 +207,7 @@ public class TishiFragment extends Fragment {
                                             + "/admin/loginAndReg")
                                             .addParam("adminName", Admin.username)
                                             .addParam("adminPasswd", Admin.password)
-                                            .addHeader("Content-Type"
-                                                    , "application/json; charset=utf-8")
+                                            .addHeader("Content-Type", "application/json; charset=utf-8")
                                             .post(true)
                                             .async(new OkHttpUtils.ICallBack() {
                                                 @Override
@@ -234,8 +231,7 @@ public class TishiFragment extends Fragment {
                                                         // 验证成功后，跳转到主界面
                                                         Looper.loop();
                                                     } else {
-                                                        Log.d(TAG, "onSuccessful: data==>"
-                                                                + data);
+                                                        Log.d(TAG, "onSuccessful: data==>" + data);
                                                         mMessage = mHandler.obtainMessage();
                                                         mMessage.what = 1;
                                                         mHandler.sendMessage(mMessage);
@@ -249,8 +245,7 @@ public class TishiFragment extends Fragment {
 
                                                 @Override
                                                 public void onFailure(Call call, String errorMsg) {
-                                                    Log.d(TAG, "onFailure: errorMsg ==>"
-                                                            + errorMsg);
+                                                    Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
                                                     mMessage = mHandler.obtainMessage();
                                                     mMessage.what = 1;
                                                     mHandler.sendMessage(mMessage);

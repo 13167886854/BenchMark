@@ -98,7 +98,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
         }
         while (!AccessibilityUtil.findIsContainText(service, "100%")
                 || !AccessibilityUtil.findIsContainText(service, "启动完成")) {
-            Log.d("QT", "服务启动中" );
+            Log.d("QT", "服务启动中");
         }
         Log.e("QT", "openTime:" + (System.currentTimeMillis() - startTime));
         service.mOpenTime.add(System.currentTimeMillis() - startTime);

@@ -43,11 +43,9 @@ public class IpPortDialog extends Dialog {
     private TextView messageTv; // 消息提示文本
     private String titleStr; // 从外界设置的title文本
     private String messageStr; // 从外界设置的消息文本
-    private View view;
-
-    //确定文本和取消文本的显示内容
-    private String yesStr, noStr;
-
+    private View view; // 确定文本和取消文本的显示内容
+    private String yesStr;
+    private String noStr;
     private EditText ipAddress;
     private EditText port;
     private String textIp = "";
@@ -57,10 +55,8 @@ public class IpPortDialog extends Dialog {
     private Thread mThread;
     private Message mMessage;
     private static final String TAG = "Login";
-
     private onNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器
     private onYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -70,7 +66,6 @@ public class IpPortDialog extends Dialog {
             }
         }
     };
-
     public IpPortDialog(@NonNull Context context) {
         super(context);
     }
@@ -83,7 +78,6 @@ public class IpPortDialog extends Dialog {
      */
     public void setNoOnclickListener(String str, onNoOnclickListener onNoOnclickListener) {
         if (str != null) {
-
             noStr = str;
         }
         this.noOnclickListener = onNoOnclickListener;
@@ -101,57 +95,31 @@ public class IpPortDialog extends Dialog {
         }
         this.yesOnclickListener = onYesOnclickListener;
     }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ip_port_dialog);
-
         // 设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         // 按空白处不能取消动画
         setCanceledOnTouchOutside(false);
-
         // 初始化界面控件
         initView();
-
         // 初始化界面数据
         initData();
-
         // 初始化界面控件的事件
         initEvent();
         ipAddress = findViewById(R.id.ip_address); // 用户名
         ipAddress.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 textIp = editable.toString();
                 IpPort.ip = textIp;
             }
         });
-
         port = findViewById(R.id.port); // 密码
         port.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 testPort = editable.toString();
@@ -159,9 +127,7 @@ public class IpPortDialog extends Dialog {
                 IpPort.ip = textIp;
             }
         });
-
     }
-
     /**
      * 初始化界面的确定和取消监听器
      */
@@ -169,7 +135,7 @@ public class IpPortDialog extends Dialog {
         // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (yesOnclickListener != null) {
                     Log.d(TAG, "onClick: ");
                 }
@@ -179,21 +145,19 @@ public class IpPortDialog extends Dialog {
         // 设置取消按钮被点击后，向外界提供监听
         no.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 if (noOnclickListener != null) {
                     noOnclickListener.onNoClick();
                 }
             }
         });
     }
-
     /**
      * 初始化界面控件的显示数据
      */
     private void initData() {
 
     }
-
     /**
      * 初始化界面控件
      */
@@ -204,7 +168,6 @@ public class IpPortDialog extends Dialog {
         messageTv = (TextView) findViewById(R.id.message);
         view = findViewById(R.id.view_dialog);
     }
-
     /**
      * 从外界Activity为Dialog设置标题
      *
@@ -213,7 +176,6 @@ public class IpPortDialog extends Dialog {
     public void setTitle(String title) {
         titleStr = title;
     }
-
     /**
      * 从外界Activity为Dialog设置dialog的message
      *
@@ -222,19 +184,13 @@ public class IpPortDialog extends Dialog {
     public void setMessage(String message) {
         messageStr = message;
     }
-
     /**
      * 设置确定按钮和取消被点击的接口
      */
     public interface onYesOnclickListener {
         public void onYesClick();
     }
-
     public interface onNoOnclickListener {
         public void onNoClick();
     }
-
 }
-
-
-

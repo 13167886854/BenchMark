@@ -13,17 +13,16 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:11
  */
 public class CepingData {
-
-    //测评的分数
+    // 测评的分数
     private int grade;
 
     // 测评模块得图片
     private int cepingImage;
 
-    //测评的模块
+    // 测评的模块
     private String cepingItem;
 
-    //测评得说明信息
+    // 测评得说明信息
     private String cepingText;
 
     /**
@@ -51,8 +50,6 @@ public class CepingData {
         this.cepingItem = cepingItem;
         this.cepingText = cepingText;
     }
-
-
     /**
      * CepingData
      *
@@ -70,7 +67,6 @@ public class CepingData {
         this.cepingItem = cepingItem;
         this.cepingText = cepingText;
     }
-
     /**
      * getGrade
      *

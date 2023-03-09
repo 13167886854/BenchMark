@@ -169,7 +169,6 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         synchronized (this) {
             if (isUpdateSurface) {
-
                 // 获取新数据
                 surfaceTexture.updateTexImage();
 
@@ -185,18 +184,17 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
             }
         }
         GLES20.glUseProgram(programId);
-        GLES20.glUniformMatrix4fv(uMatrixLocation, 1
-                , false, projectionMatrix, 0);
-        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1
-                , false, mSTMatrix, 0);
+        GLES20.glUniformMatrix4fv(uMatrixLocation, 1,
+                false, projectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1,
+                false, mSTMatrix, 0);
         vertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aPositionLocation);
         GLES20.glVertexAttribPointer(aPositionLocation, 3, GLES20.GL_FLOAT, false,
                 12, vertexBuffer);
         textureVertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aTextureCoordLocation);
-        GLES20.glVertexAttribPointer(aTextureCoordLocation, 2
-                , GLES20.GL_FLOAT, false, 8, textureVertexBuffer);
+        GLES20.glVertexAttribPointer(aTextureCoordLocation, 2, GLES20.GL_FLOAT, false, 8, textureVertexBuffer);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, textureId);
         GLES20.glUniform1i(uTextureSamplerLocation, 0);
@@ -219,12 +217,11 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
         float screenRatio = (float) screenWidth / screenHeight;
         float videoRatio = (float) videoHeight / videoWidth;
         if (videoRatio > screenRatio) {
-            Matrix.orthoM(projectionMatrix, 0, -1f, 1f
-                    , -videoRatio / screenRatio, videoRatio / screenRatio
-                    , -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
+                    -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
         } else {
-            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio
-                    , screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio,
+                    screenRatio / videoRatio, -1f, 1f, -1f, 1f);
         }
     }
 

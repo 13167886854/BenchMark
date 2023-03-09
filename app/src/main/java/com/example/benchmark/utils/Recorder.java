@@ -138,7 +138,7 @@ public class Recorder {
         CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + "AudioRecorder";
         Log.e(TAG, "root: " + root);
-        cache = new File(context.getCacheDir().getAbsolutePath(), File.separator+"RawData");
+        cache = new File(context.getCacheDir().getAbsolutePath(), File.separator + "RawData");
         if (!root.exists()) {
             root.mkdir();
             root.setWritable(true);
@@ -256,7 +256,6 @@ public class Recorder {
 
     private void writeAudioFile() {
         try {
-            // String absolutePath = rawOutput.getAbsolutePath();
             String canonicalPath = rawOutput.getCanonicalPath();
             FileOutputStream outputStream = new FileOutputStream(canonicalPath);
             short[] data = new short[bufferElements2Rec];

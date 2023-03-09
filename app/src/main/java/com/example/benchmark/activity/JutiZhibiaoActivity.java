@@ -52,10 +52,13 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
     private Boolean isCloudPhone;
     private HashMap mHashMapLocal;
     private ImageButton back;
-    private TextView juTiPhoneName, juTiGrade;
-    private Button backCePing, nextZhiBiao;
+    private TextView juTiPhoneName;
+    private TextView juTiGrade;
+    private Button backCePing;
+    private Button nextZhiBiao;
     private ImageView juTiImg;
-    private TextView juTiText, juTiItem;
+    private TextView juTiText;
+    private TextView juTiItem;
     private LinearLayout mHeadScore;
     private FragmentManager fragmentManager;
     private RecyclerView recyclerView;
@@ -91,25 +94,25 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
 
     @SuppressLint("SetTextI18n")
     private void initdata(Intent intent) {
-        String select_plat = intent.getStringExtra("select_plat");
-        Log.d(TAG, "initdata: select_plat-------" + select_plat);
-        String select_item = intent.getStringExtra("select_item");
-        String select_text = intent.getStringExtra("select_text");
+        String selectPlat = intent.getStringExtra("selectPlat");
+        Log.d(TAG, "initdata: selectPlat-------" + selectPlat);
+        String selectItem = intent.getStringExtra("selectItem");
+        String selectText = intent.getStringExtra("selectText");
         Integer grade = intent.getIntExtra("select_grade", 98);
-        int select_img = intent.getIntExtra("select_img", R.drawable.blue_liuchang);
+        int selectImg = intent.getIntExtra("selectImg", R.drawable.blue_liuchang);
         isCloudPhone = intent.getBooleanExtra("isCloudPhone", false);
         Log.d(TAG, "onCreate: isCloudPhone-----------" + isCloudPhone);
         if (mHashMapLocal instanceof HashMap) {
             mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
         }
         Log.d(TAG, "initdata: localMobileInfo--------" + mHashMapLocal);
-        juTiImg.setImageResource(select_img);
-        juTiText.setText(select_text);
-        juTiItem.setText(select_item);
-        juTiPhoneName.setText(select_plat + "·" + select_item);
+        juTiImg.setImageResource(selectImg);
+        juTiText.setText(selectText);
+        juTiItem.setText(selectItem);
+        juTiPhoneName.setText(selectPlat + "·" + selectItem);
         juTiGrade.setText(String.valueOf(grade));
-        Log.e("TWT", "select_item: " + select_item);
-        switch (select_item) {
+        Log.e("TWT", "selectItem: " + selectItem);
+        switch (selectItem) {
             case CacheConst.KEY_FLUENCY_INFO: {
                 data = new ArrayList<>();
                 data.add(new JuTiData("平均帧率", ScoreUtil.getAverageFPS() + "fps"));
@@ -221,7 +224,6 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
      * @date 2023/2/23 10:35
      */
     public Map<String, Object> getInfo() {
-
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
         Map<String, String> ramInfo = SDCardUtils.getRAMInfo(this);
         if (ramInfo.get("可用").equals(ramInfo.get("总共"))) {

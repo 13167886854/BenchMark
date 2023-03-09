@@ -60,7 +60,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof RecyclerViewHolder){
+        if (holder instanceof RecyclerViewHolder) {
             RecyclerViewHolder recyclerViewHolder = (RecyclerViewHolder) holder;
             LiuChang liuChang = data.get(position);
             recyclerViewHolder.itemOfItem.setText(liuChang.getItemOfItem());

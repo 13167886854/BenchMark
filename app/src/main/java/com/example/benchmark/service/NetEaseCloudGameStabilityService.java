@@ -24,7 +24,7 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
     private static final String TAG = "NetEaseCloudGameStabilityService";
 
     // 超过一定时间仍未进入游戏则表示加载失败
-    private final long MONITOR_FAIL_TIME = 8000L;
+    private final long monitorFailTime = 8000L;
     private final String nodeIdInstantPlay = "com.netease.android.cloudgame:id/start_game_btn";
     private final String nodeTextInstantPlay = "秒玩";
     private final String nodeIdEnterGame = "com.netease.android.cloudgame:id/btn_enter_game";
@@ -56,7 +56,9 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
         if (!isEnterGame) {
             AccessibilityNodeInfo instantPlayNode = AccessibilityUtil.findNodeInfo(
                     service, nodeIdInstantPlay, nodeTextInstantPlay);
-            if (instantPlayNode == null) {return;}
+            if (instantPlayNode == null) {
+                return;
+            }
             AccessibilityUtil.performClick(instantPlayNode);
             mStartTime = System.currentTimeMillis();
             try {
@@ -73,7 +75,7 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
             long startWaitLoadTime = System.currentTimeMillis();
             AccessibilityNodeInfo loadGameNode = AccessibilityUtil.findNodeInfo(service,
                     nodeIdLoadingGame, nodeTextLoadingGame);
-            while (loadGameNode == null && System.currentTimeMillis() - startWaitLoadTime < MONITOR_FAIL_TIME) {
+            while (loadGameNode == null && System.currentTimeMillis() - startWaitLoadTime < monitorFailTime) {
                 loadGameNode = AccessibilityUtil.findNodeInfo(
                         service, nodeIdLoadingGame, nodeTextLoadingGame);
             }
@@ -129,8 +131,12 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
             stillQuitNode = AccessibilityUtil.findNodeInfo(service,
                     nodeIdStillQuit, nodeTextStillQuit);
         }
-        if (sureQuitNode != null) {AccessibilityUtil.performClick(sureQuitNode);}
-        if (stillQuitNode != null) {AccessibilityUtil.performClick(stillQuitNode);}
+        if (sureQuitNode != null) {
+            AccessibilityUtil.performClick(sureQuitNode);
+        }
+        if (stillQuitNode != null) {
+            AccessibilityUtil.performClick(stillQuitNode);
+        }
         long quitTime = System.currentTimeMillis();
         AccessibilityNodeInfo instantPlayNode = AccessibilityUtil.findNodeInfo(
                 service, nodeIdInstantPlay, nodeTextInstantPlay);

@@ -107,7 +107,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
                                         showVideoWidth, ViewGroup.LayoutParams.MATCH_PARENT);
                                 params.gravity = Gravity.CENTER;
                                 mSurfaceView.setLayoutParams(params);
-                            }else {
+                            } else {
                                 Log.d(TAG, "run: lastElse");
                             }
                         }

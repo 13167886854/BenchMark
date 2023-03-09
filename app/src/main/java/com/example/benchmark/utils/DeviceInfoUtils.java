@@ -6,18 +6,10 @@
 
 package com.example.benchmark.utils;
 
-import android.content.Context;
+
 import android.util.Log;
-
-import com.alibaba.fastjson.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**

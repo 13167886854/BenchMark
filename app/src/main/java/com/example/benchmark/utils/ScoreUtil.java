@@ -240,8 +240,6 @@ public class ScoreUtil {
         BigDecimal frameIntervalScore = BigDecimal.valueOf(frameInterval < 50 ? 100f / 6 : 100f * 50 / (6 * frameInterval));
         BigDecimal jankCountScore = BigDecimal.valueOf(100f / (6 * (1 + jankCount)));
         BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate.intValue())));
-//        int fluencyScore = (int) (averFpsScore + frameShakeScore + lowFrameScore
-//                + frameIntervalScore + jankCountScore + stutterRateScore);
         int fluencyScore = (averFpsScore.add(frameShakeScore.add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
@@ -498,7 +496,7 @@ public class ScoreUtil {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void calcAndSaveTouchScores(
             String cloudDownTimeList, String cloudSpendTimeList) {
-        //没有进行触控测试 没有数据时 直接返回
+        // 没有进行触控测试 没有数据时 直接返回
         if (cloudDownTimeList == null || cloudSpendTimeList == null) {
             return;
         }
@@ -532,11 +530,11 @@ public class ScoreUtil {
         Log.d("zzl", "localTapTimes: " + localTapTimes);
 
         long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
-                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;;
+                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
         long responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2")
-                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;;
+                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
         long responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3")
-                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;;
+                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
         long responseTime3 = responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4")
                 + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
         long responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5")
@@ -545,7 +543,7 @@ public class ScoreUtil {
                 + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
         long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
                 + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
-        long responseTime7 =  (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
+        long responseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
                 + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
         long responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9")
                 + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
@@ -621,19 +619,14 @@ public class ScoreUtil {
         BigDecimal avgResponseTime = new BigDecimal(allResponseTime / longs.size());
 
         // 正确率
-//        float averageAccuracy = (float) (responseNum - 4) / longs.size();
         BigDecimal averageAccuracy = new BigDecimal((responseNum - 4) / longs.size());
         BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy.intValue() / 2);
         BigDecimal responseTimeScore = new BigDecimal(avgResponseTime.intValue() < 50 ? 50 : 100f * 50 / (2 * avgResponseTime.intValue()));
-//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
-        int touchScore =(averAccuracyScore.add(responseTimeScore)).intValue();
+        int touchScore = (averAccuracyScore.add(responseTimeScore)).intValue();
         // 保存触控体验分数
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
-
         averageAccuracy = averageAccuracy.scaleByPowerOfTen(2);
-//        CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, (Set<String>) averageAccuracy);
-//        CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, avgResponseTime);
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, (Set<String>) avgResponseTime);
         if (avgResponseTime.add(averageAccuracy).intValue() != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
@@ -738,8 +731,6 @@ public class ScoreUtil {
         psnr = psnr > 40 ? 40 : psnr;
         BigDecimal d3 = new BigDecimal((100 * ((psnr / 40) + ssim)) / 8);
         BigDecimal d4 = new BigDecimal(((100 * pesq) / (4.5 * 4)));
-//        int soundFrameScore = (int) (resolutionScore + maxDiffValueScore + d3 + d4);
-//        int soundFrameScore = (resolutionScore + maxDiffValueScore + (d3.add(d4)).intValue())
           int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);

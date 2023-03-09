@@ -37,40 +37,40 @@ import com.example.benchmark.data.Admin;
  */
 public class LoginDialog extends Dialog {
     private static final String TAG = "Login";
-
-    //确定按钮
+    // 确定按钮
     public Button yes;
 
-    //取消按钮
+    // 取消按钮
     private Button no;
 
-    //消息标题文本
+    // 消息标题文本
     private TextView titleTv;
 
-    //消息提示文本
+    // 消息提示文本
     private TextView messageTv;
 
-    //从外界设置的title文本
+    // 从外界设置的title文本
     private String titleStr;
 
-    //从外界设置的消息文本
+    // 从外界设置的消息文本
     private String messageStr;
     private View view;
-    private String yesStr, noStr;
+    private String yesStr;
+    private String noStr;
     private String username = "";
     private String password = "";
 
-    //确定文本和取消文本的显示内容
+    // 确定文本和取消文本的显示内容
     private EditText mUserName;
     private EditText mPassWord;
     private SharedPreferences sharedPreferences;
     private Thread mThread;
     private Message mMessage;
 
-    //取消按钮被点击了的监听器
+    // 取消按钮被点击了的监听器
     private OnNoOnclickListener noOnclickListener;
 
-    //确定按钮被点击了的监听器
+    // 确定按钮被点击了的监听器
     private OnYesOnclickListener yesOnclickListener;
 
     private Handler mHandler = new Handler() {
@@ -128,54 +128,41 @@ public class LoginDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mydialog);
-
-        //设置背景透明，不然会出现白色直角问题
+        // 设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        //按空白处不能取消动画
+        // 按空白处不能取消动画
         setCanceledOnTouchOutside(false);
-
-        //初始化界面控件
+        // 初始化界面控件
         initView();
-
-        //初始化界面数据
+        // 初始化界面数据
         initData();
-
-        //初始化界面控件的事件
+        // 初始化界面控件的事件
         initEvent();
-
         // 用户名
         mUserName = findViewById(R.id.et_username);
         mUserName.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 username = editable.toString();
                 Admin.username = username;
             }
         });
-
         // 密码
         mPassWord = findViewById(R.id.et_password);
         mPassWord.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 password = editable.toString();
@@ -191,8 +178,7 @@ public class LoginDialog extends Dialog {
      * @date 2023/2/23 09:42
      */
     private void initEvent() {
-
-        //设置确定按钮被点击后，向外界提供监听
+        // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,7 +189,7 @@ public class LoginDialog extends Dialog {
             }
         });
 
-        //设置取消按钮被点击后，向外界提供监听
+        // 设置取消按钮被点击后，向外界提供监听
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -221,9 +207,7 @@ public class LoginDialog extends Dialog {
      * @date 2023/2/23 09:43
      */
     private void initData() {
-
     }
-
     /**
      * 初始化界面控件
      */
@@ -242,7 +226,6 @@ public class LoginDialog extends Dialog {
         }
         view = findViewById(R.id.view_dialog);
     }
-
     /**
      * @param title description
      * @return void

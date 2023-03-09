@@ -25,7 +25,6 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:15
  */
 public class JuTiGpuFragment extends Fragment {
-
     private TextView mGpuInfo;
     private View mView;
 

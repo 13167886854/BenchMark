@@ -54,9 +54,7 @@ public final class DecodeFormatManager {
      * 默认
      */
     public static final Map<DecodeHintType, Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
-
     static {
-
         // all hints
         addDecodeHintTypes(ALL_HINTS, getAllFormats());
 
@@ -131,7 +129,6 @@ public final class DecodeFormatManager {
         return list;
     }
 
-
     /**
      * getDefaultFormats
      *
@@ -178,7 +175,6 @@ public final class DecodeFormatManager {
     }
 
     private static void addDecodeHintTypes(Map<DecodeHintType, Object> hints, List<BarcodeFormat> formats) {
-
         // Image is known to be of one of a few possible formats.
         hints.put(DecodeHintType.POSSIBLE_FORMATS, formats);
 

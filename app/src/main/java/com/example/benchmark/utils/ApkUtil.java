@@ -23,7 +23,6 @@ import java.util.List;
  * @since 2023/3/7 17:23
  */
 public class ApkUtil {
-
     /**
      * isApkInstalled
      *
@@ -87,8 +86,7 @@ public class ApkUtil {
                 launchAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(launchAppIntent);
             } else {
-                Toast.makeText(context, "Launch " + packageName + " Fail."
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Launch " + packageName + " Fail.", Toast.LENGTH_SHORT).show();
             }
         } else {
             launchAppDetailInMarket(context, packageName);

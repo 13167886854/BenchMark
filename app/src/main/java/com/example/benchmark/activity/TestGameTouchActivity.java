@@ -35,8 +35,8 @@ public class TestGameTouchActivity extends AppCompatActivity {
     private static final String TAG = "TWT";
 
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
-    private final int HandlingFrame = 111;
-    private final int TestCompleted = 222;
+    private final int handlingFrame = 111;
+    private final int testCompleted = 222;
     private int lastRgb = 0;
     private int thisRgb = 0;
     private long count = 0L;
@@ -49,10 +49,10 @@ public class TestGameTouchActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case HandlingFrame:
+                case handlingFrame:
                     handlingTv.setText("测试中----(" + msg.arg1 + "/" + count + ")");
                     break;
-                case TestCompleted:
+                case testCompleted:
                     try {
                         float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.testNum);
                         handlingTv.setText(gameTouchUtil.getDelayTime() + "\navgTime:" + delayTime);
@@ -103,7 +103,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
                         Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
                         Message mes = new Message();
                         mes.arg1 = (i + 1);
-                        mes.what = HandlingFrame;
+                        mes.what = handlingFrame;
                         handler.sendMessage(mes);
                         if (Math.abs(thisRgb - lastRgb) > 10000000) {
                             Log.e(TAG, "rgb changed!!! : " + i);
@@ -121,7 +121,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
                         Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
                         Message mes = new Message();
                         mes.arg1 = (i + 1);
-                        mes.what = HandlingFrame;
+                        mes.what = handlingFrame;
                         handler.sendMessage(mes);
 
                         if (Math.abs(thisRgb - lastRgb) > 10000000) {
@@ -133,7 +133,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
                     }
                 }
                 gameTouchUtil.printTestTime();
-                handler.sendEmptyMessage(TestCompleted);
+                handler.sendEmptyMessage(testCompleted);
             }
         }).start();
     }

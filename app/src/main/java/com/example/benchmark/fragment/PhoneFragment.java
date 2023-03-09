@@ -76,7 +76,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             } else if (msg.what == 2) {
                 myDialog.yes.setEnabled(true);
                 myDialog.dismiss();
-            }else{
+            } else {
                 Log.d(TAG, "handleMessage: ");
             }
         }
@@ -104,10 +104,10 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private AccessUtils accessUtils;
     private PopDiaLog popDiaLog;
 
-    private final HashMap<String, String> check_phone_map = new HashMap<>();
+    private final HashMap<String, String> checkPhoneMap = new HashMap<>();
 
-    private final int ALL_CHECK_COUNTS = 8;
-    private int mCheckCounts = ALL_CHECK_COUNTS;
+    private final int allCheckCount = 8;
+    private int mCheckCounts = allCheckCount;
 
     @Nullable
     @Override
@@ -137,7 +137,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             String time = simpleDateFormat.format(date);
             Admin.testTime = time;
             Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
-            if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == null) {
+            if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -176,12 +176,12 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             this.startActivity(intentToFloatPermission);
             return;
         }
-        if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
+        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
             // 检测华为云手机测试 提示用户输入ip地址加端口
             Log.e(TAG, "onCreateView: hiahiasadsad");
             showDialog();
         }
-        if (check_phone_map.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
+        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
             Log.e(TAG, "onCreateView: hiahiasadsad");
             showDialog();
         }
@@ -281,9 +281,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         Log.d("mCheckCounts", "onClick: mCheckCounts==>  " + mCheckCounts);
         switch (vi.getId()) {
             case R.id.kunpeng_phone: {
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
                 initPhoneBtn();
-                if(vi instanceof Button){
+                if (vi instanceof Button) {
                     Button btn = (Button) vi;
                     Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -292,9 +292,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.kunpeng_data_phone: {
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
+                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
                 initPhoneBtn();
-                if(vi instanceof Button){
+                if (vi instanceof Button) {
                     Button btn = (Button) vi;
                     Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -303,9 +303,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.redfigure_phone: {
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
+                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
                 initPhoneBtn();
-                if(vi instanceof Button){
+                if (vi instanceof Button) {
                     Button btn = (Button) vi;
                     Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -314,9 +314,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.yidong_phone: {
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
+                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
                 initPhoneBtn();
-                if(vi instanceof Button){
+                if (vi instanceof Button) {
                     Button btn = (Button) vi;
                     Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -325,9 +325,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.wangyiyun_phone: {
-                check_phone_map.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
+                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
                 initPhoneBtn();
-                if(vi instanceof Button){
+                if (vi instanceof Button) {
                     Button btn = (Button) vi;
                     Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -346,7 +346,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueLiuChangCheck.setChecked(true);
                     blueLiuChangCheck.setVisibility(View.VISIBLE);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -363,7 +363,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueWenDingCheck.setVisibility(View.VISIBLE);
                     blueWenDingCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -380,7 +380,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueChuKongCheck.setVisibility(View.VISIBLE);
                     blueChuKongCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -397,7 +397,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueYinHuaCheck.setVisibility(View.VISIBLE);
                     blueYinHuaCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -429,25 +429,25 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueCpuCheck.setVisibility(View.VISIBLE);
                     blueCpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueGpuCheck.setVisibility(View.VISIBLE);
                     blueGpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueRamCheck.setVisibility(View.VISIBLE);
                     blueRamCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueRomCheck.setVisibility(View.VISIBLE);
                     blueRomCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -479,28 +479,28 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueGpuCheck.setVisibility(View.VISIBLE);
                     blueGpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueCpuCheck.setVisibility(View.VISIBLE);
                     blueCpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueRamCheck.setVisibility(View.VISIBLE);
                     blueRamCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueRomCheck.setVisibility(View.VISIBLE);
                     blueRomCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -532,28 +532,28 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueRamCheck.setVisibility(View.VISIBLE);
                     blueRamCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueCpuCheck.setVisibility(View.VISIBLE);
                     blueCpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueGpuCheck.setVisibility(View.VISIBLE);
                     blueGpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
 
                     blueRomCheck.setVisibility(View.VISIBLE);
                     blueRomCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -585,25 +585,25 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                     blueRomCheck.setVisibility(View.VISIBLE);
                     blueRomCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueCpuCheck.setVisibility(View.VISIBLE);
                     blueCpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueGpuCheck.setVisibility(View.VISIBLE);
                     blueGpuCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                     blueRamCheck.setVisibility(View.VISIBLE);
                     blueRamCheck.setChecked(true);
                     mCheckCounts++;
-                    if (mCheckCounts == ALL_CHECK_COUNTS) {
+                    if (mCheckCounts == allCheckCount) {
                         phoneSelectAll.setChecked(true);
                     }
                 }
@@ -700,7 +700,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                         intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
                         intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
                         intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
-                                check_phone_map.get(CacheConst.KEY_PLATFORM_NAME));
+                                checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME));
                         startActivity(intent);
                     }
                 });

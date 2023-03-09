@@ -15,7 +15,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
  * @since 2023/3/7 17:22
  */
 public interface AccessibilityClassFindCallback {
-
     /**
      * caterTo
      *

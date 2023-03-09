@@ -93,16 +93,11 @@ public class SDCardUtils {
         StatFs statFs = new StatFs(file.getPath());
         String stotageInfo;
 
-        long blockCount;
-        long bloackSize;
-        long totalSpace;
-        long availableBlocks;
-        long availableSpace;
-        blockCount = statFs.getBlockCountLong();
-        bloackSize = statFs.getBlockSizeLong();
-        totalSpace = bloackSize * blockCount;
-        availableBlocks = statFs.getAvailableBlocksLong();
-        availableSpace = availableBlocks * bloackSize;
+        long blockCount = statFs.getBlockCountLong();
+        long bloackSize = statFs.getBlockSizeLong();
+        long totalSpace = bloackSize * blockCount;
+        long availableBlocks = statFs.getAvailableBlocksLong();
+        long availableSpace = availableBlocks * bloackSize;
 
         Map<String, String> res = new HashMap<>();
         res.put("可用", Formatter.formatFileSize(context, availableSpace));

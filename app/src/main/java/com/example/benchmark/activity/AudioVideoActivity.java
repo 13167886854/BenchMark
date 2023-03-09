@@ -46,7 +46,6 @@ import java.util.TimerTask;
  * @since 2023/3/7 15:05
  */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
-
     public static boolean isTestOver = false;
     public static String mMp4FilePath;
 

@@ -60,13 +60,12 @@ public class OkHttpUtils {
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(20, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)
-                            .sslSocketFactory(createSSLSocketFactory(trustManagers)
-                                    , (X509TrustManager) trustManagers[0])
+                            .sslSocketFactory(createSSLSocketFactory(trustManagers),
+                                    (X509TrustManager) trustManagers[0])
                             .hostnameVerifier((hostName, session) -> true)
                             .retryOnConnectionFailure(true)
                             .build();
-                    addHeader("User-Agent"
-                            , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
+                    addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
                                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
                                     + "Chrome/63.0.3239.132 Safari/537.36");
                 }
@@ -81,8 +80,7 @@ public class OkHttpUtils {
      * @date 2023/3/8 09:11
      */
     private static Semaphore getSemaphoreInstance() {
-
-        //只能1个线程同时访问
+        // 只能1个线程同时访问
         synchronized (OkHttpUtils.class) {
             if (semaphore == null) {
                 semaphore = new Semaphore(0);
@@ -158,10 +156,10 @@ public class OkHttpUtils {
             urlBuilder.append("?");
             try {
                 for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-                    urlBuilder.append(URLEncoder.encode(entry.getKey(), "utf-8")).
-                            append("=").
-                            append(URLEncoder.encode(entry.getValue(), "utf-8")).
-                            append("&");
+                    urlBuilder.append(URLEncoder.encode(entry.getKey(), "utf-8"))
+                            .append("=")
+                            .append(URLEncoder.encode(entry.getValue(), "utf-8"))
+                            .append("&");
                 }
             } catch (Exception ex) {
                 Log.e(TAG, "get: ", ex);
@@ -186,8 +184,7 @@ public class OkHttpUtils {
             if (paramMap != null) {
                 json = JSON.toJSONString(paramMap);
             }
-            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8")
-                    , json);
+            requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
         } else {
             FormBody.Builder formBody = new FormBody.Builder();
             if (paramMap != null) {
@@ -339,14 +336,12 @@ public class OkHttpUtils {
                 }
         };
     }
-
     /**
      * @return
      * @throws null
      * @date 2023/3/8 09:12
      */
     public interface ICallBack {
-
         /**
          * onSuccessful
          *
@@ -357,7 +352,6 @@ public class OkHttpUtils {
          * @date 2023/3/8 09:12
          */
         void onSuccessful(Call call, String data);
-
         /**
          * onFailure
          *
@@ -368,6 +362,5 @@ public class OkHttpUtils {
          * @date 2023/3/8 09:12
          */
         void onFailure(Call call, String errorMsg);
-
     }
 }

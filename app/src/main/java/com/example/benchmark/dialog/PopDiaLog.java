@@ -29,7 +29,6 @@ import com.example.benchmark.utils.AutoStartUtil;
  * @since 2023/3/7 15:14
  */
 public class PopDiaLog extends Dialog implements View.OnClickListener {
-
     private Button queRen;
     private Button quXiao;
     private Context context;

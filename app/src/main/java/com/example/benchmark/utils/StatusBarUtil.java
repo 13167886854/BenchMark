@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
  * @since 2023/3/7 17:29
  */
 public class StatusBarUtil {
-
     /**
      * getStatusBarHeight
      *
@@ -32,14 +31,13 @@ public class StatusBarUtil {
      */
     public static int getStatusBarHeight(Context context) {
         int result = 0;
-        int resourceId = context.getResources().getIdentifier("status_bar_height"
-                , "dimen", "android");
+        int resourceId = context.getResources()
+                .getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = context.getResources().getDimensionPixelSize(resourceId);
         }
         return result;
     }
-
     /**
      * getNavigationBarHeight
      *
@@ -53,11 +51,10 @@ public class StatusBarUtil {
             return 0;
         }
         Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height"
-                , "dimen", "android");
+        int resourceId = resources
+                .getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
-
     /**
      * checkDeviceHasNavigationBar
      *
@@ -69,8 +66,7 @@ public class StatusBarUtil {
     public static boolean checkDeviceHasNavigationBar(Context context) {
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();
-        int id = rs.getIdentifier("config_showNavigationBar"
-                , "bool", "android");
+        int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
         if (id > 0) {
             hasNavigationBar = rs.getBoolean(id);
         }
@@ -79,20 +75,19 @@ public class StatusBarUtil {
             Method med = systemPropertiesClass.getMethod("get", String.class);
             String navBarOverride = null;
             if (med.invoke(systemPropertiesClass) instanceof String) {
-                navBarOverride = (String) med.invoke(systemPropertiesClass
-                        , "qemu.hw.mainkeys");
+                navBarOverride = (String) med
+                        .invoke(systemPropertiesClass, "qemu.hw.mainkeys");
             }
             if ("1".equals(navBarOverride)) {
                 hasNavigationBar = false;
             } else if ("0".equals(navBarOverride)) {
                 hasNavigationBar = true;
-            }else{
+            } else {
                 Log.d("checkDeviceHasNavigationBar", "checkDeviceHasNavigationBar: ");
             }
         } catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException
                 | InvocationTargetException exception) {
-            Log.e("checkDeviceHasNavigationBar", "checkDeviceHasNavigationBar: "
-                    , exception);
+            Log.e("checkDeviceHasNavigationBar", "checkDeviceHasNavigationBar: ", exception);
         }
         return hasNavigationBar;
     }

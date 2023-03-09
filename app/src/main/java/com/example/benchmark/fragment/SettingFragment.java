@@ -85,8 +85,7 @@ public class SettingFragment extends Fragment {
                             }
                         }).create();
                 dialog.show();
-                Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。"
-                        , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
             }
             else {
                 System.out.println(";");
@@ -97,7 +96,7 @@ public class SettingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_fragment, container, false);
         RelativeLayout relativeLayout = view.findViewById(R.id.set_shiyongshuom);
         relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -113,11 +112,10 @@ public class SettingFragment extends Fragment {
                 startActivity(new Intent(getActivity(), SettingsActivity.class));
             }
         });
-        RelativeLayout set_system_update = view.findViewById(R.id.set_system_update);
-        set_system_update.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout setSystemUpdate = view.findViewById(R.id.set_system_update);
+        setSystemUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // 打印信息 do nothing checkUpdate();
                 Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
             }
@@ -129,16 +127,13 @@ public class SettingFragment extends Fragment {
         String localVersion = getContext().getPackageManager()
                 .getPackageInfo(getContext().getPackageName(), 0).versionName;
         Log.e("TWT", "localVersion: " + localVersion);
-
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String url = tmpUrl + "/upgrade/hint?version=" + localVersion + "&platform=Local";
-
         // 创建一个request对象
         Request request = new Request.Builder()
                 .url(url)
                 .build();
         client.newCall(request).enqueue(new Callback() {
-
             /**
              * onFailure
              *
@@ -195,8 +190,7 @@ public class SettingFragment extends Fragment {
             final ComponentName componentName = intent.resolveActivity(context.getPackageManager());
             context.startActivity(Intent.createChooser(intent, "请选择浏览器"));
         } else {
-            Toast.makeText(context.getApplicationContext(), "请下载浏览器"
-                    , Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "请下载浏览器", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -87,23 +87,17 @@ public class GameTouchTestService extends Service {
 
     private boolean isRecording = false;
     private int statusBarHeight;
-
-
-
-
-
     Handler handler = new Handler() {
         @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
             switch (msg.what) {
                 case START_RECORD:
-                    isRecording =! isRecording;
+                    isRecording = !isRecording;
                     startRecord();
-
                     break;
                 case STOP_RECORD:
-                    isRecording =! isRecording;
+                    isRecording = !isRecording;
                     // 点击结束录制后休息1s后才能继续录制
                     isAble = false;
                     stopRecord();
@@ -145,7 +139,7 @@ public class GameTouchTestService extends Service {
         Log.d(TAG, "createFloatView: 1212");
         wmParams = new LayoutParams();
         // 获取WindowManagerImpl.CompatModeWrapper
-        if(mContext.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager) {
+        if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager) {
             mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         }
         // 设置window type
@@ -327,7 +321,7 @@ public class GameTouchTestService extends Service {
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(60);
         } catch (Exception e) {
-            Log.e("TWT", "initRecorder: "+ e.toString());
+            Log.e("TWT", "initRecorder: " + e.toString());
         }
         try {
             mediaRecorder.prepare();

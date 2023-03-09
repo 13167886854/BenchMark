@@ -29,7 +29,6 @@ import com.example.benchmark.service.FxService;
  * @since 2023/3/7 17:28
  */
 public class ServiceUtil {
-
     /**
      * isServiceRunning
      *
@@ -73,7 +72,7 @@ public class ServiceUtil {
      * startFxService
      *
      * @param context           description
-     * @param checked_plat      description
+     * @param checkedPlat      description
      * @param resultCode        description
      * @param data              description
      * @param isCheckTouch      description
@@ -81,14 +80,13 @@ public class ServiceUtil {
      * @description: startFxService
      * @date 2023/2/22 14:53
      */
-    public static void startFxService(Context context, String checked_plat, int resultCode,
-                                      Intent data, boolean isCheckTouch,
-                                      boolean isCheckSoundFrame) {
+    public static void startFxService(Context context, String checkedPlat, int resultCode,
+        Intent data, boolean isCheckTouch, boolean isCheckSoundFrame) {
         if (!Settings.canDrawOverlays(context)) {
             toFloatGetPermission(context);
         } else {
             Intent fxService = new Intent(context, FxService.class)
-                    .putExtra(CacheConst.KEY_PLATFORM_NAME, checked_plat)
+                    .putExtra(CacheConst.KEY_PLATFORM_NAME, checkedPlat)
                     .putExtra("resultCode", resultCode)
                     .putExtra("data", data)
                     .putExtra("isCheckTouch", isCheckTouch)

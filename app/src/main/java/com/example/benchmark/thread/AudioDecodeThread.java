@@ -92,8 +92,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
                 String mime = trackFormat.getString(MediaFormat.KEY_MIME);
                 if (mime.contains("audio")) {
                     mAudioTrackIndex = i;
-
-                    //开始读数据前一定要先选择媒体轨道，否则读取不到数据
+                    // 开始读数据前一定要先选择媒体轨道，否则读取不到数据
                     mMediaExtractor.selectTrack(mAudioTrackIndex);
                     break;
                 }

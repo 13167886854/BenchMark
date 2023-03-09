@@ -30,7 +30,6 @@ import java.util.List;
  * @since 2023/3/7 17:22
  */
 public class AccessibilityUtil {
-
     /**
      * Accessibility move function
      *
@@ -47,7 +46,6 @@ public class AccessibilityUtil {
             @IntRange(from = 0) Long duration,
             AccessibilityCallback callback
     ) {
-
         // Build Accessibility Gesture Description
         GestureDescription gestureDescription = new GestureDescription.Builder()
                 .addStroke(new GestureDescription.StrokeDescription(path, delayTime, duration))
@@ -61,7 +59,6 @@ public class AccessibilityUtil {
                     super.onCompleted(gestureDescription);
                     callback.onSuccess();
                 }
-
                 @Override
                 public void onCancelled(GestureDescription gestureDescription) {
                     super.onCancelled(gestureDescription);
@@ -353,7 +350,6 @@ public class AccessibilityUtil {
             nodeInfo.performAction(AccessibilityNodeInfo.ACTION_CLICK);
             return true;
         } else {
-
             // find clickable parent node
             AccessibilityNodeInfo parent = nodeInfo.getParent();
             if (parent == null) {
@@ -364,7 +360,6 @@ public class AccessibilityUtil {
             return isParentClickSuccess;
         }
     }
-
     /**
      * @param service  description
      * @param xx       description
@@ -394,7 +389,6 @@ public class AccessibilityUtil {
                 super.onCompleted(gestureDescription);
                 callback.onSuccess();
             }
-
             @Override
             public void onCancelled(GestureDescription gestureDescription) {
                 super.onCancelled(gestureDescription);
@@ -542,5 +536,4 @@ public class AccessibilityUtil {
         context.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
-
 }

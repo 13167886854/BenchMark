@@ -61,8 +61,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @since 2023/3/7 17:21
  */
 public class MyAccessibilityService extends AccessibilityService {
-    private final int MSG_CONTINUE_MONITOR = 0;
-    private final int MSG_MONITOR_OVER = 1;
+    private final int msgContinueMonitor = 0;
+    private final int msgMonitorOver = 1;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
@@ -99,14 +99,17 @@ public class MyAccessibilityService extends AccessibilityService {
     private final Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message message) {
-            if (message.what == MSG_CONTINUE_MONITOR) {
+            if (message.what == msgContinueMonitor) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
-                 ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch,isCheckSoundFrame);
-            } else if (message.what == MSG_MONITOR_OVER) {
+                ServiceUtil.startFxService(MyAccessibilityService.this, checkPlatform, resultCode, data, isCheckTouch, isCheckSoundFrame);
+            } else if (message.what == msgMonitorOver) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
                 ServiceUtil.backToCePingActivity(MyAccessibilityService.this);
+            }
+            else {
+                System.out.println("ok");
             }
             return true;
         }
@@ -117,7 +120,7 @@ public class MyAccessibilityService extends AccessibilityService {
         super.onCreate();
         Notification notification = createForegroundNotification();
         // 启动前台服务
-        startForeground(1,notification);
+        startForeground(1, notification);
         tapUtil = TapUtil.getUtil();
         tapUtil.setService(this);
     }
@@ -128,7 +131,7 @@ public class MyAccessibilityService extends AccessibilityService {
         super.onDestroy();
     }
 
-    private Notification createForegroundNotification(){
+    private Notification createForegroundNotification() {
         // 前台通知的id名，任意
         String channelId = "ForegroundService";
         // 前台通知的名称，任意
@@ -136,10 +139,10 @@ public class MyAccessibilityService extends AccessibilityService {
         // 发送通知的等级，此处为高，根据业务情况而定
         int importance = NotificationManager.IMPORTANCE_HIGH;
         // 判断Android版本，不同的Android版本请求不一样，以下代码为官方写法
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-            NotificationChannel channel = new NotificationChannel(channelId,channelName,importance);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
             channel.setLightColor(Color.BLUE);
-            NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
         // 点击通知时可进入的Activity
@@ -213,11 +216,11 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (service == null){
+        if (service == null) {
             return;
         }
         if (service.isFinished()) {
-            if (!isDealResult && !isCheckTouch){
+            if (!isDealResult && !isCheckTouch) {
                 dealWithResult();
             }
             return;
@@ -227,7 +230,7 @@ public class MyAccessibilityService extends AccessibilityService {
 
     private void captureScreen() {
         while (!service.isFinished()) {
-            if (!isStartCaptureScreen){
+            if (!isStartCaptureScreen) {
                 continue;
             }
             try (Image image = mImageReader.acquireLatestImage()) {
@@ -241,7 +244,6 @@ public class MyAccessibilityService extends AccessibilityService {
                             screenHeight, Bitmap.Config.ARGB_8888);
                     bitmap.copyPixelsFromBuffer(buffer);
                     mBitmapWithTime.offer(new Pair<>(bitmap, System.currentTimeMillis()));
-//                    if (!mDealBitmapThread.isAlive()) mDealBitmapThread.start();
                     startDealBitmap();
                     image.close();
                 }
@@ -256,7 +258,7 @@ public class MyAccessibilityService extends AccessibilityService {
             boolean isBlackOrWhiteExist = false;
             while (dealIndex < mStartTimes.size()) {
                 bitmapWithTime = mBitmapWithTime.poll();
-                if (bitmapWithTime == null){
+                if (bitmapWithTime == null) {
                     break;
                 }
                 long startTime = mStartTimes.get(dealIndex);
@@ -265,33 +267,16 @@ public class MyAccessibilityService extends AccessibilityService {
                         isBlackOrWhiteExist = true;
                     } else if (isBlackOrWhiteExist && !isBitmapBlackOrWhite(bitmapWithTime.first)) {
                         isBlackOrWhiteExist = false;
-                        mOpenTime.set(dealIndex, mOpenTime.get(dealIndex) +
-                                bitmapWithTime.second - mStartTimes.get(dealIndex));
+                        mOpenTime.set(dealIndex, mOpenTime.get(dealIndex)
+                                + bitmapWithTime.second - mStartTimes.get(dealIndex));
                         dealIndex++;
+                    }
+                    else {
+                        System.out.println("OK");
                     }
                 }
             }
-//            for (long startGameTime : mStartTimes) {
-//                Pair<Bitmap, Long> bitmapWithTime = mBitmapWithTime.poll();
-//                // black bitmap appear
-//                while (bitmapWithTime != null && !isBitmapInvalid(bitmapWithTime.first))
-//                    bitmapWithTime = mBitmapWithTime.poll();
-//                if (bitmapWithTime == null) break;
-//                long blackStartTime = bitmapWithTime.second;
-//                // black bitmap disappear
-//                while (bitmapWithTime != null && isBitmapInvalid(bitmapWithTime.first))
-//                    bitmapWithTime = mBitmapWithTime.poll();
-//                if (bitmapWithTime == null) break;
-//                mOpenTime.add(bitmapWithTime.second - startGameTime);
-//                mStartTimes.remove(0);
-//                Log.e("QT", "Open Time: " + (bitmapWithTime.second - startGameTime) +
-//                        " blackStartTime:" + blackStartTime + " startGameTime:" + startGameTime);
-//            }
         }
-//        mProjection.stop();
-//        mImageReader.close();
-//        mDisplay.release();
-//        dealWithResult();
     }
 
     private void dealWithResult() {
@@ -315,23 +300,21 @@ public class MyAccessibilityService extends AccessibilityService {
         averageQuitTime /= mQuitTimes.size();
 
         ScoreUtil.calcAndSaveStabilityScores(startSuccessRate, averageStartTime, averageQuitTime);
-        Log.e("QT", "startSuccessRate:" + startSuccessRate +
-                " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
+        Log.e("QT", "startSuccessRate:" + startSuccessRate
+                + " averageStartTime:" + averageStartTime + " averageQuitTime:" + averageQuitTime);
         CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, true);
         if (isHaveOtherPerformance) {
             Log.d("TWT", "isHaveOtherPerformance:yep ");
-            mHandler.sendEmptyMessage(MSG_CONTINUE_MONITOR);
+            mHandler.sendEmptyMessage(msgContinueMonitor);
         } else {
             Log.d("TWT", "isHaveOtherPerformance:nop ");
-            mHandler.sendEmptyMessage(MSG_MONITOR_OVER);
+            mHandler.sendEmptyMessage(msgMonitorOver);
         }
     }
 
     private boolean isBitmapBlackOrWhite(Bitmap bitmap) {
         Palette palette = Palette.from(bitmap).clearFilters().generate();
         int domainColor = palette.getDominantColor(Color.BLACK);
-//        if (domainColor == Color.BLACK || domainColor == Color.WHITE)
-//            Log.e("QT-Color", "True");
         return domainColor == Color.BLACK || domainColor == Color.WHITE;
     }
 

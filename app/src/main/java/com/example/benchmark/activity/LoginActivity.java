@@ -91,12 +91,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
                 // 在文本改变之后记录用户账号
                 if (isChecked) {
                     if (sharedPreferences == null) {
-                        sharedPreferences = getApplication().getSharedPreferences("config"
-                                , MODE_PRIVATE);
+                        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("username", mUserName.getText().toString());
@@ -115,15 +113,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
                 Log.d(TAG, "onTextChanged: " + charSequence);
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
-
                 // 在文本改变之后记录用户密码
                 if (isChecked) {
                     if (sharedPreferences == null) {
-                        sharedPreferences = getApplication().getSharedPreferences("config"
-                                , MODE_PRIVATE);
+                        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("password", mPassWord.getText().toString());
@@ -176,8 +171,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setView() {
         if (sharedPreferences == null) {
-            sharedPreferences = getApplication().getSharedPreferences("config"
-                    , MODE_PRIVATE);
+            sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
         }
         mUserName.setText(sharedPreferences.getString("username", ""));
         mPassWord.setText(sharedPreferences.getString("password", ""));

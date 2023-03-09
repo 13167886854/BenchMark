@@ -24,7 +24,6 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:07
  */
 public class ShuoMingActivity extends Activity {
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         InitShuoming sm = new InitShuoming();

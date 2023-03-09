@@ -59,8 +59,8 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     private float[] mSTMatrix = new float[16];
     private int uSTMMatrixHandle;
     private boolean isUpdateSurface;
-    private int screenWidth, screenHeight;
-
+    private int screenWidth;
+    private int screenHeight;
     private FpsUtils fpsUtils = FpsUtils.getFpsUtils();
     private Context context;
     private FloatBuffer vertexBuffer;
@@ -125,9 +125,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         surfaceTexture.setOnFrameAvailableListener(this);
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
-
     }
-
     private void initMediaPlayer() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -142,7 +140,6 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         screenHeight = height;
         try {
             mediaPlayer.prepareAsync();
-
         } catch (IllegalStateException e) {
             Log.e("TWT", "onSurfaceChanged: " + e.toString());
         }
@@ -166,10 +163,10 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
             }
         }
         GLES20.glUseProgram(programId);
-        GLES20.glUniformMatrix4fv(uMatrixLocation, 1, false
-                , projectionMatrix, 0);
-        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1, false
-                , mSTMatrix, 0);
+        GLES20.glUniformMatrix4fv(uMatrixLocation, 1, false,
+                projectionMatrix, 0);
+        GLES20.glUniformMatrix4fv(uSTMMatrixHandle, 1, false,
+                mSTMatrix, 0);
         vertexBuffer.position(0);
         GLES20.glEnableVertexAttribArray(aPositionLocation);
         GLES20.glVertexAttribPointer(aPositionLocation, 3, GLES20.GL_FLOAT, false,

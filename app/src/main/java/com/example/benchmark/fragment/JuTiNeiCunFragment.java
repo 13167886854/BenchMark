@@ -24,7 +24,6 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:16
  */
 public class JuTiNeiCunFragment extends Fragment {
-
     private View mView;
 
     /**
@@ -40,7 +39,7 @@ public class JuTiNeiCunFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_neicun_fragment, container, false);
         return mView;
     }

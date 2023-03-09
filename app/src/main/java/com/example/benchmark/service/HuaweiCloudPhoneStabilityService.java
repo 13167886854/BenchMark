@@ -28,7 +28,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
-    private final String NODE_ID_BTN_START_CONNECT = "com.huawei.instructionstream.appui:id/btn_startGame";
+    private final String nodeIdBtnStartConnect = "com.huawei.instructionstream.appui:id/btn_startGame";
     private final String nodeIdQuitPhone = "com.huawei.instructionstream.appui:id/rotate_exit";
     private final String nodeTextQuitPhone = "退出云手机";
     private final String nodeIdConnectFailExit = "android:id/button1";
@@ -60,7 +60,7 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
                 Log.e(TAG, "onMonitor: ", e);
             }
             AccessibilityNodeInfo nodeBtnStartGame = AccessibilityUtil.findNodeInfo(
-                    service, NODE_ID_BTN_START_CONNECT, "");
+                    service, nodeIdBtnStartConnect, "");
             if (nodeBtnStartGame != null) {
                 AccessibilityUtil.performClick(nodeBtnStartGame);
                 isClickStartConnectBtn = true;
@@ -79,7 +79,9 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     @Override
     public void startControlCloudPhone() {
         mStartTime = System.currentTimeMillis();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || isFinished()) {
+            return;
+        }
         isConnectSuccess = false;
         long startTime = System.currentTimeMillis();
         while (!isConnectSuccess) {
@@ -99,7 +101,9 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
                 startQuitCloudPhone();
                 isConnectSuccess = true;
             }
-            if (System.currentTimeMillis() - startTime < 800L) continue;
+            if (System.currentTimeMillis() - startTime < 800L) {
+                continue;
+            }
             startTime = System.currentTimeMillis();
             AccessibilityUtil.tap(
                     service,
@@ -122,9 +126,11 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
     public void startQuitCloudPhone() {
         Log.e("QT", "startQuitCloudPhone");
         AccessibilityNodeInfo nodeBtnStartGame = AccessibilityUtil.findNodeInfo(
-                service, NODE_ID_BTN_START_CONNECT, "");
-        while (nodeBtnStartGame == null) nodeBtnStartGame = AccessibilityUtil
-                .findNodeInfo(service, NODE_ID_BTN_START_CONNECT, "");
+                service, nodeIdBtnStartConnect, "");
+        while (nodeBtnStartGame == null) {
+            nodeBtnStartGame = AccessibilityUtil
+                    .findNodeInfo(service, nodeIdBtnStartConnect, "");
+        }
         service.mQuitTimes.add(System.currentTimeMillis() - mQuitTime);
     }
 

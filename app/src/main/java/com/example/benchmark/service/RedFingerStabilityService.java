@@ -130,7 +130,6 @@ public class RedFingerStabilityService implements IStabilityService {
 
     @Override
     public void startQuitCloudPhone() {
-
         // 双击返回键退出云手机
         service.performGlobalAction(GLOBAL_ACTION_BACK);
         try {

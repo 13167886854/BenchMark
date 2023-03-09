@@ -28,11 +28,7 @@ import java.util.List;
  */
 public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<JuTiData> data;
-
     private Context context;
-
-
-
     public JutiAdapter(Context context, List<JuTiData> data) {
         this.context = context;
         this.data = data;

@@ -31,8 +31,8 @@ public class InitShuoming {
         list = new ArrayList<>();
         initLiuchang = new InitShuomingItem();
         initLiuchang.initLiuchang();
-        ShuoMingData data = new ShuoMingData(R.drawable.blue_liuchang, "流畅性"
-                , initLiuchang.getList());
+        ShuoMingData data = new ShuoMingData(R.drawable.blue_liuchang, "流畅性",
+                initLiuchang.getList());
         list.add(data);
     }
 

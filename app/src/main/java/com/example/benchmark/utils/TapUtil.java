@@ -70,10 +70,6 @@ public class TapUtil {
         }
         return util;
     }
-
-
-
-
     public void setService(MyAccessibilityService service) {
         this.service = service;
     }

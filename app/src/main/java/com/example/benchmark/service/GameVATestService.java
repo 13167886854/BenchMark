@@ -389,8 +389,7 @@ public class GameVATestService extends Service {
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-        boolean isTestCloudPhone;
-        isTestCloudPhone = platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
+        boolean isTestCloudPhone = platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
         isTestCloudPhone = isTestCloudPhone || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
@@ -555,9 +554,8 @@ public class GameVATestService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
-        boolean isSupported;
         mRecorder = new Recorder();
-        isSupported = mRecorder.start(this, mediaProjection);
+        boolean isSupported = mRecorder.start(this, mediaProjection);
         if (!isSupported) {
             mediaProjection.stop();
             stopSelf();
@@ -661,7 +659,6 @@ public class GameVATestService extends Service {
                             Log.d(TAG, "onFailure: call " + call);
                             Log.d(TAG, "onFailure: e" + ex.toString());
                         }
-
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.d(TAG, "onResponse: response==>" + response);
@@ -672,7 +669,6 @@ public class GameVATestService extends Service {
                             YinHuaData.pesq = resArr[resArr.length - 1];
                             Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
                             handler.sendEmptyMessage(computePesq);
-
                         }
                     });
         }

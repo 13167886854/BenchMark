@@ -45,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
     public void sub(View view) {
         Log.d(TAG, "sub");
-        if(testNum == 1) {
+        if (testNum == 1) {
             return;
         }
         testNum--;

@@ -26,14 +26,13 @@ import com.example.benchmark.R;
  * @since 2023/3/7 15:16
  */
 public class JuTiYingPanFragment extends Fragment {
-
     private View mView;
     private TextView mJuTiYingPanNum;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_yingpan_fragment, container, false);
         mJuTiYingPanNum = mView.findViewById(R.id.juti_yingpan_num);
         mJuTiYingPanNum.setText(MobileCloud.storage);
