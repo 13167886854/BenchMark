@@ -95,15 +95,15 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      * onCreateView
      *
      * @param inflater description
- * @param container description
- * @param savedInstanceState description
+     * @param container description
+     * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:44
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                                 @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.game_fragment, container, false);
         initview(view);
         redLiuChang.setOnClickListener(this::onClick);
@@ -116,6 +116,11 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         redRom.setOnClickListener(this::onClick);
         gameSelectAll.setOnCheckedChangeListener(this::onCheckedChanged);
         selectGame.setOnCheckedChangeListener(this::onCheckedChanged);
+        clickInit();
+        return view;
+    }
+
+    private void clickInit() {
         redStartTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View vi) {
@@ -147,7 +152,6 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 startActivity(intent);
             }
         });
-        return view;
     }
 
     private void check() {
@@ -253,107 +257,139 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      *
      * @param vi description
      * @date 2023/3/8 15:23
-    */
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View vi) {
         switch (vi.getId()) {
             case R.id.red_liuchangxing: {
-                boolean isChecked = redLiuChangCheck.isChecked();
-                if (isChecked) {
-                    redLiuChangCheck.setChecked(false);
-                    redLiuChangCheck.setVisibility(View.INVISIBLE);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redLiuChangCheck.setChecked(true);
-                    redLiuChangCheck.setVisibility(View.VISIBLE);
-                }
+                liuChangClick();
                 break;
             }
             case R.id.red_wendinxing: {
-                boolean isChecked = redWenDingCheck.isChecked();
-                if (isChecked) {
-                    redWenDingCheck.setChecked(false);
-                    redWenDingCheck.setVisibility(View.INVISIBLE);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redWenDingCheck.setVisibility(View.VISIBLE);
-                    redWenDingCheck.setChecked(true);
-                }
+                wenDingClick();
                 break;
             }
             case R.id.red_chukong: {
-                boolean isChecked = redChuKongCheck.isChecked();
-                if (isChecked) {
-                    redChuKongCheck.setChecked(false);
-                    redChuKongCheck.setVisibility(View.INVISIBLE);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redChuKongCheck.setVisibility(View.VISIBLE);
-                    redChuKongCheck.setChecked(true);
-                }
+                chuKongClick();
                 break;
             }
             case R.id.red_yinhua: {
-                boolean isChecked = redYinHuaCheck.isChecked();
-                if (isChecked) {
-                    redYinHuaCheck.setVisibility(View.INVISIBLE);
-                    redYinHuaCheck.setChecked(false);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redYinHuaCheck.setVisibility(View.VISIBLE);
-                    redYinHuaCheck.setChecked(true);
-                }
+                yinHuaClick();
                 break;
             }
             case R.id.red_cpu: {
-                boolean isChecked = redCpuCheck.isChecked();
-                if (isChecked) {
-                    redCpuCheck.setVisibility(View.INVISIBLE);
-                    redCpuCheck.setChecked(false);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redCpuCheck.setVisibility(View.VISIBLE);
-                    redCpuCheck.setChecked(true);
-                }
+                cpuClick();
                 break;
             }
             case R.id.red_gpu: {
-                boolean isChecked = redGpuCheck.isChecked();
-                if (isChecked) {
-                    redGpuCheck.setVisibility(View.INVISIBLE);
-                    redGpuCheck.setChecked(false);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redGpuCheck.setVisibility(View.VISIBLE);
-                    redGpuCheck.setChecked(true);
-                }
+                gpuClick();
                 break;
             }
             case R.id.red_ram: {
-                boolean isChecked = redRamCheck.isChecked();
-                if (isChecked) {
-                    redRamCheck.setVisibility(View.INVISIBLE);
-                    redRamCheck.setChecked(false);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redRamCheck.setVisibility(View.VISIBLE);
-                    redRamCheck.setChecked(true);
-                }
+                ramClick();
                 break;
             }
             case R.id.red_rom: {
-                boolean isChecked = redRomCheck.isChecked();
-                if (isChecked) {
-                    redRomCheck.setVisibility(View.INVISIBLE);
-                    redRomCheck.setChecked(false);
-                    gameSelectAll.setChecked(false);
-                } else {
-                    redRomCheck.setVisibility(View.VISIBLE);
-                    redRomCheck.setChecked(true);
-                }
+                romClick();
                 break;
             }
+        }
+    }
+
+    private void romClick() {
+        boolean isChecked = redRomCheck.isChecked();
+        if (isChecked) {
+            redRomCheck.setVisibility(View.INVISIBLE);
+            redRomCheck.setChecked(false);
+            gameSelectAll.setChecked(false);
+        } else {
+            redRomCheck.setVisibility(View.VISIBLE);
+            redRomCheck.setChecked(true);
+        }
+    }
+
+    private void ramClick() {
+        boolean isChecked = redRamCheck.isChecked();
+        if (isChecked) {
+            redRamCheck.setVisibility(View.INVISIBLE);
+            redRamCheck.setChecked(false);
+            gameSelectAll.setChecked(false);
+        } else {
+            redRamCheck.setVisibility(View.VISIBLE);
+            redRamCheck.setChecked(true);
+        }
+    }
+
+    private void gpuClick() {
+        boolean isChecked = redGpuCheck.isChecked();
+        if (isChecked) {
+            redGpuCheck.setVisibility(View.INVISIBLE);
+            redGpuCheck.setChecked(false);
+            gameSelectAll.setChecked(false);
+        } else {
+            redGpuCheck.setVisibility(View.VISIBLE);
+            redGpuCheck.setChecked(true);
+        }
+    }
+
+    private void cpuClick() {
+        boolean isChecked = redCpuCheck.isChecked();
+        if (isChecked) {
+            redCpuCheck.setVisibility(View.INVISIBLE);
+            redCpuCheck.setChecked(false);
+            gameSelectAll.setChecked(false);
+        } else {
+            redCpuCheck.setVisibility(View.VISIBLE);
+            redCpuCheck.setChecked(true);
+        }
+    }
+
+    private void yinHuaClick() {
+        boolean isChecked = redYinHuaCheck.isChecked();
+        if (isChecked) {
+            redYinHuaCheck.setVisibility(View.INVISIBLE);
+            redYinHuaCheck.setChecked(false);
+            gameSelectAll.setChecked(false);
+        } else {
+            redYinHuaCheck.setVisibility(View.VISIBLE);
+            redYinHuaCheck.setChecked(true);
+        }
+    }
+
+    private void chuKongClick() {
+        boolean isChecked = redChuKongCheck.isChecked();
+        if (isChecked) {
+            redChuKongCheck.setChecked(false);
+            redChuKongCheck.setVisibility(View.INVISIBLE);
+            gameSelectAll.setChecked(false);
+        } else {
+            redChuKongCheck.setVisibility(View.VISIBLE);
+            redChuKongCheck.setChecked(true);
+        }
+    }
+
+    private void wenDingClick() {
+        boolean isChecked = redWenDingCheck.isChecked();
+        if (isChecked) {
+            redWenDingCheck.setChecked(false);
+            redWenDingCheck.setVisibility(View.INVISIBLE);
+            gameSelectAll.setChecked(false);
+        } else {
+            redWenDingCheck.setVisibility(View.VISIBLE);
+            redWenDingCheck.setChecked(true);
+        }
+    }
+
+    private void liuChangClick() {
+        boolean isChecked = redLiuChangCheck.isChecked();
+        if (isChecked) {
+            redLiuChangCheck.setChecked(false);
+            redLiuChangCheck.setVisibility(View.INVISIBLE);
+            gameSelectAll.setChecked(false);
+        } else {
+            redLiuChangCheck.setChecked(true);
+            redLiuChangCheck.setVisibility(View.VISIBLE);
         }
     }
 
@@ -363,7 +399,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      * @param group description
      * @param checkedId description
      * @date 2023/3/8 15:23
-    */
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -410,7 +446,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      * @param buttonView description
      * @param isChecked description
      * @date 2023/3/8 15:23
-    */
+     */
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
@@ -469,7 +505,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      *
      * @return java.util.Map<java.lang.String,java.lang.Object>
      * @date 2023/3/8 15:23
-    */
+     */
     public Map<String, Object> getInfo() {
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
         Map<String, String> ramInfo = SDCardUtils.getRAMInfo(getContext());

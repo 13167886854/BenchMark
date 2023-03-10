@@ -8,7 +8,6 @@ package com.example.benchmark.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -35,8 +34,12 @@ import com.example.benchmark.data.IpPort;
  * @since 2023/3/7 15:14
  */
 public class IpPortDialog extends Dialog {
+    /** TAG */
+    private static final String TAG = "Login";
+
     /** 确定按钮 */
     public Button yes;
+
     private Button no; // 取消按钮
     private TextView titleTv; // 消息标题文本
     private TextView messageTv; // 消息提示文本
@@ -49,13 +52,9 @@ public class IpPortDialog extends Dialog {
     private EditText port;
     private String textIp = "";
     private String testPort = "";
-    private SharedPreferences sharedPreferences;
-    private boolean mIsChecked = false;
-    private Thread mThread;
-    private Message mMessage;
-    private static final String TAG = "Login";
-    private onNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器
-    private onYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器
+
+    private OnNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器
+    private OnYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -69,21 +68,22 @@ public class IpPortDialog extends Dialog {
     /**
      * IpPortDialog
      *
-     * @param context description 
-     * @return 
-     * @date 2023/3/9 19:46
+     * @param context description
+     * @date 2023/3/10 11:25
      */
     public IpPortDialog(@NonNull Context context) {
         super(context);
     }
 
     /**
-     * 设置取消按钮的显示内容和监听
+     * setNoOnclickListener
      *
-     * @param str
-     * @param onNoOnclickListener
+     * @param str description
+     * @param onNoOnclickListener description
+     * @return void
+     * @date 2023/3/10 11:25
      */
-    public void setNoOnclickListener(String str, onNoOnclickListener onNoOnclickListener) {
+    public void setNoOnclickListener(String str, OnNoOnclickListener onNoOnclickListener) {
         if (str != null) {
             noStr = str;
         }
@@ -91,41 +91,53 @@ public class IpPortDialog extends Dialog {
     }
 
     /**
-     * 设置确定按钮的显示内容和监听
+     * setYesOnclickListener
      *
-     * @param str
-     * @param onYesOnclickListener
+     * @param str description
+     * @param onYesOnclickListener description
+     * @return void
+     * @date 2023/3/10 11:25
      */
-    public void setYesOnclickListener(String str, onYesOnclickListener onYesOnclickListener) {
+    public void setYesOnclickListener(String str, OnYesOnclickListener onYesOnclickListener) {
         if (str != null) {
             yesStr = str;
         }
         this.yesOnclickListener = onYesOnclickListener;
     }
+    
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/10 11:25
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ip_port_dialog);
+
         // 设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         // 按空白处不能取消动画
         setCanceledOnTouchOutside(false);
+
         // 初始化界面控件
         initView();
-        // 初始化界面数据
-        initData();
+
         // 初始化界面控件的事件
         initEvent();
         ipAddress = findViewById(R.id.ip_address); // 用户名
         ipAddress.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
 
             }
 
@@ -138,12 +150,12 @@ public class IpPortDialog extends Dialog {
         port = findViewById(R.id.port); // 密码
         port.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
 
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
 
             }
 
@@ -155,9 +167,7 @@ public class IpPortDialog extends Dialog {
             }
         });
     }
-    /**
-     * 初始化界面的确定和取消监听器
-     */
+    
     private void initEvent() {
         // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
@@ -179,45 +189,68 @@ public class IpPortDialog extends Dialog {
             }
         });
     }
-    /**
-     * 初始化界面控件的显示数据
-     */
-    private void initData() {
 
-    }
-    /**
-     * 初始化界面控件
-     */
     private void initView() {
-        yes = (Button) findViewById(R.id.yes2);
-        no = (Button) findViewById(R.id.no2);
-        titleTv = (TextView) findViewById(R.id.title);
-        messageTv = (TextView) findViewById(R.id.message);
+        yes = findViewById(R.id.yes2);
+        no = findViewById(R.id.no2);
+        titleTv = findViewById(R.id.title);
+        messageTv =  findViewById(R.id.message);
         view = findViewById(R.id.view_dialog);
     }
+    
     /**
-     * 从外界Activity为Dialog设置标题
+     * setTitle
      *
-     * @param title
+     * @param title description
+     * @return void
+     * @date 2023/3/10 11:25
      */
     public void setTitle(String title) {
         titleStr = title;
     }
+    
     /**
-     * 从外界Activity为Dialog设置dialog的message
+     * setMessage
      *
-     * @param message
+     * @param message description
+     * @return void
+     * @date 2023/3/10 11:25
      */
     public void setMessage(String message) {
         messageStr = message;
     }
+    
     /**
-     * 设置确定按钮和取消被点击的接口
+     * IpPortDialog.java
+     *
+     * @Author benchmark
+     * @Version 1.0 
+     * @since 2023/3/10 11:25
      */
-    public interface onYesOnclickListener {
-        public void onYesClick();
+    public interface OnYesOnclickListener {
+        /**
+         * onYesClick
+         *
+         * @return void
+         * @date 2023/3/10 11:29
+         */
+        void onYesClick();
     }
-    public interface onNoOnclickListener {
-        public void onNoClick();
+
+    /**
+     * IpPortDialog.java
+     *
+     * @Author benchmark
+     * @Version 1.0
+     * @since 2023/3/10 11:31
+     */
+    public interface OnNoOnclickListener {
+        /**
+         * onNoClick
+         *
+         * @return void
+         * @date 2023/3/10 11:29
+         */
+        void onNoClick();
     }
 }

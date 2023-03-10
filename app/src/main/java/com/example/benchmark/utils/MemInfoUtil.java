@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,9 +64,11 @@ public class MemInfoUtil {
      * @param field description
      * @return java.lang.String
      * @date 2023/3/9 15:53
+     * @throws IOException 网络流错误
      */
     public static String getFieldFromMeminfo(String field) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(File.separator + "proc" + File.separator + "meminfo"));
+        BufferedReader br = new BufferedReader(new FileReader(File.separator
+                + "proc" + File.separator + "meminfo"));
         Pattern pa = Pattern.compile(field + "\\s*:\\s*(.*)");
 
         try {

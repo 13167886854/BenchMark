@@ -54,6 +54,13 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Sink;
 
+/**
+ * MainActivity.java
+ *
+ * @Author benchmark
+ * @Version 1.0 
+ * @since 2023/3/10 10:44
+ */
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
     private FragmentManager fragmentManager;
     private RadioGroup mainMenu;
@@ -85,18 +92,26 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                openBrowser(mContext, tmpUrl + "/upgrade/update?version=" + latestVersion + "&platform=Local");
+                                openBrowser(mContext, tmpUrl 
+                                        + "/upgrade/update?version=" + latestVersion + "&platform=Local");
                                 dialog.dismiss();
                             }
                         }).create();
                 dialog.show();
                 Toast.makeText(mContext, "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
             } else {
-                System.out.println("else");
+                Log.e("WZX", "ELSE: ");
             }
         }
     };
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/10 10:45
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,11 +136,25 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         qrCode = findViewById(R.id.qr_code);
     }
 
+    /**
+     * onPause
+     *
+     * @return void
+     * @date 2023/3/10 10:45
+     */
     @Override
     protected void onPause() {
         super.onPause();
     }
 
+    /**
+     * onCheckedChanged
+     *
+     * @param group description
+     * @param checkedId description
+     * @return void
+     * @date 2023/3/10 10:45
+     */
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -145,6 +174,14 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         }
     }
 
+    /**
+     * changeFragment
+     *
+     * @param fragment description
+     * @param isFisrt description
+     * @return void
+     * @date 2023/3/10 10:45
+     */
     public void changeFragment(Fragment fragment, boolean isFisrt) {
         fragmentManager = getSupportFragmentManager();
         // 开启事务
@@ -174,7 +211,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             public void onResponse(Call call, Response response)
                     throws IOException {
                 String str = response.body().string();
-                System.out.println("OkHttp的get()请求方式" + str);
                 if (str.equals("当前已是最新版本")) {
                     Message msg = new Message();
                     msg.what = 111;
@@ -238,6 +274,14 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         });
     }
 
+    /**
+     * openBrowser
+     *
+     * @param context description
+     * @param url description
+     * @return void
+     * @date 2023/3/10 10:45
+     */
     public static void openBrowser(Context context, String url) {
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -259,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 安装完成后打开新版本
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // 给目标应用一个临时授权
-        System.out.println("00002");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 判断版本大于等于7.0
             // 如果SDK版本>=24，即：Build.VERSION.SDK_INT >= 24，使用FileProvider兼容安装apk
             String packageName = mContext.getApplicationContext().getPackageName();

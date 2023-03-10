@@ -77,19 +77,19 @@ public class GameVATestService extends Service {
     private static final int START_RECORD = 1;
     private static final int STOP_RECORD = 2;
 
-    // 定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    LayoutParams wmParams;
-
-    // 创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
-    TextView mFloatView;
-    TextView snap;
-
     private final int computePesq = 222;
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
 
+    // 定义浮动窗口布局
+    private LinearLayout mFloatLayout;
+    private LayoutParams wmParams;
+
+    // 创建浮动窗口设置布局参数的对象
+    private WindowManager mWindowManager;
+    private TextView mFloatView;
+    private TextView snap;
+    
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -197,7 +197,82 @@ public class GameVATestService extends Service {
     }
 
     private void createFloatView() {
-        Log.d(TAG, "createFloatView: 1212");
+        initFloatView1();
+
+        // 获取状态栏的高度
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+
+        // 浮动窗口按钮
+        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
+                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        // 设置监听浮动窗口的触摸移动
+        mFloatView.setOnTouchListener(new OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public boolean onTouch(View vi, MotionEvent event) {
+                boolean isClick = touch1(event);
+                // 响应点击事件
+                if (isClick && isAble) {
+                    Log.d(TAG, "screenWidth: " + screenWidth + " screenWidth" + screenWidth);
+                    tapUtil.tap(500, 500);
+                    menu2.setVisibility(View.GONE);
+                    startAudioRecord();
+                    startVideoRecord();
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            stopAudioRecord();
+                            stopVideoRecord();
+                            handler.sendEmptyMessage(STOP_RECORD);
+                        }
+                    };
+                    timer.schedule(task, 20000);
+                }
+                return true;
+            }
+        });
+
+        mFloatView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View vi) {
+                Log.d(TAG, "Click");
+            }
+        });
+    }
+
+    private boolean touch1(MotionEvent event) {
+        boolean isClick = false;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTime = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
+
+                // 刷新
+                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                endTime = System.currentTimeMillis();
+
+                // 小于0.2秒被判断为点击
+                if ((endTime - startTime) > 200) {
+                    isClick = false;
+                } else {
+                    isClick = true;
+                }
+                break;
+        }
+        return isClick;
+    }
+
+    private void initFloatView1() {
         wmParams = new LayoutParams();
 
         // 获取WindowManagerImpl.CompatModeWrapper
@@ -246,73 +321,6 @@ public class GameVATestService extends Service {
         }
         snap.setVisibility(View.GONE);
         mWindowManager.addView(mFloatLayout, wmParams);
-
-        // 获取状态栏的高度
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-
-        // 浮动窗口按钮
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        // 设置监听浮动窗口的触摸移动
-        mFloatView.setOnTouchListener(new OnTouchListener() {
-            @RequiresApi(api = Build.VERSION_CODES.Q)
-            @Override
-            public boolean onTouch(View vi, MotionEvent event) {
-                boolean isClick = false;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        startTime = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
-
-                        // 刷新
-                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        endTime = System.currentTimeMillis();
-
-                        // 小于0.2秒被判断为点击
-                        if ((endTime - startTime) > 200) {
-                            isClick = false;
-                        } else {
-                            isClick = true;
-                        }
-                        break;
-                }
-                // 响应点击事件
-                if (isClick && isAble) {
-                    Log.d(TAG, "screenWidth: " + screenWidth + " screenWidth" + screenWidth);
-                    tapUtil.tap(500, 500);
-                    menu2.setVisibility(View.GONE);
-                    startAudioRecord();
-                    startVideoRecord();
-                    Timer timer = new Timer();
-                    TimerTask task = new TimerTask() {
-                        @Override
-                        public void run() {
-                            stopAudioRecord();
-                            stopVideoRecord();
-                            handler.sendEmptyMessage(STOP_RECORD);
-                        }
-                    };
-                    timer.schedule(task, 20000);
-                }
-                return true;
-            }
-        });
-
-        mFloatView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View vi) {
-                Log.d(TAG, "Click");
-            }
-        });
     }
 
     /**
@@ -453,51 +461,7 @@ public class GameVATestService extends Service {
 
         // 如果是云手机
         if (isTestCloudPhone) {
-            File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_PHONE_NAME);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
-                    + "form-data"), file);
-            MultipartBody multipartBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
-                    .build();
-            Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
-            Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
-                    .post(multipartBody)
-                    .build();
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
-                    .build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException ex) {
-                            Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + ex.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.d(TAG, "onResponse: response==>" + response);
-                            Log.d(TAG, "onResponse: response==>" + response.body());
-                            String res = response.body().string();
-                            Log.d(TAG, "onResponse:" + res);
-                            String[] resArr = res.split("=");
-                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.psnr = resArr[1];
-                            YinHuaData.ssim = resArr[3];
-                            YinHuaData.resolution = resArr[5];
-
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
-                        }
-                    });
+            stopVideoRecord1();
         } else {
             // file是要上传的文件 File()
             File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_GAME_NAME);
@@ -514,42 +478,94 @@ public class GameVATestService extends Service {
                     .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                     .post(multipartBody)
                     .build();
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
-                    .build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException ex) {
-                            Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + ex.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.d(TAG, "onResponse: response==>" + response);
-                            Log.d(TAG, "onResponse: response==>" + response.body());
-                            String res = response.body().string();
-                            String[] resArr = res.split("=");
-                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-
-                            YinHuaData.psnr = resArr[1];
-                            YinHuaData.ssim = resArr[3];
-                            YinHuaData.resolution = resArr[5];
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
-                            Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                            Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                            Intent intent = new Intent(getApplicationContext(), CePingActivity.class);
-                            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-                    });
+            stopVideoRecord2(request);
         }
+    }
+
+    private void stopVideoRecord2(Request request) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException ex) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + ex.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                        Log.d(TAG, "onResponse: response==>" + response.body());
+                        String res = response.body().string();
+                        String[] resArr = res.split("=");
+                        Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+
+                        YinHuaData.psnr = resArr[1];
+                        YinHuaData.ssim = resArr[3];
+                        YinHuaData.resolution = resArr[5];
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                        Intent intent = new Intent(getApplicationContext(), CePingActivity.class);
+                        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                });
+    }
+
+    private void stopVideoRecord1() {
+        File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_PHONE_NAME);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
+                + "form-data"), file);
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
+                .build();
+        Log.d("zzl", "stopAudioRecord: " + file.getName());
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
+        Request request = new Request.Builder()
+                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
+                .post(multipartBody)
+                .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException ex) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + ex.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                        Log.d(TAG, "onResponse: response==>" + response.body());
+                        String res = response.body().string();
+                        Log.d(TAG, "onResponse:" + res);
+                        String[] resArr = res.split("=");
+                        Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                        YinHuaData.psnr = resArr[1];
+                        YinHuaData.ssim = resArr[3];
+                        YinHuaData.resolution = resArr[5];
+
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
+                    }
+                });
     }
 
     private void initRecorder() {
@@ -666,86 +682,94 @@ public class GameVATestService extends Service {
 
         // 如果是云手机
         if (isTestCloudPhone) {
-            File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_PHONE_NAME);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
-                    + "form-data"), file);
-            MultipartBody multipartBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
-                    .build();
-            Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
-            Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
-                    .post(multipartBody)
-                    .build();
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
-                    .build();
-
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException ex) {
-                            Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + ex.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.d(TAG, "onResponse: response==>" + response);
-                            Log.d(TAG, "onResponse: response==>" + response.body());
-                            String res = response.body().string();
-                            String[] resArr = res.split(" ");
-                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.pesq = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
-                            handler.sendEmptyMessage(computePesq);
-                        }
-                    });
+            stopAudioRecord1();
         } else {
-            File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_GAME_NAME);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
-                    + "form-data"), file);
-            MultipartBody multipartBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("AudioRecord", CacheConst.AUDIO_GAME_NAME, requestBody)
-                    .build();
-            Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
-            Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
-            Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
-                    .post(multipartBody)
-                    .build();
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                    .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                    .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
-                    .build();
-            client.newCall(request)
-                    .enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException ex) {
-                            Log.d(TAG, "onFailure: call " + call);
-                            Log.d(TAG, "onFailure: e" + ex.toString());
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            Log.d(TAG, "onResponse: response==>" + response);
-                            Log.d(TAG, "onResponse: response==>" + response.body());
-                            String res = response.body().string();
-                            String[] resArr = res.split(" ");
-                            Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                            YinHuaData.pesq = resArr[resArr.length - 1];
-                            Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
-                            handler.sendEmptyMessage(computePesq);
-                        }
-                    });
+            stopAudioRecord2();
         }
+    }
+
+    private void stopAudioRecord2() {
+        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_GAME_NAME);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
+                + "form-data"), file);
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("AudioRecord", CacheConst.AUDIO_GAME_NAME, requestBody)
+                .build();
+        Log.d("zzl", "stopAudioRecord: " + file.getName());
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
+        Request request = new Request.Builder()
+                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .post(multipartBody)
+                .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .build();
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException ex) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + ex.toString());
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                        Log.d(TAG, "onResponse: response==>" + response.body());
+                        String res = response.body().string();
+                        String[] resArr = res.split(" ");
+                        Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                        YinHuaData.pesq = resArr[resArr.length - 1];
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        handler.sendEmptyMessage(computePesq);
+                    }
+                });
+    }
+
+    private void stopAudioRecord1() {
+        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_PHONE_NAME);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
+                + "form-data"), file);
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
+                .build();
+        Log.d("zzl", "stopAudioRecord: " + file.getName());
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
+        Request request = new Request.Builder()
+                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .post(multipartBody)
+                .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .build();
+
+        client.newCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException ex) {
+                        Log.d(TAG, "onFailure: call " + call);
+                        Log.d(TAG, "onFailure: e" + ex.toString());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.d(TAG, "onResponse: response==>" + response);
+                        Log.d(TAG, "onResponse: response==>" + response.body());
+                        String res = response.body().string();
+                        String[] resArr = res.split(" ");
+                        Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
+                        YinHuaData.pesq = resArr[resArr.length - 1];
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        handler.sendEmptyMessage(computePesq);
+                    }
+                });
     }
 
     /**
@@ -781,6 +805,12 @@ public class GameVATestService extends Service {
      * Version 1.0
      */
     public class RecordBinder extends Binder {
+        /**
+         * getRecordService
+         *
+         * @return com.example.benchmark.service.GameVATestService
+         * @date 2023/3/10 15:44
+         */
         public GameVATestService getRecordService() {
             return GameVATestService.this;
         }

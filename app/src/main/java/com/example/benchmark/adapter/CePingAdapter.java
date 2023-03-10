@@ -33,12 +33,28 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private OnBenchmarkResultItemClickListener onClickListener;
 
+    /**
+     * CePingAdapter
+     *
+     * @param data description
+     * @param onClickListener description
+     * @return 
+     * @date 2023/3/10 11:13
+     */
     public CePingAdapter(List<CepingData> data,
-                         OnBenchmarkResultItemClickListener onClickListener) {
+                            OnBenchmarkResultItemClickListener onClickListener) {
         this.data = data;
         this.onClickListener = onClickListener;
     }
 
+    /**
+     * onCreateViewHolder
+     *
+     * @param parent description
+     * @param viewType description
+     * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
+     * @date 2023/3/10 11:13
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -47,6 +63,14 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return new RecyclerViewHolder(view);
     }
 
+    /**
+     * onBindViewHolder
+     *
+     * @param holder description
+     * @param position description
+     * @return void
+     * @date 2023/3/10 11:13
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecyclerViewHolder) {
@@ -69,18 +93,31 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    /**
+     * getItemCount
+     *
+    
+     * @return int
+     * @date 2023/3/10 11:13
+     */
     @Override
     public int getItemCount() {
         return data.size();
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public ImageView cePingImage;
-        public TextView cePingItem;
-        public TextView cePingGrade;
-        public TextView cePingText;
-        public RelativeLayout relativeLayout;
+        private ImageView cePingImage;
+        private TextView cePingItem;
+        private TextView cePingGrade;
+        private TextView cePingText;
+        private RelativeLayout relativeLayout;
 
+        /**
+         * RecyclerViewHolder
+         *
+         * @param itemView description
+         * @date 2023/3/10 11:17
+         */
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             cePingImage = itemView.findViewById(R.id.ceping_image);

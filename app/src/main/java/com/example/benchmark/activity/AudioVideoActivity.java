@@ -112,7 +112,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     /**
      * start
      *
-     * @param context description 
+     * @param context description
      * @return void
      * @date 2023/3/9 19:56
      */
@@ -125,7 +125,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     /**
      * onCreate
      *
-     * @param savedInstanceState description 
+     * @param savedInstanceState description
      * @return void
      * @date 2023/3/9 19:57
      */
@@ -155,21 +155,23 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         yinhuaxinxi = findViewById(R.id.yinhua_item);
         mMp4FilePath = getIntent().getStringExtra("path");
         if (getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
-            WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
-            DisplayMetrics outMetrics = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(outMetrics);
-            // 分辨率
-            heightPixels = outMetrics.heightPixels;
-            widthPixels = outMetrics.widthPixels;
-            // 最大同步差
-            maxDifferenceValue = 0;
+            if(AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager){
+                WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
+                DisplayMetrics outMetrics = new DisplayMetrics();
+                wm.getDefaultDisplay().getMetrics(outMetrics);
+                // 分辨率
+                heightPixels = outMetrics.heightPixels;
+                widthPixels = outMetrics.widthPixels;
+                // 最大同步差
+                maxDifferenceValue = 0;
+            }
         }
     }
 
     /**
      * onClick
      *
-     * @param view description 
+     * @param view description
      * @return void
      * @date 2023/3/9 19:57
      */

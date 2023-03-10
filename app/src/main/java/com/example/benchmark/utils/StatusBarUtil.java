@@ -37,6 +37,7 @@ public class StatusBarUtil {
         }
         return result;
     }
+
     /**
      * getNavigationBarHeight
      *
@@ -54,6 +55,7 @@ public class StatusBarUtil {
                 .getIdentifier("navigation_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
+
     /**
      * checkDeviceHasNavigationBar
      *
@@ -74,10 +76,10 @@ public class StatusBarUtil {
             Method med = systemPropertiesClass.getMethod("get", String.class);
             String navBarOverride = null;
             if (med.invoke(systemPropertiesClass) instanceof String) {
-                if(med.invoke(systemPropertiesClass
-                        , "qemu.hw.mainkeys") instanceof String){
-                    navBarOverride = (String) med.invoke(systemPropertiesClass
-                            , "qemu.hw.mainkeys");
+                if (med.invoke(systemPropertiesClass,
+                        "qemu.hw.mainkeys") instanceof String) {
+                    navBarOverride = (String) med.invoke(systemPropertiesClass,
+                            "qemu.hw.mainkeys");
                 }
             }
             if ("1".equals(navBarOverride)) {

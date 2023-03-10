@@ -19,8 +19,7 @@ public class JuTiData {
     /**
      * JuTiData
      *
-     * @return
-     * @date 2023/3/9 19:45
+     * @date 2023/3/10 11:24
      */
     public JuTiData() {
     }
@@ -28,9 +27,10 @@ public class JuTiData {
     /**
      * JuTiData
      *
-     * @param item      description
+     * @param item description
      * @param itemGrade description
-     * @date 2023/3/9 19:45
+     * @return 
+     * @date 2023/3/10 11:24
      */
     public JuTiData(String item, String itemGrade) {
         jutiItem = item;
@@ -41,8 +41,7 @@ public class JuTiData {
      * getJutiItem
      *
      * @return java.lang.String
-     * @description: getJutiItem
-     * @date 2023/3/5 16:47
+     * @date 2023/3/10 11:24
      */
     public String getJutiItem() {
         return jutiItem;
@@ -51,9 +50,9 @@ public class JuTiData {
     /**
      * setJutiItem
      *
-     * @description: setJutiItem
-     * @param: * @param item 具体字符串
-     * @date 2023/3/5 16:52
+     * @param item description
+     * @return void
+     * @date 2023/3/10 11:23
      */
     public void setJutiItem(String item) {
         jutiItem = item;
@@ -63,9 +62,7 @@ public class JuTiData {
      * getJuTiItemGrade
      *
      * @return java.lang.String
-     * @description: getJuTiItemGrade
-     * @param:
-     * @date 2023/3/5 16:53
+     * @date 2023/3/10 11:23
      */
     public String getJuTiItemGrade() {
         return juTiItemGrade;
@@ -74,9 +71,9 @@ public class JuTiData {
     /**
      * setJuTiItemGrade
      *
-     * @description: setJuTiItemGrade
-     * @param: * @param itemGrade description
-     * @date 2023/3/5 16:53
+     * @param itemGrade description
+     * @return void
+     * @date 2023/3/10 11:23
      */
     public void setJuTiItemGrade(String itemGrade) {
         juTiItemGrade = itemGrade;

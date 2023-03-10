@@ -33,6 +33,7 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
 
+import java.io.File;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -58,7 +59,6 @@ public class HistoryFragment extends Fragment {
     private JSONArray stability;
     private JSONArray audioVideo;
     private JSONArray touch;
-
 
     private Handler handler = new Handler() {
         @Override
@@ -230,16 +230,16 @@ public class HistoryFragment extends Fragment {
     /**
      * onCreateView
      *
-     * @param inflater description
- * @param container description
- * @param savedInstanceState description
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
      * @return android.view.View
-     * @date 2023/3/9 19:44
+     * @date 2023/3/10 14:10
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                               @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.history_fragment, container, false);
 
         historyBack = view.findViewById(R.id.history_back);
@@ -318,7 +318,8 @@ public class HistoryFragment extends Fragment {
     }
 
     private void queryForData(String username, String type) {
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/data/" + username + "/" + type)
+        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + File.separator + "data" + File.separator
+                + username + File.separator + type)
                 .get()
                 .async(new OkHttpUtils.ICallBack() {
                     @Override

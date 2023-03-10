@@ -52,7 +52,9 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
     @Override
     public void onMonitor() {
-        if (isFinished()) return;
+        if (isFinished()) {
+            return;
+        }
         if (!isClickStartConnectBtn) {
             try {
                 Thread.sleep(1000L);

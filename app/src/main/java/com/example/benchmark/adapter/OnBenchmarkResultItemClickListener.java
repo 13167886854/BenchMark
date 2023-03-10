@@ -15,5 +15,12 @@ import com.example.benchmark.data.CepingData;
  * @since 2023/3/7 15:08
  */
 public interface OnBenchmarkResultItemClickListener {
+    /**
+     * onClick
+     *
+     * @param data description
+     * @return void
+     * @date 2023/3/10 11:33
+     */
     void onClick(CepingData data);
 }

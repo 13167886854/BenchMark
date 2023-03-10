@@ -8,7 +8,6 @@ package com.example.benchmark.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -28,7 +27,6 @@ import androidx.annotation.NonNull;
 import com.example.benchmark.R;
 import com.example.benchmark.data.Admin;
 
-
 /**
  * LoginDialog
  *
@@ -36,6 +34,7 @@ import com.example.benchmark.data.Admin;
  * @since 2023/3/7 15:14
  */
 public class LoginDialog extends Dialog {
+    /** Login */
     private static final String TAG = "Login";
 
     /** 确定按钮 */
@@ -64,9 +63,6 @@ public class LoginDialog extends Dialog {
     // 确定文本和取消文本的显示内容
     private EditText mUserName;
     private EditText mPassWord;
-    private SharedPreferences sharedPreferences;
-    private Thread mThread;
-    private Message mMessage;
 
     // 取消按钮被点击了的监听器
     private OnNoOnclickListener noOnclickListener;
@@ -75,6 +71,13 @@ public class LoginDialog extends Dialog {
     private OnYesOnclickListener yesOnclickListener;
 
     private Handler mHandler = new Handler() {
+        /**
+         * handleMessage
+         *
+         * @param msg description
+         * @return void
+         * @date 2023/3/10 11:35
+         */
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -85,23 +88,21 @@ public class LoginDialog extends Dialog {
     };
 
     /**
+     * LoginDialog
+     *
      * @param context description
-     * @return null
-     * @throws null
-     * @description: LoginDialog
-     * @date 2023/2/23 09:44
+     * @date 2023/3/10 11:33
      */
     public LoginDialog(@NonNull Context context) {
         super(context);
     }
 
     /**
-     * @param str                 description
+     * setNoOnclickListener
+     *
+     * @param str description
      * @param onNoOnclickListener description
-     * @return void
-     * @throws null
-     * @description: 设置取消按钮的显示内容和监听
-     * @date 2023/2/23 09:41
+     * @date 2023/3/10 11:33
      */
     public void setNoOnclickListener(String str, OnNoOnclickListener onNoOnclickListener) {
         if (str != null) {
@@ -111,12 +112,12 @@ public class LoginDialog extends Dialog {
     }
 
     /**
-     * @param str                  str
-     * @param onYesOnclickListener onYesOnclickListener
+     * setYesOnclickListener
+     *
+     * @param str description
+     * @param onYesOnclickListener description
      * @return void
-     * @throws null
-     * @description: 设置确定按钮的显示内容和监听
-     * @date 2023/2/23 09:42
+     * @date 2023/3/10 11:33
      */
     public void setYesOnclickListener(String str, OnYesOnclickListener onYesOnclickListener) {
         if (str != null) {
@@ -136,17 +137,20 @@ public class LoginDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mydialog);
+
         // 设置背景透明，不然会出现白色直角问题
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         // 按空白处不能取消动画
         setCanceledOnTouchOutside(false);
+
         // 初始化界面控件
         initView();
-        // 初始化界面数据
-        initData();
+
         // 初始化界面控件的事件
         initEvent();
+
         // 用户名
         mUserName = findViewById(R.id.et_username);
         mUserName.addTextChangedListener(new TextWatcher() {
@@ -179,12 +183,6 @@ public class LoginDialog extends Dialog {
         });
     }
 
-    /**
-     * @return void
-     * @throws null
-     * @description: 初始化界面的确定和取消监听器
-     * @date 2023/2/23 09:42
-     */
     private void initEvent() {
         // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
@@ -208,17 +206,6 @@ public class LoginDialog extends Dialog {
         });
     }
 
-    /**
-     * @return void
-     * @throws null
-     * @description: 初始化界面控件的显示数据
-     * @date 2023/2/23 09:43
-     */
-    private void initData() {
-    }
-    /**
-     * 初始化界面控件
-     */
     private void initView() {
         if (findViewById(R.id.yes) instanceof Button) {
             yes = (Button) findViewById(R.id.yes);

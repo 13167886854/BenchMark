@@ -67,7 +67,7 @@ public class SpeedManager {
                 Log.e(TAG, "preRender: frameDelta == 0");
             } else if (frameDelta > 10 * ONE_MILLION) {
                 frameDelta = 5 * ONE_MILLION;
-            }else {
+            } else {
                 Log.d(TAG, "preRender: LastElse");
             }
             // when we want to wake up
@@ -81,8 +81,8 @@ public class SpeedManager {
                 try {
                     if (IS_SLEEP) {
                         long startNsec = System.nanoTime();
-                        Thread.sleep(sleepTimeUsec / 1000
-                                , (int) (sleepTimeUsec % 1000) * 1000);
+                        Thread.sleep(sleepTimeUsec / 1000,
+                                (int) (sleepTimeUsec % 1000) * 1000);
                         long actualSleepNsec = System.nanoTime() - startNsec;
                     } else {
                         long time = sleepTimeUsec / 1000;

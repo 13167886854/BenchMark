@@ -119,6 +119,7 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
      * doTest
      *
      * @return void
+     * @throws IOException ioexception
      * @date 2023/3/9 19:52
      */
     public void doTest() throws IOException {
@@ -132,7 +133,8 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
      * stopTest
      *
      * @return void
-     * @date 2023/3/9 19:52
+     * @throws IOException ioexception
+     * @date 2023/3/10 10:20
      */
     public void stopTest() throws IOException {
         isTesting = false;

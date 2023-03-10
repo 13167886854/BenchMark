@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -33,10 +35,14 @@ import okhttp3.Response;
  * @since 2023/3/7 17:29
  */
 public class TapUtil {
-    /** mWholeMonitorNum */
+    /**
+     * mWholeMonitorNum
+     */
     public static int mWholeMonitorNum;
 
-    /** 点击次数 */
+    /**
+     * 点击次数
+     */
     public static final int TOTAL_TAP_NUM = 12;
 
     private static TapUtil util = new TapUtil();
@@ -58,13 +64,18 @@ public class TapUtil {
     private long endTime = 0L;
     private long responseTime = 0L;
 
-    private Thread mThread;
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
 
     private TapUtil() {
     }
 
-    // 单例模式
+    /**
+     * getUtil
+     *
+     * @return com.example.benchmark.utils.TapUtil
+     * @date 2023/3/10 16:50
+     */
     public static TapUtil getUtil() {
         if (util == null) {
             util = new TapUtil();
@@ -72,6 +83,13 @@ public class TapUtil {
         return util;
     }
 
+    /**
+     * setService
+     *
+     * @param service description
+     * @return void
+     * @date 2023/3/10 16:51
+     */
     public void setService(MyAccessibilityService service) {
         this.service = service;
     }
@@ -81,8 +99,9 @@ public class TapUtil {
      *
      * @param locationX description
      * @param locationY description
-     * @date 2023/3/9 15:03
-    */
+     * @return void
+     * @date 2023/3/10 16:51
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void tap(int locationX, int locationY) {
         if (service == null) {
@@ -103,12 +122,13 @@ public class TapUtil {
     }
 
     /**
-     * cloudPhoneTap云手机触控体验
+     * cloudPhoneTap
      *
-     *  * @param locationX description
-     * @param locationY description
-     * @date 2023/3/9 14:55
-    */
+     * @param locationX description
+ * @param locationY description
+     * @return void
+     * @date 2023/3/10 16:53
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void cloudPhoneTap(int locationX, int locationY) {
         if (service == null) {
@@ -118,18 +138,13 @@ public class TapUtil {
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
-                        /**
-                         * 模拟点击成功，记录每次点击的时间戳
-                         * 使用okhttp3发送 GET 请求，获取一个标准的时间戳
-                         */
                         // 记录发送请求时的系统时间戳
                         startTime = System.currentTimeMillis();
-
                         Request request = new Request.Builder()
                                 .get()
                                 .url(CacheConst.WEB_TIME_URL)
                                 .build();
-                        mThread = new Thread(new Runnable() {
+                        threadPool.execute(new Runnable() {
                             @Override
                             public void run() {
                                 client.newCall(request)
@@ -145,32 +160,21 @@ public class TapUtil {
                                                 // 获取成功响应的系统时间戳
                                                 endTime = System.currentTimeMillis();
                                                 responseTime = endTime - startTime;
-
                                                 String result = response.body().string();
                                                 String res = result.substring(81, 94);
-                                                Log.d("zzl", "onResponse: result===>" + result);
-                                                Log.d("zzl", "onResponse: res===>" + res);
 
                                                 // 获取到的时间戳，应该减去响应时延
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
                                                 mCurrentTapNum++;
-
-                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-"
-                                                        + mCurrentTapNum + ": " + mLastTapTime);
-                                                Log.e("TWT zzl", "Tap Time mCurrentTapNum-"
-                                                        + mCurrentTapNum + "System.currentTimeMillis(): "
-                                                        + System.currentTimeMillis());
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
                                             }
                                         });
                             }
                         });
-                        mThread.start();
                         if (mCurrentTapNum == TOTAL_TAP_NUM) {
                             mCurrentTapNum = 0;
                         }
                     }
-
                     @Override
                     public void onFailure() {
                         Log.e("TWT", "tap failure");
@@ -184,7 +188,7 @@ public class TapUtil {
      *
      * @param service description
      * @date 2023/3/9 14:55
-    */
+     */
     public void gameTouchTap(GameTouchTestService service) {
         turn = 0;
         gameTouchUtil.clear();
@@ -216,7 +220,7 @@ public class TapUtil {
      * phoneTouchTap
      *
      * @date 2023/3/9 14:56
-    */
+     */
     public void phoneTouchTap() {
         phoneCurrentTapNum = 0;
         TimerTask task = new TimerTask() {

@@ -47,10 +47,23 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
 
     private long mStartTime;
 
+    /**
+     * NetEaseCloudGameStabilityService
+     *
+     * @param service description
+     * @return 
+     * @date 2023/3/10 16:11
+     */
     public NetEaseCloudGameStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 
+    /**
+     * onMonitor
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void onMonitor() {
         if (!isEnterGame) {
@@ -93,6 +106,12 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * startControlCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void startControlCloudPhone() {
         service.mOpenTime.add(System.currentTimeMillis() - mStartTime);
@@ -108,6 +127,12 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * startQuitCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void startQuitCloudPhone() {
         try {
@@ -154,11 +179,23 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * getStartSuccessRate
+     *
+     * @return float
+     * @date 2023/3/10 16:12
+     */
     @Override
     public float getStartSuccessRate() {
         return (mCurrentMonitorNum - mFailMonitorNum) / (float) TapUtil.mWholeMonitorNum * 100;
     }
 
+    /**
+     * getCurrentMonitorNum
+     *
+     * @return int
+     * @date 2023/3/10 16:12
+     */
     @Override
     public int getCurrentMonitorNum() {
         return mCurrentMonitorNum;

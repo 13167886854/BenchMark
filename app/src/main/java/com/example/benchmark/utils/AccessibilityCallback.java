@@ -14,18 +14,18 @@ package com.example.benchmark.utils;
  */
 public interface AccessibilityCallback {
     /**
+     * onSuccess
+     *
      * @return void
-     * @throws null
-     * @description: onSuccess
-     * @date 2023/3/2 10:03
+     * @date 2023/3/10 16:26
      */
     void onSuccess();
 
     /**
+     * onFailure
+     *
      * @return void
-     * @throws null
-     * @description: onFailure
-     * @date 2023/3/2 10:03
+     * @date 2023/3/10 16:26
      */
     void onFailure();
 }

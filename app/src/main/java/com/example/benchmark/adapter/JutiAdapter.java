@@ -27,7 +27,7 @@ import java.util.List;
  * @since 2023/3/7 15:08
  */
 public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<JuTiData> data;
+    private List<JuTiData> data;
 
     private Context context;
 
@@ -89,9 +89,15 @@ public class JutiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public TextView juTiItemZhiBiao;
-        public TextView juTiItemGrade;
+        private TextView juTiItemZhiBiao;
+        private TextView juTiItemGrade;
 
+        /**
+         * RecyclerViewHolder
+         *
+         * @param itemView description
+         * @date 2023/3/10 11:17
+         */
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             juTiItemZhiBiao = itemView.findViewById(R.id.juti_item_zhibiao);

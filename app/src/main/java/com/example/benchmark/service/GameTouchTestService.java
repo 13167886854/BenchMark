@@ -60,18 +60,20 @@ public class GameTouchTestService extends Service {
     private static final int STOP_RECORD = 2;
     private static final String TAG = "TWT";
 
+    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
+    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
+
     // 定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    LayoutParams wmParams;
+    private LinearLayout mFloatLayout;
+    private LayoutParams wmParams;
 
     // 创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
-    TextView mFloatView;
+    private WindowManager mWindowManager;
+    private TextView mFloatView;
 
     private TapUtil tapUtil = TapUtil.getUtil();
     private GameTouchUtil gameTouchUtil = GameTouchUtil.getGameTouchUtil();
-    private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
-    private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
+
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -87,7 +89,7 @@ public class GameTouchTestService extends Service {
 
     private boolean isRecording = false;
     private int statusBarHeight;
-    Handler handler = new Handler() {
+    private Handler handler = new Handler() {
         @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -111,7 +113,12 @@ public class GameTouchTestService extends Service {
         }
     };
 
-
+    /**
+     * onCreate
+     *
+     * @return void
+     * @date 2023/3/10 15:40
+     */
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate: 121212");
@@ -122,13 +129,28 @@ public class GameTouchTestService extends Service {
         createFloatView();
     }
 
-
+    /**
+     * onBind
+     *
+     * @param intent description
+     * @return android.os.IBinder
+     * @date 2023/3/10 15:40
+     */
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind:12132 ");
         return new RecordBinder();
     }
 
+    /**
+     * setConfig
+     *
+     * @param width  description
+     * @param height description
+     * @param dpi    description
+     * @return void
+     * @date 2023/3/10 15:40
+     */
     public void setConfig(int width, int height, int dpi) {
         this.width = width;
         this.height = height;
@@ -136,43 +158,7 @@ public class GameTouchTestService extends Service {
     }
 
     private void createFloatView() {
-        Log.d(TAG, "createFloatView: 1212");
-        wmParams = new LayoutParams();
-        // 获取WindowManagerImpl.CompatModeWrapper
-        if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof  WindowManager) {
-            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        }
-        // 设置window type
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
-            wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
-        } else {
-            wmParams.type = LayoutParams.TYPE_TOAST;
-        }
-        // 设置图片格式，效果为背景透明
-        wmParams.format = PixelFormat.RGBA_8888;
-        // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
-        // 调整悬浮窗显示的停靠位置为左侧置顶
-        wmParams.gravity = Gravity.START | Gravity.TOP;
-        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
-        wmParams.x = screenWidth / 2;
-        wmParams.y = screenHeight;
-        // 设置悬浮窗口长宽数据
-        wmParams.width = LayoutParams.WRAP_CONTENT;
-        wmParams.height = LayoutParams.WRAP_CONTENT;
-        LayoutInflater inflater = LayoutInflater.from(getApplication());
-        // 获取浮动窗口视图所在布局
-        if (inflater.inflate(R.layout.record_float2, null) instanceof LinearLayout) {
-            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
-        }
-        if (mFloatLayout.findViewById(R.id.recordText2) instanceof  TextView) {
-            mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText2);
-        }
-        mWindowManager.addView(mFloatLayout, wmParams);
-
-        // 获取状态栏的高度
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        initFloatView1();
 
         // 浮动窗口按钮
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
@@ -182,30 +168,7 @@ public class GameTouchTestService extends Service {
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                boolean isClick = false;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        startTime = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
-
-                        // 刷新
-                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        endTime = System.currentTimeMillis();
-
-                        // 小于0.2秒被判断为点击
-                        if ((endTime - startTime) > 200) {
-                            isClick = false;
-                        } else {
-                            isClick = true;
-                        }
-                        break;
-                }
+                boolean isClick = touch1(event);
                 // 响应点击事件
                 if (isClick && isAble) {
                     if (!isRecording) {
@@ -247,18 +210,90 @@ public class GameTouchTestService extends Service {
         });
     }
 
+    private boolean touch1(MotionEvent event) {
+        boolean isClick = false;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTime = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
+
+                // 刷新
+                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                endTime = System.currentTimeMillis();
+
+                // 小于0.2秒被判断为点击
+                if ((endTime - startTime) > 200) {
+                    isClick = false;
+                } else {
+                    isClick = true;
+                }
+                break;
+        }
+        return isClick;
+    }
+
+    private void initFloatView1() {
+        wmParams = new LayoutParams();
+        // 获取WindowManagerImpl.CompatModeWrapper
+        if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
+            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+        }
+        // 设置window type
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+            wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            wmParams.type = LayoutParams.TYPE_TOAST;
+        }
+        // 设置图片格式，效果为背景透明
+        wmParams.format = PixelFormat.RGBA_8888;
+        // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
+        wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
+        // 调整悬浮窗显示的停靠位置为左侧置顶
+        wmParams.gravity = Gravity.START | Gravity.TOP;
+        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
+        wmParams.x = screenWidth / 2;
+        wmParams.y = screenHeight;
+        // 设置悬浮窗口长宽数据
+        wmParams.width = LayoutParams.WRAP_CONTENT;
+        wmParams.height = LayoutParams.WRAP_CONTENT;
+        LayoutInflater inflater = LayoutInflater.from(getApplication());
+        // 获取浮动窗口视图所在布局
+        if (inflater.inflate(R.layout.record_float2, null) instanceof LinearLayout) {
+            mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float2, null);
+        }
+        if (mFloatLayout.findViewById(R.id.recordText2) instanceof TextView) {
+            mFloatView = (TextView) mFloatLayout.findViewById(R.id.recordText2);
+        }
+        mWindowManager.addView(mFloatLayout, wmParams);
+
+        // 获取状态栏的高度
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+    }
+
     /**
-     * @description: setMediaProject
+     * setMediaProject
+     *
      * @param project description
      * @return void
-     * @throws
-     * @date 2023/2/16 15:30
+     * @date 2023/3/10 15:40
      */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
 
-
+    /**
+     * startRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 15:40
+     */
     public boolean startRecord() {
         if (mediaProjection == null || isRunning) {
             return false;
@@ -281,11 +316,22 @@ public class GameTouchTestService extends Service {
         return true;
     }
 
-
+    /**
+     * sendStopMsg
+     *
+     * @return void
+     * @date 2023/3/10 15:40
+     */
     public void sendStopMsg() {
         handler.sendEmptyMessageDelayed(STOP_RECORD, 1000);
     }
 
+    /**
+     * stopRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 15:40
+     */
     public boolean stopRecord() {
         if (!isRunning) {
             return false;
@@ -307,32 +353,36 @@ public class GameTouchTestService extends Service {
 
     private void createVirtualDisplay() {
         virtualDisplay = mediaProjection.createVirtualDisplay("MainScreen", width, height, dpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                    mediaRecorder.getSurface(), null, null);
     }
 
     private void initRecorder() {
-        try {
-            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
-            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(width, height); // 横向录屏
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
-            mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
-            mediaRecorder.setVideoFrameRate(60);
-        } catch (Exception e) {
-            Log.e("TWT", "initRecorder: " + e.toString());
-        }
+        path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(path);
+        mediaRecorder.setVideoSize(width, height); // 横向录屏
+        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+        mediaRecorder.setVideoFrameRate(60);
         try {
             mediaRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(TAG, "initRecorder: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "initRecorder: ", ex);
         }
     }
 
+    /**
+     * getsaveDirectory
+     *
+     * @return java.lang.String
+     * @date 2023/3/10 15:41
+     */
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ScreenRecorder" + File.separator;
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator + "ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -345,17 +395,45 @@ public class GameTouchTestService extends Service {
         }
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/10 15:41
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * onStartCommand
+     *
+     * @param intent  description
+     * @param flags   description
+     * @param startId description
+     * @return int
+     * @date 2023/3/10 15:41
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    /**
+     * GameTouchTestService.java
+     *
+     * @Author benchmark
+     * @Version 1.0
+     * @since 2023/3/10 15:41
+     */
     public class RecordBinder extends Binder {
+        /**
+         * getRecordService
+         *
+         * @return com.example.benchmark.service.GameTouchTestService
+         * @date 2023/3/10 15:41
+         */
         public GameTouchTestService getRecordService() {
             return GameTouchTestService.this;
         }

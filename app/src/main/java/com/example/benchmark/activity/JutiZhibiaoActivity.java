@@ -65,6 +65,13 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
     private List<JuTiData> data;
     private JutiAdapter jutiAdapter;
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/10 10:32
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,118 +101,155 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
 
     @SuppressLint("SetTextI18n")
     private void initdata(Intent intent) {
-        String selectPlat = intent.getStringExtra("selectPlat");
-        Log.d(TAG, "initdata: selectPlat-------" + selectPlat);
-        String selectItem = intent.getStringExtra("selectItem");
-        String selectText = intent.getStringExtra("selectText");
-        Integer grade = intent.getIntExtra("select_grade", 98);
-        int selectImg = intent.getIntExtra("selectImg", R.drawable.blue_liuchang);
-        isCloudPhone = intent.getBooleanExtra("isCloudPhone", false);
-        Log.d(TAG, "onCreate: isCloudPhone-----------" + isCloudPhone);
-        if (mHashMapLocal instanceof HashMap) {
-            mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
-        }
-        Log.d(TAG, "initdata: localMobileInfo--------" + mHashMapLocal);
-        juTiImg.setImageResource(selectImg);
-        juTiText.setText(selectText);
-        juTiItem.setText(selectItem);
-        juTiPhoneName.setText(selectPlat + "·" + selectItem);
-        juTiGrade.setText(String.valueOf(grade));
-        Log.e("TWT", "selectItem: " + selectItem);
+        String selectItem = init1(intent);
         switch (selectItem) {
             case CacheConst.KEY_FLUENCY_INFO: {
-                data = new ArrayList<>();
-                data.add(new JuTiData("平均帧率", ScoreUtil.getAverageFPS() + "fps"));
-                data.add(new JuTiData("抖动帧率(方差)", ScoreUtil.getFrameShakeRate() + ""));
-                data.add(new JuTiData("低帧率", ScoreUtil.getLowFrameRate() + "%"));
-                data.add(new JuTiData("帧间隔", ScoreUtil.getFrameInterval() + "ms"));
-                data.add(new JuTiData("jank", ScoreUtil.getJankCount() + "次"));
-                data.add(new JuTiData("卡顿时长占比", ScoreUtil.getStutterRate() + "%"));
+                fluencyInfo();
                 break;
             }
             case CacheConst.KEY_STABILITY_INFO: {
-                data = new ArrayList<>();
-                data.add(new JuTiData("启动成功率", ScoreUtil.getStartSuccessRate() + "%"));
-                data.add(new JuTiData("平均启动时长", ScoreUtil.getAverageStartTime() + "ms"));
-                data.add(new JuTiData("平均退出时长", ScoreUtil.getAverageQuitTime() + "ms"));
+                stabilityInfo();
                 break;
             }
             case CacheConst.KEY_TOUCH_INFO: {
-                data = new ArrayList<>();
-                data.add(new JuTiData("平均正确率", ScoreUtil.getAverageAccuracy() + "%"));
-                data.add(new JuTiData("触屏响应时延", ScoreUtil.getResponseTime() + "ms"));
+                touchInfo();
                 break;
             }
             case CacheConst.KEY_SOUND_FRAME_INFO: {
-                data = new ArrayList<>();
-                data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
-                data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "帧"));
-                data.add(new JuTiData("PSNR", YinHuaData.psnr));
-                data.add(new JuTiData("SSIM", YinHuaData.ssim));
-                data.add(new JuTiData("PESQ", YinHuaData.pesq));
+                audioVideoInfo();
                 break;
             }
             case CacheConst.KEY_CPU_INFO: {
-                mHeadScore.setVisibility(View.GONE);
-                data = new ArrayList<>();
-                if (!isCloudPhone) {
-                    data.add(new JuTiData("CPU核数", mHashMapLocal.get("CPUCores") + "核"));
-                } else {
-                    data.add(new JuTiData("CPU核数", CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
-                }
+                cpuInfo();
                 break;
             }
             case CacheConst.KEY_GPU_INFO: {
-                mHeadScore.setVisibility(View.GONE);
-                data = new ArrayList<>();
-                if (!isCloudPhone) {
-                    data.add(new JuTiData("GPU供应商", mHashMapLocal.get("GPUVendor") + ""));
-                    data.add(new JuTiData("GPU渲染器", mHashMapLocal.get("GPURenderer") + ""));
-                    data.add(new JuTiData("GPU版本", mHashMapLocal.get("GPUVersion") + ""));
-                } else {
-                    data.add(new JuTiData("GPU供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
-                    data.add(new JuTiData("GPU渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
-                    data.add(new JuTiData("GPU版本", CacheUtil.getString(CacheConst.KEY_GPU_VERSION)));
-                }
+                gpuInfo();
                 break;
             }
             case CacheConst.KEY_ROM_INFO: {
-                mHeadScore.setVisibility(View.GONE);
-                data = new ArrayList<>();
-                if (!isCloudPhone) {
-                    if (mHashMapLocal instanceof HashMap) {
-                        HashMap rom = (HashMap) mHashMapLocal.get("ROM");
-                        data.add(new JuTiData("可用ROM", rom.get("可用") + ""));
-                        data.add(new JuTiData("总共ROM", rom.get("总共") + ""));
-                    }
-                } else {
-                    data.add(new JuTiData("可用ROM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
-                    data.add(new JuTiData("总共ROM", CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
-                }
+                romInfo();
                 break;
             }
             case CacheConst.KEY_RAM_INFO: {
-                mHeadScore.setVisibility(View.GONE);
-                data = new ArrayList<>();
-                if (!isCloudPhone) {
-                    if (mHashMapLocal instanceof HashMap) {
-                        HashMap ram = (HashMap) mHashMapLocal.get("RAM");
-                        data.add(new JuTiData("可用RAM", ram.get("可用") + ""));
-                        data.add(new JuTiData("总共RAM", ram.get("总共") + ""));
-                    }
-                } else {
-                    data.add(new JuTiData("可用RAM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
-                    data.add(new JuTiData("总共RAM", CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
-                }
+                ramInfo();
                 break;
             }
         }
     }
 
+    private void ramInfo() {
+        mHeadScore.setVisibility(View.GONE);
+        data = new ArrayList<>();
+        if (!isCloudPhone) {
+            if (mHashMapLocal.get("RAM") instanceof HashMap) {
+                HashMap ram = (HashMap) mHashMapLocal.get("RAM");
+                data.add(new JuTiData("可用RAM", ram.get("可用") + ""));
+                data.add(new JuTiData("总共RAM", ram.get("总共") + ""));
+            }
+        } else {
+            data.add(new JuTiData("可用RAM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_RAM)));
+            data.add(new JuTiData("总共RAM", CacheUtil.getString(CacheConst.KEY_TOTAL_RAM)));
+        }
+    }
+
+    private void romInfo() {
+        mHeadScore.setVisibility(View.GONE);
+        data = new ArrayList<>();
+        if (!isCloudPhone) {
+            if (mHashMapLocal.get("ROM") instanceof HashMap) {
+                HashMap rom = (HashMap) mHashMapLocal.get("ROM");
+                data.add(new JuTiData("可用ROM", rom.get("可用") + ""));
+                data.add(new JuTiData("总共ROM", rom.get("总共") + ""));
+            }
+        } else {
+            data.add(new JuTiData("可用ROM", CacheUtil.getString(CacheConst.KEY_AVAILABLE_STORAGE)));
+            data.add(new JuTiData("总共ROM", CacheUtil.getString(CacheConst.KEY_TOTAL_STORAGE)));
+        }
+    }
+
+    private void cpuInfo() {
+        mHeadScore.setVisibility(View.GONE);
+        data = new ArrayList<>();
+        if (!isCloudPhone) {
+            data.add(new JuTiData("CPU核数", mHashMapLocal.get("CPUCores") + "核"));
+        } else {
+            data.add(new JuTiData("CPU核数", CacheUtil.getInt(CacheConst.KEY_CPU_CORES) + "核"));
+        }
+    }
+
+    private void audioVideoInfo() {
+        data = new ArrayList<>();
+        data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
+        data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "帧"));
+        data.add(new JuTiData("PSNR", YinHuaData.psnr));
+        data.add(new JuTiData("SSIM", YinHuaData.ssim));
+        data.add(new JuTiData("PESQ", YinHuaData.pesq));
+    }
+
+    private void touchInfo() {
+        data = new ArrayList<>();
+        data.add(new JuTiData("平均正确率", ScoreUtil.getAverageAccuracy() + "%"));
+        data.add(new JuTiData("触屏响应时延", ScoreUtil.getResponseTime() + "ms"));
+    }
+
+    private void stabilityInfo() {
+        data = new ArrayList<>();
+        data.add(new JuTiData("启动成功率", ScoreUtil.getStartSuccessRate() + "%"));
+        data.add(new JuTiData("平均启动时长", ScoreUtil.getAverageStartTime() + "ms"));
+        data.add(new JuTiData("平均退出时长", ScoreUtil.getAverageQuitTime() + "ms"));
+    }
+
+    private void gpuInfo() {
+        mHeadScore.setVisibility(View.GONE);
+        data = new ArrayList<>();
+        if (!isCloudPhone) {
+            data.add(new JuTiData("GPU供应商", mHashMapLocal.get("GPUVendor") + ""));
+            data.add(new JuTiData("GPU渲染器", mHashMapLocal.get("GPURenderer") + ""));
+            data.add(new JuTiData("GPU版本", mHashMapLocal.get("GPUVersion") + ""));
+        } else {
+            data.add(new JuTiData("GPU供应商", CacheUtil.getString(CacheConst.KEY_GPU_VENDOR)));
+            data.add(new JuTiData("GPU渲染器", CacheUtil.getString(CacheConst.KEY_GPU_RENDER)));
+            data.add(new JuTiData("GPU版本", CacheUtil.getString(CacheConst.KEY_GPU_VERSION)));
+        }
+    }
+
+    private void fluencyInfo() {
+        data = new ArrayList<>();
+        data.add(new JuTiData("平均帧率", ScoreUtil.getAverageFPS() + "fps"));
+        data.add(new JuTiData("抖动帧率(方差)", ScoreUtil.getFrameShakeRate() + ""));
+        data.add(new JuTiData("低帧率", ScoreUtil.getLowFrameRate() + "%"));
+        data.add(new JuTiData("帧间隔", ScoreUtil.getFrameInterval() + "ms"));
+        data.add(new JuTiData("jank", ScoreUtil.getJankCount() + "次"));
+        data.add(new JuTiData("卡顿时长占比", ScoreUtil.getStutterRate() + "%"));
+    }
+
+    private String init1(Intent intent) {
+        String selectPlat = intent.getStringExtra("selectPlat");
+        Log.d(TAG, "initdata: selectPlat-------" + selectPlat);
+        int selectImg = intent.getIntExtra("selectImg", R.drawable.blue_liuchang);
+        isCloudPhone = intent.getBooleanExtra("isCloudPhone", false);
+        Log.d(TAG, "onCreate: isCloudPhone-----------" + isCloudPhone);
+        if (intent.getSerializableExtra("localMobileInfo") instanceof HashMap) {
+            mHashMapLocal = (HashMap) intent.getSerializableExtra("localMobileInfo");
+        }
+        Log.d(TAG, "initdata: localMobileInfo--------" + mHashMapLocal);
+        juTiImg.setImageResource(selectImg);
+        String selectText = intent.getStringExtra("selectText");
+        String selectItem = intent.getStringExtra("selectItem");
+        Integer grade = intent.getIntExtra("select_grade", 98);
+        juTiText.setText(selectText);
+        juTiItem.setText(selectItem);
+        juTiPhoneName.setText(selectPlat + "·" + selectItem);
+        juTiGrade.setText(String.valueOf(grade));
+        Log.e("TWT", "selectItem: " + selectItem);
+        return selectItem;
+    }
+
     /**
      * onClick
      *
-     * @param view description 
+     * @param view description
      * @return void
      * @date 2023/3/9 20:03
      */
@@ -225,6 +269,8 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
     }
 
     /**
+     * getInfo
+     *
      * @return java.util.Map<java.lang.String, java.lang.Object>
      * @throws null
      * @description: 查询本机的规格数据
@@ -257,7 +303,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         res.put("GPURenderer", GPURenderer.glRenderer);
         res.put("GPUVendor", GPURenderer.glVendor);
         res.put("GPUVersion", GPURenderer.glVersion);
-        Log.d(TAG, "getInfo: res-----------+\n" + res);
+        Log.d(TAG, "getInfo: res-----------:" + res);
         return res;
     }
 }

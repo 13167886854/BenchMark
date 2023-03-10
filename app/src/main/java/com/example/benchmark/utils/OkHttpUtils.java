@@ -64,14 +64,14 @@ public class OkHttpUtils {
                             .connectTimeout(15, TimeUnit.SECONDS)
                             .writeTimeout(20, TimeUnit.SECONDS)
                             .readTimeout(20, TimeUnit.SECONDS)
-                            .sslSocketFactory(createSSLSocketFactory(trustManagers)
-                                    , trustManagers[0] instanceof X509TrustManager
+                            .sslSocketFactory(createSSLSocketFactory(trustManagers),
+                                    trustManagers[0] instanceof X509TrustManager
                                             ? (X509TrustManager) trustManagers[0] : null)
                             .hostnameVerifier((hostName, session) -> true)
                             .retryOnConnectionFailure(true)
                             .build();
-                    addHeader("User-Agent"
-                            , "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
+                    addHeader("User-Agent",
+                            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
                                     + "AppleWebKit/537.36 (KHTML, like Gecko) "
                                     + "Chrome/63.0.3239.132 Safari/537.36");
                 }
@@ -168,7 +168,7 @@ public class OkHttpUtils {
                             .append("&");
                 }
             } catch (UnsupportedEncodingException ex) {
-                Log.e(TAG, "UnsupportedEncodingException: "+ex);
+                Log.e(TAG, "UnsupportedEncodingException: " + ex);
             }
             urlBuilder.deleteCharAt(urlBuilder.length() - 1);
         }
@@ -292,7 +292,6 @@ public class OkHttpUtils {
         }
     }
 
-
     /**
      * createSSLSocketFactory
      *
@@ -307,10 +306,8 @@ public class OkHttpUtils {
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new SecureRandom());
             ssfFactory = sc.getSocketFactory();
-        } catch (NoSuchAlgorithmException ex) {
-            Log.e(TAG, "createSSLSocketFactory: "+ex);
-        } catch (KeyManagementException ex) {
-            Log.e(TAG, "createSSLSocketFactory: "+ex);
+        } catch (NoSuchAlgorithmException | KeyManagementException ex) {
+            Log.e(TAG, "createSSLSocketFactory: " + ex);
         }
         return ssfFactory;
     }
@@ -340,12 +337,14 @@ public class OkHttpUtils {
                 }
         };
     }
+
     /**
      * @return
      * @throws null
      * @date 2023/3/8 09:12
      */
     public interface ICallBack {
+
         /**
          * onSuccessful
          *
@@ -356,6 +355,7 @@ public class OkHttpUtils {
          * @date 2023/3/8 09:12
          */
         void onSuccessful(Call call, String data);
+
         /**
          * onFailure
          *

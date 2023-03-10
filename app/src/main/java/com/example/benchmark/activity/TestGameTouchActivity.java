@@ -19,11 +19,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.benchmark.R;
 import com.example.benchmark.utils.GameTouchUtil;
 import com.example.benchmark.utils.ScoreUtil;
+
+import java.io.File;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * TestGameTouchActivity
@@ -44,17 +47,21 @@ public class TestGameTouchActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private String path;
     private TextView handlingTv;
+
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
                 case handlingFrame:
-                    handlingTv.setText("测试中----(" + msg.arg1 + "/" + count + ")");
+                    handlingTv.setText("测试中----(" + msg.arg1 + File.separator + count + ")");
                     break;
                 case testCompleted:
                     float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.TEST_NUM);
-                    handlingTv.setText(gameTouchUtil.getDelayTime() + "\navgTime:" + delayTime);
+                    handlingTv.setText(gameTouchUtil.getDelayTime()
+                            + System.lineSeparator() +"avgTime:" + delayTime);
                     ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(), delayTime);
                     Log.d(TAG, "gameTouchUtil.getDetectNum(): " + gameTouchUtil.getDetectNum());
                     Log.d(TAG, "delayTime): " + delayTime);
@@ -66,6 +73,13 @@ public class TestGameTouchActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * onCreate
+     *
+     * @param savedInstanceState description
+     * @return void
+     * @date 2023/3/10 10:58
+     */
     @RequiresApi(api = Build.VERSION_CODES.P)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +92,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions(permissions, 1);
         }
-        new Thread(new Runnable() {
+        threadPool.execute(new Runnable() {
             @Override
             public void run() {
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -89,49 +103,54 @@ public class TestGameTouchActivity extends AppCompatActivity {
                 Log.d(TAG, "durationS: " + durationS);
                 count = Long.valueOf(countS);
                 duration = Long.valueOf(durationS);
-                float frameTime = (float) duration / count;
                 Bitmap bitmap1 = retriever.getFrameAtIndex(0);
-                if (bitmap1.getWidth() > bitmap1.getHeight()) {
-                    thisRgb = bitmap1.getPixel(1060, 830);
-                    lastRgb = thisRgb;
-                    for (int i = 1; i < count; i++) {
-                        bitmap = retriever.getFrameAtIndex(i);
-                        thisRgb = bitmap.getPixel(1060, 830);
-                        Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
-                        Message mes = new Message();
-                        mes.arg1 = (i + 1);
-                        mes.what = handlingFrame;
-                        handler.sendMessage(mes);
-                        if (Math.abs(thisRgb - lastRgb) > 10000000) {
-                            Log.e(TAG, "rgb changed!!! : " + i);
-                            gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime() + (long) (duration * ((float) (i) / count)));
-                            gameTouchUtil.getTestTime((long) (duration * ((float) (i) / count)));
-                        }
-                        lastRgb = thisRgb;
-                    }
-                } else {
-                    thisRgb = bitmap1.getPixel(1060, 830);
-                    lastRgb = thisRgb;
-                    for (int i = 1; i < count; i++) {
-                        bitmap = retriever.getFrameAtIndex(i);
-                        thisRgb = bitmap.getPixel(1060, 830);
-                        Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
-                        Message mes = new Message();
-                        mes.arg1 = (i + 1);
-                        mes.what = handlingFrame;
-                        handler.sendMessage(mes);
-
-                        if (Math.abs(thisRgb - lastRgb) > 10000000) {
-                            Log.e(TAG, "rgb changed!!! : " + i);
-                            gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime() + (long) (duration * ((float) (i) / count)));
-                            gameTouchUtil.getTestTime((long) (duration * ((float) (i) / count)));
-                        }
-                        lastRgb = thisRgb;
-                    }
-                }
+                bitmao(retriever, bitmap1);
                 gameTouchUtil.printTestTime();
                 handler.sendEmptyMessage(testCompleted);
             }
-        }).start();
+        });
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    private void bitmao(MediaMetadataRetriever retriever, Bitmap bitmap1) {
+        if (bitmap1.getWidth() > bitmap1.getHeight()) {
+            thisRgb = bitmap1.getPixel(1060, 830);
+            lastRgb = thisRgb;
+            for (int i = 1; i < count; i++) {
+                bitmap = retriever.getFrameAtIndex(i);
+                thisRgb = bitmap.getPixel(1060, 830);
+                Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
+                Message mes = new Message();
+                mes.arg1 = (i + 1);
+                mes.what = handlingFrame;
+                handler.sendMessage(mes);
+                if (Math.abs(thisRgb - lastRgb) > 10000000) {
+                    Log.e(TAG, "rgb changed!!! : " + i);
+                    gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()
+                            + (long) (duration * ((float) (i) / count)));
+                    gameTouchUtil.getTestTime((long) (duration * ((float) (i) / count)));
+                }
+                lastRgb = thisRgb;
+            }
+        } else {
+            thisRgb = bitmap1.getPixel(1060, 830);
+            lastRgb = thisRgb;
+            for (int i = 1; i < count; i++) {
+                bitmap = retriever.getFrameAtIndex(i);
+                thisRgb = bitmap.getPixel(1060, 830);
+                Log.d(TAG, "Image: <" + i + "> :" + thisRgb);
+                Message mes = new Message();
+                mes.arg1 = (i + 1);
+                mes.what = handlingFrame;
+                handler.sendMessage(mes);
+                if (Math.abs(thisRgb - lastRgb) > 10000000) {
+                    Log.e(TAG, "rgb changed!!! : " + i);
+                    gameTouchUtil.getUpdateTime(gameTouchUtil.getVideoStartTime()
+                            + (long) (duration * ((float) (i) / count)));
+                    gameTouchUtil.getTestTime((long) (duration * ((float) (i) / count)));
+                }
+                lastRgb = thisRgb;
+            }
+        }
     }
 }

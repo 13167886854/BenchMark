@@ -87,7 +87,7 @@ public class SettingFragment extends Fragment {
                 dialog.show();
                 Toast.makeText(getContext(), "检测到有新版本，请前往浏览器下载最新版。", Toast.LENGTH_SHORT).show();
             } else {
-                System.out.println(";");
+                Log.e("WZX", "OK");
             }
         }
     };
@@ -95,16 +95,16 @@ public class SettingFragment extends Fragment {
     /**
      * onCreateView
      *
-     * @param inflater description
- * @param container description
- * @param savedInstanceState description
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:36
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                                @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_fragment, container, false);
         RelativeLayout relativeLayout = view.findViewById(R.id.set_shiyongshuom);
         relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +161,7 @@ public class SettingFragment extends Fragment {
              * @param call description
              * @param response description
              * @return void
-             * @throws null
+             * @throws IOException 网络流异常
              * @date 2023/3/8 09:58
              */
             public void onResponse(Call call, Response response)

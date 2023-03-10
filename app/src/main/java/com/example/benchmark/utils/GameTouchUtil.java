@@ -205,33 +205,33 @@ public class GameTouchUtil {
     /**
      * printAvgTime
      *
-     * @param TEST_NUM description
+     * @param testNum description
      * @description: printAvgTime
      * @date 2023/3/2 09:55
      */
-    public void printAvgTime(int TEST_NUM) {
+    public void printAvgTime(int testNum) {
         long sum = 0L;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / TEST_NUM;
+        float avgtime = (float) sum / testNum;
         Log.d("TWT", "printAvgTime: 平均自动点击响应时间为：" + avgtime);
     }
 
     /**
      * getAvgTime
      *
-     * @param TEST_NUM description
+     * @param testNum description
      * @return float
      * @description: getAvgTime
      * @date 2023/3/2 09:55
      */
-    public float getAvgTime(int TEST_NUM) {
+    public float getAvgTime(int testNum) {
         long sum = 0L;
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / TEST_NUM;
+        float avgtime = (float) sum / testNum;
         Log.e("TWT", "getAvgTime:+frameUpdateTime.size " + frameUpdateTime.size());
         Log.e("TWT", "getAvgTime:+autoTapTime.size " + autoTapTime.size());
         return avgtime;

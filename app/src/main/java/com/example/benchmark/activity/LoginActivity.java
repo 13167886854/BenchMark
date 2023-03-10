@@ -69,6 +69,34 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        init1();
+        mPassWord.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
+                Log.d(TAG, "beforeTextChanged: ");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
+                Log.d(TAG, "onTextChanged: " + charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // 在文本改变之后记录用户密码
+                if (isChecked) {
+                    if (sharedPreferences == null) {
+                        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
+                    }
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("password", mPassWord.getText().toString());
+                }
+                password = editable.toString();
+            }
+        });
+    }
+
+    private void init1() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
@@ -103,30 +131,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         mPassWord = findViewById(R.id.et_password);
-        mPassWord.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
-                Log.d(TAG, "beforeTextChanged: ");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
-                Log.d(TAG, "onTextChanged: " + charSequence);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // 在文本改变之后记录用户密码
-                if (isChecked) {
-                    if (sharedPreferences == null) {
-                        sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
-                    }
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("password", mPassWord.getText().toString());
-                }
-                password = editable.toString();
-            }
-        });
     }
 
     /**

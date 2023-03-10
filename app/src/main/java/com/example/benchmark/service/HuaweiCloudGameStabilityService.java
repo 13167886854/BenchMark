@@ -13,6 +13,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityUtil;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * HuaweiCloudGameStabilityService
  *
@@ -28,6 +31,8 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     private final String nodeIdBtnQuitCloudPhone = "com.huawei.cloudphonedaily:id/tv_positive";
 
     private final MyAccessibilityService service;
+
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private int mCurrentMonitorNum = 0;
     private long mStartTime = 0L;
@@ -136,19 +141,22 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     }
 
     private void clickContinueGameIfExist() {
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000L);
-                AccessibilityNodeInfo nodeBtnContinueGame = AccessibilityUtil.findNodeInfo(
-                        service, nodeIdBtnContinueGame, "");
-                if (nodeBtnContinueGame != null) {
-                    AccessibilityUtil.performClick(nodeBtnContinueGame);
-                    mStartTime = System.currentTimeMillis();
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000L);
+                    AccessibilityNodeInfo nodeBtnContinueGame = AccessibilityUtil.findNodeInfo(
+                            service, nodeIdBtnContinueGame, "");
+                    if (nodeBtnContinueGame != null) {
+                        AccessibilityUtil.performClick(nodeBtnContinueGame);
+                        mStartTime = System.currentTimeMillis();
+                    }
+                } catch (InterruptedException ex) {
+                    Log.e(TAG, "startQuitCloudPhone: ", ex);
                 }
-            } catch (InterruptedException e) {
-                Log.e(TAG, "startQuitCloudPhone: ", e);
             }
-        }).start();
+        });
     }
 
     @Override

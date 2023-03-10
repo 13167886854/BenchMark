@@ -46,6 +46,8 @@ import com.example.benchmark.utils.ServiceUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * PhoneFragment
@@ -59,6 +61,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private final HashMap<String, String> checkPhoneMap = new HashMap<>();
     private final int allCheckCount = 8;
 
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
     private Button blueLiuChang;
     private Button blueWenDing;
     private Button blueChuKong;
@@ -70,7 +73,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private CheckBox blueYinHuaCheck;
 
     private IpPortDialog myDialog;
-    private Thread mThread;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -288,387 +290,427 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View vi) {
-        Log.d("mCheckCounts", "onClick: mCheckCounts==>  " + mCheckCounts);
-        switch (vi.getId()) {
-            case R.id.kunpeng_phone: {
-                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
-                initPhoneBtn();
-                if (vi instanceof Button) {
-                    Button btn = (Button) vi;
-                    Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
-                }
-                break;
-            }
-            case R.id.kunpeng_data_phone: {
-                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
-                initPhoneBtn();
-                if (vi instanceof Button) {
-                    Button btn = (Button) vi;
-                    Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
-                }
-                break;
-            }
-            case R.id.redfigure_phone: {
-                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
-                initPhoneBtn();
-                if (vi instanceof Button) {
-                    Button btn = (Button) vi;
-                    Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
-                }
-                break;
-            }
-            case R.id.yidong_phone: {
-                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
-                initPhoneBtn();
-                if (vi instanceof Button) {
-                    Button btn = (Button) vi;
-                    Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
-                }
-                break;
-            }
-            case R.id.wangyiyun_phone: {
-                checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
-                initPhoneBtn();
-                if (vi instanceof Button) {
-                    Button btn = (Button) vi;
-                    Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
-                }
-                break;
-            }
-            case R.id.bule_liuchangxing: {
-                boolean isChecked = blueLiuChangCheck.isChecked();
-                if (isChecked) {
-                    blueLiuChangCheck.setVisibility(View.INVISIBLE);
-                    blueLiuChangCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueLiuChangCheck.setChecked(true);
-                    blueLiuChangCheck.setVisibility(View.VISIBLE);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
-                break;
-            }
-            case R.id.bule_wendinxing: {
-                boolean isChecked = blueWenDingCheck.isChecked();
-                if (isChecked) {
-                    blueWenDingCheck.setVisibility(View.INVISIBLE);
-                    blueWenDingCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueWenDingCheck.setVisibility(View.VISIBLE);
-                    blueWenDingCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
-                break;
-            }
+        switch1(vi);
+        switch2(vi);
+    }
+
+    private void switch2(View vi) {
+        switch (vi.getId()){
             case R.id.bule_chukong: {
-                boolean isChecked = blueChuKongCheck.isChecked();
-                if (isChecked) {
-                    blueChuKongCheck.setVisibility(View.INVISIBLE);
-                    blueChuKongCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueChuKongCheck.setVisibility(View.VISIBLE);
-                    blueChuKongCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                touch();
                 break;
             }
             case R.id.bule_yinhua: {
-                boolean isChecked = blueYinHuaCheck.isChecked();
-                if (isChecked) {
-                    blueYinHuaCheck.setVisibility(View.INVISIBLE);
-                    blueYinHuaCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueYinHuaCheck.setVisibility(View.VISIBLE);
-                    blueYinHuaCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                audioVideo();
                 break;
             }
             case R.id.bule_cpu: {
-                boolean isChecked = blueCpuCheck.isChecked();
-                if (isChecked) {
-                    blueCpuCheck.setVisibility(View.INVISIBLE);
-                    blueCpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueGpuCheck.setVisibility(View.INVISIBLE);
-                    blueGpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRamCheck.setVisibility(View.INVISIBLE);
-                    blueRamCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRomCheck.setVisibility(View.INVISIBLE);
-                    blueRomCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueCpuCheck.setVisibility(View.VISIBLE);
-                    blueCpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueGpuCheck.setVisibility(View.VISIBLE);
-                    blueGpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueRamCheck.setVisibility(View.VISIBLE);
-                    blueRamCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueRomCheck.setVisibility(View.VISIBLE);
-                    blueRomCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                cpu();
                 break;
             }
             case R.id.bule_gpu: {
-                boolean isChecked = blueGpuCheck.isChecked();
-                if (isChecked) {
-                    blueGpuCheck.setVisibility(View.INVISIBLE);
-                    blueGpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueCpuCheck.setVisibility(View.INVISIBLE);
-                    blueCpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRamCheck.setVisibility(View.INVISIBLE);
-                    blueRamCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRomCheck.setVisibility(View.INVISIBLE);
-                    blueRomCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueGpuCheck.setVisibility(View.VISIBLE);
-                    blueGpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueCpuCheck.setVisibility(View.VISIBLE);
-                    blueCpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueRamCheck.setVisibility(View.VISIBLE);
-                    blueRamCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueRomCheck.setVisibility(View.VISIBLE);
-                    blueRomCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                gpu();
                 break;
             }
             case R.id.bule_ram: {
-                boolean isChecked = blueRamCheck.isChecked();
-                if (isChecked) {
-                    blueRamCheck.setVisibility(View.INVISIBLE);
-                    blueRamCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueCpuCheck.setVisibility(View.INVISIBLE);
-                    blueCpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueGpuCheck.setVisibility(View.INVISIBLE);
-                    blueGpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRomCheck.setVisibility(View.INVISIBLE);
-                    blueRomCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueRamCheck.setVisibility(View.VISIBLE);
-                    blueRamCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueCpuCheck.setVisibility(View.VISIBLE);
-                    blueCpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueGpuCheck.setVisibility(View.VISIBLE);
-                    blueGpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-
-                    blueRomCheck.setVisibility(View.VISIBLE);
-                    blueRomCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                ram();
                 break;
             }
             case R.id.bule_rom: {
-                boolean isChecked = blueRomCheck.isChecked();
-                if (isChecked) {
-                    blueRomCheck.setVisibility(View.INVISIBLE);
-                    blueRomCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueCpuCheck.setVisibility(View.INVISIBLE);
-                    blueCpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueGpuCheck.setVisibility(View.INVISIBLE);
-                    blueGpuCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-
-                    blueRamCheck.setVisibility(View.INVISIBLE);
-                    blueRamCheck.setChecked(false);
-                    phoneSelectAll.setChecked(false);
-                    mCheckCounts--;
-                } else {
-                    blueRomCheck.setVisibility(View.VISIBLE);
-                    blueRomCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueCpuCheck.setVisibility(View.VISIBLE);
-                    blueCpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueGpuCheck.setVisibility(View.VISIBLE);
-                    blueGpuCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                    blueRamCheck.setVisibility(View.VISIBLE);
-                    blueRamCheck.setChecked(true);
-                    mCheckCounts++;
-                    if (mCheckCounts == allCheckCount) {
-                        phoneSelectAll.setChecked(true);
-                    }
-                }
+                rom();
                 break;
             }
             case R.id.phone_select_all: {
-                boolean isCheckedAll = phoneSelectAll.isChecked();
-                if (isCheckedAll) {
-                    blueLiuChangCheck.setChecked(true);
-                    blueLiuChangCheck.setVisibility(View.VISIBLE);
-                    blueWenDingCheck.setVisibility(View.VISIBLE);
-                    blueWenDingCheck.setChecked(true);
-                    blueChuKongCheck.setVisibility(View.VISIBLE);
-                    blueChuKongCheck.setChecked(true);
-                    blueYinHuaCheck.setVisibility(View.VISIBLE);
-                    blueYinHuaCheck.setChecked(true);
-                    blueCpuCheck.setVisibility(View.VISIBLE);
-                    blueCpuCheck.setChecked(true);
-
-                    blueGpuCheck.setVisibility(View.VISIBLE);
-                    blueGpuCheck.setChecked(true);
-
-                    blueRamCheck.setVisibility(View.VISIBLE);
-                    blueRamCheck.setChecked(true);
-
-                    blueRomCheck.setVisibility(View.VISIBLE);
-                    blueRomCheck.setChecked(true);
-                    mCheckCounts = 8;
-                } else {
-                    blueLiuChangCheck.setChecked(false);
-                    blueLiuChangCheck.setVisibility(View.INVISIBLE);
-
-                    blueWenDingCheck.setChecked(false);
-                    blueWenDingCheck.setVisibility(View.INVISIBLE);
-
-                    blueChuKongCheck.setChecked(false);
-                    blueChuKongCheck.setVisibility(View.INVISIBLE);
-
-                    blueYinHuaCheck.setVisibility(View.INVISIBLE);
-                    blueYinHuaCheck.setChecked(false);
-
-                    blueCpuCheck.setVisibility(View.INVISIBLE);
-                    blueCpuCheck.setChecked(false);
-
-                    blueGpuCheck.setVisibility(View.INVISIBLE);
-                    blueGpuCheck.setChecked(false);
-
-                    blueRamCheck.setVisibility(View.INVISIBLE);
-                    blueRamCheck.setChecked(false);
-
-                    blueRomCheck.setVisibility(View.INVISIBLE);
-                    blueRomCheck.setChecked(false);
-                    mCheckCounts = 0;
-                }
+                selectAll();
             }
+        }
+    }
+
+    private void switch1(View vi) {
+        switch (vi.getId()) {
+            case R.id.kunpeng_phone: {
+                kunPengPhone(vi);
+                break;
+            }
+            case R.id.kunpeng_data_phone: {
+                kunPengDataPhone(vi);
+                break;
+            }
+            case R.id.redfigure_phone: {
+                redFingerPhone(vi);
+                break;
+            }
+            case R.id.yidong_phone: {
+                yiDongPhone(vi);
+                break;
+            }
+            case R.id.wangyiyun_phone: {
+                wangYiYunPhone(vi);
+                break;
+            }
+            case R.id.bule_liuchangxing: {
+                flucency();
+                break;
+            }
+            case R.id.bule_wendinxing: {
+                stability();
+                break;
+            }
+        }
+    }
+
+    private void selectAll() {
+        boolean isCheckedAll = phoneSelectAll.isChecked();
+        if (isCheckedAll) {
+            blueLiuChangCheck.setChecked(true);
+            blueLiuChangCheck.setVisibility(View.VISIBLE);
+            blueWenDingCheck.setVisibility(View.VISIBLE);
+            blueWenDingCheck.setChecked(true);
+            blueChuKongCheck.setVisibility(View.VISIBLE);
+            blueChuKongCheck.setChecked(true);
+            blueYinHuaCheck.setVisibility(View.VISIBLE);
+            blueYinHuaCheck.setChecked(true);
+            blueCpuCheck.setVisibility(View.VISIBLE);
+            blueCpuCheck.setChecked(true);
+            blueGpuCheck.setVisibility(View.VISIBLE);
+            blueGpuCheck.setChecked(true);
+            blueRamCheck.setVisibility(View.VISIBLE);
+            blueRamCheck.setChecked(true);
+            blueRomCheck.setVisibility(View.VISIBLE);
+            blueRomCheck.setChecked(true);
+            mCheckCounts = 8;
+        } else {
+            blueLiuChangCheck.setChecked(false);
+            blueLiuChangCheck.setVisibility(View.INVISIBLE);
+            blueWenDingCheck.setChecked(false);
+            blueWenDingCheck.setVisibility(View.INVISIBLE);
+            blueChuKongCheck.setChecked(false);
+            blueChuKongCheck.setVisibility(View.INVISIBLE);
+            blueYinHuaCheck.setVisibility(View.INVISIBLE);
+            blueYinHuaCheck.setChecked(false);
+            blueCpuCheck.setVisibility(View.INVISIBLE);
+            blueCpuCheck.setChecked(false);
+            blueGpuCheck.setVisibility(View.INVISIBLE);
+            blueGpuCheck.setChecked(false);
+            blueRamCheck.setVisibility(View.INVISIBLE);
+            blueRamCheck.setChecked(false);
+            blueRomCheck.setVisibility(View.INVISIBLE);
+            blueRomCheck.setChecked(false);
+            mCheckCounts = 0;
+        }
+    }
+
+    private void rom() {
+        boolean isChecked = blueRomCheck.isChecked();
+        if (isChecked) {
+            blueRomCheck.setVisibility(View.INVISIBLE);
+            blueRomCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueCpuCheck.setVisibility(View.INVISIBLE);
+            blueCpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueGpuCheck.setVisibility(View.INVISIBLE);
+            blueGpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueRamCheck.setVisibility(View.INVISIBLE);
+            blueRamCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueRomCheck.setVisibility(View.VISIBLE);
+            blueRomCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueCpuCheck.setVisibility(View.VISIBLE);
+            blueCpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueGpuCheck.setVisibility(View.VISIBLE);
+            blueGpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRamCheck.setVisibility(View.VISIBLE);
+            blueRamCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void ram() {
+        boolean isChecked = blueRamCheck.isChecked();
+        if (isChecked) {
+            blueRamCheck.setVisibility(View.INVISIBLE);
+            blueRamCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueCpuCheck.setVisibility(View.INVISIBLE);
+            blueCpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueGpuCheck.setVisibility(View.INVISIBLE);
+            blueGpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueRomCheck.setVisibility(View.INVISIBLE);
+            blueRomCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueRamCheck.setVisibility(View.VISIBLE);
+            blueRamCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueCpuCheck.setVisibility(View.VISIBLE);
+            blueCpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueGpuCheck.setVisibility(View.VISIBLE);
+            blueGpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRomCheck.setVisibility(View.VISIBLE);
+            blueRomCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void gpu() {
+        boolean isChecked = blueGpuCheck.isChecked();
+        if (isChecked) {
+            blueGpuCheck.setVisibility(View.INVISIBLE);
+            blueGpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueCpuCheck.setVisibility(View.INVISIBLE);
+            blueCpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueRamCheck.setVisibility(View.INVISIBLE);
+            blueRamCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+            blueRomCheck.setVisibility(View.INVISIBLE);
+            blueRomCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueGpuCheck.setVisibility(View.VISIBLE);
+            blueGpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueCpuCheck.setVisibility(View.VISIBLE);
+            blueCpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRamCheck.setVisibility(View.VISIBLE);
+            blueRamCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRomCheck.setVisibility(View.VISIBLE);
+            blueRomCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void cpu() {
+        boolean isChecked = blueCpuCheck.isChecked();
+        if (isChecked) {
+            blueCpuCheck.setVisibility(View.INVISIBLE);
+            blueCpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+
+            blueGpuCheck.setVisibility(View.INVISIBLE);
+            blueGpuCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+
+            blueRamCheck.setVisibility(View.INVISIBLE);
+            blueRamCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+
+            blueRomCheck.setVisibility(View.INVISIBLE);
+            blueRomCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueCpuCheck.setVisibility(View.VISIBLE);
+            blueCpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueGpuCheck.setVisibility(View.VISIBLE);
+            blueGpuCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRamCheck.setVisibility(View.VISIBLE);
+            blueRamCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+            blueRomCheck.setVisibility(View.VISIBLE);
+            blueRomCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void audioVideo() {
+        boolean isChecked = blueYinHuaCheck.isChecked();
+        if (isChecked) {
+            blueYinHuaCheck.setVisibility(View.INVISIBLE);
+            blueYinHuaCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueYinHuaCheck.setVisibility(View.VISIBLE);
+            blueYinHuaCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void touch() {
+        boolean isChecked = blueChuKongCheck.isChecked();
+        if (isChecked) {
+            blueChuKongCheck.setVisibility(View.INVISIBLE);
+            blueChuKongCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueChuKongCheck.setVisibility(View.VISIBLE);
+            blueChuKongCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void stability() {
+        boolean isChecked = blueWenDingCheck.isChecked();
+        if (isChecked) {
+            blueWenDingCheck.setVisibility(View.INVISIBLE);
+            blueWenDingCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueWenDingCheck.setVisibility(View.VISIBLE);
+            blueWenDingCheck.setChecked(true);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void flucency() {
+        boolean isChecked = blueLiuChangCheck.isChecked();
+        if (isChecked) {
+            blueLiuChangCheck.setVisibility(View.INVISIBLE);
+            blueLiuChangCheck.setChecked(false);
+            phoneSelectAll.setChecked(false);
+            mCheckCounts--;
+        } else {
+            blueLiuChangCheck.setChecked(true);
+            blueLiuChangCheck.setVisibility(View.VISIBLE);
+            mCheckCounts++;
+            if (mCheckCounts == allCheckCount) {
+                phoneSelectAll.setChecked(true);
+            }
+        }
+    }
+
+    private void wangYiYunPhone(View vi) {
+        checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE);
+        initPhoneBtn();
+        if (vi instanceof Button) {
+            Button btn = (Button) vi;
+            Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+        }
+    }
+
+    private void yiDongPhone(View vi) {
+        checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_E_CLOUD_PHONE);
+        initPhoneBtn();
+        if (vi instanceof Button) {
+            Button btn = (Button) vi;
+            Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+        }
+    }
+
+    private void redFingerPhone(View vi) {
+        checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE);
+        initPhoneBtn();
+        if (vi instanceof Button) {
+            Button btn = (Button) vi;
+            Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+        }
+    }
+
+    private void kunPengDataPhone(View vi) {
+        checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
+        initPhoneBtn();
+        if (vi instanceof Button) {
+            Button btn = (Button) vi;
+            Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+        }
+    }
+
+    private void kunPengPhone(View vi) {
+        checkPhoneMap.put(CacheConst.KEY_PLATFORM_NAME, CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE);
+        initPhoneBtn();
+        if (vi instanceof Button) {
+            Button btn = (Button) vi;
+            Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
         }
     }
 
@@ -680,16 +722,16 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     public void showDialog() {
         Log.e(TAG, "PhoneFragement-showDialog: ");
         myDialog = new IpPortDialog(getContext());
-        myDialog.setNoOnclickListener("取消", new IpPortDialog.onNoOnclickListener() {
+        myDialog.setNoOnclickListener("取消", new IpPortDialog.OnNoOnclickListener() {
             @Override
             public void onNoClick() {
                 myDialog.dismiss();
             }
         });
-        mThread = new Thread(new Runnable() {
+        threadPool.execute(new Runnable() {
             @Override
             public void run() {
-                myDialog.setYesOnclickListener("确定", new IpPortDialog.onYesOnclickListener() {
+                myDialog.setYesOnclickListener("确定", new IpPortDialog.OnYesOnclickListener() {
                     @Override
                     public void onYesClick() {
                         myDialog.yes.setEnabled(false);
@@ -716,7 +758,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 });
             }
         });
-        mThread.start();
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();

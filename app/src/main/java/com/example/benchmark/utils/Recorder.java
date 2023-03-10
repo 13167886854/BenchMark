@@ -31,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Recorder
@@ -43,15 +45,17 @@ public class Recorder {
      * Recorder TAG标签
      */
     public static final String TAG = "Recorder";
+    
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     /** isRecording */
     public boolean isRecording = false;
 
     private AudioRecord mRecorder;
-    private Thread recordingThread;
     private int bufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
     private int bytesPerElement = 2; // 2 bytes in 16bit format
     private String file;
@@ -62,10 +66,10 @@ public class Recorder {
     /**
      * start
      *
-     * context description
+     * @param context description
      * @param mProjection description
      * @return boolean
-     * @date 2023/3/8 15:31
+     * @date 2023/3/10 16:42
      */
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -109,18 +113,16 @@ public class Recorder {
                     .setBufferSizeInBytes(bufferElements2Rec * bytesPerElement)
                     .setAudioPlaybackCaptureConfig(config)
                     .build();
-
             isRecording = true;
             mRecorder.startRecording();
-
             createAudioFile(context);
-            recordingThread = new Thread(new Runnable() {
+
+            threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
                     writeAudioFile();
                 }
-            }, "System Audio Capture");
-            recordingThread.start();
+            });
         }
         return true;
     }
@@ -129,7 +131,8 @@ public class Recorder {
      * createAudioFile
      *
      * @param context description
-     * @date 2023/3/8 15:31
+     * @return void
+     * @date 2023/3/10 16:42
      */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void createAudioFile(Context context) {

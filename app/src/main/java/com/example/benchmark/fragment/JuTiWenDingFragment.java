@@ -30,15 +30,15 @@ public class JuTiWenDingFragment extends Fragment {
      * onCreateView
      *
      * @param inflater description
- * @param container description
- * @param savedInstanceState description
+     * @param container description
+     * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:41
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                              @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_wending_fragment, container, false);
         return mView;
     }

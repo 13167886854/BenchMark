@@ -24,6 +24,7 @@ import com.example.benchmark.utils.StatusBarUtil;
  */
 public class TencentGamerStabilityService implements IStabilityService {
     private static final String TAG = "TencentGamerStabilityService";
+
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final String nodeClassParentTabHome = "android.widget.RelativeLayout";
@@ -55,12 +56,12 @@ public class TencentGamerStabilityService implements IStabilityService {
     private boolean isClickHome = false;
     private boolean isClickRank = false;
     private boolean isClickInstantPlay = false;
-    
+
     /**
-     * TencentGamerStabilityService 
+     * TencentGamerStabilityService
      *
      * @param service description
-     * @return 
+     * @return
      * @throws null
      * @date 2023/3/8 10:15
      */
@@ -68,6 +69,12 @@ public class TencentGamerStabilityService implements IStabilityService {
         this.service = service;
     }
 
+    /**
+     * onMonitor
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void onMonitor() {
         if (!isClickInstantPlay) {
@@ -83,6 +90,12 @@ public class TencentGamerStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * startControlCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void startControlCloudPhone() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
@@ -132,6 +145,12 @@ public class TencentGamerStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * startQuitCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:11
+     */
     @Override
     public void startQuitCloudPhone() {
         try {
@@ -164,6 +183,12 @@ public class TencentGamerStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * getCurrentMonitorNum
+     *
+     * @return int
+     * @date 2023/3/10 16:11
+     */
     @Override
     public int getCurrentMonitorNum() {
         return mCurrentMonitorNum;

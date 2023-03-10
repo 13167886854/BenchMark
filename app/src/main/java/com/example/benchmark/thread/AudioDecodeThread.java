@@ -17,6 +17,8 @@ import android.media.MediaFormat;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.benchmark.activity.AudioVideoActivity;
 
 import java.io.IOException;
@@ -30,6 +32,7 @@ import java.nio.ByteBuffer;
  */
 public class AudioDecodeThread extends Thread implements Runnable {
     private static final String TAG = AudioDecodeThread.class.getSimpleName();
+
     private int mAudioTrackIndex = -1;
     private long audiocurtime;
     private String mMp4FilePath;
@@ -66,8 +69,8 @@ public class AudioDecodeThread extends Thread implements Runnable {
         mMediaExtractor = new MediaExtractor();
         try {
             mMediaExtractor.setDataSource(mMp4FilePath);
-        } catch (IOException e) {
-            Log.e(TAG, "AudioDecodeThread: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "AudioDecodeThread: ", ex);
         }
     }
 
@@ -86,22 +89,9 @@ public class AudioDecodeThread extends Thread implements Runnable {
     @Override
     public void run() {
         try {
-            int trackCount = mMediaExtractor.getTrackCount();
-            for (int i = 0; i < trackCount; i++) {
-                MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
-                String mime = trackFormat.getString(MediaFormat.KEY_MIME);
-                if (mime.contains("audio")) {
-                    mAudioTrackIndex = i;
-                    // 开始读数据前一定要先选择媒体轨道，否则读取不到数据
-                    mMediaExtractor.selectTrack(mAudioTrackIndex);
-                    break;
-                }
-            }
-            if (mAudioTrackIndex == -1) {
-                mMediaExtractor.release();
+            if (run4()) {
                 return;
             }
-
             MediaFormat format = mMediaExtractor.getTrackFormat(mAudioTrackIndex);
             Log.e(TAG, "音频编码器 run: " + format.toString());
             String audioMime = format.getString(MediaFormat.KEY_MIME);
@@ -133,77 +123,110 @@ public class AudioDecodeThread extends Thread implements Runnable {
                     channelConfig,
                     audioFormat
             );
-            AudioTrack audioTrack;
-            if (mSessionId != 0) {
-                Log.e(TAG, "run: 新方式，初始化音频播放器");
-                AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                        .build();
-                AudioFormat.Builder builder = new AudioFormat.Builder();
-                AudioFormat audioTrackFormat = builder
-                        .setSampleRate(sampleRate) // 部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对
-                        .setEncoding(audioFormat)
-                        .setChannelMask(channelConfig)
-                        .build();
-                audioTrack = new AudioTrack(
-                        audioAttributes,
-                        audioTrackFormat,
-                        minBufferSize,
-                        AudioTrack.MODE_STREAM,
-                        mSessionId
-                );
-            } else {
-                Log.e(TAG, "run: 旧方式，初始化音频播放器");
-                audioTrack = new AudioTrack(
-                        AudioManager.STREAM_MUSIC,
-                        sampleRate,
-                        channelConfig,
-                        audioFormat,
-                        minBufferSize,
-                        AudioTrack.MODE_STREAM
-                );
-            }
-            audioTrack.play();
-            MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-            ByteBuffer byteBuffer = ByteBuffer.allocate(minBufferSize);
-            int sampleSize = 0;
-            while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
-                sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
-
-                // 填充要解码的数据
-                if (sampleSize != -1) {
-                    int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
-                    if (inputBufferIndex >= 0) {
-                        ByteBuffer inputBuffer = mAudioDecoder.getInputBuffer(inputBufferIndex);
-                        if (inputBuffer != null) {
-                            inputBuffer.put(byteBuffer);
-                            mAudioDecoder.queueInputBuffer(inputBufferIndex,
-                                    0, sampleSize, mMediaExtractor.getSampleTime(), 0);
-                            audiocurtime = mMediaExtractor.getSampleTime();
-                            mMediaExtractor.advance();
-                        }
-                    }
-                }
-
-                // 解码已填充的数据
-                int outputBufferIndex = mAudioDecoder.dequeueOutputBuffer(bufferInfo, 0);
-                if (outputBufferIndex >= 0) {
-                    ByteBuffer outputBuffer = mAudioDecoder.getOutputBuffer(outputBufferIndex);
-                    if (outputBuffer != null) {
-                        byte[] bytes = new byte[bufferInfo.size];
-                        outputBuffer.position(0);
-                        outputBuffer.get(bytes);
-                        outputBuffer.clear();
-                        audioTrack.write(bytes, 0, bufferInfo.size);
-                        mAudioDecoder.releaseOutputBuffer(outputBufferIndex, false);
-                    }
-                }
-            }
-            mMediaExtractor.unselectTrack(mAudioTrackIndex);
-            mMediaExtractor.release();
-            audioTrack.release();
-        } catch (IOException e) {
-            Log.e(TAG, "run: ", e);
+            run3(sampleRate, channelConfig, audioFormat, minBufferSize);
+        } catch (IOException ex) {
+            Log.e(TAG, "run: ", ex);
         }
+    }
+
+    private boolean run4() {
+        int trackCount = mMediaExtractor.getTrackCount();
+        for (int i = 0; i < trackCount; i++) {
+            MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
+            String mime = trackFormat.getString(MediaFormat.KEY_MIME);
+            if (mime.contains("audio")) {
+                mAudioTrackIndex = i;
+                // 开始读数据前一定要先选择媒体轨道，否则读取不到数据
+                mMediaExtractor.selectTrack(mAudioTrackIndex);
+                break;
+            }
+        }
+        if (mAudioTrackIndex == -1) {
+            mMediaExtractor.release();
+            return true;
+        }
+        return false;
+    }
+
+    private void run3(int sampleRate, int channelConfig, int audioFormat, int minBufferSize) {
+        AudioTrack audioTrack = run1(sampleRate, channelConfig, audioFormat, minBufferSize);
+        audioTrack.play();
+        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(minBufferSize);
+        int sampleSize = 0;
+        run2(audioTrack, bufferInfo, byteBuffer, sampleSize);
+        mMediaExtractor.unselectTrack(mAudioTrackIndex);
+        mMediaExtractor.release();
+        audioTrack.release();
+    }
+
+    private void run2(AudioTrack audioTrack, MediaCodec.BufferInfo bufferInfo, ByteBuffer byteBuffer, int sampleSize) {
+        while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
+            sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
+
+            // 填充要解码的数据
+            if (sampleSize != -1) {
+                int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
+                if (inputBufferIndex >= 0) {
+                    ByteBuffer inputBuffer = mAudioDecoder.getInputBuffer(inputBufferIndex);
+                    if (inputBuffer != null) {
+                        inputBuffer.put(byteBuffer);
+                        mAudioDecoder.queueInputBuffer(inputBufferIndex,
+                                0, sampleSize, mMediaExtractor.getSampleTime(), 0);
+                        audiocurtime = mMediaExtractor.getSampleTime();
+                        mMediaExtractor.advance();
+                    }
+                }
+            }
+
+            // 解码已填充的数据
+            int outputBufferIndex = mAudioDecoder.dequeueOutputBuffer(bufferInfo, 0);
+            if (outputBufferIndex >= 0) {
+                ByteBuffer outputBuffer = mAudioDecoder.getOutputBuffer(outputBufferIndex);
+                if (outputBuffer != null) {
+                    byte[] bytes = new byte[bufferInfo.size];
+                    outputBuffer.position(0);
+                    outputBuffer.get(bytes);
+                    outputBuffer.clear();
+                    audioTrack.write(bytes, 0, bufferInfo.size);
+                    mAudioDecoder.releaseOutputBuffer(outputBufferIndex, false);
+                }
+            }
+        }
+    }
+
+    @NonNull
+    private AudioTrack run1(int sampleRate, int channelConfig, int audioFormat, int minBufferSize) {
+        AudioTrack audioTrack;
+        if (mSessionId != 0) {
+            Log.e(TAG, "run: 新方式，初始化音频播放器");
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .build();
+            AudioFormat.Builder builder = new AudioFormat.Builder();
+            AudioFormat audioTrackFormat = builder
+                    .setSampleRate(sampleRate) // 部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对
+                    .setEncoding(audioFormat)
+                    .setChannelMask(channelConfig)
+                    .build();
+            audioTrack = new AudioTrack(
+                    audioAttributes,
+                    audioTrackFormat,
+                    minBufferSize,
+                    AudioTrack.MODE_STREAM,
+                    mSessionId
+            );
+        } else {
+            Log.e(TAG, "run: 旧方式，初始化音频播放器");
+            audioTrack = new AudioTrack(
+                    AudioManager.STREAM_MUSIC,
+                    sampleRate,
+                    channelConfig,
+                    audioFormat,
+                    minBufferSize,
+                    AudioTrack.MODE_STREAM
+            );
+        }
+        return audioTrack;
     }
 
     private void getOptionalValue(MediaFormat format) {

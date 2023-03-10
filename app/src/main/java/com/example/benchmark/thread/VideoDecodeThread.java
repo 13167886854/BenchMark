@@ -19,6 +19,8 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
+
 import com.example.benchmark.activity.AudioVideoActivity;
 import com.example.benchmark.utils.SpeedManager;
 
@@ -33,6 +35,7 @@ import java.nio.ByteBuffer;
  */
 public class VideoDecodeThread extends Thread implements Runnable {
     private static final String TAG = VideoDecodeThread.class.getSimpleName();
+
     private MediaCodec mVideoDecoder;
     private MediaExtractor mMediaExtractor;
     private int mVideoTrackIndex = -1;
@@ -44,7 +47,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
     /**
      * VideoDecodeThread
      *
-     * @param path description
+     * @param path    description
      * @param context description
      * @date 2023/3/9 16:40
      */
@@ -54,8 +57,8 @@ public class VideoDecodeThread extends Thread implements Runnable {
         mMediaExtractor = new MediaExtractor();
         try {
             mMediaExtractor.setDataSource(mMp4FilePath);
-        } catch (IOException e) {
-            Log.e(TAG, "VideoDecodeThread: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "VideoDecodeThread: ", ex);
         }
     }
 
@@ -79,59 +82,14 @@ public class VideoDecodeThread extends Thread implements Runnable {
     @Override
     public void run() {
         try {
-            int trackCount = mMediaExtractor.getTrackCount();
-            for (int i = 0; i < trackCount; i++) {
-                MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
-                String mime = trackFormat.getString(MediaFormat.KEY_MIME);
-                if (mime.contains("video")) {
-                    mVideoTrackIndex = i;
-                    break;
-                }
-            }
-            if (mVideoTrackIndex == -1) {
-                mMediaExtractor.release();
+            final MediaFormat videoFormat = run1();
+            if (videoFormat == null) {
                 return;
             }
-            final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
-            int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
 
             // 如果设置为SurfaceView，那就动态调整它的高度，保持原视频的宽高比
             if (mSurfaceView != null) {
-                Context contextTemp = mSurfaceView.getContext();
-                if (contextTemp instanceof Activity) {
-                    ((Activity) contextTemp).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // 按视频大小动态调整SurfaceView的高度
-                            Resources resources = mSurfaceView.getResources();
-
-                            final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);
-                            final int videoHeight = videoFormat.getInteger(MediaFormat.KEY_HEIGHT);
-
-                            int measuredWidth = mSurfaceView.getMeasuredWidth();
-                            int measuredHeight = mSurfaceView.getMeasuredHeight();
-
-                            // 纵屏，宽充满，高按比例缩放
-                            int showVideoHeight = videoHeight * measuredWidth / videoWith;
-
-                            // 横屏，高充满，宽按比例缩放
-                            int showVideoWidth = videoWith * measuredHeight / videoHeight;
-
-                            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                mSurfaceView.setLayoutParams(new FrameLayout.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT, showVideoHeight));
-                            } else if (resources.getConfiguration()
-                                    .orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                                        showVideoWidth, ViewGroup.LayoutParams.MATCH_PARENT);
-                                params.gravity = Gravity.CENTER;
-                                mSurfaceView.setLayoutParams(params);
-                            } else {
-                                Log.d(TAG, "run: lastElse");
-                            }
-                        }
-                    });
-                }
+                run2(videoFormat);
             }
             String videoMime = videoFormat.getString(MediaFormat.KEY_MIME);
             mVideoDecoder = MediaCodec.createDecoderByType(videoMime);
@@ -146,36 +104,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mMediaExtractor.selectTrack(mVideoTrackIndex);
             SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器
             while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
-                sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
-
-                // 填充要解码的数据
-                if (sampleSize != -1) {
-                    if (sampleSize >= 0) {
-                        long sampleTime = mMediaExtractor.getSampleTime();
-                        videocurtime = mMediaExtractor.getSampleTime();
-                        if (sampleTime >= 0) {
-                            int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
-                            if (inputBufferIndex >= 0) {
-                                ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
-                                if (inputBuffer != null) {
-                                    inputBuffer.clear();
-                                    inputBuffer.put(byteBuffer);
-                                    mVideoDecoder.queueInputBuffer(inputBufferIndex,
-                                            0, sampleSize, sampleTime, 0);
-                                    mSpeedManager.preRender(sampleTime);
-
-                                    mMediaExtractor.advance();
-                                }
-                            }
-                        }
-                    }
-                }
-                // 解码已填充的数据
-                int outputBufferIndex = mVideoDecoder.dequeueOutputBuffer(bufferInfo, 0);
-                if (outputBufferIndex >= 0) {
-                    // 控制帧率在24帧左右
-                    mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
-                }
+                sampleSize = run3(byteBuffer, bufferInfo, mSpeedManager);
             }
             mSpeedManager.reset();
             mMediaExtractor.unselectTrack(mVideoTrackIndex);
@@ -188,12 +117,105 @@ public class VideoDecodeThread extends Thread implements Runnable {
         }
     }
 
+    private int run3(ByteBuffer byteBuffer, MediaCodec.BufferInfo bufferInfo, SpeedManager mSpeedManager) {
+        int sampleSize;
+        sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
+
+        // 填充要解码的数据
+        if (sampleSize != -1) {
+            if (sampleSize >= 0) {
+                long sampleTime = mMediaExtractor.getSampleTime();
+                videocurtime = mMediaExtractor.getSampleTime();
+                if (sampleTime >= 0) {
+                    int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
+                    if (inputBufferIndex >= 0) {
+                        ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
+                        if (inputBuffer != null) {
+                            inputBuffer.clear();
+                            inputBuffer.put(byteBuffer);
+                            mVideoDecoder.queueInputBuffer(inputBufferIndex,
+                                    0, sampleSize, sampleTime, 0);
+                            mSpeedManager.preRender(sampleTime);
+
+                            mMediaExtractor.advance();
+                        }
+                    }
+                }
+            }
+        }
+        // 解码已填充的数据
+        int outputBufferIndex = mVideoDecoder.dequeueOutputBuffer(bufferInfo, 0);
+        if (outputBufferIndex >= 0) {
+            // 控制帧率在24帧左右
+            mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
+        }
+        return sampleSize;
+    }
+
+    private void run2(MediaFormat videoFormat) {
+        Context contextTemp = mSurfaceView.getContext();
+        if (contextTemp instanceof Activity) {
+            ((Activity) contextTemp).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    // 按视频大小动态调整SurfaceView的高度
+                    Resources resources = mSurfaceView.getResources();
+
+                    final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);
+                    final int videoHeight = videoFormat.getInteger(MediaFormat.KEY_HEIGHT);
+
+                    int measuredWidth = mSurfaceView.getMeasuredWidth();
+                    int measuredHeight = mSurfaceView.getMeasuredHeight();
+
+                    // 纵屏，宽充满，高按比例缩放
+                    int showVideoHeight = videoHeight * measuredWidth / videoWith;
+
+                    // 横屏，高充满，宽按比例缩放
+                    int showVideoWidth = videoWith * measuredHeight / videoHeight;
+
+                    if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        mSurfaceView.setLayoutParams(new FrameLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT, showVideoHeight));
+                    } else if (resources.getConfiguration()
+                            .orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                                showVideoWidth, ViewGroup.LayoutParams.MATCH_PARENT);
+                        params.gravity = Gravity.CENTER;
+                        mSurfaceView.setLayoutParams(params);
+                    } else {
+                        Log.d(TAG, "run: lastElse");
+                    }
+                }
+            });
+        }
+    }
+
+    @Nullable
+    private MediaFormat run1() {
+        int trackCount = mMediaExtractor.getTrackCount();
+        for (int i = 0; i < trackCount; i++) {
+            MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
+            String mime = trackFormat.getString(MediaFormat.KEY_MIME);
+            if (mime.contains("video")) {
+                mVideoTrackIndex = i;
+                break;
+            }
+        }
+        if (mVideoTrackIndex == -1) {
+            mMediaExtractor.release();
+            return null;
+        }
+        final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
+        int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
+        return videoFormat;
+    }
+
     /**
      * getcurTime
      *
      * @return long
      * @date 2023/3/8 15:38
-    */
+     */
     public long getcurTime() {
         return videocurtime;
     }

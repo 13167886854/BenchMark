@@ -27,16 +27,16 @@ public class JuTiLiuChangFragment extends Fragment {
     /**
      * onCreateView
      *
-     * @param inflater description
- * @param container description
- * @param savedInstanceState description
+     * @param inflater           description
+     * @param container          description
+     * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:43
      */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.juti_liuchang_fragment, container, false);
     }
 }

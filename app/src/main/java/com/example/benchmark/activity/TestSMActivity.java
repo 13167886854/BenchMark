@@ -68,7 +68,7 @@ public class TestSMActivity extends AppCompatActivity {
     /**
      * onCreate
      *
-     * @param savedInstanceState description 
+     * @param savedInstanceState description
      * @return void
      * @date 2023/3/9 19:48
      */
@@ -100,7 +100,6 @@ public class TestSMActivity extends AppCompatActivity {
                     stopTest();
                 } catch (IOException exception) {
                     Log.e("TestSMActivity: ", exception.toString());
-
                 }
             }
         });
@@ -158,7 +157,6 @@ public class TestSMActivity extends AppCompatActivity {
     /**
      * onPause
      *
-     
      * @return void
      * @date 2023/3/9 19:48
      */
@@ -180,7 +178,6 @@ public class TestSMActivity extends AppCompatActivity {
     /**
      * onResume
      *
-     
      * @return void
      * @date 2023/3/9 19:48
      */
@@ -203,13 +200,15 @@ public class TestSMActivity extends AppCompatActivity {
             Log.d("TWT", "runing.......... ");
             textInfo.setText(
                     "当前FPS" + fpsUtil.getCount() + "帧/秒" + System.getProperty("line.separator")
-                            + "帧抖动率" + String.format("%.2f", fpsUtil.getFrameShakingRate()) + System.getProperty("line.separator")
+                            + "帧抖动率" + String.format("%.2f", fpsUtil.getFrameShakingRate())
+                            + System.getProperty("line.separator")
                             + "低帧率" + df.format(fpsUtil.getLowFrameRate()) + System.getProperty("line.separator")
                             + "当前帧间隔" + fpsUtil.getIntervalTime() + "ms" + System.getProperty("line.separator")
                             + "jank发生次数" + fpsUtil.getJankCount() + System.getProperty("line.separator")
                             + "卡顿率" + df.format(fpsUtil.getShtutterRate()) + System.getProperty("line.separator")
                             + "总帧数" + fpsUtil.getTotalCount() + System.getProperty("line.separator")
-                            + "测试时长" + (fpsUtil.getSizeOfCountArray() + 1) + "s" + System.getProperty("line.separator")
+                            + "测试时长" + (fpsUtil.getSizeOfCountArray() + 1)
+                            + "s" + System.getProperty("line.separator")
             );
             fpsUtil.updateAfterGetInfo();
 
@@ -223,7 +222,7 @@ public class TestSMActivity extends AppCompatActivity {
      *
      * @param requestCode description
      * @param resultCode description
-     * @param data description 
+     * @param data description
      * @return void
      * @date 2023/3/9 19:48
      */

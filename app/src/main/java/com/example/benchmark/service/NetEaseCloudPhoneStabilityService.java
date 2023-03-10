@@ -88,6 +88,10 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
         if (viewPager == null) {
             return;
         }
+        forMethod(viewPager);
+    }
+
+    private void forMethod(AccessibilityNodeInfo viewPager) {
         for (int i = 0; i < viewPager.getChildCount(); i++) {
             AccessibilityNodeInfo recyclerView = viewPager.getChild(i);
             for (int j = 0; j < recyclerView.getChildCount(); j++) {

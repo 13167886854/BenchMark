@@ -18,7 +18,6 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -41,9 +40,9 @@ public class SDCardUtils {
      * getRAMInfo
      *
      * @param context description
-     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @return java.util.Map<java.lang.String, java.lang.String>
      * @date 2023/3/9 15:22
-    */
+     */
     public static Map<String, String> getRAMInfo(Context context) {
         long totalSize = 0L;
         long availableSize = 0L;
@@ -70,7 +69,7 @@ public class SDCardUtils {
      *
      * @return boolean
      * @date 2023/3/9 15:22
-    */
+     */
     public static boolean isSDCardMount() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
@@ -81,13 +80,13 @@ public class SDCardUtils {
      * getStorageInfo获取手机存储 ROM 信息
      *
      * @param context description
-     * @param type description
-     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @param type    description
+     * @return java.util.Map<java.lang.String, java.lang.String>
      * @date 2023/3/9 15:22
-    */
+     */
     public static Map<String, String> getStorageInfo(Context context, int type) {
         String path = getStoragePath(context, type);
-        if (isSDCardMount() != true || TextUtils.isEmpty(path)) {
+        if (!isSDCardMount() || TextUtils.isEmpty(path)) {
             return (Map<String, String>) new HashMap<>().put("无外置SD卡", null);
         }
 
@@ -114,10 +113,10 @@ public class SDCardUtils {
      * getStoragePath
      *
      * @param context description
-     * @param type description
+     * @param type    description
      * @return java.lang.String
      * @date 2023/3/9 15:12
-    */
+     */
     public static String getStoragePath(Context context, int type) {
         if (context.getSystemService(Context.STORAGE_SERVICE) instanceof StorageManager) {
             StorageManager sm = (StorageManager) context
@@ -137,7 +136,7 @@ public class SDCardUtils {
                     default:
                         break;
                 }
-            } catch ( NoSuchMethodException e1) {
+            } catch (NoSuchMethodException e1) {
                 Log.e(TAG, "getStoragePath: ", e1);
             } catch (InvocationTargetException e2) {
                 Log.e(TAG, "getStoragePath: ", e2);
@@ -154,7 +153,7 @@ public class SDCardUtils {
      * @param context description
      * @return java.lang.String
      * @date 2023/3/9 15:15
-    */
+     */
     public static String getTotalRAM(Context context) {
         long size = 0L;
 
@@ -175,7 +174,7 @@ public class SDCardUtils {
      * @param context description
      * @return java.lang.String
      * @date 2023/3/9 15:16
-    */
+     */
     public static String getTotalRAMOther(Context context) {
         String path = File.separator + "proc" + File.separator + "meminfo";
         String firstLine = null;
@@ -202,7 +201,7 @@ public class SDCardUtils {
      * @param context description
      * @return java.lang.String
      * @date 2023/3/9 15:16
-    */
+     */
     public static String getAvailableRAM(Context context) {
         long size = 0L;
         if (context.getSystemService(context.ACTIVITY_SERVICE) instanceof ActivityManager) {
@@ -281,7 +280,7 @@ public class SDCardUtils {
      *
      * @return java.lang.String
      * @date 2023/3/9 15:18
-    */
+     */
     public static String getSDCardInfo() {
         SDCardInfo sd = new SDCardInfo();
         if (!isSDCardMount()) {
@@ -302,10 +301,11 @@ public class SDCardUtils {
     }
 
     /**
-     * ClassName: SDCardInfo
-     * Description:
+     * SDCardUtils.java
+     *
      * @Author benchmark
-     * Version 1.0
+     * @Version 1.0 
+     * @since 2023/3/10 16:46
      */
     public static class SDCardInfo {
         boolean isExist;
@@ -317,6 +317,12 @@ public class SDCardUtils {
         long freeBytes;
         long availableBytes;
 
+        /**
+         * toString
+         *
+         * @return java.lang.String
+         * @date 2023/3/10 16:46
+         */
         @Override
         public String toString() {
             return "isExist=" + isExist + System.getProperty("line.separator") + "totalBlocks=" + totalBlocks
@@ -335,7 +341,7 @@ public class SDCardUtils {
      * @param totalByte description
      * @return java.lang.String
      * @date 2023/3/9 15:19
-    */
+     */
     public static String getSDCardTotalStorage(long totalByte) {
         double byte2GB = totalByte / 1024.00 / 1024.00 / 1024.00;
         double totalStorage;

@@ -62,8 +62,6 @@ public class FpsUtils {
 
     private boolean isFpsOpen = false;
 
-
-
     private FpsUtils() {
     }
 

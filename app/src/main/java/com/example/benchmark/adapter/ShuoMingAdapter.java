@@ -97,9 +97,15 @@ public class ShuoMingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        public ImageView introductionImg;
-        public RecyclerView recyclerView;
+        private ImageView introductionImg;
+        private RecyclerView recyclerView;
 
+        /**
+         * RecyclerViewHolder
+         *
+         * @param itemView description
+         * @date 2023/3/10 11:19
+         */
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             introductionImg = itemView.findViewById(R.id.shuoming_img);

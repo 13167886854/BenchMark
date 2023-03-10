@@ -32,6 +32,9 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import okhttp3.Call;
 
 /**
@@ -50,9 +53,10 @@ public class TishiFragment extends Fragment {
     private Button infoHardware;
     private LoginDialog myDialog;
     private Message mMessage;
-    private Thread mThread;
     private FragmentManager fragmentManager;
     private HistoryFragment history;
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -68,6 +72,99 @@ public class TishiFragment extends Fragment {
         }
     };
 
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            myDialog.setYesOnclickListener("确定", new LoginDialog.OnYesOnclickListener() {
+                @Override
+                public void onYesClick() {
+                    myDialog.yes.setEnabled(false);
+                    Log.d(TAG, "点击登录: username---" + Admin.username
+                            + "---password---" + Admin.username);
+                    if (Admin.username.length() < 5 || Admin.username.length() > 15) {
+                        Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
+                        myDialog.yes.setEnabled(true);
+                        if (Admin.password.length() < 5 || Admin.password.length() > 15) {
+                            Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
+                            myDialog.yes.setEnabled(true);
+                        }
+                    } else {
+                        // 发送后端登录验证请求
+                        sendLoginQuest();
+                    }
+                }
+            });
+        }
+    };
+
+    private void sendLoginQuest() {
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
+                        + "/admin/loginAndReg")
+                        .addParam("adminName", Admin.username)
+                        .addParam("adminPasswd", Admin.password)
+                        .addHeader("Content-Type", "application/json; charset=utf-8")
+                        .post(true)
+                        .async(new OkHttpUtils.ICallBack() {
+                            @Override
+                            public void onSuccessful(Call call, String data) {
+                                successful(data);
+                            }
+                            @Override
+                            public void onFailure(Call call, String errorMsg) {
+                                failure(errorMsg);
+                            }
+                        });
+            }
+        });
+    }
+
+    private void failure(String errorMsg) {
+        Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
+        mMessage = mHandler.obtainMessage();
+        mMessage.what = 1;
+        mHandler.sendMessage(mMessage);
+        Looper.prepare();
+        Toast.makeText(getContext(),
+                "遇见未知异常! " + "请检查网络后重新启动应用🙂 ",
+                Toast.LENGTH_SHORT).show();
+        Looper.loop();
+    }
+
+    private void successful(String data) {
+        Log.e(TAG, "Admin.username: "
+                + Admin.username);
+        Log.e(TAG, "Admin.password: "
+                + Admin.password);
+        Log.d(TAG, "onSuccessful: data--" + data);
+        if (data.endsWith("成功")) {
+            Admin.adminName = data.split(" ")[1];
+            Log.d(TAG, "onSuccessful: Admin.adminName=="
+                    + Admin.adminName);
+            Admin.status = "Success";
+            mMessage = mHandler.obtainMessage();
+            mMessage.what = 2;
+            mHandler.sendMessage(mMessage);
+            Looper.prepare();
+            Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
+
+            // 验证成功后，跳转到主界面
+            Looper.loop();
+        } else {
+            Log.d(TAG, "onSuccessful: data==>" + data);
+            mMessage = mHandler.obtainMessage();
+            mMessage.what = 1;
+            mHandler.sendMessage(mMessage);
+
+            Looper.prepare();
+            Toast.makeText(getContext(), data,
+                    Toast.LENGTH_SHORT).show();
+            Looper.loop();
+        }
+    }
+
     /**
      * onCreateView
      *
@@ -81,7 +178,7 @@ public class TishiFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                               @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tishi_fragment, container, false);
         infoFluency = view.findViewById(R.id.info_fluency);
         infoStability = view.findViewById(R.id.info_stability);
@@ -95,34 +192,12 @@ public class TishiFragment extends Fragment {
             showDialog();
         }
 
-        infoFluency.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View vi) {
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "info_fluency");
-                history.setArguments(bundle);
-                fragmentManager = getFragmentManager();
+        btnInit1();
+        btnInit2();
+        return view;
+    }
 
-                // 开启事务
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_fram, history);
-                fragmentTransaction.commit();
-            }
-        });
-        infoStability.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View vi) {
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "info_stability");
-                history.setArguments(bundle);
-                fragmentManager = getFragmentManager();
-
-                // 开启事务
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.main_fram, history);
-                fragmentTransaction.commit();
-            }
-        });
+    private void btnInit2() {
         infoTouch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View vi) {
@@ -165,7 +240,37 @@ public class TishiFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
-        return view;
+    }
+
+    private void btnInit1() {
+        infoFluency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vi) {
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_fluency");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();
+
+                // 开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
+            }
+        });
+        infoStability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View vi) {
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "info_stability");
+                history.setArguments(bundle);
+                fragmentManager = getFragmentManager();
+
+                // 开启事务
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_fram, history);
+                fragmentTransaction.commit();
+            }
+        });
     }
 
     /**
@@ -183,91 +288,7 @@ public class TishiFragment extends Fragment {
                 myDialog.dismiss();
             }
         });
-        mThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                myDialog.setYesOnclickListener("确定", new LoginDialog.OnYesOnclickListener() {
-                    @Override
-                    public void onYesClick() {
-                        myDialog.yes.setEnabled(false);
-                        Log.d(TAG, "点击登录: username---" + Admin.username
-                                + "---password---" + Admin.username);
-                        if (Admin.username.length() < 5 || Admin.username.length() > 15) {
-                            Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
-                            myDialog.yes.setEnabled(true);
-                            if (Admin.password.length() < 5 || Admin.password.length() > 15) {
-                                Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
-                                myDialog.yes.setEnabled(true);
-                            }
-                        } else {
-                            // 发送后端登录验证请求
-                            mThread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
-                                            + "/admin/loginAndReg")
-                                            .addParam("adminName", Admin.username)
-                                            .addParam("adminPasswd", Admin.password)
-                                            .addHeader("Content-Type", "application/json; charset=utf-8")
-                                            .post(true)
-                                            .async(new OkHttpUtils.ICallBack() {
-                                                @Override
-                                                public void onSuccessful(Call call, String data) {
-                                                    Log.e(TAG, "Admin.username: "
-                                                            + Admin.username);
-                                                    Log.e(TAG, "Admin.password: "
-                                                            + Admin.password);
-                                                    Log.d(TAG, "onSuccessful: data--" + data);
-                                                    if (data.endsWith("成功")) {
-                                                        Admin.adminName = data.split(" ")[1];
-                                                        Log.d(TAG, "onSuccessful: Admin.adminName=="
-                                                                + Admin.adminName);
-                                                        Admin.status = "Success";
-                                                        mMessage = mHandler.obtainMessage();
-                                                        mMessage.what = 2;
-                                                        mHandler.sendMessage(mMessage);
-                                                        Looper.prepare();
-                                                        Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-
-                                                        // 验证成功后，跳转到主界面
-                                                        Looper.loop();
-                                                    } else {
-                                                        Log.d(TAG, "onSuccessful: data==>" + data);
-                                                        mMessage = mHandler.obtainMessage();
-                                                        mMessage.what = 1;
-                                                        mHandler.sendMessage(mMessage);
-
-                                                        Looper.prepare();
-                                                        Toast.makeText(getContext(), data
-                                                                , Toast.LENGTH_SHORT).show();
-                                                        Looper.loop();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call call, String errorMsg) {
-                                                    Log.d(TAG, "onFailure: errorMsg ==>" + errorMsg);
-                                                    mMessage = mHandler.obtainMessage();
-                                                    mMessage.what = 1;
-                                                    mHandler.sendMessage(mMessage);
-
-                                                    Looper.prepare();
-                                                    Toast.makeText(getContext(),
-                                                            "遇见未知异常! " +
-                                                                    "请检查网络后重新启动应用🙂 ",
-                                                            Toast.LENGTH_SHORT).show();
-                                                    Looper.loop();
-                                                }
-                                            });
-                                }
-                            });
-                            mThread.start();
-                        }
-                    }
-                });
-            }
-        });
-        mThread.start();
+        threadPool.execute(runnable);
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();

@@ -7,9 +7,11 @@
 package com.example.benchmark.data;
 
 /**
- * @Author: ranzili
- * @Time: 2022/9/9 16:03
- * @Description:
+ * Admin.java
+ *
+ * @Author benchmark
+ * @Version 1.0 
+ * @since 2023/3/10 11:21
  */
 public class Admin {
     /**

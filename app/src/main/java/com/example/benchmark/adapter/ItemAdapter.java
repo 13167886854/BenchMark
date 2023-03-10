@@ -43,7 +43,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param viewType description
      * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
      * @date 2023/3/8 15:15
-    */
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,7 +57,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      * @param holder description
      * @param position description
      * @date 2023/3/8 15:15
-    */
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecyclerViewHolder) {
@@ -74,7 +74,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      *
      * @return int
      * @date 2023/3/8 15:15
-    */
+     */
     @Override
     public int getItemCount() {
         return data.size();
@@ -82,20 +82,20 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class RecyclerViewHolder extends RecyclerView.ViewHolder {
         /** itemOfItem */
-        public TextView itemOfItem;
+        private TextView itemOfItem;
 
         /** itemTestMethod */
-        public TextView itemTestMethod;
+        private TextView itemTestMethod;
 
         /** itemEvaluationIndex */
-        public TextView itemEvaluationIndex;
+        private TextView itemEvaluationIndex;
 
         /**
          * RecyclerViewHolder
          *
          * @param itemView description
          * @date 2023/3/8 15:16
-        */
+         */
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             itemOfItem = itemView.findViewById(R.id.item_item);

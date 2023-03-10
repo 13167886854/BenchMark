@@ -17,6 +17,9 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * ECloudPhoneStabilityService
  *
@@ -25,6 +28,7 @@ import com.example.benchmark.utils.CacheUtil;
  */
 public class ECloudPhoneStabilityService implements IStabilityService {
     private static final String TAG = "ECloudPhoneStabilityService";
+
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final String nodeIdClickView = "com.chinamobile.cmss.saas.cloundphone:id/index_img";
@@ -41,6 +45,8 @@ public class ECloudPhoneStabilityService implements IStabilityService {
     private boolean isClickQuitNotice = false;
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
+
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public ECloudPhoneStabilityService(MyAccessibilityService service) {
         this.service = service;
@@ -135,25 +141,28 @@ public class ECloudPhoneStabilityService implements IStabilityService {
         if (isClickQuitNotice) {
             return;
         }
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000L);
-                AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                        nodeIdQuitPhone, nodeTextQuitPhone);
-                if (nodeBtnQuit != null) {
-                    AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
-                            nodeIdNoNotice, "");
-                    if (noNotionNode != null) {
-                        AccessibilityUtil.performClick(noNotionNode);
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000L);
+                    AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
+                            nodeIdQuitPhone, nodeTextQuitPhone);
+                    if (nodeBtnQuit != null) {
+                        AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
+                                nodeIdNoNotice, "");
+                        if (noNotionNode != null) {
+                            AccessibilityUtil.performClick(noNotionNode);
+                        }
+                        AccessibilityUtil.performClick(nodeBtnQuit);
+                        mQuitTime = System.currentTimeMillis();
                     }
-                    AccessibilityUtil.performClick(nodeBtnQuit);
-                    mQuitTime = System.currentTimeMillis();
+                    isClickQuitNotice = true;
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "closeDialogIfExistWhenQuit: ", e);
                 }
-                isClickQuitNotice = true;
-            } catch (InterruptedException e) {
-                Log.e(TAG, "closeDialogIfExistWhenQuit: ", e);
             }
-        }).start();
+        });
     }
 
     @Override

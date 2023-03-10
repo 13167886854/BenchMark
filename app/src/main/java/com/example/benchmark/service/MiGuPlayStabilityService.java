@@ -54,10 +54,23 @@ public class MiGuPlayStabilityService implements IStabilityService {
 
     private boolean isClickInstantPlay = false;
 
+    /**
+     * MiGuPlayStabilityService
+     *
+     * @param service description
+     * @return 
+     * @date 2023/3/10 16:12
+     */
     public MiGuPlayStabilityService(MyAccessibilityService service) {
         this.service = service;
     }
 
+    /**
+     * onMonitor
+     *
+     * @return void
+     * @date 2023/3/10 16:12
+     */
     @Override
     public void onMonitor() {
         if (!isClickInstantPlay) {
@@ -72,6 +85,12 @@ public class MiGuPlayStabilityService implements IStabilityService {
         }
     }
 
+    /**
+     * startControlCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:12
+     */
     @Override
     public void startControlCloudPhone() {
         long startTime = System.currentTimeMillis();
@@ -104,6 +123,12 @@ public class MiGuPlayStabilityService implements IStabilityService {
         service.mOpenTime.add(System.currentTimeMillis() - startTime);
     }
 
+    /**
+     * startQuitCloudPhone
+     *
+     * @return void
+     * @date 2023/3/10 16:12
+     */
     @Override
     public void startQuitCloudPhone() {
         try {
@@ -145,6 +170,12 @@ public class MiGuPlayStabilityService implements IStabilityService {
         mCurrentMonitorNum++;
     }
 
+    /**
+     * getCurrentMonitorNum
+     *
+     * @return int
+     * @date 2023/3/10 16:12
+     */
     @Override
     public int getCurrentMonitorNum() {
         return mCurrentMonitorNum;

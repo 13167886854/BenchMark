@@ -48,6 +48,12 @@ public class BothRecordService extends Service {
     private VirtualDisplay virtualDisplay;
     private MediaRecorder mediaRecorder;
 
+    /**
+     * onCreate
+     *
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public void onCreate() {
@@ -59,25 +65,59 @@ public class BothRecordService extends Service {
         super.onCreate();
     }
 
+    /**
+     * onStartCommand
+     *
+     * @param intent description
+     * @param flags description
+     * @param startId description
+     * @return int
+     * @date 2023/3/10 15:02
+     */
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * setMediaProject
+     *
+     * @param project description
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     public void setMediaProject(MediaProjection project) {
         mProjection = project;
     }
 
+    /**
+     * isRunning
+     *
+     * @return boolean
+     * @date 2023/3/10 15:02
+     */
     public boolean isRunning() {
         return isRunning;
     }
 
+    /**
+     * record
+     *
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     void record() {
         mRecorder = new Recorder();
@@ -88,6 +128,12 @@ public class BothRecordService extends Service {
         }
     }
 
+    /**
+     * startVideoRecord
+     *
+     * @return void
+     * @date 2023/3/10 15:01
+     */
     public void startVideoRecord() {
         if (mProjection == null || isRunning) {
             Log.d("TWT", "startRecord: mediaProjection == null");
@@ -108,6 +154,12 @@ public class BothRecordService extends Service {
         isRunning = true;
     }
 
+    /**
+     * stopVideoRecord
+     *
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     public void stopVideoRecord() {
         if (!isRunning) {
             return;
@@ -119,11 +171,23 @@ public class BothRecordService extends Service {
         virtualDisplay.release();
     }
 
+    /**
+     * startAudioRecord
+     *
+     * @return void
+     * @date 2023/3/10 15:02
+     */
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public void startAudioRecord() {
         record();
     }
 
+    /**
+     * stopAudioRecord
+     *
+     * @return void
+     * @date 2023/3/10 15:01
+     */
     public void stopAudioRecord() {
         if (mRecorder != null) {
             try {
@@ -156,6 +220,12 @@ public class BothRecordService extends Service {
         }
     }
 
+    /**
+     * getsaveDirectory
+     *
+     * @return java.lang.String
+     * @date 2023/3/10 15:01
+     */
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -172,12 +242,32 @@ public class BothRecordService extends Service {
         }
     }
 
+    /**
+     * onBind
+     *
+     * @param intent description
+     * @return android.os.IBinder
+     * @date 2023/3/10 15:01
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return new RecordBinder();
     }
 
+    /**
+     * BothRecordService.java
+     *
+     * @Author benchmark
+     * @Version 1.0 
+     * @since 2023/3/10 15:01
+     */
     public class RecordBinder extends Binder {
+        /**
+         * getRecordService
+         *
+         * @return com.example.benchmark.service.BothRecordService
+         * @date 2023/3/10 15:01
+         */
         public BothRecordService getRecordService() {
             return BothRecordService.this;
         }

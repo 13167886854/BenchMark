@@ -17,6 +17,9 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * RedFingerStabilityService
  *
@@ -25,6 +28,7 @@ import com.example.benchmark.utils.CacheUtil;
  */
 public class RedFingerStabilityService implements IStabilityService {
     private static final String TAG = "RedFingerStabilityService";
+
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
     private final String nodeIdClickView = "com.redfinger.app:id/click_view";
@@ -47,6 +51,7 @@ public class RedFingerStabilityService implements IStabilityService {
     private boolean isClickQuitNotice = false;
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     /**
      * RedFingerStabilityService
@@ -158,67 +163,74 @@ public class RedFingerStabilityService implements IStabilityService {
         if (isClickStartControl || isClickContinueControl) {
             return;
         }
-        new Thread(() -> {
-            try {
-                if (!isClickStartControl) {
-                    Thread.sleep(1000L);
-                    AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,
-                            nodeIdStartControl, nodeTextStartControl);
-                    if (startControlNode != null) {
-                        AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
-                                nodeIdNoNotice, "");
-                        if (noNoticeNode != null) {
-                            AccessibilityUtil.performClick(noNoticeNode);
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (!isClickStartControl) {
+                        Thread.sleep(1000L);
+                        AccessibilityNodeInfo startControlNode = AccessibilityUtil.findNodeInfo(service,
+                                nodeIdStartControl, nodeTextStartControl);
+                        if (startControlNode != null) {
+                            AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
+                                    nodeIdNoNotice, "");
+                            if (noNoticeNode != null) {
+                                AccessibilityUtil.performClick(noNoticeNode);
+                            }
+                            AccessibilityUtil.performClick(startControlNode);
+                            mStartTime = System.currentTimeMillis();
                         }
-                        AccessibilityUtil.performClick(startControlNode);
-                        mStartTime = System.currentTimeMillis();
+                        isClickStartControl = true;
                     }
-                    isClickStartControl = true;
-                }
-                if (!isClickContinueControl) {
-                    Thread.sleep(1000L);
-                    AccessibilityNodeInfo continueControlNode = AccessibilityUtil.findNodeInfo(service,
-                            nodeIdContinueControl, nodeTextContinueControl);
-                    if (continueControlNode != null) {
-                        AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
-                                nodeIdNoNotice, "");
-                        if (noNoticeNode != null) {
-                            AccessibilityUtil.performClick(noNoticeNode);
+                    if (!isClickContinueControl) {
+                        Thread.sleep(1000L);
+                        AccessibilityNodeInfo continueControlNode = AccessibilityUtil.findNodeInfo(service,
+                                nodeIdContinueControl, nodeTextContinueControl);
+                        if (continueControlNode != null) {
+                            AccessibilityNodeInfo noNoticeNode = AccessibilityUtil.findNodeInfo(service,
+                                    nodeIdNoNotice, "");
+                            if (noNoticeNode != null) {
+                                AccessibilityUtil.performClick(noNoticeNode);
+                            }
+                            AccessibilityUtil.performClick(continueControlNode);
+                            mStartTime = System.currentTimeMillis();
                         }
-                        AccessibilityUtil.performClick(continueControlNode);
-                        mStartTime = System.currentTimeMillis();
+                        isClickContinueControl = true;
                     }
-                    isClickContinueControl = true;
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "closeDialogIfExistWhenStart: ", e);
                 }
-            } catch (InterruptedException e) {
-                Log.e(TAG, "closeDialogIfExistWhenStart: ", e);
             }
-        }).start();
+        });
+
     }
 
     private void closeDialogIfExistWhenQuit() {
         if (isClickQuitNotice) {
             return;
         }
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000L);
-                AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
-                        nodeIdQuitPhone, nodeTextQuitPhone);
-                if (nodeBtnQuit != null) {
-                    AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
-                            nodeIdNoNotice, "");
-                    if (noNotionNode != null) {
-                        AccessibilityUtil.performClick(noNotionNode);
+        threadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000L);
+                    AccessibilityNodeInfo nodeBtnQuit = AccessibilityUtil.findNodeInfo(service,
+                            nodeIdQuitPhone, nodeTextQuitPhone);
+                    if (nodeBtnQuit != null) {
+                        AccessibilityNodeInfo noNotionNode = AccessibilityUtil.findNodeInfo(service,
+                                nodeIdNoNotice, "");
+                        if (noNotionNode != null) {
+                            AccessibilityUtil.performClick(noNotionNode);
+                        }
+                        AccessibilityUtil.performClick(nodeBtnQuit);
+                        mQuitTime = System.currentTimeMillis();
                     }
-                    AccessibilityUtil.performClick(nodeBtnQuit);
-                    mQuitTime = System.currentTimeMillis();
+                    isClickQuitNotice = true;
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "closeDialogIfExistWhenQuit: ", e);
                 }
-                isClickQuitNotice = true;
-            } catch (InterruptedException e) {
-                Log.e(TAG, "closeDialogIfExistWhenQuit: ", e);
             }
-        }).start();
+        });
     }
 
     @Override

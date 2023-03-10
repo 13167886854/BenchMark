@@ -108,6 +108,12 @@ public class VideoRecordService extends Service {
         }
     };
 
+    /**
+     * onCreate
+     *
+     * @return void
+     * @date 2023/3/10 16:13
+     */
     @Override
     public void onCreate() {
         Log.d(TAG, "onCreate: 121212");
@@ -118,20 +124,111 @@ public class VideoRecordService extends Service {
         createFloatView();
     }
 
-
+    /**
+     * onBind
+     *
+     * @param intent description
+     * @return android.os.IBinder
+     * @date 2023/3/10 16:13
+     */
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind:12132 ");
         return new RecordBinder();
     }
 
+    /**
+     * setConfig
+     *
+     * @param width description
+     * @param height description
+     * @param dpi description
+     * @return void
+     * @date 2023/3/10 16:13
+     */
     public void setConfig(int width, int height, int dpi) {
         this.width = width;
         this.height = height;
         this.dpi = dpi;
     }
-
+    
     private void createFloatView() {
+        initFloatView();
+
+        // 浮动窗口按钮
+        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
+                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        // 设置监听浮动窗口的触摸移动
+        mFloatView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View vi, MotionEvent event) {
+                boolean isClick = touch(event);
+                // 响应点击事件
+                if (isClick && isAble) {
+                    if (!isRecording) {
+                        mFloatView.setText("停止");
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),
+                                null, null, null);
+                        // 开始录制
+                        handler.sendEmptyMessage(START_RECORD);
+                    } else {
+                        // 停止录制
+                        handler.sendEmptyMessage(STOP_RECORD);
+                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),
+                                null, null, null);
+                        mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
+
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                if (handler != null) {
+                                    isAble = true;
+                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                            getDrawable(R.drawable.ic_start), null, null, null);
+                                    mFloatView.setTextColor(Color.parseColor("#000000"));
+                                }
+                            }
+                        };
+                        // 主线程中调用：
+                        handler.postDelayed(runnable, 1000); // 延时1000毫秒
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    private boolean touch(MotionEvent event) {
+        boolean isClick = false;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTime = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
+
+                // 刷新
+                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                endTime = System.currentTimeMillis();
+
+                // 小于0.2秒被判断为点击
+                if ((endTime - startTime) > 200) {
+                    isClick = false;
+                } else {
+                    isClick = true;
+                }
+                break;
+        }
+        return isClick;
+    }
+
+    private void initFloatView() {
         wmParams = new LayoutParams();
 
         // 获取WindowManagerImpl.CompatModeWrapper
@@ -176,79 +273,25 @@ public class VideoRecordService extends Service {
         // 获取状态栏的高度
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-
-        // 浮动窗口按钮
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        // 设置监听浮动窗口的触摸移动
-        mFloatView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View vi, MotionEvent event) {
-                boolean isClick = false;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        startTime = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
-
-                        // 刷新
-                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        endTime = System.currentTimeMillis();
-
-                        // 小于0.2秒被判断为点击
-                        if ((endTime - startTime) > 200) {
-                            isClick = false;
-                        } else {
-                            isClick = true;
-                        }
-                        break;
-                }
-                // 响应点击事件
-                if (isClick && isAble) {
-                    if (!isRecording) {
-                        mFloatView.setText("停止");
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_stop),
-                                null, null, null);
-                        // 开始录制
-                        handler.sendEmptyMessage(START_RECORD);
-                    } else {
-                        // 停止录制
-                        handler.sendEmptyMessage(STOP_RECORD);
-                        mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(getDrawable(R.drawable.ic_rest),
-                                null, null, null);
-                        mFloatView.setTextColor(Color.parseColor("#9F9F9F"));
-
-                        Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (handler != null) {
-                                    isAble = true;
-                                    mFloatView.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                                            getDrawable(R.drawable.ic_start), null, null, null);
-                                    mFloatView.setTextColor(Color.parseColor("#000000"));
-                                }
-                            }
-                        };
-                        // 主线程中调用：
-                        handler.postDelayed(runnable, 1000); // 延时1000毫秒
-                    }
-                }
-                return true;
-            }
-        });
     }
 
+    /**
+     * setMediaProject
+     *
+     * @param project description
+     * @return void
+     * @date 2023/3/10 16:13
+     */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
 
+    /**
+     * startRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 16:13
+     */
     public boolean startRecord() {
         if (mediaProjection == null || isRunning) {
             return false;
@@ -261,7 +304,12 @@ public class VideoRecordService extends Service {
         return true;
     }
 
-
+    /**
+     * stopRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 16:13
+     */
     public boolean stopRecord() {
         if (!isRunning) {
             return false;
@@ -284,29 +332,32 @@ public class VideoRecordService extends Service {
     }
 
     private void initRecorder() {
-        try {
-            // 不录制音频
-            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
-            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(width, height); // 横向录屏
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
-            mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
-            mediaRecorder.setVideoFrameRate(60);
-        } catch (Exception e) {
-            Log.e("TWT", "initRecorder: " + e.toString());
-        }
+        // 不录制音频
+        path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(path);
+        mediaRecorder.setVideoSize(width, height); // 横向录屏
+        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+        mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+        mediaRecorder.setVideoFrameRate(60);
         try {
             mediaRecorder.prepare();
-        } catch (IOException e) {
-            Log.e(TAG, "initRecorder: ", e);
+        } catch (IOException ex) {
+            Log.e(TAG, "initRecorder: ", ex);
         }
     }
 
+    /**
+     * getsaveDirectory
+     *
+     * @return java.lang.String
+     * @date 2023/3/10 16:13
+     */
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ScreenRecorder/";
+            String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator +"ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -319,17 +370,45 @@ public class VideoRecordService extends Service {
         }
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/10 16:13
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * onStartCommand
+     *
+     * @param intent description
+     * @param flags description
+     * @param startId description
+     * @return int
+     * @date 2023/3/10 16:13
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_NOT_STICKY;
     }
 
+    /**
+     * VideoRecordService.java
+     *
+     * @Author benchmark
+     * @Version 1.0 
+     * @since 2023/3/10 16:13
+     */
     public class RecordBinder extends Binder {
+        /**
+         * getRecordService
+         *
+         * @return com.example.benchmark.service.VideoRecordService
+         * @date 2023/3/10 16:14
+         */
         public VideoRecordService getRecordService() {
             return VideoRecordService.this;
         }

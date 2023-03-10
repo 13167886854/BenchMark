@@ -54,6 +54,7 @@ public final class DecodeFormatManager {
      * 默认
      */
     public static final Map<DecodeHintType, Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
+
     static {
         // all hints
         addDecodeHintTypes(ALL_HINTS, getAllFormats());

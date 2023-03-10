@@ -382,9 +382,10 @@ public class ScoreUtil {
         // 计算稳定性分数
         startSuccessRate /= 100;
         BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRate / 3);
-        BigDecimal averageStartScore = new BigDecimal(averageStartTime < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3);
-        BigDecimal averageQuitScore = new BigDecimal(averageQuitTime < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3);
-//        int stabilityScores = (int) (startSuccessScore + averageStartScore + averageQuitScore);
+        BigDecimal averageStartScore = new BigDecimal(averageStartTime
+                < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3);
+        BigDecimal averageQuitScore = new BigDecimal(averageQuitTime
+                < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3);
         int stabilityScores = (startSuccessScore.add(averageStartScore.add(averageQuitScore))).intValue();
 
         // 保存稳定性分数

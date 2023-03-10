@@ -39,6 +39,20 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
     private CheckBox houTaiCheak;
     private AccessUtils accessUtils;
 
+    /**
+     * PopDiaLog
+     *
+     * @param context description
+     * @return
+     * @throws null
+     * @description: PopDiaLog
+     * @date 2023/3/2 10:12
+     */
+    public PopDiaLog(@NonNull Context context) {
+        super(context);
+        this.context = context;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,23 +76,11 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
         queRen.setOnClickListener(this::onClick);
         setCanceledOnTouchOutside(false);
     }
-
-    /**
-     * @param context description
-     * @return
-     * @throws null
-     * @description: PopDiaLog
-     * @date 2023/3/2 10:12
-     */
-    public PopDiaLog(@NonNull Context context) {
-        super(context);
-        this.context = context;
-    }
-
+    
     /**
      * onClick
      *
-     * @param view description 
+     * @param view description
      * @return void
      * @date 2023/3/9 19:47
      */

@@ -55,12 +55,12 @@ public class GameSmoothTestService extends Service {
     private static final String TAG = "GameSmoothTestService";
 
     // 定义浮动窗口布局
-    LinearLayout mFloatLayout;
-    LayoutParams wmParams;
+    private LinearLayout mFloatLayout;
+    private LayoutParams wmParams;
 
     // 创建浮动窗口设置布局参数的对象
-    WindowManager mWindowManager;
-    TextView mFloatView;
+    private WindowManager mWindowManager;
+    private TextView mFloatView;
 
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
@@ -84,6 +84,13 @@ public class GameSmoothTestService extends Service {
     private Messenger mMessenger;
     private int timeCount = 15; // 录屏时间
     private Handler handler = new Handler() {
+        /**
+         * handleMessage
+         *
+         * @param msg description
+         * @return void
+         * @date 2023/3/10 15:30
+         */
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -92,6 +99,12 @@ public class GameSmoothTestService extends Service {
         }
     };
 
+    /**
+     * onCreate
+     *
+     * @return void
+     * @date 2023/3/10 15:30
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -105,18 +118,110 @@ public class GameSmoothTestService extends Service {
         createFloatView();
     }
 
+    /**
+     * onBind
+     *
+     * @param intent description
+     * @return android.os.IBinder
+     * @date 2023/3/10 15:30
+     */
     @Override
     public IBinder onBind(Intent intent) {
         return new GameSmoothBinder();
     }
 
+    /**
+     * onStartCommand
+     *
+     * @param intent description
+     * @param flags description
+     * @param startId description
+     * @return int
+     * @date 2023/3/10 15:30
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
 
     private void createFloatView() {
-        Log.d("TWT", "createFloatView:gamesmoothTest ");
+        initFloatView1();
+
+        // 获取状态栏的高度
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+
+        // 浮动窗口按钮
+        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
+                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        // 设置监听浮动窗口的触摸移动
+        mFloatView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                boolean isClick = false;
+                isClick = touch1(event, isClick);
+                // 响应点击事件
+                if (isClick && isAble) {
+                    isAble = false;
+                    startRecord();
+                    Timer timer = new Timer();
+                    TimerTask task = new TimerTask() {
+                        @Override
+                        public void run() {
+                            Message mes = new Message();
+                            handler.sendMessage(mes);
+                            if (timeCount == 0) {
+                                timer.cancel();
+                                Log.d(TAG, "run: stop");
+                                stopRecord();
+                            }
+                            timeCount--;
+                        }
+                    };
+                    timer.schedule(task, 0, 1000);
+                }
+                return true;
+            }
+        });
+
+        mFloatView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: mFloatView.setOnClickListener");
+            }
+        });
+    }
+
+    private boolean touch1(MotionEvent event, boolean isClick) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startTime = System.currentTimeMillis();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
+                wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
+
+                // 刷新
+                mWindowManager.updateViewLayout(mFloatLayout, wmParams);
+                break;
+            case MotionEvent.ACTION_UP:
+                endTime = System.currentTimeMillis();
+
+                // 小于0.2秒被判断为点击
+                if ((endTime - startTime) > 200) {
+                    isClick = false;
+                } else {
+                    isClick = true;
+                }
+                break;
+        }
+        return isClick;
+    }
+
+    private void initFloatView1() {
         wmParams = new LayoutParams();
 
         // 获取WindowManagerImpl.CompatModeWrapper
@@ -159,95 +264,61 @@ public class GameSmoothTestService extends Service {
         }
 
         mWindowManager.addView(mFloatLayout, wmParams);
-
-        // 获取状态栏的高度
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-
-        // 浮动窗口按钮
-        mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
-                View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
-                .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-        // 设置监听浮动窗口的触摸移动
-        mFloatView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                boolean isClick = false;
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        startTime = System.currentTimeMillis();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
-                        wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
-                        wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
-
-                        // 刷新
-                        mWindowManager.updateViewLayout(mFloatLayout, wmParams);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        endTime = System.currentTimeMillis();
-
-                        // 小于0.2秒被判断为点击
-                        if ((endTime - startTime) > 200) {
-                            isClick = false;
-                        } else {
-                            isClick = true;
-                        }
-                        break;
-                }
-                // 响应点击事件
-                if (isClick && isAble) {
-                    isAble = false;
-                    startRecord();
-                    Timer timer = new Timer();
-                    TimerTask task = new TimerTask() {
-                        @Override
-                        public void run() {
-                            Message mes = new Message();
-                            handler.sendMessage(mes);
-                            if (timeCount == 0) {
-                                timer.cancel();
-                                Log.d(TAG, "run: stop");
-                                stopRecord();
-                            }
-                            timeCount--;
-                        }
-                    };
-                    timer.schedule(task, 0, 1000);
-                }
-                return true;
-            }
-        });
-
-        mFloatView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: mFloatView.setOnClickListener");
-            }
-        });
     }
 
+    /**
+     * onDestroy
+     *
+     * @return void
+     * @date 2023/3/10 15:30
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * setMediaProject
+     *
+     * @param project description
+     * @return void
+     * @date 2023/3/10 15:31
+     */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
     }
 
+    /**
+     * isRunning
+     *
+     * @return boolean
+     * @date 2023/3/10 15:31
+     */
     public boolean isRunning() {
         return isRunning;
     }
 
+    /**
+     * setConfig
+     *
+     * @param width description
+     * @param height description
+     * @param dpi description
+     * @return void
+     * @date 2023/3/10 15:31
+     */
     public void setConfig(int width, int height, int dpi) {
         this.width = width;
         this.height = height;
         this.dpi = dpi;
     }
 
+    /**
+     * startRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 15:31
+     */
     public boolean startRecord() {
         if (mediaProjection == null || isRunning) {
             return false;
@@ -264,6 +335,12 @@ public class GameSmoothTestService extends Service {
         return true;
     }
 
+    /**
+     * stopRecord
+     *
+     * @return boolean
+     * @date 2023/3/10 15:31
+     */
     public boolean stopRecord() {
         if (!isRunning) {
             return false;
@@ -289,18 +366,14 @@ public class GameSmoothTestService extends Service {
     }
 
     private void initRecorder() {
-        try {
-            path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
-            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-            mediaRecorder.setOutputFile(path);
-            mediaRecorder.setVideoSize(screenWidth, screenHeight);
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-            mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
-            mediaRecorder.setVideoFrameRate(30);
-        } catch (Exception e) {
-            Log.e("TWT", "initRecorder: " + e.toString());
-        }
+        path = getsaveDirectory() + System.currentTimeMillis() + ".mp4";
+        mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mediaRecorder.setOutputFile(path);
+        mediaRecorder.setVideoSize(screenWidth, screenHeight);
+        mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
+        mediaRecorder.setVideoFrameRate(30);
         try {
             mediaRecorder.prepare();
         } catch (IOException e) {
@@ -308,6 +381,12 @@ public class GameSmoothTestService extends Service {
         }
     }
 
+    /**
+     * getsaveDirectory
+     *
+     * @return java.lang.String
+     * @date 2023/3/10 15:31
+     */
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -324,7 +403,20 @@ public class GameSmoothTestService extends Service {
         }
     }
 
+    /**
+     * GameSmoothTestService.java
+     *
+     * @Author benchmark
+     * @Version 1.0 
+     * @since 2023/3/10 15:31
+     */
     public class GameSmoothBinder extends Binder {
+        /**
+         * getGameSmoothService
+         *
+         * @return com.example.benchmark.service.GameSmoothTestService
+         * @date 2023/3/10 15:31
+         */
         public GameSmoothTestService getGameSmoothService() {
             return GameSmoothTestService.this;
         }

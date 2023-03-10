@@ -100,8 +100,8 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     /**
      * onSurfaceCreated
      *
-     * @param gl description
-     * @param config description 
+     * @param gl     description
+     * @param config description
      * @return void
      * @date 2023/3/9 19:27
      */
@@ -148,9 +148,9 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     /**
      * onSurfaceChanged
      *
-     * @param gl description
-     * @param width description
-     * @param height description 
+     * @param gl     description
+     * @param width  description
+     * @param height description
      * @return void
      * @date 2023/3/9 19:27
      */
@@ -169,7 +169,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     /**
      * onDrawFrame
      *
-     * @param gl description 
+     * @param gl description
      * @return void
      * @date 2023/3/9 19:28
      */
@@ -213,7 +213,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     /**
      * onFrameAvailable
      *
-     * @param surface description 
+     * @param surface description
      * @return void
      * @date 2023/3/9 19:28
      */
@@ -225,9 +225,9 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     /**
      * onVideoSizeChanged
      *
-     * @param mp description
-     * @param width description
-     * @param height description 
+     * @param mp     description
+     * @param width  description
+     * @param height description
      * @return void
      * @date 2023/3/9 19:29
      */
@@ -244,12 +244,11 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
                     -videoRatio / screenRatio,
                     videoRatio / screenRatio, -1f, 1f);
-        } else{
+        } else {
             Matrix.orthoM(projectionMatrix, 0,
                     -screenRatio / videoRatio,
                     screenRatio / videoRatio, -1f, 1f, -1f, 1f);
         }
-
     }
 
     /**

@@ -69,14 +69,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param service AccessibilityService instance
-     * @param id      view id
-     * @param text    view text
+     * findNodeInfo
+     *
+     * @param service description
+     * @param id description
+     * @param text description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * target node, but no such node if it is null.
-     * @throws null
-     * @description: find node info through Accessibility
-     * @date 2023/2/23 09:57
+     * @date 2023/3/10 16:26
      */
     public static AccessibilityNodeInfo findNodeInfo(
             AccessibilityService service,
@@ -97,13 +96,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param service   description
+     * findNodeInfoByIdAndClass
+     *
+     * @param service description
      * @param className description
-     * @param id        description
+     * @param id description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * @throws null
-     * @description: findNodeInfoByIdAndClass
-     * @date 2023/2/23 09:58
+     * @date 2023/3/10 16:26
      */
     public static AccessibilityNodeInfo findNodeInfoByIdAndClass(
             AccessibilityService service,
@@ -127,13 +126,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param service   description
+     * findNodeInfoByText
+     *
+     * @param service description
      * @param className description
-     * @param text      description
+     * @param text description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * @throws null
-     * @description: findNodeInfoByText
-     * @date 2023/2/23 09:58
+     * @date 2023/3/10 16:27
      */
     public static AccessibilityNodeInfo findNodeInfoByText(
             AccessibilityService service,
@@ -157,13 +156,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param parent    description
+     * findNodeInfoByText
+     *
+     * @param parent description
      * @param className description
-     * @param text      description
+     * @param text description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * @throws null
-     * @description: findNodeInfoByText
-     * @date 2023/2/23 09:58
+     * @date 2023/3/10 16:27
      */
     public static AccessibilityNodeInfo findNodeInfoByText(
             AccessibilityNodeInfo parent,
@@ -184,12 +183,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * findIsExistText
+     *
      * @param parent description
-     * @param text   description
+     * @param text description
      * @return boolean
-     * @throws null
-     * @description: findIsExistText
-     * @date 2023/2/23 09:59
+     * @date 2023/3/10 16:27
      */
     public static boolean findIsExistText(
             AccessibilityNodeInfo parent,
@@ -217,12 +216,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * findIsContainText
+     *
      * @param service description
-     * @param text    description
+     * @param text description
      * @return boolean
-     * @throws null
-     * @description: findIsContainText
-     * @date 2023/2/23 09:59
+     * @date 2023/3/10 16:28
      */
     public static boolean findIsContainText(
             AccessibilityService service,
@@ -232,12 +231,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * findIsContainText
+     *
      * @param parent description
-     * @param text   description
+     * @param text description
      * @return boolean
-     * @throws null
-     * @description: findIsContainText
-     * @date 2023/2/23 09:59
+     * @date 2023/3/10 16:28
      */
     public static boolean findIsContainText(
             AccessibilityNodeInfo parent,
@@ -258,12 +257,12 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param service   description
+     * findIsExistClass
+     *
+     * @param service description
      * @param className description
      * @return boolean
-     * @throws null
-     * @description: findIsExistClass
-     * @date 2023/2/23 10:00
+     * @date 2023/3/10 16:28
      */
     public static boolean findIsExistClass(
             AccessibilityService service,
@@ -273,12 +272,12 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param parent    description
+     * findIsExistClass
+     *
+     * @param parent description
      * @param className description
      * @return boolean
-     * @throws null
-     * @description: findIsExistClass
-     * @date 2023/2/23 10:00
+     * @date 2023/3/10 16:28
      */
     public static boolean findIsExistClass(
             AccessibilityNodeInfo parent,
@@ -299,12 +298,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * getTextById
+     *
      * @param service description
-     * @param id      description
+     * @param id description
      * @return java.lang.String
-     * @throws null
-     * @description: getTextById  Get view's text
-     * @date 2023/2/23 10:01
+     * @date 2023/3/10 16:28
      */
     public static String getTextById(
             AccessibilityService service,
@@ -325,11 +324,11 @@ public class AccessibilityUtil {
     }
 
     /**
+     * performClick
+     *
      * @param nodeInfo description
      * @return boolean
-     * @throws null
-     * @description: performClick  click node action
-     * @date 2023/2/23 10:00
+     * @date 2023/3/10 16:28
      */
     public static boolean performClick(
             AccessibilityNodeInfo nodeInfo
@@ -351,15 +350,16 @@ public class AccessibilityUtil {
             return isParentClickSuccess;
         }
     }
+    
     /**
-     * @param service  description
-     * @param xx       description
-     * @param yy       description
+     * tap
+     *
+     * @param service description
+     * @param xx description
+     * @param yy description
      * @param callback description
      * @return void
-     * @throws null
-     * @description: tap
-     * @date 2023/2/23 10:01
+     * @date 2023/3/10 16:28
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void tap(
@@ -389,13 +389,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param service   description
+     * findNodeByClassName
+     *
+     * @param service description
      * @param className description
-     * @param callback  description
+     * @param callback description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * @throws null
-     * @description: findNodeByClassName
-     * @date 2023/2/23 10:02
+     * @date 2023/3/10 16:28
      */
     public static AccessibilityNodeInfo findNodeByClassName(
             AccessibilityService service,
@@ -406,13 +406,13 @@ public class AccessibilityUtil {
     }
 
     /**
-     * @param rootInfo  description
+     * findNodeByClassName
+     *
+     * @param rootInfo description
      * @param className description
-     * @param callback  description
+     * @param callback description
      * @return android.view.accessibility.AccessibilityNodeInfo
-     * @throws null
-     * @description: findNodeByClassName
-     * @date 2023/2/23 10:02
+     * @date 2023/3/10 16:28
      */
     public static AccessibilityNodeInfo findNodeByClassName(
             AccessibilityNodeInfo rootInfo,
@@ -436,12 +436,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * logAllChildNodesClass
+     *
      * @param service description
-     * @param index   description
+     * @param index description
      * @return void
-     * @throws null
-     * @description: logAllChildNodesClass
-     * @date 2023/2/23 10:02
+     * @date 2023/3/10 16:28
      */
     public static void logAllChildNodesClass(AccessibilityService service, int index) {
         logAllChildNodesClass(service.getRootInActiveWindow(), index);
@@ -453,7 +453,7 @@ public class AccessibilityUtil {
      * @param nodeInfo description
      * @param index description
      * @return void
-     * @date 2023/3/9 16:38
+     * @date 2023/3/10 16:28
      */
     public static void logAllChildNodesClass(AccessibilityNodeInfo nodeInfo, int index) {
         if (nodeInfo == null) {
@@ -486,12 +486,12 @@ public class AccessibilityUtil {
     }
 
     /**
+     * logAllChildNodesText
+     *
      * @param nodeInfo description
-     * @param index    description
+     * @param index description
      * @return void
-     * @throws null
-     * @description: logAllChildNodesText
-     * @date 2023/2/23 10:03
+     * @date 2023/3/10 16:29
      */
     public static void logAllChildNodesText(AccessibilityNodeInfo nodeInfo, int index) {
         if (nodeInfo == null) {
@@ -510,11 +510,11 @@ public class AccessibilityUtil {
     }
 
     /**
+     * isAccessibilityServiceEnabled
+     *
      * @param context description
      * @return boolean
-     * @throws null
-     * @description: Check whether the accessibility function is enabled
-     * @date 2023/2/23 10:03
+     * @date 2023/3/10 16:29
      */
     public static boolean isAccessibilityServiceEnabled(Context context) {
         AccessibilityManager accessibilityManager = null;
@@ -527,11 +527,11 @@ public class AccessibilityUtil {
     }
 
     /**
+     * goToAccessibilitySetting
+     *
      * @param context description
      * @return void
-     * @throws null
-     * @description: Go to the Setting page to enable the accessibility when it is disabled.
-     * @date 2023/2/23 10:04
+     * @date 2023/3/10 16:33
      */
     public static void goToAccessibilitySetting(Context context) {
         context.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
