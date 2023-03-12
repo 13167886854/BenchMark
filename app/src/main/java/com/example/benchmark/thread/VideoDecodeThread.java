@@ -124,23 +124,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
         // 填充要解码的数据
         if (sampleSize != -1) {
             if (sampleSize >= 0) {
-                long sampleTime = mMediaExtractor.getSampleTime();
-                videocurtime = mMediaExtractor.getSampleTime();
-                if (sampleTime >= 0) {
-                    int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
-                    if (inputBufferIndex >= 0) {
-                        ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
-                        if (inputBuffer != null) {
-                            inputBuffer.clear();
-                            inputBuffer.put(byteBuffer);
-                            mVideoDecoder.queueInputBuffer(inputBufferIndex,
-                                    0, sampleSize, sampleTime, 0);
-                            mSpeedManager.preRender(sampleTime);
-
-                            mMediaExtractor.advance();
-                        }
-                    }
-                }
+                if1(byteBuffer, mSpeedManager, sampleSize);
             }
         }
         // 解码已填充的数据
@@ -150,6 +134,26 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
         }
         return sampleSize;
+    }
+
+    private void if1(ByteBuffer byteBuffer, SpeedManager mSpeedManager, int sampleSize) {
+        long sampleTime = mMediaExtractor.getSampleTime();
+        videocurtime = mMediaExtractor.getSampleTime();
+        if (sampleTime >= 0) {
+            int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
+            if (inputBufferIndex >= 0) {
+                ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
+                if (inputBuffer != null) {
+                    inputBuffer.clear();
+                    inputBuffer.put(byteBuffer);
+                    mVideoDecoder.queueInputBuffer(inputBufferIndex,
+                            0, sampleSize, sampleTime, 0);
+                    mSpeedManager.preRender(sampleTime);
+
+                    mMediaExtractor.advance();
+                }
+            }
+        }
     }
 
     private void run2(MediaFormat videoFormat) {

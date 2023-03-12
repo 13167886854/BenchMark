@@ -9,6 +9,7 @@ package com.example.benchmark.utils;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.data.Admin;
@@ -475,9 +476,8 @@ public class ScoreUtil {
         Log.e("TWT", "testNum: " + testNum);
         Log.e("TWT", "time: " + time);
 
-        BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy / 2) ;
+        BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy / 2);
         BigDecimal responseTimeScore = new BigDecimal(time < 50 ? 50 : 100f * 50 / (2 * time));
-//        int touchScore = (int) (averAccuracyScore + responseTimeScore);
         int touchScore = (int) (averAccuracyScore.add(responseTimeScore)).intValue();
 
         // 保存触控体验分数
@@ -511,110 +511,14 @@ public class ScoreUtil {
                 cloudSpendTimeList.substring(1, cloudSpendTimeList.length() - 1);
         String[] cloudDownTimeListArr = cloudDownTimeListSub.split(",");
         String[] cloudSpendTimeListArr = cloudSpendTimeListSub.split(",");
-        Log.d("zzl", "calcAndSaveTouchScores: cloudDownTimeListArr==>"
-                + Arrays.toString(cloudDownTimeListArr));
-        Log.d("zzl", "calcAndSaveTouchScores: cloudSpendTimeListArr==>"
-                + Arrays.toString(cloudSpendTimeListArr));
-        for (int i = 0; i < cloudDownTimeListArr.length; i++) {
-            cloudDownTimeListArr[i] =
-                    cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
-            Log.d("zzll", "calcAndSaveTouchScores: --" + cloudDownTimeListArr[i]);
-        }
-
-        for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
-            cloudSpendTimeListArr[i] =
-                    cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
-            Log.d("zzll", "calcAndSaveTouchScores: --" + cloudSpendTimeListArr[i]);
-        }
-
-        // 判断测试平台
-        String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
-        Log.d("zzl", "测试平台===>" + checkPlatform);
-        TreeSet<String> localTapTimes =
-                (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
-        Log.d("zzl", "localTapTimes: " + localTapTimes);
-
-        long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
-                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
-        long responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2")
-                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
-        long responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3")
-                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
-        long responseTime3 = responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4")
-                + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
-        long responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5")
-                + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
-        long responseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6")
-                + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
-        long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
-                + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
-        long responseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
-                + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
-        long responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9")
-                + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
-        long responseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10")
-                + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
-        long responseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11")
-                + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
-        Log.d("zzl", "触控体验总共耗时===>" + (CacheUtil.getLong("tapTimeOnLocal11")
-                - CacheUtil.getLong("tapTimeOnLocal1")));
-        ArrayList<Long> longs = new ArrayList<>();
+        ArrayList<Long> longs = getLongs(cloudDownTimeListArr, cloudSpendTimeListArr);
 
         // 响应次数
         int responseNum = 0;
-        if (responseTime0 != 0L) {
-            responseNum++;
-            longs.add(responseTime0);
-        }
-        if (responseTime1 != 0L) {
-            responseNum++;
-            longs.add(responseTime1);
-        }
-        if (responseTime2 != 0L) {
-            responseNum++;
-            longs.add(responseTime2);
-        }
-        if (responseTime3 != 0L) {
-            responseNum++;
-            longs.add(responseTime3);
-        }
-        if (responseTime4 != 0L) {
-            responseNum++;
-            longs.add(responseTime4);
-        }
-        if (responseTime5 != 0L) {
-            responseNum++;
-            longs.add(responseTime5);
-        }
-        if (responseTime6 != 0L) {
-            responseNum++;
-            longs.add(responseTime6);
-        }
-        if (responseTime7 != 0L) {
-            responseNum++;
-            longs.add(responseTime7);
-        }
-        if (responseTime8 != 0L) {
-            responseNum++;
-            longs.add(responseTime8);
-        }
-        if (responseTime9 != 0L) {
-            responseNum++;
-            longs.add(responseTime9);
-        }
-        if (responseTime10 != 0L) {
-            responseNum++;
-            longs.add(responseTime10);
-        }
-        longs.sort(Long::compareTo);
-        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+        responseNum = getResponseNum1(cloudDownTimeListArr, cloudSpendTimeListArr, longs, responseNum);
+        responseNum = getResponseNum2(cloudDownTimeListArr, cloudSpendTimeListArr, longs, responseNum);
 
-        // 去掉两个最高延时，去掉两个最低延时，然后求平均值
-        longs.remove(longs.size() - 1);
-        longs.remove(longs.size() - 1);
-        longs.remove(0);
-        longs.remove(0);
-        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+        extracted(longs);
 
         // 平均触控时延
         long allResponseTime = 0L;
@@ -626,13 +530,18 @@ public class ScoreUtil {
         // 正确率
         BigDecimal averageAccuracy = new BigDecimal((responseNum - 4) / longs.size());
         BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy.intValue() / 2);
-        BigDecimal responseTimeScore = new BigDecimal(avgResponseTime.intValue() < 50 ? 50 : 100f * 50 / (2 * avgResponseTime.intValue()));
+        BigDecimal responseTimeScore = new BigDecimal(avgResponseTime.intValue() < 50
+                ? 50 : 100f * 50 / (2 * avgResponseTime.intValue()));
         int touchScore = (averAccuracyScore.add(responseTimeScore)).intValue();
         // 保存触控体验分数
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
         averageAccuracy = averageAccuracy.scaleByPowerOfTen(2);
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, (Set<String>) averageAccuracy);
         CacheUtil.put(CacheConst.KEY_RESPONSE_TIME, (Set<String>) avgResponseTime);
+        extracted2(avgResponseTime, averageAccuracy, touchScore);
+    }
+
+    private static void extracted2(BigDecimal avgResponseTime, BigDecimal averageAccuracy, int touchScore) {
         if (avgResponseTime.add(averageAccuracy).intValue() != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
                     .addParam("adminName", Admin.adminName)
@@ -657,6 +566,111 @@ public class ScoreUtil {
                         }
                     });
         }
+    }
+
+    private static void extracted(ArrayList<Long> longs) {
+        // 去掉两个最高延时，去掉两个最低延时，然后求平均值
+        longs.remove(longs.size() - 1);
+        longs.remove(longs.size() - 1);
+        longs.remove(0);
+        longs.remove(0);
+        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+    }
+
+    private static int getResponseNum2(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr, ArrayList<Long> longs, int responseNum) {
+        long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
+                + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
+        if (responseTime6 != 0L) {
+            responseNum++;
+            longs.add(responseTime6);
+        }
+        long responseTime7 = (Long.parseLong(cloudDownTimeListArr[7]) - CacheUtil.getLong("tapTimeOnLocal8")
+                + Long.parseLong(cloudSpendTimeListArr[7])) * 2;
+        if (responseTime7 != 0L) {
+            responseNum++;
+            longs.add(responseTime7);
+        }
+        long responseTime8 = (Long.parseLong(cloudDownTimeListArr[8]) - CacheUtil.getLong("tapTimeOnLocal9")
+                + Long.parseLong(cloudSpendTimeListArr[8])) * 2;
+        if (responseTime8 != 0L) {
+            responseNum++;
+            longs.add(responseTime8);
+        }
+        long responseTime9 = (Long.parseLong(cloudDownTimeListArr[9]) - CacheUtil.getLong("tapTimeOnLocal10")
+                + Long.parseLong(cloudSpendTimeListArr[9])) * 2;
+        if (responseTime9 != 0L) {
+            responseNum++;
+            longs.add(responseTime9);
+        }
+        long responseTime10 = (Long.parseLong(cloudDownTimeListArr[10]) - CacheUtil.getLong("tapTimeOnLocal11")
+                + Long.parseLong(cloudSpendTimeListArr[10])) * 2;
+        if (responseTime10 != 0L) {
+            responseNum++;
+            longs.add(responseTime10);
+        }
+        longs.sort(Long::compareTo);
+        Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
+        return responseNum;
+    }
+
+    private static int getResponseNum1(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr, ArrayList<Long> longs, int responseNum) {
+        long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
+                + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
+        if (responseTime0 != 0L) {
+            responseNum++;
+            longs.add(responseTime0);
+        }
+        long responseTime1 = (Long.parseLong(cloudDownTimeListArr[1]) - CacheUtil.getLong("tapTimeOnLocal2")
+                + Long.parseLong(cloudSpendTimeListArr[1])) * 2;
+        if (responseTime1 != 0L) {
+            responseNum++;
+            longs.add(responseTime1);
+        }
+        long responseTime2 = (Long.parseLong(cloudDownTimeListArr[2]) - CacheUtil.getLong("tapTimeOnLocal3")
+                + Long.parseLong(cloudSpendTimeListArr[2])) * 2;
+        if (responseTime2 != 0L) {
+            responseNum++;
+            longs.add(responseTime2);
+        }
+        long responseTime3 = (Long.parseLong(cloudDownTimeListArr[3]) - CacheUtil.getLong("tapTimeOnLocal4")
+                + Long.parseLong(cloudSpendTimeListArr[3])) * 2;
+        if (responseTime3 != 0L) {
+            responseNum++;
+            longs.add(responseTime3);
+        }
+        long responseTime4 = (Long.parseLong(cloudDownTimeListArr[4]) - CacheUtil.getLong("tapTimeOnLocal5")
+                + Long.parseLong(cloudSpendTimeListArr[4])) * 2;
+        if (responseTime4 != 0L) {
+            responseNum++;
+            longs.add(responseTime4);
+        }
+        long responseTime5 = (Long.parseLong(cloudDownTimeListArr[5]) - CacheUtil.getLong("tapTimeOnLocal6")
+                + Long.parseLong(cloudSpendTimeListArr[5])) * 2;
+        if (responseTime5 != 0L) {
+            responseNum++;
+            longs.add(responseTime5);
+        }
+        return responseNum;
+    }
+
+    @NonNull
+    private static ArrayList<Long> getLongs(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr) {
+        for (int i = 0; i < cloudDownTimeListArr.length; i++) {
+            cloudDownTimeListArr[i] =
+                    cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
+        }
+
+        for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
+            cloudSpendTimeListArr[i] =
+                    cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
+        }
+
+        // 判断测试平台
+        String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
+        TreeSet<String> localTapTimes =
+                (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
+        ArrayList<Long> longs = new ArrayList<>();
+        return longs;
     }
 
     /**
@@ -701,36 +715,19 @@ public class ScoreUtil {
      * @throws null
      * @date 2023/3/8 09:54
      */
-    public static void calcAndSaveSoundFrameScores(
-            String resolution,
-            float maxDiffValue
-    ) {
-        if (YinHuaData.pesq == null || YinHuaData.ssim == null || YinHuaData.psnr == null) {
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    calcAndSaveSoundFrameScores(resolution, maxDiffValue);
-                    timer.cancel();
-                }
-            };
-            timer.schedule(task, 5000);
+    public static void calcAndSaveSoundFrameScores(String resolution, float maxDiffValue) {
+        if (extracted1(resolution, maxDiffValue)) {
             return;
         }
         float psnr = Float.parseFloat(YinHuaData.psnr);
         float ssim = Float.parseFloat(YinHuaData.ssim);
         float pesq = Float.parseFloat(YinHuaData.pesq);
-
-        // 保存音画质量结果
-        CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
-        CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
-        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.pesq);
-        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.psnr);
-        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.ssim);
+        extracted(resolution, maxDiffValue);
 
         // 计算音画质量分数
         String[] resolutionArray = resolution.split("X");
-        BigDecimal resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]));
+        BigDecimal resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0])
+                * Integer.parseInt(resolutionArray[1]));
         BigDecimal resolutionScore = new BigDecimal(100f * resolutionValue.floatValue() / (4 * 1920 * 1080));
         BigDecimal maxDiffValueScore = new BigDecimal(maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue));
         psnr = psnr > 40 ? 40 : psnr;
@@ -767,6 +764,31 @@ public class ScoreUtil {
                         }
                     });
         }
+    }
+
+    private static boolean extracted1(String resolution, float maxDiffValue) {
+        if (YinHuaData.pesq == null || YinHuaData.ssim == null || YinHuaData.psnr == null) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    calcAndSaveSoundFrameScores(resolution, maxDiffValue);
+                    timer.cancel();
+                }
+            };
+            timer.schedule(task, 5000);
+            return true;
+        }
+        return false;
+    }
+
+    private static void extracted(String resolution, float maxDiffValue) {
+        // 保存音画质量结果
+        CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
+        CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
+        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.pesq);
+        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.psnr);
+        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.ssim);
     }
 
     /**

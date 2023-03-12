@@ -34,10 +34,14 @@ import com.example.benchmark.data.IpPort;
  * @since 2023/3/7 15:14
  */
 public class IpPortDialog extends Dialog {
-    /** TAG */
+    /**
+     * TAG
+     */
     private static final String TAG = "Login";
 
-    /** 确定按钮 */
+    /**
+     * 确定按钮
+     */
     public Button yes;
 
     private Button no; // 取消按钮
@@ -64,7 +68,7 @@ public class IpPortDialog extends Dialog {
             }
         }
     };
-    
+
     /**
      * IpPortDialog
      *
@@ -78,7 +82,7 @@ public class IpPortDialog extends Dialog {
     /**
      * setNoOnclickListener
      *
-     * @param str description
+     * @param str                 description
      * @param onNoOnclickListener description
      * @return void
      * @date 2023/3/10 11:25
@@ -93,7 +97,7 @@ public class IpPortDialog extends Dialog {
     /**
      * setYesOnclickListener
      *
-     * @param str description
+     * @param str                  description
      * @param onYesOnclickListener description
      * @return void
      * @date 2023/3/10 11:25
@@ -104,7 +108,7 @@ public class IpPortDialog extends Dialog {
         }
         this.yesOnclickListener = onYesOnclickListener;
     }
-    
+
     /**
      * onCreate
      *
@@ -167,7 +171,7 @@ public class IpPortDialog extends Dialog {
             }
         });
     }
-    
+
     private void initEvent() {
         // 设置确定按钮被点击后，向外界提供监听
         yes.setOnClickListener(new View.OnClickListener() {
@@ -194,10 +198,10 @@ public class IpPortDialog extends Dialog {
         yes = findViewById(R.id.yes2);
         no = findViewById(R.id.no2);
         titleTv = findViewById(R.id.title);
-        messageTv =  findViewById(R.id.message);
+        messageTv = findViewById(R.id.message);
         view = findViewById(R.id.view_dialog);
     }
-    
+
     /**
      * setTitle
      *
@@ -208,7 +212,7 @@ public class IpPortDialog extends Dialog {
     public void setTitle(String title) {
         titleStr = title;
     }
-    
+
     /**
      * setMessage
      *
@@ -219,12 +223,12 @@ public class IpPortDialog extends Dialog {
     public void setMessage(String message) {
         messageStr = message;
     }
-    
+
     /**
      * IpPortDialog.java
      *
      * @Author benchmark
-     * @Version 1.0 
+     * @Version 1.0
      * @since 2023/3/10 11:25
      */
     public interface OnYesOnclickListener {

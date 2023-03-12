@@ -161,22 +161,13 @@ public class AudioDecodeThread extends Thread implements Runnable {
     }
 
     private void run2(AudioTrack audioTrack, MediaCodec.BufferInfo bufferInfo, ByteBuffer byteBuffer, int sampleSize) {
-        while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
-            sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
+        int temp = sampleSize;
+        while (temp != -1 && !AudioVideoActivity.isTestOver) {
+            temp = mMediaExtractor.readSampleData(byteBuffer, 0);
 
             // 填充要解码的数据
-            if (sampleSize != -1) {
-                int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
-                if (inputBufferIndex >= 0) {
-                    ByteBuffer inputBuffer = mAudioDecoder.getInputBuffer(inputBufferIndex);
-                    if (inputBuffer != null) {
-                        inputBuffer.put(byteBuffer);
-                        mAudioDecoder.queueInputBuffer(inputBufferIndex,
-                                0, sampleSize, mMediaExtractor.getSampleTime(), 0);
-                        audiocurtime = mMediaExtractor.getSampleTime();
-                        mMediaExtractor.advance();
-                    }
-                }
+            if (temp != -1) {
+                extracted(byteBuffer, temp);
             }
 
             // 解码已填充的数据
@@ -191,6 +182,20 @@ public class AudioDecodeThread extends Thread implements Runnable {
                     audioTrack.write(bytes, 0, bufferInfo.size);
                     mAudioDecoder.releaseOutputBuffer(outputBufferIndex, false);
                 }
+            }
+        }
+    }
+
+    private void extracted(ByteBuffer byteBuffer, int temp) {
+        int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
+        if (inputBufferIndex >= 0) {
+            ByteBuffer inputBuffer = mAudioDecoder.getInputBuffer(inputBufferIndex);
+            if (inputBuffer != null) {
+                inputBuffer.put(byteBuffer);
+                mAudioDecoder.queueInputBuffer(inputBufferIndex,
+                        0, temp, mMediaExtractor.getSampleTime(), 0);
+                audiocurtime = mMediaExtractor.getSampleTime();
+                mMediaExtractor.advance();
             }
         }
     }

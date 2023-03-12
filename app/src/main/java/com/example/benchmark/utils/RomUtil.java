@@ -13,6 +13,7 @@ import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -218,7 +219,8 @@ public class RomUtil {
         BufferedReader input = null;
         try {
             Process process = Runtime.getRuntime().exec("getprop " + name);
-            input = new BufferedReader(new InputStreamReader(process.getInputStream()), 1024);
+            input = new BufferedReader(new InputStreamReader(process.getInputStream(),
+                    StandardCharsets.UTF_8), 1024);
             line = input.readLine();
             input.close();
         } catch (IOException ex) {

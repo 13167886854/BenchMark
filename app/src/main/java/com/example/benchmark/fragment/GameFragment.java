@@ -94,8 +94,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * onCreateView
      *
-     * @param inflater description
-     * @param container description
+     * @param inflater           description
+     * @param container          description
      * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:44
@@ -396,7 +396,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * onCheckedChanged
      *
-     * @param group description
+     * @param group     description
      * @param checkedId description
      * @date 2023/3/8 15:23
      */
@@ -444,7 +444,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      * onCheckedChanged
      *
      * @param buttonView description
-     * @param isChecked description
+     * @param isChecked  description
      * @date 2023/3/8 15:23
      */
     @Override
@@ -503,7 +503,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * getInfo
      *
-     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @return java.util.Map<java.lang.String, java.lang.Object>
      * @date 2023/3/8 15:23
      */
     public Map<String, Object> getInfo() {

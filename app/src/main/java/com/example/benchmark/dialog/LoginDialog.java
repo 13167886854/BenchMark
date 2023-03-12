@@ -221,23 +221,24 @@ public class LoginDialog extends Dialog {
         }
         view = findViewById(R.id.view_dialog);
     }
+    
     /**
+     * setTitle
+     *
      * @param title description
      * @return void
-     * @throws null
-     * @description: 从外界Activity为Dialog设置标题
-     * @date 2023/2/23 09:43
+     * @date 2023/3/11 15:00
      */
     public void setTitle(String title) {
         titleStr = title;
     }
 
     /**
+     * setMessage
+     *
      * @param message description
      * @return void
-     * @throws null
-     * @description: 从外界Activity为Dialog设置dialog的message
-     * @date 2023/2/23 09:43
+     * @date 2023/3/11 15:13
      */
     public void setMessage(String message) {
         messageStr = message;

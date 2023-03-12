@@ -27,9 +27,9 @@ public class JuTiData {
     /**
      * JuTiData
      *
-     * @param item description
+     * @param item      description
      * @param itemGrade description
-     * @return 
+     * @return
      * @date 2023/3/10 11:24
      */
     public JuTiData(String item, String itemGrade) {

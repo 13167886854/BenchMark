@@ -124,7 +124,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                                @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_fragment, container, false);
         initview(view);
         kunPengPhone.setOnClickListener(this);
@@ -295,7 +295,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     }
 
     private void switch2(View vi) {
-        switch (vi.getId()){
+        switch (vi.getId()) {
             case R.id.bule_chukong: {
                 touch();
                 break;

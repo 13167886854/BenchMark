@@ -63,7 +63,7 @@ public class CepingData {
      * @date 2023/3/8 11:05
      */
     public CepingData(int grade, int cepingImage, String cepingItem, String cepingText) {
-        this(cepingImage,cepingItem,cepingText);
+        this(cepingImage, cepingItem, cepingText);
         this.grade = grade;
     }
 

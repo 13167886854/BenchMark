@@ -10,7 +10,7 @@ package com.example.benchmark.data;
  * Admin.java
  *
  * @Author benchmark
- * @Version 1.0 
+ * @Version 1.0
  * @since 2023/3/10 11:21
  */
 public class Admin {
@@ -42,5 +42,5 @@ public class Admin {
     /**
      * 登录状态
      */
-    public static String status = "Failure"; //
+    public static String status = "Failure";
 }

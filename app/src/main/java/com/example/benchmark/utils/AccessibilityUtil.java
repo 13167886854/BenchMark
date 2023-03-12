@@ -31,12 +31,15 @@ import java.util.List;
  */
 public class AccessibilityUtil {
     /**
-     * Accessibility move function
+     * move
      *
-     * @param service   AccessibilityService instance
-     * @param path      moving path
-     * @param delayTime delayed time to start
-     * @param duration  execution duration
+     * @param service description
+     * @param path description
+     * @param delayTime description
+     * @param duration description
+     * @param callback description
+     * @return void
+     * @date 2023/3/11 15:34
      */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void move(
@@ -350,7 +353,7 @@ public class AccessibilityUtil {
             return isParentClickSuccess;
         }
     }
-    
+
     /**
      * tap
      *

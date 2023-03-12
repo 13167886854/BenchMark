@@ -46,10 +46,14 @@ import java.util.TimerTask;
  * @since 2023/3/7 15:05
  */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
-    /** isTestOver */
+    /**
+     * isTestOver
+     */
     public static boolean isTestOver = false;
 
-    /** mMp4FilePath */
+    /**
+     * mMp4FilePath
+     */
     public static String mMp4FilePath;
 
     private SurfaceView mSurfaceView;
@@ -155,7 +159,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         yinhuaxinxi = findViewById(R.id.yinhua_item);
         mMp4FilePath = getIntent().getStringExtra("path");
         if (getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
-            if(AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager){
+            if (AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
                 WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
                 DisplayMetrics outMetrics = new DisplayMetrics();
                 wm.getDefaultDisplay().getMetrics(outMetrics);

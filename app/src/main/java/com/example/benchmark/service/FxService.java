@@ -545,7 +545,7 @@ public class FxService extends Service {
         @SuppressLint("WrongConstant")
         ImageReader imageReader = ImageReader.newInstance(screenWidth, screenHeight,
                 PixelFormat.RGBA_8888, 60);
-        VirtualDisplay virtualDisplay = mediaProjection.createVirtualDisplay(
+        VirtualDisplay virtualDisplayTemp = mediaProjection.createVirtualDisplay(
                 "screen", screenWidth, screenHeight, 1,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                 imageReader.getSurface(), null, null);
@@ -555,7 +555,7 @@ public class FxService extends Service {
         Image image = imageReader.acquireLatestImage();
 
         // 释放 virtualDisplay,不释放会报错
-        virtualDisplay.release();
+        virtualDisplayTemp.release();
         return image2Bitmap(image);
     }
 
@@ -577,7 +577,8 @@ public class FxService extends Service {
         int pixelStride = planes[0].getPixelStride();
         int rowStride = planes[0].getRowStride();
         int rowPadding = rowStride - pixelStride * imageWidth;
-        Bitmap bitmap = Bitmap.createBitmap(imageWidth + rowPadding / pixelStride, imageHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(imageWidth
+                + rowPadding / pixelStride, imageHeight, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
         image.close();
         return bitmap;
@@ -701,11 +702,11 @@ public class FxService extends Service {
     }
 
     /**
+     * setMediaProject
+     *
      * @param project description
      * @return void
-     * @throws null
-     * @description: setMediaProject
-     * @date 2023/3/1 15:07
+     * @date 2023/3/11 15:16
      */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;

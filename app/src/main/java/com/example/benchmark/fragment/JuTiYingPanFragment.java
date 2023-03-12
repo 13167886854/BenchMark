@@ -41,7 +41,7 @@ public class JuTiYingPanFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                              @Nullable Bundle savedInstanceState) {
+                                @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.juti_yingpan_fragment, container, false);
         mJuTiYingPanNum = mView.findViewById(R.id.juti_yingpan_num);
         mJuTiYingPanNum.setText(MobileCloud.storage);

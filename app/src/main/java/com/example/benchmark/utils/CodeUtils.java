@@ -143,7 +143,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
-                                      @FloatRange(from = 0.0f, to = 1.0f) float ratio, int codeColor) {
+                                        @FloatRange(from = 0.0f, to = 1.0f) float ratio, int codeColor) {
         // 配置参数
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
@@ -168,7 +168,8 @@ public final class CodeUtils {
      * @date 2023/3/9 16:21
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
-                                      @FloatRange(from = 0.0f, to = 1.0f) float ratio, Map<EncodeHintType, ?> hints) {
+                                        @FloatRange(from = 0.0f, to = 1.0f) float ratio,
+                                        Map<EncodeHintType, ?> hints) {
         return createQRCode(content, heightPix, logo, ratio, hints, Color.BLACK);
     }
 
@@ -184,7 +185,8 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
-                                      @FloatRange(from = 0.0f, to = 1.0f) float ratio, Map<EncodeHintType, ?> hints, int codeColor) {
+                                        @FloatRange(from = 0.0f, to = 1.0f) float ratio,
+                                        Map<EncodeHintType, ?> hints, int codeColor) {
         try {
             // 图像数据转换，使用了矩阵转换
             BitMatrix bitMatrix = new QRCodeWriter().encode(content,
@@ -223,7 +225,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     private static Bitmap addLogo(Bitmap src, Bitmap logo,
-                                  @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
+                                    @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
         if (src == null) {
             return src;
         }
@@ -379,7 +381,7 @@ public final class CodeUtils {
      * @return Result
      */
     public static Result parseCodeResult(String bitmapPath, int reqWidth,
-                                         int reqHeight, Map<DecodeHintType, Object> hints) {
+                                            int reqHeight, Map<DecodeHintType, Object> hints) {
         return parseCodeResult(compressBitmap(bitmapPath, reqWidth, reqHeight), hints);
     }
 
@@ -580,7 +582,8 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                       int desiredWidth, int desiredHeight, Map<EncodeHintType, ?> hints) {
+                                        int desiredWidth, int desiredHeight,
+                                        Map<EncodeHintType, ?> hints) {
         return createBarCode(content, format, desiredWidth,
                 desiredHeight, hints, false, 40, Color.BLACK);
     }
@@ -597,7 +600,8 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                       int desiredWidth, int desiredHeight, Map<EncodeHintType, ?> hints, boolean isShowText) {
+                                        int desiredWidth, int desiredHeight,
+                                        Map<EncodeHintType, ?> hints, boolean isShowText) {
         return createBarCode(content, format, desiredWidth, desiredHeight,
                 hints, isShowText, 40, Color.BLACK);
     }
@@ -614,7 +618,8 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                       int desiredWidth, int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
+                                        int desiredWidth, int desiredHeight, boolean isShowText,
+                                        @ColorInt int codeColor) {
         return createBarCode(content, format, desiredWidth, desiredHeight,
                 null, isShowText, 40, codeColor);
     }
@@ -633,7 +638,8 @@ public final class CodeUtils {
      * @date 2023/3/10 16:33
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth,
-                                       int desiredHeight, Map<EncodeHintType, ?> hints, boolean isShowText, @ColorInt int codeColor) {
+                                        int desiredHeight, Map<EncodeHintType, ?> hints,
+                                        boolean isShowText, @ColorInt int codeColor) {
         return createBarCode(content, format, desiredWidth, desiredHeight,
                 hints, isShowText, 40, codeColor);
     }
@@ -652,7 +658,8 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth,
-                                       int desiredHeight, Map<EncodeHintType, ?> hints, boolean isShowText, int textSize, @ColorInt int codeColor) {
+                                        int desiredHeight, Map<EncodeHintType, ?> hints,
+                                        boolean isShowText, int textSize, @ColorInt int codeColor) {
         final int white = Color.WHITE;
         final int black = codeColor;
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -696,7 +703,7 @@ public final class CodeUtils {
      * @date 2023/3/10 16:33
      */
     private static Bitmap addCode(Bitmap src, String code, int textSize,
-                                  @ColorInt int textColor, int offset) {
+                                    @ColorInt int textColor, int offset) {
         if (TextUtils.isEmpty(code)) {
             return src;
         }

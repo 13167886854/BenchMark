@@ -40,8 +40,8 @@ public class SDCardUtils {
      * getRAMInfo
      *
      * @param context description
-     * @return java.util.Map<java.lang.String, java.lang.String>
-     * @date 2023/3/9 15:22
+     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @date 2023/3/11 16:25
      */
     public static Map<String, String> getRAMInfo(Context context) {
         long totalSize = 0L;
@@ -68,7 +68,7 @@ public class SDCardUtils {
      * isSDCardMount
      *
      * @return boolean
-     * @date 2023/3/9 15:22
+     * @date 2023/3/11 16:26
      */
     public static boolean isSDCardMount() {
         return Environment.getExternalStorageState().equals(
@@ -77,12 +77,12 @@ public class SDCardUtils {
 
 
     /**
-     * getStorageInfo获取手机存储 ROM 信息
+     * getStorageInfo
      *
      * @param context description
-     * @param type    description
-     * @return java.util.Map<java.lang.String, java.lang.String>
-     * @date 2023/3/9 15:22
+     * @param type description
+     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @date 2023/3/11 16:26
      */
     public static Map<String, String> getStorageInfo(Context context, int type) {
         String path = getStoragePath(context, type);
@@ -113,9 +113,9 @@ public class SDCardUtils {
      * getStoragePath
      *
      * @param context description
-     * @param type    description
+     * @param type description
      * @return java.lang.String
-     * @date 2023/3/9 15:12
+     * @date 2023/3/11 16:26
      */
     public static String getStoragePath(Context context, int type) {
         if (context.getSystemService(Context.STORAGE_SERVICE) instanceof StorageManager) {
@@ -216,10 +216,11 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机内部存储空间
+     * getTotalInternalMemorySize
      *
-     * @param context
-     * @return 以M, G为单位的容量
+     * @param context description
+     * @return java.lang.String
+     * @date 2023/3/11 16:26
      */
     public static String getTotalInternalMemorySize(Context context) {
         File file = Environment.getDataDirectory();
@@ -231,10 +232,11 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机内部可用存储空间
+     * getAvailableInternalMemorySize
      *
-     * @param context
-     * @return 以M, G为单位的容量
+     * @param context description
+     * @return java.lang.String
+     * @date 2023/3/11 16:26
      */
     public static String getAvailableInternalMemorySize(Context context) {
         File file = Environment.getDataDirectory();
@@ -246,10 +248,11 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机外部存储空间
+     * getTotalExternalMemorySize
      *
-     * @param context
-     * @return 以M, G为单位的容量
+     * @param context description
+     * @return java.lang.String
+     * @date 2023/3/11 16:27
      */
     public static String getTotalExternalMemorySize(Context context) {
         File file = Environment.getExternalStorageDirectory();
@@ -261,10 +264,11 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机外部可用存储空间
+     * getAvailableExternalMemorySize
      *
-     * @param context
-     * @return 以M, G为单位的容量
+     * @param context description
+     * @return java.lang.String
+     * @date 2023/3/11 16:27
      */
     public static String getAvailableExternalMemorySize(Context context) {
         File file = Environment.getExternalStorageDirectory();
@@ -275,12 +279,12 @@ public class SDCardUtils {
                 * blockSizeLong);
     }
 
-    /**
-     * getSDCardInfo
-     *
-     * @return java.lang.String
-     * @date 2023/3/9 15:18
-     */
+   /**
+    * getSDCardInfo
+    *
+    * @return java.lang.String
+    * @date 2023/3/11 16:27
+    */
     public static String getSDCardInfo() {
         SDCardInfo sd = new SDCardInfo();
         if (!isSDCardMount()) {
@@ -304,7 +308,7 @@ public class SDCardUtils {
      * SDCardUtils.java
      *
      * @Author benchmark
-     * @Version 1.0 
+     * @Version 1.0
      * @since 2023/3/10 16:46
      */
     public static class SDCardInfo {

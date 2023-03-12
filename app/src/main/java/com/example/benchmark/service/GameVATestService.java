@@ -89,7 +89,7 @@ public class GameVATestService extends Service {
     private WindowManager mWindowManager;
     private TextView mFloatView;
     private TextView snap;
-    
+
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -715,6 +715,7 @@ public class GameVATestService extends Service {
                         Log.d(TAG, "onFailure: call " + call);
                         Log.d(TAG, "onFailure: e" + ex.toString());
                     }
+
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         Log.d(TAG, "onResponse: response==>" + response);

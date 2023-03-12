@@ -36,9 +36,9 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     /**
      * CePingAdapter
      *
-     * @param data description
+     * @param data            description
      * @param onClickListener description
-     * @return 
+     * @return
      * @date 2023/3/10 11:13
      */
     public CePingAdapter(List<CepingData> data,
@@ -50,7 +50,7 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     /**
      * onCreateViewHolder
      *
-     * @param parent description
+     * @param parent   description
      * @param viewType description
      * @return androidx.recyclerview.widget.RecyclerView.ViewHolder
      * @date 2023/3/10 11:13
@@ -66,7 +66,7 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     /**
      * onBindViewHolder
      *
-     * @param holder description
+     * @param holder   description
      * @param position description
      * @return void
      * @date 2023/3/10 11:13
@@ -96,7 +96,6 @@ public class CePingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     /**
      * getItemCount
      *
-    
      * @return int
      * @date 2023/3/10 11:13
      */

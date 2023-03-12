@@ -61,7 +61,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
                 case testCompleted:
                     float delayTime = gameTouchUtil.getAvgTime(GameTouchUtil.TEST_NUM);
                     handlingTv.setText(gameTouchUtil.getDelayTime()
-                            + System.lineSeparator() +"avgTime:" + delayTime);
+                            + System.lineSeparator() + "avgTime:" + delayTime);
                     ScoreUtil.calaAndSaveGameTouchScores(gameTouchUtil.getDetectNum(), delayTime);
                     Log.d(TAG, "gameTouchUtil.getDetectNum(): " + gameTouchUtil.getDetectNum());
                     Log.d(TAG, "delayTime): " + delayTime);

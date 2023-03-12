@@ -51,7 +51,7 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
      * NetEaseCloudGameStabilityService
      *
      * @param service description
-     * @return 
+     * @return
      * @date 2023/3/10 16:11
      */
     public NetEaseCloudGameStabilityService(MyAccessibilityService service) {

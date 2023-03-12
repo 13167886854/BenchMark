@@ -321,7 +321,7 @@ public class FpsUtils {
             return 0;
         }
         for (Integer integer : list) {
-            maxList = maxList > integer ? maxList : integer;
+            maxList = maxList > integer ? maxList : integer.intValue();
         }
         return maxList;
     }

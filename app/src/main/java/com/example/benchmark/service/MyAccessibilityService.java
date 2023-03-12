@@ -392,7 +392,7 @@ public class MyAccessibilityService extends AccessibilityService {
             } else if ((Color.red(pixel) == 255 && Color.green(pixel) == 255 && Color.blue(pixel) == 255)) {
                 invalidPixelCount++;
             } else {
-
+                Log.d("TAG", "isBitmapInvalid: lastElse");
             }
         }
         return false;

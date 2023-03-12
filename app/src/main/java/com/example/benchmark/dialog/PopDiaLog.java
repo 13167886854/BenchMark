@@ -76,7 +76,7 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
         queRen.setOnClickListener(this::onClick);
         setCanceledOnTouchOutside(false);
     }
-    
+
     /**
      * onClick
      *

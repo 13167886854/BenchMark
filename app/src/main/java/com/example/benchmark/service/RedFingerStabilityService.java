@@ -202,7 +202,6 @@ public class RedFingerStabilityService implements IStabilityService {
                 }
             }
         });
-
     }
 
     private void closeDialogIfExistWhenQuit() {

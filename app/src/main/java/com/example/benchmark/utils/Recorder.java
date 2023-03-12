@@ -45,15 +45,17 @@ public class Recorder {
      * Recorder TAG标签
      */
     public static final String TAG = "Recorder";
-    
+
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-
-    /** isRecording */
+    /**
+     * isRecording
+     */
     public boolean isRecording = false;
+
+    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private AudioRecord mRecorder;
     private int bufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
@@ -66,7 +68,7 @@ public class Recorder {
     /**
      * start
      *
-     * @param context description
+     * @param context     description
      * @param mProjection description
      * @return boolean
      * @date 2023/3/10 16:42
@@ -281,7 +283,7 @@ public class Recorder {
     /**
      * startProcessing
      *
-     * @throws  IOException ex
+     * @throws IOException ex
      * @description: startProcessing
      * @date 2023/3/7 14:55
      */
