@@ -278,13 +278,13 @@ public class SDCardUtils {
         return Formatter.formatFileSize(context, availableBlocksLong
                 * blockSizeLong);
     }
-
-   /**
-    * getSDCardInfo
-    *
-    * @return java.lang.String
-    * @date 2023/3/11 16:27
-    */
+    
+    /**
+     * getSDCardInfo
+     *
+     * @return java.lang.String
+     * @date 2023/3/12 10:19
+     */
     public static String getSDCardInfo() {
         SDCardInfo sd = new SDCardInfo();
         if (!isSDCardMount()) {

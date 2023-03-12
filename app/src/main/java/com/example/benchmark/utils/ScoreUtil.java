@@ -18,7 +18,6 @@ import com.example.benchmark.data.YinHuaData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +33,8 @@ import okhttp3.Call;
  */
 public class ScoreUtil {
     private static final String TAG = "ScoreUtil";
+
+    private static int responseNum;
 
     /**
      * calcAndSaveCPUScores
@@ -514,9 +515,9 @@ public class ScoreUtil {
         ArrayList<Long> longs = getLongs(cloudDownTimeListArr, cloudSpendTimeListArr);
 
         // 响应次数
-        int responseNum = 0;
-        responseNum = getResponseNum1(cloudDownTimeListArr, cloudSpendTimeListArr, longs, responseNum);
-        responseNum = getResponseNum2(cloudDownTimeListArr, cloudSpendTimeListArr, longs, responseNum);
+        responseNum = 0;
+        responseNum = getResponseNum1(cloudDownTimeListArr, cloudSpendTimeListArr, longs);
+        responseNum = getResponseNum2(cloudDownTimeListArr, cloudSpendTimeListArr, longs);
 
         extracted(longs);
 
@@ -577,7 +578,8 @@ public class ScoreUtil {
         Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
     }
 
-    private static int getResponseNum2(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr, ArrayList<Long> longs, int responseNum) {
+    private static int getResponseNum2(String[] cloudDownTimeListArr,
+                                        String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
         long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
                 + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
         if (responseTime6 != 0L) {
@@ -613,7 +615,8 @@ public class ScoreUtil {
         return responseNum;
     }
 
-    private static int getResponseNum1(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr, ArrayList<Long> longs, int responseNum) {
+    private static int getResponseNum1(String[] cloudDownTimeListArr,
+                                        String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
         long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
                 + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
         if (responseTime0 != 0L) {

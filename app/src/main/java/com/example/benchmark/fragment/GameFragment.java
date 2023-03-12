@@ -103,7 +103,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
+                                @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.game_fragment, container, false);
         initview(view);
         redLiuChang.setOnClickListener(this::onClick);

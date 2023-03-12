@@ -108,12 +108,13 @@ public class NetEaseCloudPhoneStabilityService implements IStabilityService {
     }
 
     private boolean forMethod(AccessibilityNodeInfo frameLayout, boolean isCloudPhone) {
+        boolean isCloudPhoneTemp = isCloudPhone;
         for (int k = 0; k < frameLayout.getChildCount(); k++) {
             AccessibilityNodeInfo node = frameLayout.getChild(k);
             if (node.getText() != null && nodeTextCloudPhone.equals(node.getText().toString())) {
-                isCloudPhone = true;
+                isCloudPhoneTemp = true;
             }
-            if (isCloudPhone
+            if (isCloudPhoneTemp
                     && "android.view.ViewGroup".equals(node.getClassName().toString())) {
                 Log.e("NetEase", "Click");
                 AccessibilityUtil.performClick(node.getChild(0));

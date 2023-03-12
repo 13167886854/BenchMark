@@ -414,7 +414,7 @@ public final class CodeUtils {
      * @return Result
      */
     public static Result parseCodeResult(LuminanceSource source,
-                                         Map<DecodeHintType, Object> hints) {
+                                            Map<DecodeHintType, Object> hints) {
         Result result = null;
         MultiFormatReader reader = new MultiFormatReader();
         try {
@@ -545,12 +545,12 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                       int desiredWidth, int desiredHeight) {
+                                        int desiredWidth, int desiredHeight) {
         return createBarCode(content, format, desiredWidth, desiredHeight, null);
     }
 
     public static Bitmap createBarCode(String content, int desiredWidth,
-                                       int desiredHeight, boolean isShowText) {
+                                        int desiredHeight, boolean isShowText) {
         return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
                 desiredHeight, null, isShowText, 40, Color.BLACK);
     }
@@ -566,7 +566,7 @@ public final class CodeUtils {
      * @return Bitmap
      */
     public static Bitmap createBarCode(String content, int desiredWidth,
-                                       int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
+                                        int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
         return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
                 desiredHeight, null, isShowText, 40, codeColor);
     }

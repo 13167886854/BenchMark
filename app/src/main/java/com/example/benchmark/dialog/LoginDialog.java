@@ -34,10 +34,14 @@ import com.example.benchmark.data.Admin;
  * @since 2023/3/7 15:14
  */
 public class LoginDialog extends Dialog {
-    /** Login */
+    /**
+     * Login
+     */
     private static final String TAG = "Login";
 
-    /** 确定按钮 */
+    /**
+     * 确定按钮
+     */
     public Button yes;
 
     // 取消按钮
@@ -100,7 +104,7 @@ public class LoginDialog extends Dialog {
     /**
      * setNoOnclickListener
      *
-     * @param str description
+     * @param str                 description
      * @param onNoOnclickListener description
      * @date 2023/3/10 11:33
      */
@@ -114,7 +118,7 @@ public class LoginDialog extends Dialog {
     /**
      * setYesOnclickListener
      *
-     * @param str description
+     * @param str                  description
      * @param onYesOnclickListener description
      * @return void
      * @date 2023/3/10 11:33
@@ -157,9 +161,11 @@ public class LoginDialog extends Dialog {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 username = editable.toString();
@@ -172,9 +178,11 @@ public class LoginDialog extends Dialog {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 password = editable.toString();
@@ -221,7 +229,7 @@ public class LoginDialog extends Dialog {
         }
         view = findViewById(R.id.view_dialog);
     }
-    
+
     /**
      * setTitle
      *
