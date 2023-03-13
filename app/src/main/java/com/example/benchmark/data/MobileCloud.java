@@ -13,23 +13,116 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class MobileCloud {
+    private static final MobileCloud mobileCloud = new MobileCloud();
+
+    private MobileCloud() {
+    }
+
+    public static MobileCloud getInstance() {
+        return mobileCloud;
+    }
+
     /**
      * name
      */
-    public static String name = "";
+    private String name = "";
 
     /**
      * storage
      */
-    public static String storage = "";
+    private String storage = "";
 
     /**
      * spec
      */
-    public static String spec = "";
+    private String spec = "";
 
     /**
      * cpuCoreNum
      */
-    public static String cpuCoreNum = "";
+    private String cpuCoreNum = "";
+
+    /**
+     * getName
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:20
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * setName
+     *
+     * @param name description
+     * @return void
+     * @date 2023/3/13 16:20
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * getStorage
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:20
+     */
+    public String getStorage() {
+        return storage;
+    }
+
+    /**
+     * setStorage
+     *
+     * @param storage description
+     * @return void
+     * @date 2023/3/13 16:20
+     */
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+
+    /**
+     * getSpec
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:20
+     */
+    public String getSpec() {
+        return spec;
+    }
+
+    /**
+     * setSpec
+     *
+     * @param spec description
+     * @return void
+     * @date 2023/3/13 16:20
+     */
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
+
+    /**
+     * getCpuCoreNum
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:20
+     */
+    public String getCpuCoreNum() {
+        return cpuCoreNum;
+    }
+
+    /**
+     * setCpuCoreNum
+     *
+     * @param cpuCoreNum description
+     * @return void
+     * @date 2023/3/13 16:25
+     */
+    public void setCpuCoreNum(String cpuCoreNum) {
+        this.cpuCoreNum = cpuCoreNum;
+    }
 }

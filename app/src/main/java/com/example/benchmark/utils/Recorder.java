@@ -77,7 +77,7 @@ public class Recorder {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
         // 判断平台
-        String platformKind = YinHuaData.platformType;
+        String platformKind = YinHuaData.getInstance().getPlatformType();
 
         // 如果是云手机平台
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)

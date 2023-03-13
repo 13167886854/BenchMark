@@ -78,9 +78,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
             } else if (msg.what == 2) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
                 myDialog.dismiss();
             } else {
                 Log.d(TAG, "handleMessage: ");
@@ -147,8 +147,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(date);
-            Admin.testTime = time;
-            Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
+            Admin.getInstance().setTestTime(time);
+            Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.getInstance().getTestTime());
             if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
@@ -734,7 +734,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 myDialog.setYesOnclickListener("确定", new IpPortDialog.OnYesOnclickListener() {
                     @Override
                     public void onYesClick() {
-                        myDialog.yes.setEnabled(false);
+                        myDialog.getYes().setEnabled(false);
                         myDialog.dismiss();
                         Log.d(TAG, "输入IP地址");
                         CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);

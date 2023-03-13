@@ -304,7 +304,7 @@ public class HistoryFragment extends Fragment {
         Log.e("TWT", "onCreate: " + type);
         initTitle(type);
 
-        queryForData(Admin.adminName, okHttpPara);
+        queryForData(Admin.getInstance().getAdminName(), okHttpPara);
 
         return view;
     }

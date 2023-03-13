@@ -363,7 +363,7 @@ public class TestInfoActivity extends AppCompatActivity {
         type = intent.getStringExtra("type");
         Log.e("TWT", "onCreate: " + type);
         initTitle(type);
-        queryForData(Admin.adminName, okHttpPara);
+        queryForData(Admin.getInstance().getAdminName(), okHttpPara);
     }
 
     private void initTitle(String type) {

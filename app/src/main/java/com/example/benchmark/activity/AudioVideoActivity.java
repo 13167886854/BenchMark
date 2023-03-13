@@ -77,7 +77,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             videocurtime = videoDecodeThread.getcurTime() / 10000;
             audiocurtime = audioDecodeThread.getcurTime() / 10000;
 
-            if (isCompleted && YinHuaData.resolution != null) {
+            if (isCompleted && YinHuaData.getInstance().getResolution() != null) {
                 yinhuaxinxi.setText("测试结束！"
                         + System.getProperty("line.separator")
                         + "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素"
@@ -87,7 +87,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         + "当前音频帧" + audiocurtime
                         + System.getProperty("line.separator")
                         + "最大音画同步差" + maxDifferenceValue);
-                ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.resolution, maxDifferenceValue);
+                ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.getInstance().getResolution(), maxDifferenceValue);
                 isTestOver = true;
                 return;
             }

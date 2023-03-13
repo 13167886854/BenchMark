@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         myDialog.setYesOnclickListener("确定", new LoginDialog.OnYesOnclickListener() {
             @Override
             public void onYesClick() {
-                if (Admin.status.equals("Success")) {
+                if (Admin.getInstance().getStatus().equals("Success")) {
                     myDialog.dismiss();
                 }
             }

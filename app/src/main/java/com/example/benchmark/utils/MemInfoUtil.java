@@ -130,12 +130,12 @@ public class MemInfoUtil {
     public static String bytes2kb(float bytes) {
         // 格式化小数
         DecimalFormat format = new DecimalFormat("###.00");
-        if (bytes / GB >= 1) {
-            return format.format(bytes / GB) + " GB";
-        } else if (bytes / MB >= 1) {
-            return format.format(bytes / MB) + " MB";
-        } else if (bytes / KB >= 1) {
-            return format.format(bytes / KB) + " KB";
+        if (bytes / (float) GB >= 1) {
+            return format.format(bytes / (float) GB) + " GB";
+        } else if (bytes / (float) MB >= 1) {
+            return format.format(bytes / (float) MB) + " MB";
+        } else if (bytes / (float) KB >= 1) {
+            return format.format(bytes / (float) KB) + " KB";
         } else {
             return bytes + " B";
         }

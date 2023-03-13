@@ -42,7 +42,7 @@ public class IpPortDialog extends Dialog {
     /**
      * 确定按钮
      */
-    public Button yes;
+    private Button yes;
 
     private Button no; // 取消按钮
     private TextView titleTv; // 消息标题文本
@@ -92,6 +92,16 @@ public class IpPortDialog extends Dialog {
             noStr = str;
         }
         this.noOnclickListener = onNoOnclickListener;
+    }
+
+    /**
+     * getYes
+     *
+     * @return android.widget.Button
+     * @date 2023/3/13 16:47
+     */
+    public Button getYes() {
+        return yes;
     }
 
     /**
@@ -148,7 +158,7 @@ public class IpPortDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
                 textIp = editable.toString();
-                IpPort.ip = textIp;
+                IpPort.getInstance().setIp(textIp);
             }
         });
         port = findViewById(R.id.port); // 密码
@@ -166,8 +176,8 @@ public class IpPortDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
                 testPort = editable.toString();
-                IpPort.port = testPort;
-                IpPort.ip = textIp;
+                IpPort.getInstance().setPort(testPort);
+                IpPort.getInstance().setIp(textIp);
             }
         });
     }

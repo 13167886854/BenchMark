@@ -182,9 +182,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         data = new ArrayList<>();
         data.add(new JuTiData("分辨率", ScoreUtil.getResolution() + "px"));
         data.add(new JuTiData("音画同步差", ScoreUtil.getMaxDiffValue() + "帧"));
-        data.add(new JuTiData("PSNR", YinHuaData.psnr));
-        data.add(new JuTiData("SSIM", YinHuaData.ssim));
-        data.add(new JuTiData("PESQ", YinHuaData.pesq));
+        data.add(new JuTiData("PSNR", YinHuaData.getInstance().getPsnr()));
+        data.add(new JuTiData("SSIM", YinHuaData.getInstance().getSsim()));
+        data.add(new JuTiData("PESQ", YinHuaData.getInstance().getPesq()));
     }
 
     private void touchInfo() {
@@ -300,9 +300,9 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
         res.put("CPUCores", cpuNumCores);
-        res.put("GPURenderer", GPURenderer.glRenderer);
-        res.put("GPUVendor", GPURenderer.glVendor);
-        res.put("GPUVersion", GPURenderer.glVersion);
+        res.put("GPURenderer", GPURenderer.getInstance().getGlRenderer());
+        res.put("GPUVendor", GPURenderer.getInstance().getGlVendor());
+        res.put("GPUVersion", GPURenderer.getInstance().getGlVersion());
         Log.d(TAG, "getInfo: res-----------:" + res);
         return res;
     }

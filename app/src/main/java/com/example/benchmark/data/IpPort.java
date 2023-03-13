@@ -13,13 +13,64 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class IpPort {
+    private static final IpPort ipPort = new IpPort();
+
+    private IpPort() {
+    }
+
+    public static IpPort getInstance() {
+        return ipPort;
+    }
+
     /**
      * ip地址
      */
-    public static String ip = "0.0.0.0";
+    private String ip = "0.0.0.0";
 
     /**
      * 端口号
      */
-    public static String port = "0000";
+    private String port = "0000";
+
+    /**
+     * getIp
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:13
+     */
+    public String getIp() {
+        return ip;
+    }
+
+    /**
+     * setIp
+     *
+     * @param ip description
+     * @return void
+     * @date 2023/3/13 16:13
+     */
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    /**
+     * getPort
+     *
+     * @return java.lang.String
+     * @date 2023/3/13 16:13
+     */
+    public String getPort() {
+        return port;
+    }
+
+    /**
+     * setPort
+     *
+     * @param port description
+     * @return void
+     * @date 2023/3/13 16:13
+     */
+    public void setPort(String port) {
+        this.port = port;
+    }
 }

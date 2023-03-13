@@ -161,7 +161,8 @@ public class ShaderUtils {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Log.e("ES20_ERROR", str + ": glError " + error);
-            throw new RuntimeException(str + ": glError " + error);
+            throw new ArrayIndexOutOfBoundsException(str + ": glError " + error);
+
         }
     }
 }

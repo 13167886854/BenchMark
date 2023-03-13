@@ -127,8 +127,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = simpleDateFormat.format(date);
-                Admin.testTime = time;
-                Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
+                Admin.getInstance().setTestTime(time);
+                Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.getInstance().getTestTime());
                 check();
                 Intent intent = new Intent(getActivity(), CePingActivity.class);
                 intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_GAME);
@@ -200,7 +200,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         mSurfaceView = view.findViewById(R.id.surfaceView);
         mSurfaceView.setEGLContextClientVersion(1);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 0, 0);
-        mSurfaceView.setRenderer(new GPURenderer());
+        mSurfaceView.setRenderer(GPURenderer.getInstance());
 
         redCpu = view.findViewById(R.id.red_cpu);
         redGpu = view.findViewById(R.id.red_gpu);
@@ -532,9 +532,9 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
         res.put("CPUCores", cpuNumCores);
-        res.put("GPURenderer", GPURenderer.glRenderer);
-        res.put("GPUVendor", GPURenderer.glVendor);
-        res.put("GPUVersion", GPURenderer.glVersion);
+        res.put("GPURenderer", GPURenderer.getInstance().getGlRenderer());
+        res.put("GPUVendor", GPURenderer.getInstance().getGlVendor());
+        res.put("GPUVersion", GPURenderer.getInstance().getGlVersion());
         Log.d(TAG, "getInfo: res:" + res);
         return res;
     }

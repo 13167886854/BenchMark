@@ -217,9 +217,9 @@ public class CePingActivity extends Activity implements View.OnClickListener {
 
     private void init1(Intent intent) {
         // 获取平台名称
-        Admin.platformName = checkedPlat;
+        Admin.getInstance().setPlatformName(checkedPlat);
 
-        YinHuaData.platformType = checkedPlat;
+        YinHuaData.getInstance().setPlatformType(checkedPlat);
         phoneName.setText(checkedPlat);
         CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checkedPlat);
         platformKind = intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND);

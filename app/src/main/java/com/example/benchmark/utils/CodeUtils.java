@@ -153,7 +153,10 @@ public final class CodeUtils {
 
         // 设置空白边距的宽度 default is 1
         hints.put(EncodeHintType.MARGIN, 1);
-        return createQRCode(content, heightPix, logo, ratio, hints, codeColor);
+        int[] combinedInt = new int[2];
+        combinedInt[0] = heightPix;
+        combinedInt[1] = codeColor;
+        return createQRCode(content, combinedInt, logo, ratio, hints);
     }
 
     /**
@@ -170,42 +173,44 @@ public final class CodeUtils {
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
                                         @FloatRange(from = 0.0f, to = 1.0f) float ratio,
                                         Map<EncodeHintType, ?> hints) {
-        return createQRCode(content, heightPix, logo, ratio, hints, Color.BLACK);
+        int[] combinedInt = new int[2];
+        combinedInt[0] = heightPix;
+        combinedInt[1] = Color.BLACK;
+        return createQRCode(content, combinedInt, logo, ratio, hints);
     }
 
     /**
      * 生成二维码
      *
      * @param content   二维码的内容
-     * @param heightPix 二维码的高
+     * @param combinedInt   heightPix、codeColor
      * @param logo      二维码中间的logo
      * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
      * @param hints     提示
-     * @param codeColor 二维码的颜色
      * @return Bitmap
      */
-    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
+    public static Bitmap createQRCode(String content, int[] combinedInt, Bitmap logo,
                                         @FloatRange(from = 0.0f, to = 1.0f) float ratio,
-                                        Map<EncodeHintType, ?> hints, int codeColor) {
+                                        Map<EncodeHintType, ?> hints) {
         try {
             // 图像数据转换，使用了矩阵转换
             BitMatrix bitMatrix = new QRCodeWriter().encode(content,
-                    BarcodeFormat.QR_CODE, heightPix, heightPix, hints);
-            int[] pixels = new int[heightPix * heightPix];
+                    BarcodeFormat.QR_CODE, combinedInt[0], combinedInt[0], hints);
+            int[] pixels = new int[combinedInt[0] * combinedInt[0]];
             // 下面这里按照二维码的算法，逐个生成二维码的图片，
             // 两个for循环是图片横列扫描的结果
-            for (int y = 0; y < heightPix; y++) {
-                for (int x = 0; x < heightPix; x++) {
+            for (int y = 0; y < combinedInt[0]; y++) {
+                for (int x = 0; x < combinedInt[0]; x++) {
                     if (bitMatrix.get(x, y)) {
-                        pixels[y * heightPix + x] = codeColor;
+                        pixels[y * combinedInt[0] + x] = combinedInt[1];
                     } else {
-                        pixels[y * heightPix + x] = Color.WHITE;
+                        pixels[y * combinedInt[0] + x] = Color.WHITE;
                     }
                 }
             }
             // 生成二维码图片的格式
-            Bitmap bitmap = Bitmap.createBitmap(heightPix, heightPix, Bitmap.Config.ARGB_8888);
-            bitmap.setPixels(pixels, 0, heightPix, 0, 0, heightPix, heightPix);
+            Bitmap bitmap = Bitmap.createBitmap(combinedInt[0], combinedInt[0], Bitmap.Config.ARGB_8888);
+            bitmap.setPixels(pixels, 0, combinedInt[0], 0, 0, combinedInt[0], combinedInt[0]);
             if (logo != null) {
                 bitmap = addLogo(bitmap, logo, ratio);
             }
@@ -213,7 +218,7 @@ public final class CodeUtils {
         } catch (WriterException ex) {
             Log.e("WriterException", "createQRCode: " + ex);
         }
-        return Bitmap.createBitmap(heightPix, heightPix, Bitmap.Config.ARGB_8888);
+        return Bitmap.createBitmap(combinedInt[0], combinedInt[0], Bitmap.Config.ARGB_8888);
     }
 
     /**
@@ -551,24 +556,35 @@ public final class CodeUtils {
 
     public static Bitmap createBarCode(String content, int desiredWidth,
                                         int desiredHeight, boolean isShowText) {
-        return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
-                desiredHeight, null, isShowText, 40, Color.BLACK);
+        int[] combinedInt = new int[4];
+        combinedInt[0] = desiredWidth;
+        combinedInt[1] = desiredHeight;
+        combinedInt[2] = 40;
+        combinedInt[3] = Color.BLACK;
+        return createBarCode(content, BarcodeFormat.CODE_128, combinedInt,
+                null, isShowText);
     }
 
     /**
-     * 生成条形码
+     * createBarCode
      *
-     * @param content       content
-     * @param desiredWidth  desiredWidth
-     * @param desiredHeight desiredHeight
-     * @param isShowText    isShowText
-     * @param codeColor     codeColor
-     * @return Bitmap
+     * @param content description
+     * @param desiredWidth description
+     * @param desiredHeight description
+     * @param isShowText description
+     * @param codeColor description
+     * @return android.graphics.Bitmap
+     * @date 2023/3/13 15:17
      */
     public static Bitmap createBarCode(String content, int desiredWidth,
                                         int desiredHeight, boolean isShowText, @ColorInt int codeColor) {
-        return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth,
-                desiredHeight, null, isShowText, 40, codeColor);
+        int[] combinedInt = new int[4];
+        combinedInt[0] = desiredWidth;
+        combinedInt[1] = desiredHeight;
+        combinedInt[2] = 40;
+        combinedInt[3] = codeColor;
+        return createBarCode(content, BarcodeFormat.CODE_128, combinedInt
+                , null, isShowText);
     }
 
     /**
@@ -584,88 +600,35 @@ public final class CodeUtils {
     public static Bitmap createBarCode(String content, BarcodeFormat format,
                                         int desiredWidth, int desiredHeight,
                                         Map<EncodeHintType, ?> hints) {
-        return createBarCode(content, format, desiredWidth,
-                desiredHeight, hints, false, 40, Color.BLACK);
-    }
-
-    /**
-     * 生成条形码
-     *
-     * @param content       content
-     * @param format        format
-     * @param desiredWidth  desiredWidth
-     * @param desiredHeight desiredHeight
-     * @param hints         hints
-     * @param isShowText    isShowText
-     * @return Bitmap
-     */
-    public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                        int desiredWidth, int desiredHeight,
-                                        Map<EncodeHintType, ?> hints, boolean isShowText) {
-        return createBarCode(content, format, desiredWidth, desiredHeight,
-                hints, isShowText, 40, Color.BLACK);
-    }
-
-    /**
-     * 生成条形码
-     *
-     * @param content       content
-     * @param format        format
-     * @param desiredWidth  desiredWidth
-     * @param desiredHeight desiredHeight
-     * @param isShowText    isShowText
-     * @param codeColor     codeColor
-     * @return Bitmap
-     */
-    public static Bitmap createBarCode(String content, BarcodeFormat format,
-                                        int desiredWidth, int desiredHeight, boolean isShowText,
-                                        @ColorInt int codeColor) {
-        return createBarCode(content, format, desiredWidth, desiredHeight,
-                null, isShowText, 40, codeColor);
+        int[] combinedInt = new int[4];
+        combinedInt[0] = desiredWidth;
+        combinedInt[1] = desiredHeight;
+        combinedInt[2] = 40;
+        combinedInt[3] = Color.BLACK;
+        return createBarCode(content, format,combinedInt
+                , hints, false);
     }
 
     /**
      * createBarCode
      *
-     * @param content       description
-     * @param format        description
-     * @param desiredWidth  description
-     * @param desiredHeight description
-     * @param hints         description
-     * @param isShowText    description
-     * @param codeColor     description
+     * @param content description
+ * @param format description
+ * @param combinedInt description
+ * @param hints description
+ * @param isShowText description
      * @return android.graphics.Bitmap
-     * @date 2023/3/10 16:33
+     * @date 2023/3/13 15:26
      */
-    public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth,
-                                        int desiredHeight, Map<EncodeHintType, ?> hints,
-                                        boolean isShowText, @ColorInt int codeColor) {
-        return createBarCode(content, format, desiredWidth, desiredHeight,
-                hints, isShowText, 40, codeColor);
-    }
-
-    /**
-     * 生成条形码
-     *
-     * @param content       content
-     * @param format        format
-     * @param desiredWidth  desiredWidth
-     * @param desiredHeight desiredHeight
-     * @param hints         hints
-     * @param isShowText    isShowText
-     * @param textSize      textSize
-     * @param codeColor     codeColor
-     * @return Bitmap
-     */
-    public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth,
-                                        int desiredHeight, Map<EncodeHintType, ?> hints,
-                                        boolean isShowText, int textSize, @ColorInt int codeColor) {
+    public static Bitmap createBarCode(String content, BarcodeFormat format, int[] combinedInt,
+                                        Map<EncodeHintType, ?> hints,
+                                        boolean isShowText) {
         final int white = Color.WHITE;
-        final int black = codeColor;
+        final int black = combinedInt[3];
         MultiFormatWriter writer = new MultiFormatWriter();
         try {
-            BitMatrix result = writer.encode(content, format, desiredWidth,
-                    desiredHeight, hints);
+            BitMatrix result = writer.encode(content, format, combinedInt[0],
+                    combinedInt[1], hints);
             int width = result.getWidth();
             int height = result.getHeight();
             int[] pixels = new int[width * height];
@@ -681,7 +644,7 @@ public final class CodeUtils {
                     Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
             if (isShowText) {
-                return addCode(bitmap, content, textSize, codeColor, textSize / 2);
+                return addCode(bitmap, content, combinedInt[2], combinedInt[3], combinedInt[2] / 2);
             }
             return bitmap;
         } catch (WriterException e) {

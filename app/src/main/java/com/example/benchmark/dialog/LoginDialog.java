@@ -42,7 +42,7 @@ public class LoginDialog extends Dialog {
     /**
      * 确定按钮
      */
-    public Button yes;
+    private Button yes;
 
     // 取消按钮
     private Button no;
@@ -99,6 +99,16 @@ public class LoginDialog extends Dialog {
      */
     public LoginDialog(@NonNull Context context) {
         super(context);
+    }
+
+    /**
+     * getYes
+     *
+     * @return android.widget.Button
+     * @date 2023/3/13 16:50
+     */
+    public Button getYes() {
+        return yes;
     }
 
     /**
@@ -169,7 +179,7 @@ public class LoginDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
                 username = editable.toString();
-                Admin.username = username;
+                Admin.getInstance().setUsername(username);
             }
         });
         // 密码
@@ -186,7 +196,7 @@ public class LoginDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
                 password = editable.toString();
-                Admin.password = password;
+                Admin.getInstance().setPassword(password);
             }
         });
     }

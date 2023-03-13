@@ -52,12 +52,12 @@ public class ScoreUtil {
 
         if (cpuCores != 0) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("cores", cpuCores + "")
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addHeader("Content-Type", "application/json; charset=utf-8")
                     .post(true)
                     .async(new OkHttpUtils.ICallBack() {
@@ -96,11 +96,11 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
         if (gpuVendor != null && gpuRender != null && gpuVersion != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("gpuVendor", gpuVendor)
                     .addParam("gpuRender", gpuRender)
                     .addParam("gpuVersion", gpuVersion)
@@ -140,11 +140,11 @@ public class ScoreUtil {
 
         if (availableRAM != null && totalRAM != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/ram/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("availableRam", availableRAM)
                     .addParam("totalRam", totalRAM)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -182,11 +182,11 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
         if (availableROM != null && totalROM != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/rom/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("availableRom", availableROM)
                     .addParam("totalRom", totalROM)
                     .addHeader("Content-Type", "application/json; charset=utf-8")
@@ -255,11 +255,11 @@ public class ScoreUtil {
         // 判断数据是否为空
         if (averageFPS + frameShakeRate + lowFrameRate + stutterRate + jankCount != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("averageFps", averageFPS + "")
                     .addParam("frameShakeRate", frameShakeRate + "")
                     .addParam("lowFrameRate", lowFrameRate + "")
@@ -394,11 +394,11 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
         if (startSuccessRate + averageStartTime + averageQuitTime != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("startSuccessRate", startSuccessRate + "")
                     .addParam("averageStartTime", averageStartTime + "")
                     .addParam("averageQuitTime", averageQuitTime + "")
@@ -545,11 +545,11 @@ public class ScoreUtil {
     private static void extracted2(BigDecimal avgResponseTime, BigDecimal averageAccuracy, int touchScore) {
         if (avgResponseTime.add(averageAccuracy).intValue() != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("touchTimeDelay", avgResponseTime + "ms")
                     .addParam("touchAccuracy", averageAccuracy + "%")
                     .addParam("touchScore", touchScore + "")
@@ -722,9 +722,9 @@ public class ScoreUtil {
         if (extracted1(resolution, maxDiffValue)) {
             return;
         }
-        float psnr = Float.parseFloat(YinHuaData.psnr);
-        float ssim = Float.parseFloat(YinHuaData.ssim);
-        float pesq = Float.parseFloat(YinHuaData.pesq);
+        float psnr = Float.parseFloat(YinHuaData.getInstance().getPsnr());
+        float ssim = Float.parseFloat(YinHuaData.getInstance().getSsim());
+        float pesq = Float.parseFloat(YinHuaData.getInstance().getPesq());
         extracted(resolution, maxDiffValue);
 
         // 计算音画质量分数
@@ -734,19 +734,19 @@ public class ScoreUtil {
         BigDecimal resolutionScore = new BigDecimal(100f * resolutionValue.floatValue() / (4 * 1920 * 1080));
         BigDecimal maxDiffValueScore = new BigDecimal(maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue));
         psnr = psnr > 40 ? 40 : psnr;
-        BigDecimal d3 = new BigDecimal((100 * ((psnr / 40) + ssim)) / 8);
-        BigDecimal d4 = new BigDecimal(((100 * pesq) / (4.5 * 4)));
+        BigDecimal d3 = new BigDecimal((100.0 * ((psnr / 40.0) + ssim)) / 8.0);
+        BigDecimal d4 = new BigDecimal(((100.0 * pesq) / (4.5 * 4.0)));
         int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
 
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
-        if (YinHuaData.pesq != null && YinHuaData.ssim != null && YinHuaData.psnr != null) {
+        if (YinHuaData.getInstance().getPesq() != null && YinHuaData.getInstance().getSsim() != null && YinHuaData.getInstance().getPsnr() != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")
-                    .addParam("adminName", Admin.adminName)
-                    .addParam("platformName", Admin.platformName)
-                    .addParam("time", Admin.testTime)
-                    .addParam("ip", IpPort.ip)
-                    .addParam("port", IpPort.port)
+                    .addParam("adminName", Admin.getInstance().getAdminName())
+                    .addParam("platformName", Admin.getInstance().getPlatformName())
+                    .addParam("time", Admin.getInstance().getTestTime())
+                    .addParam("ip", IpPort.getInstance().getIp())
+                    .addParam("port", IpPort.getInstance().getPort())
                     .addParam("resolution", resolution + "")
                     .addParam("maxDiffValue", maxDiffValue + "")
                     .addParam("pesq", pesq + "")
@@ -770,7 +770,7 @@ public class ScoreUtil {
     }
 
     private static boolean extracted1(String resolution, float maxDiffValue) {
-        if (YinHuaData.pesq == null || YinHuaData.ssim == null || YinHuaData.psnr == null) {
+        if (YinHuaData.getInstance().getPesq() == null || YinHuaData.getInstance().getSsim() == null || YinHuaData.getInstance().getPsnr() == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override
@@ -789,9 +789,9 @@ public class ScoreUtil {
         // 保存音画质量结果
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
-        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.pesq);
-        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.psnr);
-        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.ssim);
+        CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.getInstance().getPesq());
+        CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.getInstance().getPsnr());
+        CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.getInstance().getSsim());
     }
 
     /**

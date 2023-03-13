@@ -19,17 +19,33 @@ import javax.microedition.khronos.opengles.GL10;
  * @since 2023/3/7 17:19
  */
 public class GPURenderer implements GLSurfaceView.Renderer {
-    /** GPU渲染器 */
-    public static String glRenderer;
+    private static final GPURenderer gpuRenderer = new GPURenderer();
+    /**
+     * GPU渲染器
+     */
+    private String glRenderer;
 
-    /** GPU供应商 */
-    public static String glVendor;
+    /**
+     * GPU供应商
+     */
+    private String glVendor;
 
-    /** GPU供应商 */
-    public static String glVersion;
+    /**
+     * GPU供应商
+     */
+    private String glVersion;
 
-    /** GPU扩展名 */
-    public static String glExtensions;
+    /**
+     * GPU扩展名
+     */
+    private String glExtensions;
+
+    private GPURenderer() {
+    }
+
+    public static GPURenderer getInstance() {
+        return gpuRenderer;
+    }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig eglConfig) {
@@ -50,4 +66,29 @@ public class GPURenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl10) {
     }
+
+    public String getGlRenderer() {
+        return glRenderer;
+    }
+
+    public void setGlRenderer(String glRenderer) {
+        this.glRenderer = glRenderer;
+    }
+
+    public String getGlVendor() {
+        return glVendor;
+    }
+
+    public void setGlVendor(String glVendor) {
+        this.glVendor = glVendor;
+    }
+
+    public String getGlVersion() {
+        return glVersion;
+    }
+
+    public void setGlVersion(String glVersion) {
+        this.glVersion = glVersion;
+    }
+
 }

@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 
 import com.example.benchmark.R;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -214,14 +215,16 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
     }
 
     private void updateProjection(int videoWidth, int videoHeight) {
-        float screenRatio = (float) screenWidth / screenHeight;
-        float videoRatio = (float) videoHeight / videoWidth;
-        if (videoRatio > screenRatio) {
+        BigDecimal screenRatio = BigDecimal.valueOf(Float.parseFloat(String.valueOf(screenWidth / screenHeight)));
+        BigDecimal videoRatio = BigDecimal.valueOf(Float.parseFloat(String.valueOf(videoHeight / videoWidth)));
+        if (videoRatio.compareTo(screenRatio) == 1) {
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
-                    -videoRatio / screenRatio, videoRatio / screenRatio, -1f, 1f);
+                    videoRatio.divide(screenRatio).multiply(BigDecimal.valueOf(-1)).floatValue(),
+                    videoRatio.divide(screenRatio).floatValue(), -1f, 1f);
         } else {
-            Matrix.orthoM(projectionMatrix, 0, -screenRatio / videoRatio,
-                    screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+            Matrix.orthoM(projectionMatrix, 0,
+                    videoRatio.divide(screenRatio).multiply(BigDecimal.valueOf(-1)).floatValue(),
+                    videoRatio.divide(screenRatio).floatValue(), -1f, 1f, -1f, 1f);
         }
     }
 

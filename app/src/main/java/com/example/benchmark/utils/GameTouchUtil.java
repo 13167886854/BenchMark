@@ -214,7 +214,7 @@ public class GameTouchUtil {
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / (float) testNum;
         Log.d("TWT", "printAvgTime: 平均自动点击响应时间为：" + avgtime);
     }
 
@@ -231,7 +231,7 @@ public class GameTouchUtil {
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / (float) testNum;
         Log.e("TWT", "getAvgTime:+frameUpdateTime.size " + frameUpdateTime.size());
         Log.e("TWT", "getAvgTime:+autoTapTime.size " + autoTapTime.size());
         return avgtime;

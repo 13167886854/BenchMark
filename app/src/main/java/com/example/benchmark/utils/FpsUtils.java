@@ -21,7 +21,7 @@ public class FpsUtils {
     public static final long FPS_INTERVAL_TIME = 1000L;
 
     /** 低帧判断  fps<25判断为低帧 */
-    public static final double LOW_FRAME_TIME = 1000.0 / 24; // 每帧传输时间超过fps25的判断为低帧
+    public static final double LOW_FRAME_TIME = 1000.0 / 24.0; // 每帧传输时间超过fps25的判断为低帧
 
     /** handler */
     public static Handler mainHandler = new Handler();
