@@ -135,7 +135,7 @@ public class TestSMActivity extends AppCompatActivity {
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
 
-        float[] info = new float[5];
+        float[] info = new float[6];
         info[0] = getRoundNumber((float) fpsUtil.getAvergeFps());
         info[1] = getRoundNumber((float) fpsUtil.getFrameShakingRate());
         info[2] = getRoundNumber((float) fpsUtil.getLowFrameRate());

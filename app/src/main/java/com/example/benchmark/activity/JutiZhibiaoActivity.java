@@ -237,7 +237,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
         juTiImg.setImageResource(selectImg);
         String selectText = intent.getStringExtra("selectText");
         String selectItem = intent.getStringExtra("selectItem");
-        Integer grade = intent.getIntExtra("select_grade", 98);
+        Integer grade = intent.getIntExtra("selectGrade", 98);
         juTiText.setText(selectText);
         juTiItem.setText(selectItem);
         juTiPhoneName.setText(selectPlat + "·" + selectItem);

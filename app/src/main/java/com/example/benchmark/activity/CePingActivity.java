@@ -118,16 +118,16 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         initData();
 
         testBack.setOnClickListener(this::onClick);
+        Log.e("HAI", "checkedPlat: "+checkedPlat);
         adapter = new CePingAdapter(testData, (data) -> {
             Intent intent = new Intent(this, JutiZhibiaoActivity.class);
-            intent.putExtra("select_plat", checkedPlat);
-            intent.putExtra("select_item", data.getCepingItem());
-            intent.putExtra("select_img", data.getCepingImage());
-            intent.putExtra("select_text", data.getCepingText());
-            intent.putExtra("select_grade", data.getGrade());
+            intent.putExtra("selectPlat", checkedPlat);
+            intent.putExtra("selectItem", data.getCepingItem());
+            intent.putExtra("selectImg", data.getCepingImage());
+            intent.putExtra("selectText", data.getCepingText());
+            intent.putExtra("selectGrade", data.getGrade());
             intent.putExtra("isCloudPhone", isCloudPhone);
             intent.putExtra("localMobileInfo", mHashMapLocal);
-
             startActivity(intent);
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
