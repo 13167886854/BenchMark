@@ -19,7 +19,8 @@ import javax.microedition.khronos.opengles.GL10;
  * @since 2023/3/7 17:19
  */
 public class GPURenderer implements GLSurfaceView.Renderer {
-    private static final GPURenderer gpuRenderer = new GPURenderer();
+    private static final GPURenderer GPU_RENDERER = new GPURenderer();
+
     /**
      * GPU渲染器
      */
@@ -44,7 +45,7 @@ public class GPURenderer implements GLSurfaceView.Renderer {
     }
 
     public static GPURenderer getInstance() {
-        return gpuRenderer;
+        return GPU_RENDERER;
     }
 
     @Override
@@ -90,5 +91,4 @@ public class GPURenderer implements GLSurfaceView.Renderer {
     public void setGlVersion(String glVersion) {
         this.glVersion = glVersion;
     }
-
 }

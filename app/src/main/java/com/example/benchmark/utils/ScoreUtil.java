@@ -209,32 +209,28 @@ public class ScoreUtil {
     /**
      * calcAndSaveFluencyScores
      *
-     * @param averageFPS     description
-     * @param frameShakeRate description
-     * @param lowFrameRate   description
-     * @param frameInterval  description
-     * @param jankCount      description
-     * @param stutterRate    description
+     * @param info     averageFPS,frameShakeRate,lowFrameRate,frameInterval,jankCount,stutterRate
      * @param eachFps        description
      * @return void
      * @throws null
      * @date 2023/3/8 11:10
      */
     public static void calcAndSaveFluencyScores(
-            float averageFPS,
-            float frameShakeRate,
-            float lowFrameRate,
-            float frameInterval,
-            float jankCount,
-            float stutterRate,
+            float[] info,
             String eachFps
     ) {
         // 保存流畅性结果
+        float averageFPS = info[0];
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
+        float frameShakeRate = info[1];
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
+        float lowFrameRate = info[2];
         CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
+        float frameInterval = info[3];
         CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
+        float jankCount = info[4];
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
+        float stutterRate = info[5];
         CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
 
         // 计算流畅性分数
@@ -740,7 +736,8 @@ public class ScoreUtil {
 
         // 保存音画质量分数
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
-        if (YinHuaData.getInstance().getPesq() != null && YinHuaData.getInstance().getSsim() != null && YinHuaData.getInstance().getPsnr() != null) {
+        if (YinHuaData.getInstance().getPesq() != null
+                && YinHuaData.getInstance().getSsim() != null && YinHuaData.getInstance().getPsnr() != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
@@ -770,7 +767,8 @@ public class ScoreUtil {
     }
 
     private static boolean extracted1(String resolution, float maxDiffValue) {
-        if (YinHuaData.getInstance().getPesq() == null || YinHuaData.getInstance().getSsim() == null || YinHuaData.getInstance().getPsnr() == null) {
+        if (YinHuaData.getInstance().getPesq() == null || YinHuaData.getInstance().getSsim() == null
+                || YinHuaData.getInstance().getPsnr() == null) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 @Override

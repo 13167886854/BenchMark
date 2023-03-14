@@ -46,16 +46,7 @@ import java.util.TimerTask;
  * @since 2023/3/7 15:05
  */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
-    /**
-     * isTestOver
-     */
-    public static boolean isTestOver = false;
-
-    /**
-     * mMp4FilePath
-     */
-    public static String mMp4FilePath;
-
+    private String mMp4FilePath;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private TextView yinhuaxinxi;
@@ -88,7 +79,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         + System.getProperty("line.separator")
                         + "最大音画同步差" + maxDifferenceValue);
                 ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.getInstance().getResolution(), maxDifferenceValue);
-                isTestOver = true;
+                YinHuaData.getInstance().setTestOver(true);
                 return;
             }
 
@@ -153,7 +144,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
 
     private void init() {
         isCompleted = false;
-        isTestOver = false;
+        YinHuaData.getInstance().setTestOver(false);
         mSurfaceView = findViewById(R.id.surface_view);
         mHolder = mSurfaceView.getHolder();
         yinhuaxinxi = findViewById(R.id.yinhua_item);
@@ -208,7 +199,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                     public void run() {
                         Message message = new Message();
                         handler.sendMessage(message);
-                        if (isTestOver) {
+                        if (YinHuaData.getInstance().isTestOver()) {
                             timer.cancel();
                         }
                     }

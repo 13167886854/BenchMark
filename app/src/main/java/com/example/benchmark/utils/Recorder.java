@@ -53,7 +53,7 @@ public class Recorder {
     /**
      * isRecording
      */
-    public boolean isRecording = false;
+    private boolean isRecording = false;
 
     private ExecutorService threadPool = Executors.newCachedThreadPool();
 
@@ -140,8 +140,8 @@ public class Recorder {
     private void createAudioFile(Context context) {
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + "AudioRecorder");
-        CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + "AudioRecorder";
+        CacheConst.getInstance().setAudioPath(Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + "AudioRecorder");
         Log.e(TAG, "root: " + root);
         cache = new File(context.getCacheDir().getAbsolutePath(), File.separator + "RawData");
         if (!root.exists()) {

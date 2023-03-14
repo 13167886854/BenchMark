@@ -464,7 +464,8 @@ public class GameVATestService extends Service {
             stopVideoRecord1();
         } else {
             // file是要上传的文件 File()
-            File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_GAME_NAME);
+            File file = new File(CacheConst.getInstance().getVideoPath()
+                    + File.separator + CacheConst.VIDEO_GAME_NAME);
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                     + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
@@ -472,7 +473,7 @@ public class GameVATestService extends Service {
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_GAME_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
             Log.d("zzl", "stopAudioRecord: CacheConst.VIDEO_GAME_NAME--" + CacheConst.VIDEO_GAME_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
@@ -521,7 +522,8 @@ public class GameVATestService extends Service {
     }
 
     private void stopVideoRecord1() {
-        File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_PHONE_NAME);
+        File file = new File(CacheConst.getInstance().getVideoPath()
+                + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -529,7 +531,7 @@ public class GameVATestService extends Service {
                 .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
@@ -614,7 +616,7 @@ public class GameVATestService extends Service {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
                     + File.separator + "ScreenRecorder" + File.separator;
-            CacheConst.videoPath = rootDir;
+            CacheConst.getInstance().setVideoPath(rootDir);
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -689,7 +691,8 @@ public class GameVATestService extends Service {
     }
 
     private void stopAudioRecord2() {
-        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_GAME_NAME);
+        File file = new File(CacheConst.getInstance().getAudioPath()
+                + File.separator + CacheConst.AUDIO_GAME_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -697,7 +700,8 @@ public class GameVATestService extends Service {
                 .addFormDataPart("AudioRecord", CacheConst.AUDIO_GAME_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
@@ -731,7 +735,8 @@ public class GameVATestService extends Service {
     }
 
     private void stopAudioRecord1() {
-        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_PHONE_NAME);
+        File file = new File(CacheConst.getInstance().getAudioPath()
+                + File.separator + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -739,7 +744,8 @@ public class GameVATestService extends Service {
                 .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")

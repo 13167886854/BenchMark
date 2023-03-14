@@ -38,7 +38,7 @@ public class TapUtil {
     /**
      * mWholeMonitorNum
      */
-    public static int mWholeMonitorNum;
+    private int mWholeMonitorNum;
 
     /**
      * 点击次数
@@ -81,6 +81,27 @@ public class TapUtil {
             util = new TapUtil();
         }
         return util;
+    }
+
+    /**
+     * getmWholeMonitorNum
+     *
+     * @return int
+     * @date 2023/3/14 15:44
+     */
+    public int getmWholeMonitorNum() {
+        return mWholeMonitorNum;
+    }
+
+    /**
+     * setmWholeMonitorNum
+     *
+     * @param mWholeMonitorNum description
+     * @return void
+     * @date 2023/3/14 15:45
+     */
+    public void setmWholeMonitorNum(int mWholeMonitorNum) {
+        this.mWholeMonitorNum = mWholeMonitorNum;
     }
 
     /**
@@ -212,7 +233,7 @@ public class TapUtil {
             }
         };
         Timer timer = new Timer();
-        gameTouchUtil.readyToTapTime = System.currentTimeMillis();
+        gameTouchUtil.setReadyToTapTime(System.currentTimeMillis());
         timer.schedule(task, 1500, 750);
     }
 

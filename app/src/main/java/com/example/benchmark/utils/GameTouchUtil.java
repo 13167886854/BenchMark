@@ -21,9 +21,7 @@ public class GameTouchUtil {
     public static final int TEST_NUM = 10;
     private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
-    /** readyToTapTime */
-    public long readyToTapTime = 0L;
-
+    private long readyToTapTime = 0L;
     private long videoStartTime = 0L;
     private long videoEndTime = 0L;
     private ArrayList<Long> frameUpdateTime = new ArrayList<>();
@@ -46,6 +44,14 @@ public class GameTouchUtil {
             gameTouchUtil = new GameTouchUtil();
         }
         return gameTouchUtil;
+    }
+
+    public long getReadyToTapTime(){
+        return readyToTapTime;
+    }
+
+    public void setReadyToTapTime(long time){
+        this.readyToTapTime = time;
     }
 
     /**

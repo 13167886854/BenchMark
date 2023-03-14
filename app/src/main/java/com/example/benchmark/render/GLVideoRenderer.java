@@ -239,24 +239,23 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     }
 
     private void updateProjection(int videoWidth, int videoHeight) {
-        Log.e("TWT", screenHeight+" "+screenHeight+" "+videoWidth+" "+videoHeight);
         BigDecimal screenWidthB = BigDecimal.valueOf(screenHeight);
         BigDecimal screenHeightB = BigDecimal.valueOf(screenHeight);
         BigDecimal videoWidthB = BigDecimal.valueOf(videoWidth);
         BigDecimal videoHeightB = BigDecimal.valueOf(videoHeight);
         BigDecimal screenRatio = BigDecimal.valueOf(1);
-        BigDecimal videoRatio = videoWidthB.divide(videoHeightB,BigDecimal.ROUND_CEILING);
+        BigDecimal videoRatio = videoWidthB.divide(videoHeightB, BigDecimal.ROUND_CEILING);
 
         if (videoRatio.compareTo(screenRatio) == 1) {
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
-                    videoRatio.divide(screenRatio,BigDecimal.ROUND_CEILING)
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING)
                             .multiply(BigDecimal.valueOf(-1)).floatValue(),
-                    videoRatio.divide(screenRatio,BigDecimal.ROUND_CEILING).floatValue(), -1f, 1f);
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING).floatValue(), -1f, 1f);
         } else {
             Matrix.orthoM(projectionMatrix, 0,
                     videoRatio.divide(screenRatio,
                             BigDecimal.ROUND_CEILING).multiply(BigDecimal.valueOf(-1)).floatValue(),
-                    videoRatio.divide(screenRatio,BigDecimal.ROUND_CEILING).floatValue(),
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING).floatValue(),
                     -1f, 1f, -1f, 1f);
         }
     }

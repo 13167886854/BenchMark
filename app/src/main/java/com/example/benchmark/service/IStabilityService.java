@@ -59,7 +59,7 @@ public interface IStabilityService {
      * @date 2023/3/8 09:46
      */
     default float getStartSuccessRate() {
-        return getCurrentMonitorNum() / (float) TapUtil.mWholeMonitorNum * 100;
+        return getCurrentMonitorNum() / (float) TapUtil.getUtil().getmWholeMonitorNum() * 100;
     }
 
     /**
@@ -70,6 +70,6 @@ public interface IStabilityService {
      * @date 2023/3/8 09:46
      */
     default boolean isFinished() {
-        return getCurrentMonitorNum() == TapUtil.mWholeMonitorNum;
+        return getCurrentMonitorNum() == TapUtil.getUtil().getmWholeMonitorNum();
     }
 }

@@ -278,7 +278,7 @@ public class SDCardUtils {
         return Formatter.formatFileSize(context, availableBlocksLong
                 * blockSizeLong);
     }
-    
+
     /**
      * getSDCardInfo
      *

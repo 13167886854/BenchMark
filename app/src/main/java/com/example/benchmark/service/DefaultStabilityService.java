@@ -34,6 +34,6 @@ public class DefaultStabilityService implements IStabilityService {
 
     @Override
     public int getCurrentMonitorNum() {
-        return TapUtil.mWholeMonitorNum;
+        return TapUtil.getUtil().getmWholeMonitorNum();
     }
 }

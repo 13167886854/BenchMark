@@ -249,7 +249,11 @@ public final class CodeUtils {
             return src;
         }
         // logo大小为二维码整体大小
-        float scaleFactor = srcWidth * ratio / logoWidth;
+        BigDecimal scrWidthB = BigDecimal.valueOf(srcWidth);
+        BigDecimal ratioB = BigDecimal.valueOf(ratio);
+        BigDecimal logoWidthB = BigDecimal.valueOf(logoWidth);
+        BigDecimal scaleFactorB = scrWidthB.multiply(ratioB).divide(logoWidthB,BigDecimal.ROUND_CEILING);
+        float scaleFactor = scaleFactorB.floatValue();
         Bitmap bitmap;
         bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -554,6 +558,16 @@ public final class CodeUtils {
         return createBarCode(content, format, desiredWidth, desiredHeight, null);
     }
 
+    /**
+     * createBarCode
+     *
+     * @param content description
+     * @param desiredWidth description
+     * @param desiredHeight description
+     * @param isShowText description
+     * @return android.graphics.Bitmap
+     * @date 2023/3/14 15:20
+     */
     public static Bitmap createBarCode(String content, int desiredWidth,
                                         int desiredHeight, boolean isShowText) {
         int[] combinedInt = new int[4];
@@ -583,8 +597,8 @@ public final class CodeUtils {
         combinedInt[1] = desiredHeight;
         combinedInt[2] = 40;
         combinedInt[3] = codeColor;
-        return createBarCode(content, BarcodeFormat.CODE_128, combinedInt
-                , null, isShowText);
+        return createBarCode(content, BarcodeFormat.CODE_128, combinedInt,
+                null, isShowText);
     }
 
     /**
@@ -605,18 +619,18 @@ public final class CodeUtils {
         combinedInt[1] = desiredHeight;
         combinedInt[2] = 40;
         combinedInt[3] = Color.BLACK;
-        return createBarCode(content, format,combinedInt
-                , hints, false);
+        return createBarCode(content, format, combinedInt,
+                hints, false);
     }
 
     /**
      * createBarCode
      *
      * @param content description
- * @param format description
- * @param combinedInt description
- * @param hints description
- * @param isShowText description
+     * @param format description
+     * @param combinedInt description
+     * @param hints description
+     * @param isShowText description
      * @return android.graphics.Bitmap
      * @date 2023/3/13 15:26
      */

@@ -20,6 +20,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.benchmark.activity.AudioVideoActivity;
+import com.example.benchmark.data.YinHuaData;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -162,7 +163,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
 
     private void run2(AudioTrack audioTrack, MediaCodec.BufferInfo bufferInfo, ByteBuffer byteBuffer, int sampleSize) {
         int temp = sampleSize;
-        while (temp != -1 && !AudioVideoActivity.isTestOver) {
+        while (temp != -1 && !YinHuaData.getInstance().isTestOver()) {
             temp = mMediaExtractor.readSampleData(byteBuffer, 0);
 
             // 填充要解码的数据

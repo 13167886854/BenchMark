@@ -13,14 +13,7 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class IpPort {
-    private static final IpPort ipPort = new IpPort();
-
-    private IpPort() {
-    }
-
-    public static IpPort getInstance() {
-        return ipPort;
-    }
+    private static final IpPort IP_PORT = new IpPort();
 
     /**
      * ip地址
@@ -31,6 +24,19 @@ public class IpPort {
      * 端口号
      */
     private String port = "0000";
+
+    private IpPort() {
+    }
+
+    /**
+     * getInstance
+     *
+     * @return com.example.benchmark.data.IpPort
+     * @date 2023/3/14 14:49
+     */
+    public static IpPort getInstance() {
+        return IP_PORT;
+    }
 
     /**
      * getIp

@@ -14,15 +14,7 @@ package com.example.benchmark.data;
  * @since 2023/3/10 11:21
  */
 public class Admin {
-    private static final Admin admin = new Admin();
-
-    private Admin() {
-    }
-
-    public static Admin getInstance() {
-        return admin;
-    }
-
+    private static final Admin ADMIN = new Admin();
 
     /**
      * 全局变量记录管理员
@@ -53,6 +45,19 @@ public class Admin {
      * 登录状态
      */
     private String status = "Failure";
+
+    private Admin() {
+    }
+
+    /**
+     * getInstance
+     *
+     * @return com.example.benchmark.data.Admin
+     * @date 2023/3/14 14:47
+     */
+    public static Admin getInstance() {
+        return ADMIN;
+    }
 
     /**
      * getAdminName

@@ -53,30 +53,24 @@ public class AutoStartUtil {
         } else if (RomUtil.isFlyme()) {
             flyme(intent);
         } else {
-            intent = other(context, intent);
+            // 以上只是市面上主流机型，由于公司你懂的，所以很不容易才凑齐以上设备
+            // 针对于其他设备，我们只能调整当前系统app查看详情界面
+            // 在此根据用户手机当前版本跳转系统设置界面
+            if (Build.VERSION.SDK_INT >= 9) {
+                intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                intent.setData(Uri.fromParts("package", context.getPackageName(), null));
+            } else if (Build.VERSION.SDK_INT <= 8) {
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setClassName("com.android.settings",
+                        "com.android.settings.InstalledAppDetails");
+                intent.putExtra("com.android.settings.ApplicationPkgName",
+                        context.getPackageName());
+            } else {
+                Log.e("TAG", "openStart: SDK-VERSION-ERROR");
+            }
+            intent = new Intent(Settings.ACTION_SETTINGS);
         }
         context.startActivity(intent);
-    }
-
-    @NonNull
-    private static Intent other(Context context, Intent intent) {
-        // 以上只是市面上主流机型，由于公司你懂的，所以很不容易才凑齐以上设备
-        // 针对于其他设备，我们只能调整当前系统app查看详情界面
-        // 在此根据用户手机当前版本跳转系统设置界面
-        if (Build.VERSION.SDK_INT >= 9) {
-            intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
-            intent.setData(Uri.fromParts("package", context.getPackageName(), null));
-        } else if (Build.VERSION.SDK_INT <= 8) {
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setClassName("com.android.settings",
-                    "com.android.settings.InstalledAppDetails");
-            intent.putExtra("com.android.settings.ApplicationPkgName",
-                    context.getPackageName());
-        } else {
-            Log.e("TAG", "openStart: SDK-VERSION-ERROR");
-        }
-        intent = new Intent(Settings.ACTION_SETTINGS);
-        return intent;
     }
 
     private static void flyme(Intent intent) {

@@ -119,8 +119,11 @@ public class MyAccessibilityService extends AccessibilityService {
             if (message.what == msgContinueMonitor) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
+                boolean[] isCheckGroup = new boolean[2];
+                isCheckGroup[0] = isCheckTouch;
+                isCheckGroup[1] = isCheckSoundFrame;
                 ServiceUtil.startFxService(MyAccessibilityService.this,
-                        checkPlatform, resultCode, data, isCheckTouch, isCheckSoundFrame);
+                        checkPlatform, resultCode, data, isCheckGroup);
             } else if (message.what == msgMonitorOver) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();

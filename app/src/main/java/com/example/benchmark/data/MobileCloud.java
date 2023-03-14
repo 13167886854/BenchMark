@@ -13,14 +13,7 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:12
  */
 public class MobileCloud {
-    private static final MobileCloud mobileCloud = new MobileCloud();
-
-    private MobileCloud() {
-    }
-
-    public static MobileCloud getInstance() {
-        return mobileCloud;
-    }
+    private static final MobileCloud MOBILE_CLOUD = new MobileCloud();
 
     /**
      * name
@@ -41,6 +34,19 @@ public class MobileCloud {
      * cpuCoreNum
      */
     private String cpuCoreNum = "";
+
+    private MobileCloud() {
+    }
+
+    /**
+     * getInstance
+     *
+     * @return com.example.benchmark.data.MobileCloud
+     * @date 2023/3/14 14:50
+     */
+    public static MobileCloud getInstance() {
+        return MOBILE_CLOUD;
+    }
 
     /**
      * getName

@@ -135,13 +135,15 @@ public class TestSMActivity extends AppCompatActivity {
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
 
+        float[] info = new float[5];
+        info[0] = getRoundNumber((float) fpsUtil.getAvergeFps());
+        info[1] = getRoundNumber((float) fpsUtil.getFrameShakingRate());
+        info[2] = getRoundNumber((float) fpsUtil.getLowFrameRate());
+        info[3] = getRoundNumber((float) fpsUtil.getFrameIntervalTime());
+        info[4] = fpsUtil.getJankCount();
+        info[5] = getRoundNumber((float) fpsUtil.getShtutterRate());
         ScoreUtil.calcAndSaveFluencyScores(
-                getRoundNumber((float) fpsUtil.getAvergeFps()),
-                getRoundNumber((float) fpsUtil.getFrameShakingRate()),
-                getRoundNumber((float) fpsUtil.getLowFrameRate()),
-                getRoundNumber((float) fpsUtil.getFrameIntervalTime()),
-                fpsUtil.getJankCount(),
-                getRoundNumber((float) fpsUtil.getShtutterRate()),
+                info,
                 eachFps
         );
         Intent intent = new Intent(TestSMActivity.this, CePingActivity.class);

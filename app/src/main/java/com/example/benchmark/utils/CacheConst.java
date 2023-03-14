@@ -13,6 +13,8 @@ package com.example.benchmark.utils;
  * @since 2023/3/7 17:23
  */
 public class CacheConst {
+    private static final CacheConst CACHE_CONST = new CacheConst();
+
     /** KEY_SCREEN_WIDTH */
     public static final String KEY_SCREEN_WIDTH = "SCREEN_WIDTH";
 
@@ -206,7 +208,7 @@ public class CacheConst {
     public static final String KEY_SSIM = "SSIM";
 
     /** audioPath */
-    public static String audioPath = "";
+    private String audioPath = "";
 
     /** AUDIO_PHONE_NAME */
     public static final String AUDIO_PHONE_NAME = "phone_audio_record.pcm";
@@ -215,7 +217,7 @@ public class CacheConst {
     public static final String AUDIO_GAME_NAME = "game_audio_record.pcm";
 
     /** videoPath */
-    public static String videoPath = "";
+    private String videoPath = "";
 
     /** VIDEO_PHONE_NAME */
     public static final String VIDEO_PHONE_NAME = "phone_video_record.mp4";
@@ -234,5 +236,60 @@ public class CacheConst {
 
     /** GLOBAL_IP */
     public static final String GLOBAL_IP = "http://175.38.1.81:8080";
+
+    private CacheConst(){
+    }
+
+    /**
+     * getInstance
+     *
+     * @return com.example.benchmark.utils.CacheConst
+     * @date 2023/3/14 15:04
+     */
+    public static CacheConst getInstance(){
+        return CACHE_CONST;
+    }
+
+    /**
+     * getAudioPath
+     *
+     * @return java.lang.String
+     * @date 2023/3/14 15:08
+     */
+    public String getAudioPath() {
+        return audioPath;
+    }
+
+    /**
+     * setAudioPath
+     *
+     * @param audioPath description
+     * @return void
+     * @date 2023/3/14 15:08
+     */
+    public void setAudioPath(String audioPath) {
+        this.audioPath = audioPath;
+    }
+
+    /**
+     * getVideoPath
+     *
+     * @return java.lang.String
+     * @date 2023/3/14 15:08
+     */
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    /**
+     * setVideoPath
+     *
+     * @param videoPath description
+     * @return void
+     * @date 2023/3/14 15:08
+     */
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
 }
 

@@ -13,15 +13,7 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:13
  */
 public class YinHuaData {
-    private static final YinHuaData yinHuaData = new YinHuaData();
-
-    private YinHuaData() {
-
-    }
-
-    public static YinHuaData getInstance() {
-        return yinHuaData;
-    }
+    private static final YinHuaData YIN_HUA_DATA = new YinHuaData();
 
     /**
      * 平台类型
@@ -47,6 +39,22 @@ public class YinHuaData {
      * resolution
      */
     private String resolution;
+
+    private boolean isTestOver = false;
+
+    private YinHuaData() {
+
+    }
+
+    /**
+     * getInstance
+     *
+     * @return com.example.benchmark.data.YinHuaData
+     * @date 2023/3/14 14:51
+     */
+    public static YinHuaData getInstance() {
+        return YIN_HUA_DATA;
+    }
 
     /**
      * getPlatformType
@@ -151,5 +159,13 @@ public class YinHuaData {
      */
     public void setResolution(String resolution) {
         this.resolution = resolution;
+    }
+
+    public boolean isTestOver() {
+        return isTestOver;
+    }
+
+    public void setTestOver(boolean testOver) {
+        isTestOver = testOver;
     }
 }

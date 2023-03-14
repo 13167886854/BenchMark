@@ -162,20 +162,20 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private void afterCode() {
         if (blueWenDingCheck.isChecked()) {
             Log.e(TAG, "afterCode: 111111111111111111111111111");
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.getContext())
+                    || !ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         }
         if (blueChuKongCheck.isChecked()) {
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         }
         if (blueYinHuaCheck.isChecked()) {
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }

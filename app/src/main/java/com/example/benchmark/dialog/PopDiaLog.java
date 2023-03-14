@@ -94,7 +94,7 @@ public class PopDiaLog extends Dialog implements View.OnClickListener {
                 break;
             }
             case R.id.access_ziqidong: {
-                AutoStartUtil.openStart(BaseApp.context);
+                AutoStartUtil.openStart(BaseApp.getContext());
                 dismiss();
                 break;
             }

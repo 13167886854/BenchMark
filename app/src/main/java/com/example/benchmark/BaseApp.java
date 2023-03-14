@@ -21,7 +21,11 @@ import com.example.benchmark.utils.CacheUtil;
 public class BaseApp extends Application {
     /** context */
     @SuppressLint("StaticFieldLeak")
-    public static Context context;
+    private static Context context;
+
+    public static Context getContext() {
+        return context;
+    }
 
     /**
      * onCreate

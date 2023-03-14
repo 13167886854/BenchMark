@@ -160,14 +160,14 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             return;
         }
         if (redWenDingCheck.isChecked() || redYinHuaCheck.isChecked()) {
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.getContext())
+                    || !ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         } else if (redChuKongCheck.isChecked()) {
             // 检查是否开启无障碍服务。。。。
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

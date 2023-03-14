@@ -690,13 +690,16 @@ public class FxService extends Service {
                 jsonData.get("totalStorage") instanceof String ? (String) jsonData.get("totalStorage") : ""
 
         );
+
+        float[] info = new float[5];
+        info[0] = getFloatDataFromJson(jsonData, "avergeFPS");
+        info[1] = getFloatDataFromJson(jsonData, "frameShakingRate");
+        info[2] = getFloatDataFromJson(jsonData, "lowFrameRate");
+        info[3] = getFloatDataFromJson(jsonData, "frameInterval");
+        info[4] = getFloatDataFromJson(jsonData, "jankCount");
+        info[5] = getFloatDataFromJson(jsonData, "stutterRate");
         ScoreUtil.calcAndSaveFluencyScores(
-                getFloatDataFromJson(jsonData, "avergeFPS"),
-                getFloatDataFromJson(jsonData, "frameShakingRate"),
-                getFloatDataFromJson(jsonData, "lowFrameRate"),
-                getFloatDataFromJson(jsonData, "frameInterval"),
-                getFloatDataFromJson(jsonData, "jankCount"),
-                getFloatDataFromJson(jsonData, "stutterRate"),
+                info,
                 jsonData.getString("eachFps")
         );
     }
@@ -785,7 +788,7 @@ public class FxService extends Service {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
         // file是要上传的文件 File() "/"
-        File file = new File(CacheConst.videoPath + File.separator
+        File file = new File(CacheConst.getInstance().getVideoPath() + File.separator
                 + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -795,7 +798,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.videoPath);
+                + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -808,7 +811,7 @@ public class FxService extends Service {
     private void stopRecord3() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
         // file是要上传的文件 File() "/"
-        File file = new File(CacheConst.videoPath
+        File file = new File(CacheConst.getInstance().getVideoPath()
                 + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -818,7 +821,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.videoPath);
+                + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -962,7 +965,7 @@ public class FxService extends Service {
 
     private void stopAudioRecord4() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        File file = new File(CacheConst.audioPath + File.separator
+        File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -972,7 +975,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.audioPath);
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -984,7 +987,7 @@ public class FxService extends Service {
 
     private void stopAudioRecord3() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        File file = new File(CacheConst.audioPath + File.separator
+        File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -994,7 +997,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.audioPath);
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -1139,7 +1142,7 @@ public class FxService extends Service {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
                     + File.separator + "ScreenRecorder" + File.separator;
-            CacheConst.videoPath = rootDir;
+            CacheConst.getInstance().setVideoPath(rootDir);
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
