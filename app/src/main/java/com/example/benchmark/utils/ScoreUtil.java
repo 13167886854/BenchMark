@@ -242,8 +242,8 @@ public class ScoreUtil {
                 ? 100f / 6 : 100f * 50 / (6 * frameInterval));
         BigDecimal jankCountScore = BigDecimal.valueOf(100f / (6 * (1 + jankCount)));
         BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate)));
-        int fluencyScore = (averFpsScore.add(frameShakeScore.
-                add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
+        int fluencyScore = (averFpsScore.add(frameShakeScore
+                .add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
 
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
@@ -378,8 +378,8 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
 
         // 计算稳定性分数
-        startSuccessRate /= 100;
-        BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRate / 3);
+        float startSuccessRateDivide100 = startSuccessRate / 100;
+        BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRateDivide100 / 3);
         BigDecimal averageStartScore = new BigDecimal(averageStartTime
                 < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3);
         BigDecimal averageQuitScore = new BigDecimal(averageQuitTime
@@ -388,14 +388,14 @@ public class ScoreUtil {
 
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
-        if (startSuccessRate + averageStartTime + averageQuitTime != 0.0f) {
+        if (startSuccessRateDivide100 + averageStartTime + averageQuitTime != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
                     .addParam("ip", IpPort.getInstance().getIp())
                     .addParam("port", IpPort.getInstance().getPort())
-                    .addParam("startSuccessRate", startSuccessRate + "")
+                    .addParam("startSuccessRate", startSuccessRateDivide100 + "")
                     .addParam("averageStartTime", averageStartTime + "")
                     .addParam("averageQuitTime", averageQuitTime + "")
                     .addParam("stabilityScore", stabilityScores + "")
@@ -508,13 +508,25 @@ public class ScoreUtil {
                 cloudSpendTimeList.substring(1, cloudSpendTimeList.length() - 1);
         String[] cloudDownTimeListArr = cloudDownTimeListSub.split(",");
         String[] cloudSpendTimeListArr = cloudSpendTimeListSub.split(",");
-        ArrayList<Long> longs = getLongs(cloudDownTimeListArr, cloudSpendTimeListArr);
+        for (int i = 0; i < cloudDownTimeListArr.length; i++) {
+            cloudDownTimeListArr[i] =
+                    cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
+        }
+        for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
+            cloudSpendTimeListArr[i] =
+                    cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
+        }
+
+        // 判断测试平台
+        String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
+        TreeSet<String> localTapTimes =
+                (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
+        ArrayList<Long> longs = new ArrayList<>();
 
         // 响应次数
         responseNum = 0;
         responseNum = getResponseNum1(cloudDownTimeListArr, cloudSpendTimeListArr, longs);
         responseNum = getResponseNum2(cloudDownTimeListArr, cloudSpendTimeListArr, longs);
-
         extracted(longs);
 
         // 平均触控时延
@@ -650,26 +662,6 @@ public class ScoreUtil {
             longs.add(responseTime5);
         }
         return responseNum;
-    }
-
-    @NonNull
-    private static ArrayList<Long> getLongs(String[] cloudDownTimeListArr, String[] cloudSpendTimeListArr) {
-        for (int i = 0; i < cloudDownTimeListArr.length; i++) {
-            cloudDownTimeListArr[i] =
-                    cloudDownTimeListArr[i].substring(1, cloudDownTimeListArr[i].length() - 1);
-        }
-
-        for (int i = 0; i < cloudSpendTimeListArr.length; i++) {
-            cloudSpendTimeListArr[i] =
-                    cloudSpendTimeListArr[i].substring(1, cloudSpendTimeListArr[i].length() - 1);
-        }
-
-        // 判断测试平台
-        String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
-        TreeSet<String> localTapTimes =
-                (TreeSet<String>) CacheUtil.getSet(CacheConst.KEY_AUTO_TAP_TIMES);
-        ArrayList<Long> longs = new ArrayList<>();
-        return longs;
     }
 
     /**

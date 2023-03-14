@@ -215,7 +215,7 @@ public class TestSMActivity extends AppCompatActivity {
             fpsUtil.updateAfterGetInfo();
 
             // 记录绘制次数和绘制时间，用于计算FPS
-            FpsUtils.mainHandler.postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
+            FpsUtils.getMainHandler().postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
         }
     }
 

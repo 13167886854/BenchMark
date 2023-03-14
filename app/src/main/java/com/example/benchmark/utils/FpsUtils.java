@@ -23,8 +23,7 @@ public class FpsUtils {
     /** 低帧判断  fps<25判断为低帧 */
     public static final double LOW_FRAME_TIME = 1000.0 / 24.0; // 每帧传输时间超过fps25的判断为低帧
 
-    /** handler */
-    public static Handler mainHandler = new Handler();
+    private static Handler mainHandler = new Handler();
 
     private static FpsUtils fpsUtils = new FpsUtils();
 
@@ -76,6 +75,10 @@ public class FpsUtils {
             fpsUtils = new FpsUtils();
         }
         return fpsUtils;
+    }
+
+    public static Handler getMainHandler(){
+        return mainHandler;
     }
 
     /**
