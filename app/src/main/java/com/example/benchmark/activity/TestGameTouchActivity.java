@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.GameTouchUtil;
 import com.example.benchmark.utils.ScoreUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
@@ -47,8 +48,6 @@ public class TestGameTouchActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private String path;
     private TextView handlingTv;
-
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private Handler handler = new Handler() {
         @Override
@@ -92,7 +91,7 @@ public class TestGameTouchActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions(permissions, 1);
         }
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 MediaMetadataRetriever retriever = new MediaMetadataRetriever();

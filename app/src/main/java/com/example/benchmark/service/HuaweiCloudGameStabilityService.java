@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.example.benchmark.utils.AccessibilityUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,8 +32,6 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     private final String nodeIdBtnQuitCloudPhone = "com.huawei.cloudphonedaily:id/tv_positive";
 
     private final MyAccessibilityService service;
-
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private int mCurrentMonitorNum = 0;
     private long mStartTime = 0L;
@@ -141,7 +140,7 @@ public class HuaweiCloudGameStabilityService implements IStabilityService {
     }
 
     private void clickContinueGameIfExist() {
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 try {

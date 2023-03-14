@@ -16,6 +16,7 @@ import com.example.benchmark.utils.AccessibilityCallback;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -51,7 +52,6 @@ public class RedFingerStabilityService implements IStabilityService {
     private boolean isClickQuitNotice = false;
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     /**
      * RedFingerStabilityService
@@ -163,7 +163,7 @@ public class RedFingerStabilityService implements IStabilityService {
         if (isClickStartControl || isClickContinueControl) {
             return;
         }
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -208,7 +208,7 @@ public class RedFingerStabilityService implements IStabilityService {
         if (isClickQuitNotice) {
             return;
         }
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 try {

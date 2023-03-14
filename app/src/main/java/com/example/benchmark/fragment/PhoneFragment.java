@@ -42,6 +42,7 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ServiceUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +62,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private final HashMap<String, String> checkPhoneMap = new HashMap<>();
     private final int allCheckCount = 8;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
     private Button blueLiuChang;
     private Button blueWenDing;
     private Button blueChuKong;
@@ -728,7 +728,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 myDialog.dismiss();
             }
         });
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 myDialog.setYesOnclickListener("确定", new IpPortDialog.OnYesOnclickListener() {

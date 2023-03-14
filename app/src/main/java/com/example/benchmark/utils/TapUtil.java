@@ -64,9 +64,6 @@ public class TapUtil {
     private long endTime = 0L;
     private long responseTime = 0L;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-
-
     private TapUtil() {
     }
 
@@ -165,7 +162,7 @@ public class TapUtil {
                                 .get()
                                 .url(CacheConst.WEB_TIME_URL)
                                 .build();
-                        threadPool.execute(new Runnable() {
+                        ThreadPoolUtil.getPool().execute(new Runnable() {
                             @Override
                             public void run() {
                                 client.newCall(request)

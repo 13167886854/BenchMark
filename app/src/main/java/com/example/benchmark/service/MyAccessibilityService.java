@@ -43,6 +43,7 @@ import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -53,6 +54,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
 
 /**
  * MyAccessibilityService
@@ -88,8 +90,8 @@ public class MyAccessibilityService extends AccessibilityService {
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
     private final Queue<Pair<Bitmap, Long>> mBitmapWithTime = new LinkedList<>();
 
-    private final Thread mCaptureScreenThread = new Thread(this::captureScreen);
-    private final Thread mDealBitmapThread = new Thread(this::dealWithBitmap);
+    private Future<?> CaptureScreen;
+    private Future<?> DealBitmap;
 
     // 自动点击
     private TapUtil tapUtil;
@@ -226,9 +228,10 @@ public class MyAccessibilityService extends AccessibilityService {
         boolean isSelectCheckedPlatform = CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform);
-        if (!mCaptureScreenThread.isAlive() && !mDealBitmapThread.isAlive() && isSelectCheckedPlatform) {
-            mCaptureScreenThread.start();
-            mDealBitmapThread.start();
+
+        if (CaptureScreen.isDone() && DealBitmap.isDone() && isSelectCheckedPlatform) {
+            CaptureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            DealBitmap = ThreadPoolUtil.getPool().submit(this::captureScreen);
         }
         return START_NOT_STICKY;
     }

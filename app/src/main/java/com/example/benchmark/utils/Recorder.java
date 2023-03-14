@@ -55,8 +55,6 @@ public class Recorder {
      */
     private boolean isRecording = false;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-
     private AudioRecord mRecorder;
     private int bufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
     private int bytesPerElement = 2; // 2 bytes in 16bit format
@@ -119,7 +117,7 @@ public class Recorder {
             mRecorder.startRecording();
             createAudioFile(context);
 
-            threadPool.execute(new Runnable() {
+            ThreadPoolUtil.getPool().execute(new Runnable() {
                 @Override
                 public void run() {
                     writeAudioFile();

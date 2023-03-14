@@ -31,6 +31,7 @@ import com.example.benchmark.dialog.LoginDialog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -55,7 +56,6 @@ public class TishiFragment extends Fragment {
     private Message mMessage;
     private FragmentManager fragmentManager;
     private HistoryFragment history;
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private Handler mHandler = new Handler() {
         @Override
@@ -100,7 +100,7 @@ public class TishiFragment extends Fragment {
     };
 
     private void sendLoginQuest() {
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
@@ -290,7 +290,7 @@ public class TishiFragment extends Fragment {
                 myDialog.dismiss();
             }
         });
-        threadPool.execute(runnable);
+        ThreadPoolUtil.getPool().execute(runnable);
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();
