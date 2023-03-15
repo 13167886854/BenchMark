@@ -90,8 +90,8 @@ public class MyAccessibilityService extends AccessibilityService {
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
     private final Queue<Pair<Bitmap, Long>> mBitmapWithTime = new LinkedList<>();
 
-    private Future<?> CaptureScreen;
-    private Future<?> DealBitmap;
+    private Future<?> captureScreen;
+    private Future<?> dealBitmap;
 
     // 自动点击
     private TapUtil tapUtil;
@@ -229,9 +229,9 @@ public class MyAccessibilityService extends AccessibilityService {
                 || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform);
 
-        if (CaptureScreen.isDone() && DealBitmap.isDone() && isSelectCheckedPlatform) {
-            CaptureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
-            DealBitmap = ThreadPoolUtil.getPool().submit(this::captureScreen);
+        if (captureScreen.isDone() && dealBitmap.isDone() && isSelectCheckedPlatform) {
+            captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            dealBitmap = ThreadPoolUtil.getPool().submit(this::captureScreen);
         }
         return START_NOT_STICKY;
     }

@@ -252,7 +252,7 @@ public final class CodeUtils {
         BigDecimal scrWidthB = BigDecimal.valueOf(srcWidth);
         BigDecimal ratioB = BigDecimal.valueOf(ratio);
         BigDecimal logoWidthB = BigDecimal.valueOf(logoWidth);
-        BigDecimal scaleFactorB = scrWidthB.multiply(ratioB).divide(logoWidthB,BigDecimal.ROUND_CEILING);
+        BigDecimal scaleFactorB = scrWidthB.multiply(ratioB).divide(logoWidthB, BigDecimal.ROUND_CEILING);
         float scaleFactor = scaleFactorB.floatValue();
         Bitmap bitmap;
         bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);

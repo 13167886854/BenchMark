@@ -19,7 +19,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.benchmark.activity.AudioVideoActivity;
 import com.example.benchmark.data.YinHuaData;
 
 import java.io.IOException;

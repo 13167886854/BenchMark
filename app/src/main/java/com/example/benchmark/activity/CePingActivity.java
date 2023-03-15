@@ -118,7 +118,6 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         initData();
 
         testBack.setOnClickListener(this::onClick);
-        Log.e("HAI", "checkedPlat: "+checkedPlat);
         adapter = new CePingAdapter(testData, (data) -> {
             Intent intent = new Intent(this, JutiZhibiaoActivity.class);
             intent.putExtra("selectPlat", checkedPlat);

@@ -33,9 +33,6 @@ import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
 import com.example.benchmark.utils.ThreadPoolUtil;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import okhttp3.Call;
 
 /**

@@ -19,9 +19,6 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
-
-import com.example.benchmark.activity.AudioVideoActivity;
 import com.example.benchmark.data.YinHuaData;
 import com.example.benchmark.utils.SpeedManager;
 
@@ -67,12 +64,12 @@ public class VideoDecodeThread extends Thread implements Runnable {
      * VideoDecodeThread
      *
      * @param path description
- * @param context description
- * @param name description
-     * @return 
-     * @date 2023/3/14 15:03
+     * @param context description
+     * @param name description
+     * @return
+     * @date 2023/3/15 10:35
      */
-    public VideoDecodeThread(String path, Context context,String name){
+    public VideoDecodeThread(String path, Context context, String name) {
         super(name);
         this.context = context;
         mMp4FilePath = path;
@@ -116,7 +113,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             }
             if (mVideoTrackIndex == -1) {
                 mMediaExtractor.release();
-                videoFormat =  null;
+                videoFormat = null;
             }
             videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
             int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);

@@ -338,23 +338,27 @@ public class OkHttpUtils {
                             // Make sure that it hasn't expired.
                             try {
                                 cert.checkValidity();
-                            } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-                                e.printStackTrace();
+                            } catch (CertificateExpiredException | CertificateNotYetValidException ex) {
+                                Log.e(TAG, "checkServerTrusted: " + ex.toString());
                             }
                         }
 
-                        //检查所有证书
+                        // 检查所有证书
                         try {
                             TrustManagerFactory factory = TrustManagerFactory.getInstance("X509");
-                            factory.init((KeyStore) null);
+                            if (null instanceof KeyStore) {
+                                factory.init((KeyStore) null);
+                            }
                             for (TrustManager trustManager : factory.getTrustManagers()) {
-                                ((X509TrustManager) trustManager).checkServerTrusted(chain, authType);
+                                if (trustManager instanceof X509TrustManager) {
+                                    ((X509TrustManager) trustManager).checkServerTrusted(chain, authType);
+                                }
                             }
                         } catch (NoSuchAlgorithmException | CertificateException | KeyStoreException ex) {
-                            ex.printStackTrace();
+                            Log.e(TAG, "checkServerTrusted: " + ex.toString());
                         }
 
-                        //获取网络中的证书信息
+                        // 获取网络中的证书信息
                         X509Certificate certificate = chain[0];
                         // 证书拥有者
                         String subject = certificate.getSubjectDN().getName();

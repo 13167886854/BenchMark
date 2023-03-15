@@ -19,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,11 +33,6 @@ import okhttp3.Response;
  * @since 2023/3/7 17:29
  */
 public class TapUtil {
-    /**
-     * mWholeMonitorNum
-     */
-    private int mWholeMonitorNum;
-
     /**
      * 点击次数
      */
@@ -63,6 +56,8 @@ public class TapUtil {
     private long startTime = 0L;
     private long endTime = 0L;
     private long responseTime = 0L;
+
+    private int mWholeMonitorNum;
 
     private TapUtil() {
     }

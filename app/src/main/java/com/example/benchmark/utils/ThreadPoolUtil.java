@@ -24,12 +24,12 @@ public class ThreadPoolUtil {
             new ArrayBlockingQueue<>(4),
             new ThreadFactory() {
                 @Override
-                public Thread newThread(Runnable r) {
+                public Thread newThread(Runnable runnable) {
                     return null;
                 }
-            },new ThreadPoolExecutor.AbortPolicy());
+            }, new ThreadPoolExecutor.AbortPolicy());
 
-    private ThreadPoolUtil(){
+    private ThreadPoolUtil() {
 
     }
 
@@ -39,7 +39,7 @@ public class ThreadPoolUtil {
      * @return java.util.concurrent.ThreadPoolExecutor
      * @date 2023/3/14 19:30
      */
-    public static ThreadPoolExecutor getPool(){
+    public static ThreadPoolExecutor getPool() {
         return EXECUTOR;
     }
 }

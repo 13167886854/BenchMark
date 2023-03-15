@@ -46,11 +46,11 @@ public class GameTouchUtil {
         return gameTouchUtil;
     }
 
-    public long getReadyToTapTime(){
+    public long getReadyToTapTime() {
         return readyToTapTime;
     }
 
-    public void setReadyToTapTime(long time){
+    public void setReadyToTapTime(long time) {
         this.readyToTapTime = time;
     }
 

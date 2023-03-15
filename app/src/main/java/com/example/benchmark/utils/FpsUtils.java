@@ -77,7 +77,7 @@ public class FpsUtils {
         return fpsUtils;
     }
 
-    public static Handler getMainHandler(){
+    public static Handler getMainHandler() {
         return mainHandler;
     }
 

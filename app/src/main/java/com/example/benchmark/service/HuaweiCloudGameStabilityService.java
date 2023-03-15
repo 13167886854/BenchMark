@@ -14,9 +14,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.ThreadPoolUtil;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 /**
  * HuaweiCloudGameStabilityService
  *

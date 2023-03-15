@@ -9,7 +9,6 @@ package com.example.benchmark.utils;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.data.Admin;
@@ -35,6 +34,13 @@ public class ScoreUtil {
     private static final String TAG = "ScoreUtil";
 
     private static int responseNum;
+
+    private static float averageFPS;
+    private static float frameShakeRate;
+    private static float lowFrameRate;
+    private static float frameInterval;
+    private static float jankCount;
+    private static float stutterRate;
 
     /**
      * calcAndSaveCPUScores
@@ -219,19 +225,7 @@ public class ScoreUtil {
             float[] info,
             String eachFps
     ) {
-        // 保存流畅性结果
-        float averageFPS = info[0];
-        CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
-        float frameShakeRate = info[1];
-        CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
-        float lowFrameRate = info[2];
-        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
-        float frameInterval = info[3];
-        CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
-        float jankCount = info[4];
-        CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
-        float stutterRate = info[5];
-        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
+        initInfo(info);
 
         // 计算流畅性分数
         BigDecimal averFpsScore = BigDecimal.valueOf(averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6);
@@ -278,6 +272,22 @@ public class ScoreUtil {
                         }
                     });
         }
+    }
+
+    private static void initInfo(float[] info) {
+        // 保存流畅性结果
+        averageFPS = info[0];
+        CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
+        frameShakeRate = info[1];
+        CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
+        lowFrameRate = info[2];
+        CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
+        frameInterval = info[3];
+        CacheUtil.put(CacheConst.KEY_FRAME_INTERVAL, frameInterval);
+        jankCount = info[4];
+        CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
+        stutterRate = info[5];
+        CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
     }
 
     /**

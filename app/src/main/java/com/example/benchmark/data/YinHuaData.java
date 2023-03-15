@@ -165,7 +165,7 @@ public class YinHuaData {
         return isTestOver;
     }
 
-    public void setTestOver(boolean testOver) {
-        isTestOver = testOver;
+    public void setTestOver(boolean isTestOver) {
+        this.isTestOver = isTestOver;
     }
 }
