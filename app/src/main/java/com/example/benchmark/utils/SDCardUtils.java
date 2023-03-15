@@ -22,6 +22,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -347,7 +348,9 @@ public class SDCardUtils {
      * @date 2023/3/9 15:19
      */
     public static String getSDCardTotalStorage(long totalByte) {
-        double byte2GB = totalByte / 1024.00 / 1024.00 / 1024.00;
+        BigDecimal totalByteB = BigDecimal.valueOf(totalByte);
+        BigDecimal byte2GBb = totalByteB.divide(BigDecimal.valueOf(1024*1024*1024),BigDecimal.ROUND_CEILING);
+        double byte2GB = byte2GBb.doubleValue();
         double totalStorage;
         if (byte2GB > 1) {
             totalStorage = Math.ceil(byte2GB);
@@ -372,7 +375,8 @@ public class SDCardUtils {
             }
         } else {
             // below 1G return get values
-            totalStorage = totalByte / 1024.00 / 1024.00;
+            BigDecimal totalStorageB = totalByteB.divide(BigDecimal.valueOf(1024*1024),BigDecimal.ROUND_CEILING);
+            totalStorage = totalStorageB.doubleValue();
 
             if (totalStorage >= 515 && totalStorage < 1024) {
                 return 1 + "GB";

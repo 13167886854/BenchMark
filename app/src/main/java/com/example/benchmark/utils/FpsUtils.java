@@ -8,6 +8,7 @@ package com.example.benchmark.utils;
 
 import android.os.Handler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -17,11 +18,15 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class FpsUtils {
-    /** 监听时的刷新时间间隔,设置为1S */
+    /**
+     * 监听时的刷新时间间隔,设置为1S
+     */
     public static final long FPS_INTERVAL_TIME = 1000L;
 
-    /** 低帧判断  fps<25判断为低帧 */
-    public static final double LOW_FRAME_TIME = 1000.0 / 24.0; // 每帧传输时间超过fps25的判断为低帧
+    /**
+     * 低帧判断  fps<25判断为低帧
+     */
+    public static final double LOW_FRAME_TIME = 41.666; // 每帧传输时间超过fps25的判断为低帧 1000/24
 
     private static Handler mainHandler = new Handler();
 
@@ -273,7 +278,10 @@ public class FpsUtils {
         int t3 = last3FrameTimes.get(size - 3);
         last3FrameTimes.remove(0);
         last3FrameTimes.add(time);
-        if ((time > LOW_FRAME_TIME * 2) && (time > (double) (t1 + t2 + t3) * 2 / 3)) {
+        BigDecimal total = BigDecimal.valueOf(t1 + t2 + t3);
+        BigDecimal res = total.multiply(BigDecimal.valueOf(2)).divide(BigDecimal.valueOf(3), BigDecimal.ROUND_CEILING);
+        BigDecimal timeB = BigDecimal.valueOf(time);
+        if ((time > LOW_FRAME_TIME * 2) && (timeB.compareTo(res) == 1)) {
             shutterTime += time;
             return true;
         } else {
