@@ -42,6 +42,17 @@ public class ScoreUtil {
     private static float jankCount;
     private static float stutterRate;
 
+    private static float averFpsScore;
+    private static float frameShakeScore;
+    private static float lowFrameScore;
+    private static float frameIntervalScore;
+    private static float jankCountScore;
+    private static float stutterRateScore;
+
+    private static BigDecimal averageStartScore;
+    private static BigDecimal averageQuitScore;
+    private static BigDecimal startSuccessScore;
+
     /**
      * calcAndSaveCPUScores
      *
@@ -215,8 +226,8 @@ public class ScoreUtil {
     /**
      * calcAndSaveFluencyScores
      *
-     * @param info     averageFPS,frameShakeRate,lowFrameRate,frameInterval,jankCount,stutterRate
-     * @param eachFps        description
+     * @param info    averageFPS,frameShakeRate,lowFrameRate,frameInterval,jankCount,stutterRate
+     * @param eachFps description
      * @return void
      * @throws null
      * @date 2023/3/8 11:10
@@ -228,22 +239,23 @@ public class ScoreUtil {
         initInfo(info);
 
         // 计算流畅性分数
-        BigDecimal averFpsScore = BigDecimal.valueOf(averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6);
-        BigDecimal frameShakeScore = BigDecimal.valueOf(frameShakeRate < 10
-                ? 100f / 6 : 100f * 10 / (6 * frameShakeRate));
-        BigDecimal lowFrameScore = BigDecimal.valueOf(100f * (1 - lowFrameRate) / 6);
-        BigDecimal frameIntervalScore = BigDecimal.valueOf(frameInterval < 50
-                ? 100f / 6 : 100f * 50 / (6 * frameInterval));
-        BigDecimal jankCountScore = BigDecimal.valueOf(100f / (6 * (1 + jankCount)));
-        BigDecimal stutterRateScore = BigDecimal.valueOf(100f / (6 * (1 - stutterRate)));
-        int fluencyScore = (averFpsScore.add(frameShakeScore
-                .add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
+        BigDecimal[] infoB = new BigDecimal[6];
+        infoB[0] = BigDecimal.valueOf(info[0]);
+        infoB[1] = BigDecimal.valueOf(info[1]);
+        infoB[2] = BigDecimal.valueOf(info[2]);
+        infoB[3] = BigDecimal.valueOf(info[3]);
+        infoB[4] = BigDecimal.valueOf(info[4]);
+        infoB[5] = BigDecimal.valueOf(info[5]);
+        calculate(infoB);
+        int fluencyScore = (int) (averFpsScore + frameShakeScore + lowFrameScore
+                + frameIntervalScore + jankCountScore + stutterRateScore);
 
         // 保存流畅性分数
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
 
         // 判断数据是否为空
-        if (averageFPS + frameShakeRate + lowFrameRate + stutterRate + jankCount != 0.0f) {
+        if (BigDecimal.valueOf(averageFPS + frameShakeRate + lowFrameRate + stutterRate + jankCount)
+                .compareTo(BigDecimal.valueOf(0f)) != 0) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
@@ -272,6 +284,37 @@ public class ScoreUtil {
                         }
                     });
         }
+    }
+
+    private static void calculate(BigDecimal[] infoB) {
+        if (infoB[0].compareTo(BigDecimal.valueOf(120)) == 0
+                || infoB[0].compareTo(BigDecimal.valueOf(120)) == -1) {
+            averFpsScore = BigDecimal.valueOf(100).multiply(infoB[0])
+                    .divide(BigDecimal.valueOf(6 * 120), BigDecimal.ROUND_CEILING).floatValue();
+        } else {
+            averFpsScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(6),
+                    BigDecimal.ROUND_CEILING).floatValue();
+        }
+        if (infoB[1].compareTo(BigDecimal.valueOf(10)) == -1) {
+            frameShakeScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(6),
+                    BigDecimal.ROUND_CEILING).floatValue();
+        } else {
+            frameShakeScore = BigDecimal.valueOf(1000).divide(BigDecimal.valueOf(6).multiply(infoB[1]),
+                    BigDecimal.ROUND_CEILING).floatValue();
+        }
+        lowFrameScore = BigDecimal.valueOf(100f * (1 - lowFrameRate)).divide(BigDecimal.valueOf(6),
+                BigDecimal.ROUND_CEILING).floatValue();
+        if (infoB[3].compareTo(BigDecimal.valueOf(50)) == -1) {
+            frameIntervalScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(6),
+                    BigDecimal.ROUND_CEILING).floatValue();
+        } else {
+            frameIntervalScore = BigDecimal.valueOf(5000f).divide(BigDecimal.valueOf(6 * frameInterval),
+                    BigDecimal.ROUND_CEILING).floatValue();
+        }
+        jankCountScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(6 * (1 + jankCount)),
+                BigDecimal.ROUND_CEILING).floatValue();
+        stutterRateScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(6 * (1 - stutterRate)),
+                BigDecimal.ROUND_CEILING).floatValue();
     }
 
     private static void initInfo(float[] info) {
@@ -388,17 +431,15 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
 
         // 计算稳定性分数
-        float startSuccessRateDivide100 = startSuccessRate / 100;
-        BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRateDivide100 / 3);
-        BigDecimal averageStartScore = new BigDecimal(averageStartTime
-                < 50 ? 100f / 3 : 100f * (50 / averageStartTime) / 3);
-        BigDecimal averageQuitScore = new BigDecimal(averageQuitTime
-                < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3);
+        float startSuccessRateDivide100 = BigDecimal.valueOf(startSuccessRate)
+                .divide(BigDecimal.valueOf(100), BigDecimal.ROUND_CEILING).floatValue();
+        calculate2(averageStartTime, averageQuitTime, startSuccessRateDivide100);
         int stabilityScores = (startSuccessScore.add(averageStartScore.add(averageQuitScore))).intValue();
 
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
-        if (startSuccessRateDivide100 + averageStartTime + averageQuitTime != 0.0f) {
+        if (BigDecimal.valueOf(startSuccessRateDivide100 + averageStartTime + averageQuitTime)
+                .compareTo(BigDecimal.valueOf(0f)) != 0) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
@@ -422,6 +463,25 @@ public class ScoreUtil {
                             Log.d(TAG, "onFailure: Stability---" + errorMsg);
                         }
                     });
+        }
+    }
+
+    private static void calculate2(float averageStartTime, float averageQuitTime, float startSuccessRateDivide100) {
+        startSuccessScore = BigDecimal.valueOf(100f * startSuccessRateDivide100)
+                .divide(BigDecimal.valueOf(3), BigDecimal.ROUND_CEILING);
+
+        if (BigDecimal.valueOf(averageStartTime).compareTo(BigDecimal.valueOf(50)) == -1) {
+            averageStartScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(3), BigDecimal.ROUND_CEILING);
+        } else {
+            averageStartScore = BigDecimal.valueOf(500f).divide(BigDecimal.valueOf(3 * averageStartTime),
+                    BigDecimal.ROUND_CEILING);
+        }
+        if (BigDecimal.valueOf(averageQuitTime).compareTo(BigDecimal.valueOf(50)) == -1) {
+            averageQuitScore = BigDecimal.valueOf(100f).divide(BigDecimal.valueOf(3),
+                    BigDecimal.ROUND_CEILING);
+        } else {
+            averageQuitScore = BigDecimal.valueOf(500f).divide(BigDecimal.valueOf(3 * averageQuitTime),
+                    BigDecimal.ROUND_CEILING);
         }
     }
 
@@ -483,8 +543,15 @@ public class ScoreUtil {
         Log.e("TWT", "testNum: " + testNum);
         Log.e("TWT", "time: " + time);
 
-        BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy / 2);
-        BigDecimal responseTimeScore = new BigDecimal(time < 50 ? 50 : 100f * 50 / (2 * time));
+        BigDecimal averAccuracyScore = BigDecimal.valueOf(100f * averageAccuracy)
+                .divide(BigDecimal.valueOf(2), BigDecimal.ROUND_CEILING);
+        BigDecimal responseTimeScore;
+        if (BigDecimal.valueOf(time).compareTo(BigDecimal.valueOf(50)) == -1) {
+            responseTimeScore = BigDecimal.valueOf(50);
+        } else {
+            responseTimeScore = BigDecimal.valueOf(5000f)
+                    .divide(BigDecimal.valueOf(time * 2), BigDecimal.ROUND_CEILING);
+        }
         int touchScore = (int) (averAccuracyScore.add(responseTimeScore)).intValue();
 
         // 保存触控体验分数
@@ -597,7 +664,7 @@ public class ScoreUtil {
     }
 
     private static int getResponseNum2(String[] cloudDownTimeListArr,
-                                        String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
+                                       String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
         long responseTime6 = (Long.parseLong(cloudDownTimeListArr[6]) - CacheUtil.getLong("tapTimeOnLocal7")
                 + Long.parseLong(cloudSpendTimeListArr[6])) * 2;
         if (responseTime6 != 0L) {
@@ -634,7 +701,7 @@ public class ScoreUtil {
     }
 
     private static int getResponseNum1(String[] cloudDownTimeListArr,
-                                        String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
+                                       String[] cloudSpendTimeListArr, ArrayList<Long> longs) {
         long responseTime0 = (Long.parseLong(cloudDownTimeListArr[0]) - CacheUtil.getLong("tapTimeOnLocal1")
                 + Long.parseLong(cloudSpendTimeListArr[0])) * 2;
         if (responseTime0 != 0L) {
@@ -730,10 +797,21 @@ public class ScoreUtil {
         BigDecimal resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0])
                 * Integer.parseInt(resolutionArray[1]));
         BigDecimal resolutionScore = new BigDecimal(100f * resolutionValue.floatValue() / (4 * 1920 * 1080));
-        BigDecimal maxDiffValueScore = new BigDecimal(maxDiffValue < 50 ? 50 : 100f * 50 / (4 * maxDiffValue));
-        psnr = psnr > 40 ? 40 : psnr;
-        BigDecimal d3 = new BigDecimal((100.0 * ((psnr / 40.0) + ssim)) / 8.0);
-        BigDecimal d4 = new BigDecimal(((100.0 * pesq) / (4.5 * 4.0)));
+        BigDecimal maxDiffValueScore;
+        if (BigDecimal.valueOf(maxDiffValue).compareTo(BigDecimal.valueOf(50)) == -1) {
+            maxDiffValueScore = BigDecimal.valueOf(50);
+        } else {
+            maxDiffValueScore = BigDecimal.valueOf(1250f)
+                    .divide(BigDecimal.valueOf(maxDiffValue), BigDecimal.ROUND_CEILING);
+        }
+        if (BigDecimal.valueOf(psnr).compareTo(BigDecimal.valueOf(40)) == 1) {
+            psnr = 40f;
+        }
+        BigDecimal temp = BigDecimal.valueOf(psnr).divide(BigDecimal.valueOf(40f),
+                BigDecimal.ROUND_CEILING).add(BigDecimal.valueOf(ssim));
+        BigDecimal d3 = BigDecimal.valueOf(12.5f).multiply(temp);
+        BigDecimal d4 = BigDecimal.valueOf(pesq).multiply(BigDecimal.valueOf(100f))
+                .divide(BigDecimal.valueOf(18f), BigDecimal.ROUND_CEILING);
         int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
 
         // 保存音画质量分数
