@@ -41,7 +41,7 @@ public class SDCardUtils {
      * getRAMInfo
      *
      * @param context description
-     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @return java.util.Map<java.lang.String, java.lang.String>
      * @date 2023/3/11 16:25
      */
     public static Map<String, String> getRAMInfo(Context context) {
@@ -81,8 +81,8 @@ public class SDCardUtils {
      * getStorageInfo
      *
      * @param context description
-     * @param type description
-     * @return java.util.Map<java.lang.String,java.lang.String>
+     * @param type    description
+     * @return java.util.Map<java.lang.String, java.lang.String>
      * @date 2023/3/11 16:26
      */
     public static Map<String, String> getStorageInfo(Context context, int type) {
@@ -114,7 +114,7 @@ public class SDCardUtils {
      * getStoragePath
      *
      * @param context description
-     * @param type description
+     * @param type    description
      * @return java.lang.String
      * @date 2023/3/11 16:26
      */
@@ -349,7 +349,7 @@ public class SDCardUtils {
      */
     public static String getSDCardTotalStorage(long totalByte) {
         BigDecimal totalByteB = BigDecimal.valueOf(totalByte);
-        BigDecimal byte2GBb = totalByteB.divide(BigDecimal.valueOf(1024*1024*1024),BigDecimal.ROUND_CEILING);
+        BigDecimal byte2GBb = totalByteB.divide(BigDecimal.valueOf(1024 * 1024 * 1024), BigDecimal.ROUND_CEILING);
         double byte2GB = byte2GBb.doubleValue();
         double totalStorage;
         if (byte2GB > 1) {
@@ -375,7 +375,7 @@ public class SDCardUtils {
             }
         } else {
             // below 1G return get values
-            BigDecimal totalStorageB = totalByteB.divide(BigDecimal.valueOf(1024*1024),BigDecimal.ROUND_CEILING);
+            BigDecimal totalStorageB = totalByteB.divide(BigDecimal.valueOf(1024 * 1024), BigDecimal.ROUND_CEILING);
             totalStorage = totalStorageB.doubleValue();
 
             if (totalStorage >= 515 && totalStorage < 1024) {

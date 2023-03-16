@@ -433,9 +433,5 @@ public class CacheConst {
     public void setVideoPath(String videoPath) {
         this.videoPath = videoPath;
     }
-
-
-
-
 }
 

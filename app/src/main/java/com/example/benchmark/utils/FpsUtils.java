@@ -26,7 +26,7 @@ public class FpsUtils {
     /**
      * 低帧判断  fps<25判断为低帧
      */
-    public static final double LOW_FRAME_TIME = 41.666; // 每帧传输时间超过fps25的判断为低帧 1000/24
+    public static final double LOW_FRAME_TIME = 41.666d; // 每帧传输时间超过fps25的判断为低帧 1000/24
 
     private static Handler mainHandler = new Handler();
 
@@ -281,7 +281,8 @@ public class FpsUtils {
         BigDecimal total = BigDecimal.valueOf(t1 + t2 + t3);
         BigDecimal res = total.multiply(BigDecimal.valueOf(2)).divide(BigDecimal.valueOf(3), BigDecimal.ROUND_CEILING);
         BigDecimal timeB = BigDecimal.valueOf(time);
-        if ((time > LOW_FRAME_TIME * 2) && (timeB.compareTo(res) == 1)) {
+        if ((timeB.compareTo(BigDecimal.valueOf(LOW_FRAME_TIME).multiply(BigDecimal.valueOf(2))) == 1)
+                && (timeB.compareTo(res) == 1)) {
             shutterTime += time;
             return true;
         } else {
