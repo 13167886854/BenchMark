@@ -623,8 +623,8 @@ public class ScoreUtil {
         for (Long aLong : longs) {
             allResponseTime += aLong;
         }
-        BigDecimal avgResponseTime = BigDecimal.valueOf(allResponseTime).
-                divide(BigDecimal.valueOf(longs.size()), BigDecimal.ROUND_CEILING);
+        BigDecimal avgResponseTime = BigDecimal.valueOf(allResponseTime)
+                .divide(BigDecimal.valueOf(longs.size()), BigDecimal.ROUND_CEILING);
         // 正确率
         BigDecimal averageAccuracy = (BigDecimal.valueOf(responseNum).subtract(BigDecimal.valueOf(4)))
                 .divide(BigDecimal.valueOf(longs.size()), BigDecimal.ROUND_CEILING);
@@ -857,7 +857,7 @@ public class ScoreUtil {
         resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0])
                 * Integer.parseInt(resolutionArray[1]));
         resolutionScore = BigDecimal.valueOf(100f).multiply(resolutionValue)
-                .divide(BigDecimal.valueOf(4 * 1920 * 1080),BigDecimal.ROUND_CEILING);
+                .divide(BigDecimal.valueOf(4 * 1920 * 1080), BigDecimal.ROUND_CEILING);
         if (BigDecimal.valueOf(maxDiffValue).compareTo(BigDecimal.valueOf(50)) == -1) {
             maxDiffValueScore = BigDecimal.valueOf(50);
         } else {
