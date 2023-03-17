@@ -38,11 +38,15 @@ import com.example.benchmark.fragment.ZhuyeFragment;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -128,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         CacheUtil.put(CacheConst.KEY_SCREEN_WIDTH, dm.widthPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_HEIGHT, dm.heightPixels);
         CacheUtil.put(CacheConst.KEY_SCREEN_DPI, dm.densityDpi);
+        ThreadPoolUtil.getPool().execute(() -> Log.e("HAIHAIHAI", "run: 123123123123213"));
     }
 
     private void init() {

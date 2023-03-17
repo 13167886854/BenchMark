@@ -229,9 +229,13 @@ public class MyAccessibilityService extends AccessibilityService {
                 || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
                 || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform);
 
+        if (captureScreen == null && dealBitmap == null && isSelectCheckedPlatform) {
+            captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
+        }
         if (captureScreen.isDone() && dealBitmap.isDone() && isSelectCheckedPlatform) {
             captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
-            dealBitmap = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
         }
         return START_NOT_STICKY;
     }

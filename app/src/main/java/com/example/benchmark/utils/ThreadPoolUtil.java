@@ -20,14 +20,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadPoolUtil {
     private static final ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(
-            8, 15, 60, TimeUnit.MILLISECONDS,
+            8, 15, 60, TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(4),
-            new ThreadFactory() {
-                @Override
-                public Thread newThread(Runnable runnable) {
-                    return null;
-                }
-            }, new ThreadPoolExecutor.AbortPolicy());
+            new ThreadPoolExecutor.AbortPolicy());
 
     private ThreadPoolUtil() {
 

@@ -588,7 +588,7 @@ public class ScoreUtil {
     public static void calcAndSaveTouchScores(
             String cloudDownTimeList, String cloudSpendTimeList) {
         // 没有进行触控测试 没有数据时 直接返回
-        if (cloudDownTimeList == null || cloudSpendTimeList == null) {
+        if (cloudDownTimeList == "null" || cloudSpendTimeList == "null") {
             return;
         }
         String cloudDownTimeListSub =

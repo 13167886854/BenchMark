@@ -102,7 +102,7 @@ public class TishiFragment extends Fragment {
             public void run() {
                 OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
                         + "/admin/loginAndReg")
-                        .addParam("adminName", Admin.getInstance().getAdminName())
+                        .addParam("adminName", Admin.getInstance().getUsername())
                         .addParam("adminPasswd", Admin.getInstance().getPassword())
                         .addHeader("Content-Type", "application/json; charset=utf-8")
                         .post(true)

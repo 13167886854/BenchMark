@@ -651,6 +651,7 @@ public class FxService extends Service {
 
         getInfo1(jsonData);
 
+        Log.d("TWT", "云端测试数据JSON: " + jsonData);
         // 触控测试数据
         ScoreUtil.calcAndSaveTouchScores(
                 getCloudListDataFromJson(jsonData, "cloudDownTimeList"),
@@ -691,7 +692,7 @@ public class FxService extends Service {
 
         );
 
-        float[] info = new float[5];
+        float[] info = new float[6];
         info[0] = getFloatDataFromJson(jsonData, "avergeFPS");
         info[1] = getFloatDataFromJson(jsonData, "frameShakingRate");
         info[2] = getFloatDataFromJson(jsonData, "lowFrameRate");
