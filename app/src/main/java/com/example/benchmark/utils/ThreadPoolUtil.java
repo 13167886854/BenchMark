@@ -7,7 +7,6 @@
 package com.example.benchmark.utils;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
