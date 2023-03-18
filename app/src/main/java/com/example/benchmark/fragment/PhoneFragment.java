@@ -186,15 +186,40 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             this.startActivity(intentToFloatPermission);
             return;
         }
-        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
-            // 检测华为云手机测试 提示用户输入ip地址加端口
-            Log.e(TAG, "onCreateView: hiahiasadsad");
-            showDialog();
+        if (Admin.getInstance().getStatus().equals("success")) {
+            if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
+                // 检测华为云手机测试 提示用户输入ip地址加端口
+                Log.e(TAG, "onCreateView: hiahiasadsad");
+                showDialog();
+            }
+            if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
+                Log.e(TAG, "onCreateView: hiahiasadsad");
+                showDialog();
+            }
+        }else{
+            startCePingActivity();
         }
-        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
-            Log.e(TAG, "onCreateView: hiahiasadsad");
-            showDialog();
-        }
+
+    }
+
+    private void startCePingActivity() {
+        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
+        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
+        Intent intent = new Intent(getActivity(), CePingActivity.class);
+
+        // 传入checkbox是否被选中
+        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
+        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blueChuKongCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blueYinHuaCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_CPU_INFO, blueCpuCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_GPU_INFO, blueGpuCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
+                checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME));
+        startActivity(intent);
     }
 
 
@@ -735,23 +760,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                         myDialog.getYes().setEnabled(false);
                         myDialog.dismiss();
                         Log.d(TAG, "输入IP地址");
-                        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
-                        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
-                        Intent intent = new Intent(getActivity(), CePingActivity.class);
-
-                        // 传入checkbox是否被选中
-                        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
-                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blueChuKongCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blueYinHuaCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_CPU_INFO, blueCpuCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_GPU_INFO, blueGpuCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
-                                checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME));
-                        startActivity(intent);
+                        startCePingActivity();
                     }
                 });
             }

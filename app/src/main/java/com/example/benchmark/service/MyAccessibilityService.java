@@ -225,17 +225,15 @@ public class MyAccessibilityService extends AccessibilityService {
             }
         }
         command(intent);
-        boolean isSelectCheckedPlatform = CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checkPlatform)
-                || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
-                || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform);
 
-        if (captureScreen == null && dealBitmap == null && isSelectCheckedPlatform) {
+        if (captureScreen == null && dealBitmap == null) {
             captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
             dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
-        }
-        if (captureScreen.isDone() && dealBitmap.isDone() && isSelectCheckedPlatform) {
+        } else if (captureScreen.isDone() && dealBitmap.isDone()) {
             captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
             dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
+        } else {
+            Log.e("TAG", "onStartCommand: 123");
         }
         return START_NOT_STICKY;
     }

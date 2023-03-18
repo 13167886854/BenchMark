@@ -86,7 +86,14 @@ public class AccessibilityUtil {
             String text
     ) {
         AccessibilityNodeInfo rootInfo = service.getRootInActiveWindow();
+        AccessibilityNodeInfo empty = null;
+        if (rootInfo == null) {
+            return empty;
+        }
         List<AccessibilityNodeInfo> nodeInfoList = rootInfo.findAccessibilityNodeInfosByViewId(id);
+        if (nodeInfoList.isEmpty()) {
+            return empty;
+        }
         if (text == null || text.isEmpty()) {
             return nodeInfoList.get(0);
         }
@@ -95,7 +102,7 @@ public class AccessibilityUtil {
                 return node;
             }
         }
-        return rootInfo;
+        return empty;
     }
 
     /**
