@@ -94,8 +94,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * onCreateView
      *
-     * @param inflater description
-     * @param container description
+     * @param inflater           description
+     * @param container          description
      * @param savedInstanceState description
      * @return android.view.View
      * @date 2023/3/9 19:44
@@ -103,7 +103,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                 @Nullable Bundle savedInstanceState) {
+                                @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.game_fragment, container, false);
         initview(view);
         redLiuChang.setOnClickListener(this::onClick);
@@ -127,8 +127,8 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 Date date = new Date();
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = simpleDateFormat.format(date);
-                Admin.testTime = time;
-                Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
+                Admin.getInstance().setTestTime(time);
+                Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.getInstance().getTestTime());
                 check();
                 Intent intent = new Intent(getActivity(), CePingActivity.class);
                 intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_GAME);
@@ -160,14 +160,14 @@ public class GameFragment extends Fragment implements View.OnClickListener,
             return;
         }
         if (redWenDingCheck.isChecked() || redYinHuaCheck.isChecked()) {
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.getContext())
+                    || !ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         } else if (redChuKongCheck.isChecked()) {
-            // 检查是否开启无障碍服务。。。。  Check whether barrier-free service is enabled...
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            // 检查是否开启无障碍服务。。。。
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -200,7 +200,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         mSurfaceView = view.findViewById(R.id.surfaceView);
         mSurfaceView.setEGLContextClientVersion(1);
         mSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 0, 0);
-        mSurfaceView.setRenderer(new GPURenderer());
+        mSurfaceView.setRenderer(GPURenderer.getInstance());
 
         redCpu = view.findViewById(R.id.red_cpu);
         redGpu = view.findViewById(R.id.red_gpu);
@@ -396,7 +396,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * onCheckedChanged
      *
-     * @param group description
+     * @param group     description
      * @param checkedId description
      * @date 2023/3/8 15:23
      */
@@ -444,7 +444,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      * onCheckedChanged
      *
      * @param buttonView description
-     * @param isChecked description
+     * @param isChecked  description
      * @date 2023/3/8 15:23
      */
     @Override
@@ -503,7 +503,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     /**
      * getInfo
      *
-     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @return java.util.Map<java.lang.String, java.lang.Object>
      * @date 2023/3/8 15:23
      */
     public Map<String, Object> getInfo() {
@@ -533,9 +533,9 @@ public class GameFragment extends Fragment implements View.OnClickListener,
         res.put("RAM", ramInfo);
         res.put("ROM", storageInfo);
         res.put("CPUCores", cpuNumCores);
-        res.put("GPURenderer", GPURenderer.glRenderer);
-        res.put("GPUVendor", GPURenderer.glVendor);
-        res.put("GPUVersion", GPURenderer.glVersion);
+        res.put("GPURenderer", GPURenderer.getInstance().getGlRenderer());
+        res.put("GPUVendor", GPURenderer.getInstance().getGlVendor());
+        res.put("GPUVersion", GPURenderer.getInstance().getGlVersion());
         Log.d(TAG, "getInfo: res:" + res);
         return res;
     }

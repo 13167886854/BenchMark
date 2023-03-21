@@ -120,11 +120,11 @@ public class CePingActivity extends Activity implements View.OnClickListener {
         testBack.setOnClickListener(this::onClick);
         adapter = new CePingAdapter(testData, (data) -> {
             Intent intent = new Intent(this, JutiZhibiaoActivity.class);
-            intent.putExtra("select_plat", checkedPlat);
-            intent.putExtra("select_item", data.getCepingItem());
-            intent.putExtra("select_img", data.getCepingImage());
-            intent.putExtra("select_text", data.getCepingText());
-            intent.putExtra("select_grade", data.getGrade());
+            intent.putExtra("selectPlat", checkedPlat);
+            intent.putExtra("selectItem", data.getCepingItem());
+            intent.putExtra("selectImg", data.getCepingImage());
+            intent.putExtra("selectText", data.getCepingText());
+            intent.putExtra("selectGrade", data.getGrade());
             intent.putExtra("isCloudPhone", isCloudPhone);
             intent.putExtra("localMobileInfo", mHashMapLocal);
 
@@ -216,10 +216,10 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     }
 
     private void init1(Intent intent) {
-        // 获取平台名称   Get the platform name
-        Admin.platformName = checkedPlat;
+        // 获取平台名称
+        Admin.getInstance().setPlatformName(checkedPlat);
 
-        YinHuaData.platformType = checkedPlat;
+        YinHuaData.getInstance().setPlatformType(checkedPlat);
         phoneName.setText(checkedPlat);
         CacheUtil.put(CacheConst.KEY_PLATFORM_NAME, checkedPlat);
         platformKind = intent.getStringExtra(CacheConst.KEY_PLATFORM_KIND);

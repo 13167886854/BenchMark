@@ -14,8 +14,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
@@ -328,6 +334,36 @@ public class OkHttpUtils {
 
                     @Override
                     public void checkServerTrusted(X509Certificate[] chain, String authType) {
+                        for (X509Certificate cert : chain) {
+                            // Make sure that it hasn't expired.
+                            try {
+                                cert.checkValidity();
+                            } catch (CertificateExpiredException | CertificateNotYetValidException ex) {
+                                Log.e(TAG, "checkServerTrusted: " + ex.toString());
+                            }
+                        }
+
+                        // 检查所有证书
+                        try {
+                            TrustManagerFactory factory = TrustManagerFactory.getInstance("X509");
+                            if (null instanceof KeyStore) {
+                                factory.init((KeyStore) null);
+                            }
+                            for (TrustManager trustManager : factory.getTrustManagers()) {
+                                if (trustManager instanceof X509TrustManager) {
+                                    ((X509TrustManager) trustManager).checkServerTrusted(chain, authType);
+                                }
+                            }
+                        } catch (NoSuchAlgorithmException | CertificateException | KeyStoreException ex) {
+                            Log.e(TAG, "checkServerTrusted: " + ex.toString());
+                        }
+
+                        // 获取网络中的证书信息
+                        X509Certificate certificate = chain[0];
+                        // 证书拥有者
+                        String subject = certificate.getSubjectDN().getName();
+                        // 证书颁发者
+                        String issuer = certificate.getIssuerDN().getName();
                     }
 
                     @Override
@@ -344,7 +380,6 @@ public class OkHttpUtils {
      * @date 2023/3/8 09:12
      */
     public interface ICallBack {
-
         /**
          * onSuccessful
          *

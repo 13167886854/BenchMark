@@ -43,6 +43,7 @@ import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ScoreUtil;
 import com.example.benchmark.utils.ServiceUtil;
 import com.example.benchmark.utils.TapUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -53,6 +54,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
 
 /**
  * MyAccessibilityService
@@ -88,8 +90,8 @@ public class MyAccessibilityService extends AccessibilityService {
     private final int screenDpi = CacheUtil.getInt(CacheConst.KEY_SCREEN_DPI);
     private final Queue<Pair<Bitmap, Long>> mBitmapWithTime = new LinkedList<>();
 
-    private final Thread mCaptureScreenThread = new Thread(this::captureScreen);
-    private final Thread mDealBitmapThread = new Thread(this::dealWithBitmap);
+    private Future<?> captureScreen;
+    private Future<?> dealBitmap;
 
     // 自动点击  Automatic click
     private TapUtil tapUtil;
@@ -119,8 +121,11 @@ public class MyAccessibilityService extends AccessibilityService {
             if (message.what == msgContinueMonitor) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束，请继续在云端手机内测试", Toast.LENGTH_SHORT).show();
+                boolean[] isCheckGroup = new boolean[2];
+                isCheckGroup[0] = isCheckTouch;
+                isCheckGroup[1] = isCheckSoundFrame;
                 ServiceUtil.startFxService(MyAccessibilityService.this,
-                        checkPlatform, resultCode, data, isCheckTouch, isCheckSoundFrame);
+                        checkPlatform, resultCode, data, isCheckGroup);
             } else if (message.what == msgMonitorOver) {
                 Toast.makeText(MyAccessibilityService.this,
                         "稳定性测试结束", Toast.LENGTH_SHORT).show();
@@ -222,12 +227,15 @@ public class MyAccessibilityService extends AccessibilityService {
             }
         }
         command(intent);
-        boolean isSelectCheckedPlatform = CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE.equals(checkPlatform)
-                || CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME.equals(checkPlatform)
-                || CacheConst.PLATFORM_NAME_E_CLOUD_PHONE.equals(checkPlatform);
-        if (!mCaptureScreenThread.isAlive() && !mDealBitmapThread.isAlive() && isSelectCheckedPlatform) {
-            mCaptureScreenThread.start();
-            mDealBitmapThread.start();
+
+        if (captureScreen == null && dealBitmap == null) {
+            captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
+        } else if (captureScreen.isDone() && dealBitmap.isDone()) {
+            captureScreen = ThreadPoolUtil.getPool().submit(this::captureScreen);
+            dealBitmap = ThreadPoolUtil.getPool().submit(this::dealWithBitmap);
+        } else {
+            Log.e("TAG", "onStartCommand: 123");
         }
         return START_NOT_STICKY;
     }
@@ -394,7 +402,7 @@ public class MyAccessibilityService extends AccessibilityService {
             } else if ((Color.red(pixel) == 255 && Color.green(pixel) == 255 && Color.blue(pixel) == 255)) {
                 invalidPixelCount++;
             } else {
-
+                Log.d("TAG", "isBitmapInvalid: lastElse");
             }
         }
         return false;

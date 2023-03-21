@@ -19,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -35,11 +33,6 @@ import okhttp3.Response;
  * @since 2023/3/7 17:29
  */
 public class TapUtil {
-    /**
-     * mWholeMonitorNum
-     */
-    public static int mWholeMonitorNum;
-
     /**
      * 点击次数  number of clicks
      */
@@ -64,8 +57,7 @@ public class TapUtil {
     private long endTime = 0L;
     private long responseTime = 0L;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-
+    private int mWholeMonitorNum;
 
     private TapUtil() {
     }
@@ -81,6 +73,27 @@ public class TapUtil {
             util = new TapUtil();
         }
         return util;
+    }
+
+    /**
+     * getmWholeMonitorNum
+     *
+     * @return int
+     * @date 2023/3/14 15:44
+     */
+    public int getmWholeMonitorNum() {
+        return mWholeMonitorNum;
+    }
+
+    /**
+     * setmWholeMonitorNum
+     *
+     * @param mWholeMonitorNum description
+     * @return void
+     * @date 2023/3/14 15:45
+     */
+    public void setmWholeMonitorNum(int mWholeMonitorNum) {
+        this.mWholeMonitorNum = mWholeMonitorNum;
     }
 
     /**
@@ -125,7 +138,7 @@ public class TapUtil {
      * cloudPhoneTap
      *
      * @param locationX description
- * @param locationY description
+     * @param locationY description
      * @return void
      * @date 2023/3/10 16:53
      */
@@ -144,7 +157,7 @@ public class TapUtil {
                                 .get()
                                 .url(CacheConst.WEB_TIME_URL)
                                 .build();
-                        threadPool.execute(new Runnable() {
+                        ThreadPoolUtil.getPool().execute(new Runnable() {
                             @Override
                             public void run() {
                                 client.newCall(request)
@@ -212,7 +225,7 @@ public class TapUtil {
             }
         };
         Timer timer = new Timer();
-        gameTouchUtil.readyToTapTime = System.currentTimeMillis();
+        gameTouchUtil.setReadyToTapTime(System.currentTimeMillis());
         timer.schedule(task, 1500, 750);
     }
 

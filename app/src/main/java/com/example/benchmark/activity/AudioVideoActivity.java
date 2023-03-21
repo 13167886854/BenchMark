@@ -46,12 +46,7 @@ import java.util.TimerTask;
  * @since 2023/3/7 15:05
  */
 public class AudioVideoActivity extends AppCompatActivity implements View.OnClickListener {
-    /** isTestOver */
-    public static boolean isTestOver = false;
-
-    /** mMp4FilePath */
-    public static String mMp4FilePath;
-
+    private String mMp4FilePath;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mHolder;
     private TextView yinhuaxinxi;
@@ -73,7 +68,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
             videocurtime = videoDecodeThread.getcurTime() / 10000;
             audiocurtime = audioDecodeThread.getcurTime() / 10000;
 
-            if (isCompleted && YinHuaData.resolution != null) {
+            if (isCompleted && YinHuaData.getInstance().getResolution() != null) {
                 yinhuaxinxi.setText("测试结束！"
                         + System.getProperty("line.separator")
                         + "当前云手机像素为" + heightPixels + "X" + widthPixels + "像素"
@@ -83,8 +78,8 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                         + "当前音频帧" + audiocurtime
                         + System.getProperty("line.separator")
                         + "最大音画同步差" + maxDifferenceValue);
-                ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.resolution, maxDifferenceValue);
-                isTestOver = true;
+                ScoreUtil.calcAndSaveSoundFrameScores(YinHuaData.getInstance().getResolution(), maxDifferenceValue);
+                YinHuaData.getInstance().setTestOver(true);
                 return;
             }
 
@@ -149,13 +144,13 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
 
     private void init() {
         isCompleted = false;
-        isTestOver = false;
+        YinHuaData.getInstance().setTestOver(false);
         mSurfaceView = findViewById(R.id.surface_view);
         mHolder = mSurfaceView.getHolder();
         yinhuaxinxi = findViewById(R.id.yinhua_item);
         mMp4FilePath = getIntent().getStringExtra("path");
         if (getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
-            if(AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager){
+            if (AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
                 WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
                 DisplayMetrics outMetrics = new DisplayMetrics();
                 wm.getDefaultDisplay().getMetrics(outMetrics);
@@ -204,7 +199,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                     public void run() {
                         Message message = new Message();
                         handler.sendMessage(message);
-                        if (isTestOver) {
+                        if (YinHuaData.getInstance().isTestOver()) {
                             timer.cancel();
                         }
                     }

@@ -51,7 +51,7 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
      * NetEaseCloudGameStabilityService
      *
      * @param service description
-     * @return 
+     * @return
      * @date 2023/3/10 16:11
      */
     public NetEaseCloudGameStabilityService(MyAccessibilityService service) {
@@ -187,7 +187,8 @@ public class NetEaseCloudGameStabilityService implements IStabilityService {
      */
     @Override
     public float getStartSuccessRate() {
-        return (mCurrentMonitorNum - mFailMonitorNum) / (float) TapUtil.mWholeMonitorNum * 100;
+        return (mCurrentMonitorNum - mFailMonitorNum)
+                / (float) TapUtil.getUtil().getmWholeMonitorNum() * 100;
     }
 
     /**

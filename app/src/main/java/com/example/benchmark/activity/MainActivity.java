@@ -58,7 +58,7 @@ import okio.Sink;
  * MainActivity.java
  *
  * @Author benchmark
- * @Version 1.0 
+ * @Version 1.0
  * @since 2023/3/10 10:44
  */
 public class MainActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                openBrowser(mContext, tmpUrl 
+                                openBrowser(mContext, tmpUrl
                                         + "/upgrade/update?version=" + latestVersion + "&platform=Local");
                                 dialog.dismiss();
                             }
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     /**
      * onCheckedChanged
      *
-     * @param group description
+     * @param group     description
      * @param checkedId description
      * @return void
      * @date 2023/3/10 10:45
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
      * changeFragment
      *
      * @param fragment description
-     * @param isFisrt description
+     * @param isFisrt  description
      * @return void
      * @date 2023/3/10 10:45
      */
@@ -204,10 +204,27 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 .build();
         // 执行和回调   Execute and call back
         client.newCall(request).enqueue(new Callback() {
+            /**
+             * onFailure
+             *
+             * @param call description
+             * @param ex description
+             * @return void
+             * @date 2023/3/11 14:39
+             */
             public void onFailure(Call call, IOException ex) {
                 Log.e("TWT", "onFailure: " + ex);
             }
 
+            /**
+             * onResponse
+             *
+             * @param call description
+             * @param response description
+             * @return void
+             * @throws IOException 输入输出流错误
+             * @date 2023/3/11 14:51
+             */
             public void onResponse(Call call, Response response)
                     throws IOException {
                 String str = response.body().string();
@@ -278,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
      * openBrowser
      *
      * @param context description
-     * @param url description
+     * @param url     description
      * @return void
      * @date 2023/3/10 10:45
      */

@@ -8,6 +8,7 @@ package com.example.benchmark.utils;
 
 import android.os.Handler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 /**
@@ -17,15 +18,17 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class FpsUtils {
-    /** 监听时的刷新时间间隔,设置为1S  Set the refreshing interval for listening to 1S */
+    /**
+     * 监听时的刷新时间间隔,设置为1S
+     */
     public static final long FPS_INTERVAL_TIME = 1000L;
 
-    /** 低帧判断  fps<25判断为低帧  Low frame Indicates that the fps is less than 25 */
-    // 每帧传输时间超过fps25的判断为低帧  If the transmission time per frame exceeds fps25, it is considered as low frame
-    public static final double LOW_FRAME_TIME = 1000.0 / 24;
+    /**
+     * 低帧判断  fps<25判断为低帧
+     */
+    public static final double LOW_FRAME_TIME = 41.666d; // 每帧传输时间超过fps25的判断为低帧 1000/24
 
-    /** handler */
-    public static Handler mainHandler = new Handler();
+    private static Handler mainHandler = new Handler();
 
     private static FpsUtils fpsUtils = new FpsUtils();
 
@@ -77,6 +80,10 @@ public class FpsUtils {
             fpsUtils = new FpsUtils();
         }
         return fpsUtils;
+    }
+
+    public static Handler getMainHandler() {
+        return mainHandler;
     }
 
     /**
@@ -271,7 +278,11 @@ public class FpsUtils {
         int t3 = last3FrameTimes.get(size - 3);
         last3FrameTimes.remove(0);
         last3FrameTimes.add(time);
-        if ((time > LOW_FRAME_TIME * 2) && (time > (double) (t1 + t2 + t3) * 2 / 3)) {
+        BigDecimal total = BigDecimal.valueOf(t1 + t2 + t3);
+        BigDecimal res = total.multiply(BigDecimal.valueOf(2)).divide(BigDecimal.valueOf(3), BigDecimal.ROUND_CEILING);
+        BigDecimal timeB = BigDecimal.valueOf(time);
+        if ((timeB.compareTo(BigDecimal.valueOf(LOW_FRAME_TIME).multiply(BigDecimal.valueOf(2))) == 1)
+                && (timeB.compareTo(res) == 1)) {
             shutterTime += time;
             return true;
         } else {
@@ -322,7 +333,7 @@ public class FpsUtils {
             return 0;
         }
         for (Integer integer : list) {
-            maxList = maxList > integer ? maxList : integer;
+            maxList = maxList > integer ? maxList : integer.intValue();
         }
         return maxList;
     }

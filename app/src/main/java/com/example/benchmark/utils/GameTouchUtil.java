@@ -21,9 +21,7 @@ public class GameTouchUtil {
     public static final int TEST_NUM = 10;
     private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
-    /** readyToTapTime */
-    public long readyToTapTime = 0L;
-
+    private long readyToTapTime = 0L;
     private long videoStartTime = 0L;
     private long videoEndTime = 0L;
     private ArrayList<Long> frameUpdateTime = new ArrayList<>();
@@ -46,6 +44,14 @@ public class GameTouchUtil {
             gameTouchUtil = new GameTouchUtil();
         }
         return gameTouchUtil;
+    }
+
+    public long getReadyToTapTime() {
+        return readyToTapTime;
+    }
+
+    public void setReadyToTapTime(long time) {
+        this.readyToTapTime = time;
     }
 
     /**
@@ -214,7 +220,7 @@ public class GameTouchUtil {
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / (float) testNum;
         Log.d("TWT", "printAvgTime: 平均自动点击响应时间为：" + avgtime);
     }
 
@@ -231,7 +237,7 @@ public class GameTouchUtil {
         for (int i = 0; i < autoTapTime.size(); i++) {
             sum += (frameUpdateTime.get(i) - autoTapTime.get(i));
         }
-        float avgtime = (float) sum / testNum;
+        float avgtime = (float) sum / (float) testNum;
         Log.e("TWT", "getAvgTime:+frameUpdateTime.size " + frameUpdateTime.size());
         Log.e("TWT", "getAvgTime:+autoTapTime.size " + autoTapTime.size());
         return avgtime;

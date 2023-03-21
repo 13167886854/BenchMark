@@ -88,7 +88,6 @@ public class FxService extends Service {
     /**
      * 文件路径地址  File path address
      */
-    public static String path = "";
     private static final String TAG = "TWT";
 
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
@@ -99,6 +98,7 @@ public class FxService extends Service {
     private boolean isCodeTouchAble = true;
     private boolean isRunning;
 
+    private String path = "";
     private int width;
     private int height;
     private int dpi;
@@ -143,8 +143,8 @@ public class FxService extends Service {
                             Toast.LENGTH_SHORT).show();
                     break;
                 case computePesq:
-                    if (YinHuaData.pesq != null) {
-                        Toast.makeText(mContext, (YinHuaData.platformType + "音频质量计算完成~"),
+                    if (YinHuaData.getInstance().getPesq() != null) {
+                        Toast.makeText(mContext, (YinHuaData.getInstance().getPlatformType() + "音频质量计算完成~"),
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -559,7 +559,7 @@ public class FxService extends Service {
         @SuppressLint("WrongConstant")
         ImageReader imageReader = ImageReader.newInstance(screenWidth, screenHeight,
                 PixelFormat.RGBA_8888, 60);
-        VirtualDisplay virtualDisplay = mediaProjection.createVirtualDisplay(
+        VirtualDisplay virtualDisplayTemp = mediaProjection.createVirtualDisplay(
                 "screen", screenWidth, screenHeight, 1,
                 DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
                 imageReader.getSurface(), null, null);
@@ -568,7 +568,7 @@ public class FxService extends Service {
         // 取最新的图片  Get the latest picture
         Image image = imageReader.acquireLatestImage();
 
-        // 释放 virtualDisplay,不释放会报错  If virtualDisplay is not released, an error message is displayed
+        // 释放 virtualDisplay,不释放会报错
         virtualDisplay.release();
         return image2Bitmap(image);
     }
@@ -591,7 +591,8 @@ public class FxService extends Service {
         int pixelStride = planes[0].getPixelStride();
         int rowStride = planes[0].getRowStride();
         int rowPadding = rowStride - pixelStride * imageWidth;
-        Bitmap bitmap = Bitmap.createBitmap(imageWidth + rowPadding / pixelStride, imageHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(imageWidth
+                + rowPadding / pixelStride, imageHeight, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
         image.close();
         return bitmap;
@@ -657,14 +658,15 @@ public class FxService extends Service {
         Log.e("QT-1", result + "---123");
         Log.e("QT-1", "123---" + result);
         if ("{}".equals(result)) {
-            // 空数据，点击无效  Null data, click invalid
+            // 空数据，点击无效
             return;
         }
         JSONObject jsonData = JSON.parseObject(result);
 
         getInfo1(jsonData);
 
-        // 触控测试数据  Touch test data
+        Log.d("TWT", "云端测试数据JSON: " + jsonData);
+        // 触控测试数据
         ScoreUtil.calcAndSaveTouchScores(
                 getCloudListDataFromJson(jsonData, "cloudDownTimeList"),
                 getCloudListDataFromJson(jsonData, "cloudSpendTimeList")
@@ -703,23 +705,26 @@ public class FxService extends Service {
                 jsonData.get("totalStorage") instanceof String ? (String) jsonData.get("totalStorage") : ""
 
         );
+
+        float[] info = new float[6];
+        info[0] = getFloatDataFromJson(jsonData, "avergeFPS");
+        info[1] = getFloatDataFromJson(jsonData, "frameShakingRate");
+        info[2] = getFloatDataFromJson(jsonData, "lowFrameRate");
+        info[3] = getFloatDataFromJson(jsonData, "frameInterval");
+        info[4] = getFloatDataFromJson(jsonData, "jankCount");
+        info[5] = getFloatDataFromJson(jsonData, "stutterRate");
         ScoreUtil.calcAndSaveFluencyScores(
-                getFloatDataFromJson(jsonData, "avergeFPS"),
-                getFloatDataFromJson(jsonData, "frameShakingRate"),
-                getFloatDataFromJson(jsonData, "lowFrameRate"),
-                getFloatDataFromJson(jsonData, "frameInterval"),
-                getFloatDataFromJson(jsonData, "jankCount"),
-                getFloatDataFromJson(jsonData, "stutterRate"),
+                info,
                 jsonData.getString("eachFps")
         );
     }
 
     /**
+     * setMediaProject
+     *
      * @param project description
      * @return void
-     * @throws null
-     * @description: setMediaProject
-     * @date 2023/3/1 15:07
+     * @date 2023/3/11 15:16
      */
     public void setMediaProject(MediaProjection project) {
         mediaProjection = project;
@@ -777,8 +782,8 @@ public class FxService extends Service {
         mediaRecorder.reset();
         virtualDisplay.release();
 
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机  If it's a cloud phone
@@ -797,8 +802,8 @@ public class FxService extends Service {
     private void stopRecord4() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
-        // file是要上传的文件 File() "/"  file is the File to be uploaded File() "/"
-        File file = new File(CacheConst.videoPath + File.separator
+        // file是要上传的文件 File() "/"
+        File file = new File(CacheConst.getInstance().getVideoPath() + File.separator
                 + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -808,7 +813,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.videoPath);
+                + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -820,8 +825,8 @@ public class FxService extends Service {
 
     private void stopRecord3() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        // file是要上传的文件 File() "/"  file is the File to be uploaded File() "/"
-        File file = new File(CacheConst.videoPath
+        // file是要上传的文件 File() "/"
+        File file = new File(CacheConst.getInstance().getVideoPath()
                 + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -831,7 +836,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.videoPath);
+                + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -868,13 +873,13 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.psnr = resArr[1];
-                        YinHuaData.ssim = resArr[3];
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                        if (YinHuaData.psnr != null
-                                && YinHuaData.ssim != null
-                                && YinHuaData.pesq != null) {
+                        YinHuaData.getInstance().setPsnr(resArr[1]);
+                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        if (YinHuaData.getInstance().getPsnr() != null
+                                && YinHuaData.getInstance().getSsim() != null
+                                && YinHuaData.getInstance().getPesq() != null) {
                             isCodeTouchAble = true;
                             btnToPrCode.setTextColor(0xff000000);
                             Looper.prepare();
@@ -913,13 +918,13 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.psnr = resArr[1];
-                        YinHuaData.ssim = resArr[3];
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                        if (YinHuaData.psnr != null
-                                && YinHuaData.ssim != null
-                                && YinHuaData.pesq != null) {
+                        YinHuaData.getInstance().setPsnr(resArr[1]);
+                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        if (YinHuaData.getInstance().getPsnr() != null
+                                && YinHuaData.getInstance().getSsim() != null
+                                && YinHuaData.getInstance().getPesq() != null) {
                             isCodeTouchAble = true;
                             btnToPrCode.setTextColor(0xff000000);
                             Looper.prepare();
@@ -956,8 +961,8 @@ public class FxService extends Service {
                 Log.e(TAG, "stopAudioRecord: ", ex);
             }
         }
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机  If it's a cloud phone
@@ -975,7 +980,7 @@ public class FxService extends Service {
 
     private void stopAudioRecord4() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        File file = new File(CacheConst.audioPath + File.separator
+        File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -985,7 +990,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.audioPath);
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -997,7 +1002,7 @@ public class FxService extends Service {
 
     private void stopAudioRecord3() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        File file = new File(CacheConst.audioPath + File.separator
+        File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
                 (MediaType.parse("multipart" + File.separator + "form-data"), file);
@@ -1007,7 +1012,7 @@ public class FxService extends Service {
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
-                + CacheConst.audioPath);
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
@@ -1043,12 +1048,12 @@ public class FxService extends Service {
                         String res = response.body().string();
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr " + Arrays.toString(resArr));
-                        YinHuaData.pesq = resArr[resArr.length - 1];
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
                         handler.sendEmptyMessage(computePesq);
-                        if (YinHuaData.psnr != null
-                                && YinHuaData.ssim != null
-                                && YinHuaData.pesq != null) {
+                        if (YinHuaData.getInstance().getPsnr() != null
+                                && YinHuaData.getInstance().getSsim() != null
+                                && YinHuaData.getInstance().getPesq() != null) {
                             isCodeTouchAble = true;
                             btnToPrCode.setTextColor(0xff000000);
                             Looper.prepare();
@@ -1086,12 +1091,12 @@ public class FxService extends Service {
                         String res = response.body().string();
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.pesq = resArr[resArr.length - 1];
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
                         handler.sendEmptyMessage(computePesq);
-                        if (YinHuaData.psnr != null
-                                && YinHuaData.ssim != null
-                                && YinHuaData.pesq != null) {
+                        if (YinHuaData.getInstance().getPsnr() != null
+                                && YinHuaData.getInstance().getSsim() != null
+                                && YinHuaData.getInstance().getPesq() != null) {
                             isCodeTouchAble = true;
                             btnToPrCode.setTextColor(0xff000000);
                             Looper.prepare();
@@ -1114,8 +1119,8 @@ public class FxService extends Service {
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机  If it's a cloud phone
@@ -1152,7 +1157,7 @@ public class FxService extends Service {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
                     + File.separator + "ScreenRecorder" + File.separator;
-            CacheConst.videoPath = rootDir;
+            CacheConst.getInstance().setVideoPath(rootDir);
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {

@@ -39,14 +39,14 @@ public class JuTiCpuFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                                 @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                                @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.juti_cpu_fragment, container, false);
         TextView cpuModel = view.findViewById(R.id.juti_cpu_model);
         TextView cpuCore = view.findViewById(R.id.juti_cpu_core);
         TextView cpuMaxRate = view.findViewById(R.id.juti_cpu_maxrate);
-        cpuCore.setText(MobileCloud.cpuCoreNum);
-        Log.d("info", MobileCloud.spec);
-        Log.d("info", MobileCloud.name);
+        cpuCore.setText(MobileCloud.getInstance().getCpuCoreNum());
+        Log.d("info", MobileCloud.getInstance().getSpec());
+        Log.d("info", MobileCloud.getInstance().getName());
         return view;
     }
 }

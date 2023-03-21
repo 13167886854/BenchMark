@@ -88,7 +88,7 @@ public class ShaderUtils {
             baos.close();
             input.close();
             result = new String(buff, "UTF-8");
-            result = result.replaceAll("\\r\\n", "\n");
+            result = result.replaceAll("\\r\\n", System.lineSeparator());
         } catch (IOException ioe) {
             Log.e("ShaderUtils", "readRawTextFile: ", ioe);
         }
@@ -163,7 +163,7 @@ public class ShaderUtils {
         int error;
         while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
             Log.e("ES20_ERROR", str + ": glError " + error);
-            throw new RuntimeException(str + ": glError " + error);
+            throw new ArrayIndexOutOfBoundsException(str + ": glError " + error);
         }
     }
 }

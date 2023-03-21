@@ -90,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @date 2023/3/9 19:50
      */
     public void save(View view) {
-        TapUtil.mWholeMonitorNum = testNum;
+        TapUtil.getUtil().setmWholeMonitorNum(testNum);
         editor.putInt("testNum", testNum);
         editor.apply();
         Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();

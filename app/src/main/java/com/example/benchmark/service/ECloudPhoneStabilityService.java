@@ -16,9 +16,7 @@ import com.example.benchmark.utils.AccessibilityCallback;
 import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 /**
  * ECloudPhoneStabilityService
@@ -45,8 +43,6 @@ public class ECloudPhoneStabilityService implements IStabilityService {
     private boolean isClickQuitNotice = false;
     private boolean isConnectSuccess = false;
     private boolean isTapSuccess = false;
-
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     public ECloudPhoneStabilityService(MyAccessibilityService service) {
         this.service = service;
@@ -141,7 +137,7 @@ public class ECloudPhoneStabilityService implements IStabilityService {
         if (isClickQuitNotice) {
             return;
         }
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 try {

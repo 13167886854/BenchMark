@@ -58,7 +58,7 @@ public class MiGuPlayStabilityService implements IStabilityService {
      * MiGuPlayStabilityService
      *
      * @param service description
-     * @return 
+     * @return
      * @date 2023/3/10 16:12
      */
     public MiGuPlayStabilityService(MyAccessibilityService service) {

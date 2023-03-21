@@ -34,11 +34,15 @@ import com.example.benchmark.data.Admin;
  * @since 2023/3/7 15:14
  */
 public class LoginDialog extends Dialog {
-    /** Login */
+    /**
+     * Login
+     */
     private static final String TAG = "Login";
 
-    /** 确定按钮  Confirm button */
-    public Button yes;
+    /**
+     * 确定按钮
+     */
+    private Button yes;
 
     // 取消按钮  Cancel button
     private Button no;
@@ -98,9 +102,19 @@ public class LoginDialog extends Dialog {
     }
 
     /**
+     * getYes
+     *
+     * @return android.widget.Button
+     * @date 2023/3/13 16:50
+     */
+    public Button getYes() {
+        return yes;
+    }
+
+    /**
      * setNoOnclickListener
      *
-     * @param str description
+     * @param str                 description
      * @param onNoOnclickListener description
      * @date 2023/3/10 11:33
      */
@@ -114,7 +128,7 @@ public class LoginDialog extends Dialog {
     /**
      * setYesOnclickListener
      *
-     * @param str description
+     * @param str                  description
      * @param onYesOnclickListener description
      * @return void
      * @date 2023/3/10 11:33
@@ -157,13 +171,15 @@ public class LoginDialog extends Dialog {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 username = editable.toString();
-                Admin.username = username;
+                Admin.getInstance().setUsername(username);
             }
         });
         // 密码  password
@@ -172,13 +188,15 @@ public class LoginDialog extends Dialog {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void onTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
                 password = editable.toString();
-                Admin.password = password;
+                Admin.getInstance().setPassword(password);
             }
         });
     }
@@ -221,23 +239,24 @@ public class LoginDialog extends Dialog {
         }
         view = findViewById(R.id.view_dialog);
     }
+
     /**
+     * setTitle
+     *
      * @param title description
      * @return void
-     * @throws null
-     * @description: 从外界Activity为Dialog设置标题
-     * @date 2023/2/23 09:43
+     * @date 2023/3/11 15:00
      */
     public void setTitle(String title) {
         titleStr = title;
     }
 
     /**
+     * setMessage
+     *
      * @param message description
      * @return void
-     * @throws null
-     * @description: 从外界Activity为Dialog设置dialog的message
-     * @date 2023/2/23 09:43
+     * @date 2023/3/11 15:13
      */
     public void setMessage(String message) {
         messageStr = message;

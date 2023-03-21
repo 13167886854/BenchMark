@@ -140,9 +140,9 @@ public class VideoRecordService extends Service {
     /**
      * setConfig
      *
-     * @param width description
+     * @param width  description
      * @param height description
-     * @param dpi description
+     * @param dpi    description
      * @return void
      * @date 2023/3/10 16:13
      */
@@ -151,7 +151,7 @@ public class VideoRecordService extends Service {
         this.height = height;
         this.dpi = dpi;
     }
-    
+
     private void createFloatView() {
         initFloatView();
 
@@ -363,7 +363,7 @@ public class VideoRecordService extends Service {
     public String getsaveDirectory() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + File.separator +"ScreenRecorder" + File.separator;
+                    + File.separator + "ScreenRecorder" + File.separator;
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -390,8 +390,8 @@ public class VideoRecordService extends Service {
     /**
      * onStartCommand
      *
-     * @param intent description
-     * @param flags description
+     * @param intent  description
+     * @param flags   description
      * @param startId description
      * @return int
      * @date 2023/3/10 16:13
@@ -405,7 +405,7 @@ public class VideoRecordService extends Service {
      * VideoRecordService.java
      *
      * @Author benchmark
-     * @Version 1.0 
+     * @Version 1.0
      * @since 2023/3/10 16:13
      */
     public class RecordBinder extends Binder {

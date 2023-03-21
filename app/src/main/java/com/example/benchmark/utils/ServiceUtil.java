@@ -75,13 +75,14 @@ public class ServiceUtil {
      * @param checkedPlat      description
      * @param resultCode        description
      * @param data              description
-     * @param isCheckTouch      description
-     * @param isCheckSoundFrame description
+     * @param isCheckGroup      isCheckTouch,isCheckSoundFrame
      * @description: startFxService
      * @date 2023/2/22 14:53
      */
     public static void startFxService(Context context, String checkedPlat, int resultCode,
-        Intent data, boolean isCheckTouch, boolean isCheckSoundFrame) {
+        Intent data, boolean[] isCheckGroup) {
+        boolean isCheckTouch = isCheckGroup[0];
+        boolean isCheckSoundFrame = isCheckGroup[1];
         if (!Settings.canDrawOverlays(context)) {
             toFloatGetPermission(context);
         } else {

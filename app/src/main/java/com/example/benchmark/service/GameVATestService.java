@@ -89,7 +89,7 @@ public class GameVATestService extends Service {
     private WindowManager mWindowManager;
     private TextView mFloatView;
     private TextView snap;
-    
+
     private MediaProjection mediaProjection;
     private MediaRecorder mediaRecorder;
     private VirtualDisplay virtualDisplay;
@@ -141,8 +141,8 @@ public class GameVATestService extends Service {
                     startActivity(intent);
                     break;
                 case computePesq:
-                    if (YinHuaData.pesq != null) {
-                        Toast.makeText(mContext, (YinHuaData.platformType
+                    if (YinHuaData.getInstance().getPesq() != null) {
+                        Toast.makeText(mContext, (YinHuaData.getInstance().getPlatformType()
                                 + "音频质量计算完成~"), Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -455,8 +455,8 @@ public class GameVATestService extends Service {
         mediaRecorder.reset();
         virtualDisplay.release();
 
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         boolean isTestCloudPhone = platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
@@ -465,12 +465,13 @@ public class GameVATestService extends Service {
         isTestCloudPhone = isTestCloudPhone || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
 
-        // 如果是云手机  If it's a cloud phone
+        // 如果是云手机
         if (isTestCloudPhone) {
             stopVideoRecord1();
         } else {
-            // file是要上传的文件 File()  file is the File to be uploaded File()
-            File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_GAME_NAME);
+            // file是要上传的文件 File()
+            File file = new File(CacheConst.getInstance().getVideoPath()
+                    + File.separator + CacheConst.VIDEO_GAME_NAME);
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                     + "form-data"), file);
             MultipartBody multipartBody = new MultipartBody.Builder()
@@ -478,7 +479,7 @@ public class GameVATestService extends Service {
                     .addFormDataPart("VideoRecord", CacheConst.VIDEO_GAME_NAME, requestBody)
                     .build();
             Log.d("zzl", "stopAudioRecord: " + file.getName());
-            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
+            Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
             Log.d("zzl", "stopAudioRecord: CacheConst.VIDEO_GAME_NAME--" + CacheConst.VIDEO_GAME_NAME);
             Request request = new Request.Builder()
                     .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
@@ -490,9 +491,9 @@ public class GameVATestService extends Service {
 
     private void stopVideoRecord2(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时  Connection timeout
-                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时  Read timeout
-                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时  Write timeout
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
                 .build();
 
         client.newCall(request)
@@ -511,14 +512,14 @@ public class GameVATestService extends Service {
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
 
-                        YinHuaData.psnr = resArr[1];
-                        YinHuaData.ssim = resArr[3];
-                        YinHuaData.resolution = resArr[5];
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
+                        YinHuaData.getInstance().setPsnr(resArr[1]);
+                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        YinHuaData.getInstance().setResolution(resArr[5]);
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getResolution());
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
                         Intent intent = new Intent(getApplicationContext(), CePingActivity.class);
                         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
@@ -527,7 +528,8 @@ public class GameVATestService extends Service {
     }
 
     private void stopVideoRecord1() {
-        File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_PHONE_NAME);
+        File file = new File(CacheConst.getInstance().getVideoPath()
+                + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -535,7 +537,7 @@ public class GameVATestService extends Service {
                 .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.videoPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
@@ -563,13 +565,13 @@ public class GameVATestService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.psnr = resArr[1];
-                        YinHuaData.ssim = resArr[3];
-                        YinHuaData.resolution = resArr[5];
+                        YinHuaData.getInstance().setPsnr(resArr[1]);
+                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        YinHuaData.getInstance().setResolution(resArr[5]);
 
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.psnr);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.ssim);
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.resolution);
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getResolution());
                     }
                 });
     }
@@ -579,8 +581,8 @@ public class GameVATestService extends Service {
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         // 如果是云手机  If it's a cloud phone
@@ -620,7 +622,7 @@ public class GameVATestService extends Service {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath()
                     + File.separator + "ScreenRecorder" + File.separator;
-            CacheConst.videoPath = rootDir;
+            CacheConst.getInstance().setVideoPath(rootDir);
             File file = new File(rootDir);
             if (!file.exists()) {
                 if (!file.mkdirs()) {
@@ -675,8 +677,8 @@ public class GameVATestService extends Service {
             }
         }
 
-        // 平台类型  Platform type
-        String platformKind = YinHuaData.platformType;
+        // 平台类型
+        String platformKind = YinHuaData.getInstance().getPlatformType();
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
         boolean isTestCloudPhone;
@@ -695,7 +697,8 @@ public class GameVATestService extends Service {
     }
 
     private void stopAudioRecord2() {
-        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_GAME_NAME);
+        File file = new File(CacheConst.getInstance().getAudioPath()
+                + File.separator + CacheConst.AUDIO_GAME_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -703,7 +706,8 @@ public class GameVATestService extends Service {
                 .addFormDataPart("AudioRecord", CacheConst.AUDIO_GAME_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
@@ -721,6 +725,7 @@ public class GameVATestService extends Service {
                         Log.d(TAG, "onFailure: call " + call);
                         Log.d(TAG, "onFailure: e" + ex.toString());
                     }
+
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         Log.d(TAG, "onResponse: response==>" + response);
@@ -728,15 +733,16 @@ public class GameVATestService extends Service {
                         String res = response.body().string();
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.pesq = resArr[resArr.length - 1];
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
                         handler.sendEmptyMessage(computePesq);
                     }
                 });
     }
 
     private void stopAudioRecord1() {
-        File file = new File(CacheConst.audioPath + File.separator + CacheConst.AUDIO_PHONE_NAME);
+        File file = new File(CacheConst.getInstance().getAudioPath()
+                + File.separator + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                 + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
@@ -744,7 +750,8 @@ public class GameVATestService extends Service {
                 .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
                 .build();
         Log.d("zzl", "stopAudioRecord: " + file.getName());
-        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.audioPath);
+        Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--"
+                + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
                 .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
@@ -771,8 +778,8 @@ public class GameVATestService extends Service {
                         String res = response.body().string();
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.pesq = resArr[resArr.length - 1];
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.pesq);
+                        YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
                         handler.sendEmptyMessage(computePesq);
                     }
                 });

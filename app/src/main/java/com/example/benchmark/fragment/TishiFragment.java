@@ -31,9 +31,7 @@ import com.example.benchmark.dialog.LoginDialog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import okhttp3.Call;
 
@@ -55,16 +53,15 @@ public class TishiFragment extends Fragment {
     private Message mMessage;
     private FragmentManager fragmentManager;
     private HistoryFragment history;
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
 
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
             } else if (msg.what == 2) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
                 myDialog.dismiss();
             } else {
                 Log.e(TAG, "handleMessage: num of msg.what error");
@@ -78,15 +75,17 @@ public class TishiFragment extends Fragment {
             myDialog.setYesOnclickListener("确定", new LoginDialog.OnYesOnclickListener() {
                 @Override
                 public void onYesClick() {
-                    myDialog.yes.setEnabled(false);
-                    Log.d(TAG, "点击登录: username---" + Admin.username
-                            + "---password---" + Admin.username);
-                    if (Admin.username.length() < 5 || Admin.username.length() > 15) {
+                    myDialog.getYes().setEnabled(false);
+                    Log.d(TAG, "点击登录: username---" + Admin.getInstance().getUsername()
+                            + "---password---" + Admin.getInstance().getPassword());
+                    if (Admin.getInstance().getUsername().length() < 5
+                            || Admin.getInstance().getUsername().length() > 15) {
                         Toast.makeText(getContext(), "用户名长度为5~15位", Toast.LENGTH_SHORT).show();
-                        myDialog.yes.setEnabled(true);
-                        if (Admin.password.length() < 5 || Admin.password.length() > 15) {
+                        myDialog.getYes().setEnabled(true);
+                        if (Admin.getInstance().getPassword().length() < 5
+                                || Admin.getInstance().getPassword().length() > 15) {
                             Toast.makeText(getContext(), "密码长度为5~15位", Toast.LENGTH_SHORT).show();
-                            myDialog.yes.setEnabled(true);
+                            myDialog.getYes().setEnabled(true);
                         }
                     } else {
                         // 发送后端登录验证请求  Send a back-end login authentication request
@@ -98,13 +97,13 @@ public class TishiFragment extends Fragment {
     };
 
     private void sendLoginQuest() {
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
                         + "/admin/loginAndReg")
-                        .addParam("adminName", Admin.username)
-                        .addParam("adminPasswd", Admin.password)
+                        .addParam("adminName", Admin.getInstance().getUsername())
+                        .addParam("adminPasswd", Admin.getInstance().getPassword())
                         .addHeader("Content-Type", "application/json; charset=utf-8")
                         .post(true)
                         .async(new OkHttpUtils.ICallBack() {
@@ -135,15 +134,15 @@ public class TishiFragment extends Fragment {
 
     private void successful(String data) {
         Log.e(TAG, "Admin.username: "
-                + Admin.username);
+                + Admin.getInstance().getUsername());
         Log.e(TAG, "Admin.password: "
-                + Admin.password);
+                + Admin.getInstance().getPassword());
         Log.d(TAG, "onSuccessful: data--" + data);
         if (data.endsWith("成功")) {
-            Admin.adminName = data.split(" ")[1];
+            Admin.getInstance().setAdminName(data.split(" ")[1]);
             Log.d(TAG, "onSuccessful: Admin.adminName=="
-                    + Admin.adminName);
-            Admin.status = "Success";
+                    + Admin.getInstance().getAdminName());
+            Admin.getInstance().setStatus("Success");
             mMessage = mHandler.obtainMessage();
             mMessage.what = 2;
             mHandler.sendMessage(mMessage);
@@ -178,7 +177,7 @@ public class TishiFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
-                               @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+                                @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tishi_fragment, container, false);
         infoFluency = view.findViewById(R.id.info_fluency);
         infoStability = view.findViewById(R.id.info_stability);
@@ -188,7 +187,7 @@ public class TishiFragment extends Fragment {
 
         history = new HistoryFragment();
 
-        if (!Admin.status.equals("Success")) {
+        if (!Admin.getInstance().getStatus().equals("Success")) {
             showDialog();
         }
 
@@ -288,7 +287,7 @@ public class TishiFragment extends Fragment {
                 myDialog.dismiss();
             }
         });
-        threadPool.execute(runnable);
+        ThreadPoolUtil.getPool().execute(runnable);
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();

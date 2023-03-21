@@ -133,8 +133,8 @@ public class GameSmoothTestService extends Service {
     /**
      * onStartCommand
      *
-     * @param intent description
-     * @param flags description
+     * @param intent  description
+     * @param flags   description
      * @param startId description
      * @return int
      * @date 2023/3/10 15:30
@@ -161,8 +161,8 @@ public class GameSmoothTestService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 boolean isClick = false;
-                isClick = touch1(event, isClick);
-                // 响应点击事件  Response click event
+                isClick = touch1(event);
+                // 响应点击事件
                 if (isClick && isAble) {
                     isAble = false;
                     startRecord();
@@ -194,7 +194,7 @@ public class GameSmoothTestService extends Service {
         });
     }
 
-    private boolean touch1(MotionEvent event, boolean isClick) {
+    private boolean touch1(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 startTime = System.currentTimeMillis();
@@ -212,15 +212,14 @@ public class GameSmoothTestService extends Service {
             case MotionEvent.ACTION_UP:
                 endTime = System.currentTimeMillis();
 
-                // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
+                // 小于0.2秒被判断为点击
                 if ((endTime - startTime) > 200) {
-                    isClick = false;
+                    return false;
                 } else {
-                    isClick = true;
+                    return true;
                 }
-                break;
         }
-        return isClick;
+        return false;
     }
 
     private void initFloatView1() {
@@ -308,9 +307,9 @@ public class GameSmoothTestService extends Service {
     /**
      * setConfig
      *
-     * @param width description
+     * @param width  description
      * @param height description
-     * @param dpi description
+     * @param dpi    description
      * @return void
      * @date 2023/3/10 15:31
      */
@@ -414,7 +413,7 @@ public class GameSmoothTestService extends Service {
      * GameSmoothTestService.java
      *
      * @Author benchmark
-     * @Version 1.0 
+     * @Version 1.0
      * @since 2023/3/10 15:31
      */
     public class GameSmoothBinder extends Binder {

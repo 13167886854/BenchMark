@@ -138,7 +138,8 @@ public class HuaweiCloudPhoneStabilityService implements IStabilityService {
 
     @Override
     public float getStartSuccessRate() {
-        return (mCurrentMonitorNum - mFailMonitorNum) / (float) TapUtil.mWholeMonitorNum * 100;
+        return (mCurrentMonitorNum - mFailMonitorNum)
+                / (float) TapUtil.getUtil().getmWholeMonitorNum() * 100;
     }
 
     @Override

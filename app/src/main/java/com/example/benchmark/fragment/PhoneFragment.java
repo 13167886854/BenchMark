@@ -42,12 +42,11 @@ import com.example.benchmark.utils.AccessibilityUtil;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
 import com.example.benchmark.utils.ServiceUtil;
+import com.example.benchmark.utils.ThreadPoolUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * PhoneFragment
@@ -61,7 +60,6 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private final HashMap<String, String> checkPhoneMap = new HashMap<>();
     private final int allCheckCount = 8;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
     private Button blueLiuChang;
     private Button blueWenDing;
     private Button blueChuKong;
@@ -78,9 +76,9 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
             } else if (msg.what == 2) {
-                myDialog.yes.setEnabled(true);
+                myDialog.getYes().setEnabled(true);
                 myDialog.dismiss();
             } else {
                 Log.d(TAG, "handleMessage: ");
@@ -124,7 +122,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+                                @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.phone_fragment, container, false);
         initview(view);
         kunPengPhone.setOnClickListener(this);
@@ -147,8 +145,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Date date = new Date();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String time = simpleDateFormat.format(date);
-            Admin.testTime = time;
-            Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.testTime);
+            Admin.getInstance().setTestTime(time);
+            Log.d(TAG, "onCreateView: 开始测试时间====" + Admin.getInstance().getTestTime());
             if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == null) {
                 Toast.makeText(getActivity(), "请选择需要测评的云手机平台", Toast.LENGTH_LONG).show();
                 return;
@@ -162,20 +160,20 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     private void afterCode() {
         if (blueWenDingCheck.isChecked()) {
             Log.e(TAG, "afterCode: 111111111111111111111111111");
-            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.context)
-                    || !ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!AccessibilityUtil.isAccessibilityServiceEnabled(BaseApp.getContext())
+                    || !ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         }
         if (blueChuKongCheck.isChecked()) {
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
         }
         if (blueYinHuaCheck.isChecked()) {
-            if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
+            if (!ServiceUtil.isServiceRunning(BaseApp.getContext(), MyAccessibilityService.class.getName())) {
                 popDiaLog.show();
                 return;
             }
@@ -188,16 +186,39 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             this.startActivity(intentToFloatPermission);
             return;
         }
-        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
-            // 检测华为云手机测试 提示用户输入ip地址加端口
-            // Huawei Cloud mobile Phone test prompts you to enter an ip address and port number
-            Log.e(TAG, "onCreateView: hiahiasadsad");
-            showDialog();
+        if (Admin.getInstance().getStatus().equals("success")) {
+            if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
+                // 检测华为云手机测试 提示用户输入ip地址加端口
+                Log.e(TAG, "onCreateView: hiahiasadsad");
+                showDialog();
+            }
+            if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
+                Log.e(TAG, "onCreateView: hiahiasadsad");
+                showDialog();
+            }
+        }else{
+            startCePingActivity();
         }
-        if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME) {
-            Log.e(TAG, "onCreateView: hiahiasadsad");
-            showDialog();
-        }
+    }
+
+    private void startCePingActivity() {
+        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
+        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
+        Intent intent = new Intent(getActivity(), CePingActivity.class);
+
+        // 传入checkbox是否被选中
+        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
+        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blueChuKongCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blueYinHuaCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_CPU_INFO, blueCpuCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_GPU_INFO, blueGpuCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
+        intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
+                checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME));
+        startActivity(intent);
     }
 
 
@@ -296,7 +317,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     }
 
     private void switch2(View vi) {
-        switch (vi.getId()){
+        switch (vi.getId()) {
             case R.id.bule_chukong: {
                 touch();
                 break;
@@ -729,32 +750,16 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 myDialog.dismiss();
             }
         });
-        threadPool.execute(new Runnable() {
+        ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
                 myDialog.setYesOnclickListener("确定", new IpPortDialog.OnYesOnclickListener() {
                     @Override
                     public void onYesClick() {
-                        myDialog.yes.setEnabled(false);
+                        myDialog.getYes().setEnabled(false);
                         myDialog.dismiss();
                         Log.d(TAG, "输入IP地址");
-                        CacheUtil.put(CacheConst.KEY_STABILITY_IS_MONITORED, false);
-                        CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
-                        Intent intent = new Intent(getActivity(), CePingActivity.class);
-
-                        // 传入checkbox是否被选中  Whether the incoming checkbox is selected
-                        intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
-                        intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_TOUCH_INFO, blueChuKongCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_SOUND_FRAME_INFO, blueYinHuaCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_CPU_INFO, blueCpuCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_GPU_INFO, blueGpuCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_ROM_INFO, blueRomCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_RAM_INFO, blueRamCheck.isChecked());
-                        intent.putExtra(CacheConst.KEY_PLATFORM_NAME,
-                                checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME));
-                        startActivity(intent);
+                        startCePingActivity();
                     }
                 });
             }

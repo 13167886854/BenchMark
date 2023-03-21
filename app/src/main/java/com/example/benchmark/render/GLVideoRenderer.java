@@ -21,6 +21,7 @@ import com.example.benchmark.R;
 import com.example.benchmark.utils.FpsUtils;
 import com.example.benchmark.utils.ShaderUtils;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -242,16 +243,24 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
     }
 
     private void updateProjection(int videoWidth, int videoHeight) {
-        float screenRatio = Float.parseFloat(String.valueOf(screenWidth / screenHeight));
-        float videoRatio = Float.parseFloat(String.valueOf(videoWidth / videoHeight));
-        if (videoRatio > screenRatio) {
+        BigDecimal screenWidthB = BigDecimal.valueOf(screenHeight);
+        BigDecimal screenHeightB = BigDecimal.valueOf(screenHeight);
+        BigDecimal videoWidthB = BigDecimal.valueOf(videoWidth);
+        BigDecimal videoHeightB = BigDecimal.valueOf(videoHeight);
+        BigDecimal screenRatio = BigDecimal.valueOf(1);
+        BigDecimal videoRatio = videoWidthB.divide(videoHeightB, BigDecimal.ROUND_CEILING);
+
+        if (videoRatio.compareTo(screenRatio) == 1) {
             Matrix.orthoM(projectionMatrix, 0, -1f, 1f,
-                    -videoRatio / screenRatio,
-                    videoRatio / screenRatio, -1f, 1f);
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING)
+                            .multiply(BigDecimal.valueOf(-1)).floatValue(),
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING).floatValue(), -1f, 1f);
         } else {
             Matrix.orthoM(projectionMatrix, 0,
-                    -screenRatio / videoRatio,
-                    screenRatio / videoRatio, -1f, 1f, -1f, 1f);
+                    videoRatio.divide(screenRatio,
+                            BigDecimal.ROUND_CEILING).multiply(BigDecimal.valueOf(-1)).floatValue(),
+                    videoRatio.divide(screenRatio, BigDecimal.ROUND_CEILING).floatValue(),
+                    -1f, 1f, -1f, 1f);
         }
     }
 

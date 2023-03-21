@@ -19,9 +19,7 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
-
-import com.example.benchmark.activity.AudioVideoActivity;
+import com.example.benchmark.data.YinHuaData;
 import com.example.benchmark.utils.SpeedManager;
 
 import java.io.IOException;
@@ -63,6 +61,27 @@ public class VideoDecodeThread extends Thread implements Runnable {
     }
 
     /**
+     * VideoDecodeThread
+     *
+     * @param path description
+     * @param context description
+     * @param name description
+     * @return
+     * @date 2023/3/15 10:35
+     */
+    public VideoDecodeThread(String path, Context context, String name) {
+        super(name);
+        this.context = context;
+        mMp4FilePath = path;
+        mMediaExtractor = new MediaExtractor();
+        try {
+            mMediaExtractor.setDataSource(mMp4FilePath);
+        } catch (IOException ex) {
+            Log.e(TAG, "VideoDecodeThread: ", ex);
+        }
+    }
+
+    /**
      * setSurfaceView
      *
      * @param surfaceView description
@@ -82,7 +101,22 @@ public class VideoDecodeThread extends Thread implements Runnable {
     @Override
     public void run() {
         try {
-            final MediaFormat videoFormat = run1();
+            MediaFormat videoFormat;
+            int trackCount = mMediaExtractor.getTrackCount();
+            for (int i = 0; i < trackCount; i++) {
+                MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
+                String mime = trackFormat.getString(MediaFormat.KEY_MIME);
+                if (mime.contains("video")) {
+                    mVideoTrackIndex = i;
+                    break;
+                }
+            }
+            if (mVideoTrackIndex == -1) {
+                mMediaExtractor.release();
+                videoFormat = null;
+            }
+            videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
+            int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
             if (videoFormat == null) {
                 return;
             }
@@ -97,20 +131,18 @@ public class VideoDecodeThread extends Thread implements Runnable {
             mVideoDecoder.configure(videoFormat, mSurfaceView.getHolder().getSurface(), null, 0);
             mVideoDecoder.start();
             videocurtime = mMediaExtractor.getSampleTime();
-
             int maxInputSize = videoFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE);
             ByteBuffer byteBuffer = ByteBuffer.allocate(maxInputSize);
             int sampleSize = 0;
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             mMediaExtractor.selectTrack(mVideoTrackIndex);
-            SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器  Audio and video synchronizer
-            while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
+            SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器
+            while (sampleSize != -1 && !YinHuaData.getInstance().isTestOver()) {
                 sampleSize = run3(byteBuffer, bufferInfo, mSpeedManager);
             }
             mSpeedManager.reset();
             mMediaExtractor.unselectTrack(mVideoTrackIndex);
             mMediaExtractor.release();
-
             mVideoDecoder.stop();
             mVideoDecoder.release();
         } catch (IOException e) {
@@ -125,32 +157,36 @@ public class VideoDecodeThread extends Thread implements Runnable {
         // 填充要解码的数据  Populate the data to be decoded
         if (sampleSize != -1) {
             if (sampleSize >= 0) {
-                long sampleTime = mMediaExtractor.getSampleTime();
-                videocurtime = mMediaExtractor.getSampleTime();
-                if (sampleTime >= 0) {
-                    int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
-                    if (inputBufferIndex >= 0) {
-                        ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
-                        if (inputBuffer != null) {
-                            inputBuffer.clear();
-                            inputBuffer.put(byteBuffer);
-                            mVideoDecoder.queueInputBuffer(inputBufferIndex,
-                                    0, sampleSize, sampleTime, 0);
-                            mSpeedManager.preRender(sampleTime);
-
-                            mMediaExtractor.advance();
-                        }
-                    }
-                }
+                if1(byteBuffer, mSpeedManager, sampleSize);
             }
         }
-        // 解码已填充的数据  Decode the populated data
+        // 解码已填充的数据
         int outputBufferIndex = mVideoDecoder.dequeueOutputBuffer(bufferInfo, 0);
         if (outputBufferIndex >= 0) {
-            // 控制帧率在24帧左右 Control frame rate around 24 frames
+            // 控制帧率在24帧左右
             mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
         }
         return sampleSize;
+    }
+
+    private void if1(ByteBuffer byteBuffer, SpeedManager mSpeedManager, int sampleSize) {
+        long sampleTime = mMediaExtractor.getSampleTime();
+        videocurtime = mMediaExtractor.getSampleTime();
+        if (sampleTime >= 0) {
+            int inputBufferIndex = mVideoDecoder.dequeueInputBuffer(-1);
+            if (inputBufferIndex >= 0) {
+                ByteBuffer inputBuffer = mVideoDecoder.getInputBuffer(inputBufferIndex);
+                if (inputBuffer != null) {
+                    inputBuffer.clear();
+                    inputBuffer.put(byteBuffer);
+                    mVideoDecoder.queueInputBuffer(inputBufferIndex,
+                            0, sampleSize, sampleTime, 0);
+                    mSpeedManager.preRender(sampleTime);
+
+                    mMediaExtractor.advance();
+                }
+            }
+        }
     }
 
     private void run2(MediaFormat videoFormat) {
@@ -189,26 +225,6 @@ public class VideoDecodeThread extends Thread implements Runnable {
                 }
             });
         }
-    }
-
-    @Nullable
-    private MediaFormat run1() {
-        int trackCount = mMediaExtractor.getTrackCount();
-        for (int i = 0; i < trackCount; i++) {
-            MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
-            String mime = trackFormat.getString(MediaFormat.KEY_MIME);
-            if (mime.contains("video")) {
-                mVideoTrackIndex = i;
-                break;
-            }
-        }
-        if (mVideoTrackIndex == -1) {
-            mMediaExtractor.release();
-            return null;
-        }
-        final MediaFormat videoFormat = mMediaExtractor.getTrackFormat(mVideoTrackIndex);
-        int frameRate = videoFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
-        return videoFormat;
     }
 
     /**

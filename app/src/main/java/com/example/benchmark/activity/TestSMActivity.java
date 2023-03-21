@@ -130,18 +130,20 @@ public class TestSMActivity extends AppCompatActivity {
     private void stopTest() throws IOException {
         isTesting = false;
 
-        // 停止监听和播放  Stop listening and playing
+        // 停止监听和播放
         fpsUtil.stopMonitor(fpsRunnalbe);
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
 
+        float[] info = new float[6];
+        info[0] = getRoundNumber((float) fpsUtil.getAvergeFps());
+        info[1] = getRoundNumber((float) fpsUtil.getFrameShakingRate());
+        info[2] = getRoundNumber((float) fpsUtil.getLowFrameRate());
+        info[3] = getRoundNumber((float) fpsUtil.getFrameIntervalTime());
+        info[4] = fpsUtil.getJankCount();
+        info[5] = getRoundNumber((float) fpsUtil.getShtutterRate());
         ScoreUtil.calcAndSaveFluencyScores(
-                getRoundNumber((float) fpsUtil.getAvergeFps()),
-                getRoundNumber((float) fpsUtil.getFrameShakingRate()),
-                getRoundNumber((float) fpsUtil.getLowFrameRate()),
-                getRoundNumber((float) fpsUtil.getFrameIntervalTime()),
-                fpsUtil.getJankCount(),
-                getRoundNumber((float) fpsUtil.getShtutterRate()),
+                info,
                 eachFps
         );
         Intent intent = new Intent(TestSMActivity.this, CePingActivity.class);
@@ -212,8 +214,8 @@ public class TestSMActivity extends AppCompatActivity {
             );
             fpsUtil.updateAfterGetInfo();
 
-            // 记录绘制次数和绘制时间，用于计算FPS  The drawing times and drawing time are recorded for calculating FPS
-            FpsUtils.mainHandler.postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
+            // 记录绘制次数和绘制时间，用于计算FPS
+            FpsUtils.getMainHandler().postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
         }
     }
 

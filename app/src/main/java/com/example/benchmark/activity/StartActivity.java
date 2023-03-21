@@ -37,7 +37,7 @@ public class StartActivity extends Activity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
         int num = sharedPreferences.getInt("TestNum", 5);
-        TapUtil.mWholeMonitorNum = num;
+        TapUtil.getUtil().setmWholeMonitorNum(num);
 
         // 去除状态栏  Remove status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

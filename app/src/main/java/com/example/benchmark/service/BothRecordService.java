@@ -68,8 +68,8 @@ public class BothRecordService extends Service {
     /**
      * onStartCommand
      *
-     * @param intent description
-     * @param flags description
+     * @param intent  description
+     * @param flags   description
      * @param startId description
      * @return int
      * @date 2023/3/10 15:02
@@ -201,7 +201,8 @@ public class BothRecordService extends Service {
 
     private void createVirtualDisplay() {
         virtualDisplay = mProjection.createVirtualDisplay("MainScreen", width, height, dpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder.getSurface(), null, null);
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mediaRecorder.getSurface(), null, null);
     }
 
     private void initRecorder() {
@@ -258,7 +259,7 @@ public class BothRecordService extends Service {
      * BothRecordService.java
      *
      * @Author benchmark
-     * @Version 1.0 
+     * @Version 1.0
      * @since 2023/3/10 15:01
      */
     public class RecordBinder extends Binder {

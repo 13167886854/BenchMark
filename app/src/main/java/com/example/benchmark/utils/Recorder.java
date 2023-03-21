@@ -45,15 +45,15 @@ public class Recorder {
      * Recorder TAG标签  Recorder TAG
      */
     public static final String TAG = "Recorder";
-    
+
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private ExecutorService threadPool = Executors.newCachedThreadPool();
-
-    /** isRecording */
-    public boolean isRecording = false;
+    /**
+     * isRecording
+     */
+    private boolean isRecording = false;
 
     private AudioRecord mRecorder;
     private int bufferElements2Rec = 1024; // want to play 2048 (2K) since 2 bytes we use only 1024
@@ -66,7 +66,7 @@ public class Recorder {
     /**
      * start
      *
-     * @param context description
+     * @param context     description
      * @param mProjection description
      * @return boolean
      * @date 2023/3/10 16:42
@@ -74,8 +74,8 @@ public class Recorder {
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
-        // 判断平台  Judging platform
-        String platformKind = YinHuaData.platformType;
+        // 判断平台
+        String platformKind = YinHuaData.getInstance().getPlatformType();
 
         // 如果是云手机平台  If it is a cloud mobile platform
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
@@ -117,7 +117,7 @@ public class Recorder {
             mRecorder.startRecording();
             createAudioFile(context);
 
-            threadPool.execute(new Runnable() {
+            ThreadPoolUtil.getPool().execute(new Runnable() {
                 @Override
                 public void run() {
                     writeAudioFile();
@@ -138,8 +138,8 @@ public class Recorder {
     private void createAudioFile(Context context) {
         root = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
                 + File.separator + "AudioRecorder");
-        CacheConst.audioPath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + "AudioRecorder";
+        CacheConst.getInstance().setAudioPath(Environment.getExternalStorageDirectory()
+                .getAbsolutePath() + File.separator + "AudioRecorder");
         Log.e(TAG, "root: " + root);
         cache = new File(context.getCacheDir().getAbsolutePath(), File.separator + "RawData");
         if (!root.exists()) {
@@ -281,7 +281,7 @@ public class Recorder {
     /**
      * startProcessing
      *
-     * @throws  IOException ex
+     * @throws IOException ex
      * @description: startProcessing
      * @date 2023/3/7 14:55
      */
