@@ -81,11 +81,11 @@ public class GameVATestService extends Service {
     private final int screenHeight = CacheUtil.getInt(CacheConst.KEY_SCREEN_HEIGHT);
     private final int screenWidth = CacheUtil.getInt(CacheConst.KEY_SCREEN_WIDTH);
 
-    // 定义浮动窗口布局
+    // 定义浮动窗口布局  Define the floating window layout
     private LinearLayout mFloatLayout;
     private LayoutParams wmParams;
 
-    // 创建浮动窗口设置布局参数的对象
+    // 创建浮动窗口设置布局参数的对象  Create a floating window to set the layout parameters of the object
     private WindowManager mWindowManager;
     private TextView mFloatView;
     private TextView snap;
@@ -103,7 +103,7 @@ public class GameVATestService extends Service {
 
     private TapUtil tapUtil;
 
-    // 视频音频录制变量初始化
+    // 视频音频录制变量初始化  Initialize the video audio recording variable
     private Recorder mRecorder;
     private boolean isAble = true;
 
@@ -132,7 +132,7 @@ public class GameVATestService extends Service {
                 case STOP_RECORD:
                     isRecording = !isRecording;
 
-                    // 点击结束录制后休息1s后才能继续录制
+                    // 点击结束录制后休息1s后才能继续录制  Click Finish recording and rest for 1 second before continuing recording
                     isAble = false;
                     stopRecord();
                     Intent intent = new Intent(mContext, AudioVideoActivity.class);
@@ -199,22 +199,22 @@ public class GameVATestService extends Service {
     private void createFloatView() {
         initFloatView1();
 
-        // 获取状态栏的高度
+        // 获取状态栏的高度  Gets the height of the status bar
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // 浮动窗口按钮
+        // 浮动窗口按钮  Floating window button
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-        // 设置监听浮动窗口的触摸移动
+        // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
         mFloatView.setOnTouchListener(new OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public boolean onTouch(View vi, MotionEvent event) {
                 boolean isClick = touch1(event);
-                // 响应点击事件
+                // 响应点击事件  Response click event
                 if (isClick && isAble) {
                     Log.d(TAG, "screenWidth: " + screenWidth + " screenWidth" + screenWidth);
                     tapUtil.tap(500, 500);
@@ -252,16 +252,18 @@ public class GameVATestService extends Service {
                 break;
             case MotionEvent.ACTION_MOVE:
                 // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                // getRawX is the coordinate of the touch position with respect to the screen
+                // getX is the coordinate with respect to the button
                 wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
                 wmParams.y = (int) event.getRawY() - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
 
-                // 刷新
+                // 刷新  renovate
                 mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                 break;
             case MotionEvent.ACTION_UP:
                 endTime = System.currentTimeMillis();
 
-                // 小于0.2秒被判断为点击
+                // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                 if ((endTime - startTime) > 200) {
                     isClick = false;
                 } else {
@@ -275,38 +277,42 @@ public class GameVATestService extends Service {
     private void initFloatView1() {
         wmParams = new LayoutParams();
 
-        // 获取WindowManagerImpl.CompatModeWrapper
+        // 获取WindowManagerImpl.CompatModeWrapper  Get WindowManagerImpl.CompatModeWrapper
         if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
             mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         }
 
-        // 设置window type
+        // 设置window type  Set window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             wmParams.type = LayoutParams.TYPE_TOAST;
         }
 
-        // 设置图片格式，效果为背景透明
+        // 设置图片格式，效果为背景透明  Format the image so that the background is transparent
         wmParams.format = PixelFormat.RGBA_8888;
 
         // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
+        // Make the floating window unfocused (implements operations on visible Windows other than the floating window)
         wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        // 调整悬浮窗显示的停靠位置为左侧置顶
+        // 调整悬浮窗显示的停靠位置为左侧置顶  Adjust the dock position displayed in the suspension window to the left top
         wmParams.gravity = Gravity.START | Gravity.TOP;
 
-        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
+        /*
+            以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of the screen as the origin,
+            set the initial value of x and y (set the maximum value to be displayed directly in the lower right corner)
+         */
         wmParams.x = screenWidth / 2;
         wmParams.y = screenHeight;
         Log.d(TAG, "screenWidth: " + screenWidth + "  screenHeight: " + screenHeight);
 
-        // 设置悬浮窗口长宽数据
+        // 设置悬浮窗口长宽数据  Set the length and width of the floating window
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
 
-        // 获取浮动窗口视图所在布局
+        // 获取浮动窗口视图所在布局  Gets the layout of the floating window view
         if (inflater.inflate(R.layout.record_float, null) instanceof LinearLayout) {
             mFloatLayout = (LinearLayout) inflater.inflate(R.layout.record_float, null);
         }
@@ -449,7 +455,7 @@ public class GameVATestService extends Service {
         mediaRecorder.reset();
         virtualDisplay.release();
 
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
@@ -459,11 +465,11 @@ public class GameVATestService extends Service {
         isTestCloudPhone = isTestCloudPhone || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (isTestCloudPhone) {
             stopVideoRecord1();
         } else {
-            // file是要上传的文件 File()
+            // file是要上传的文件 File()  file is the File to be uploaded File()
             File file = new File(CacheConst.videoPath + File.separator + CacheConst.VIDEO_GAME_NAME);
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart" + File.separator
                     + "form-data"), file);
@@ -484,9 +490,9 @@ public class GameVATestService extends Service {
 
     private void stopVideoRecord2(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时  Connection timeout
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时  Read timeout
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时  Write timeout
                 .build();
 
         client.newCall(request)
@@ -536,9 +542,9 @@ public class GameVATestService extends Service {
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时  Connection timeout
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时  Read timeout
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时  Write timeout
                 .build();
 
         client.newCall(request)
@@ -573,11 +579,11 @@ public class GameVATestService extends Service {
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)
@@ -669,7 +675,7 @@ public class GameVATestService extends Service {
             }
         }
 
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
@@ -680,7 +686,7 @@ public class GameVATestService extends Service {
         isTestCloudPhone = isTestCloudPhone || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_GAME);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (isTestCloudPhone) {
             stopAudioRecord1();
         } else {
@@ -704,9 +710,9 @@ public class GameVATestService extends Service {
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时  Connection timeout
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时  Read timeout
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时  Write timeout
                 .build();
         client.newCall(request)
                 .enqueue(new Callback() {
@@ -745,9 +751,9 @@ public class GameVATestService extends Service {
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时
-                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时
-                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时
+                .connectTimeout(60 * 1000, TimeUnit.MILLISECONDS) // 连接超时  Connection timeout
+                .readTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 读取超时  Read timeout
+                .writeTimeout(5 * 60 * 1000, TimeUnit.MILLISECONDS) // 写入超时  Write timeout
                 .build();
 
         client.newCall(request)

@@ -35,7 +35,7 @@ public class ServiceUtil {
      * @param context     description
      * @param serviceName description
      * @return boolean
-     * @description: isServiceRunning  校验某个服务是否还存在
+     * @description: isServiceRunning  校验某个服务是否还存在  Check whether a service still exists
      * @date 2023/2/22 14:52
      */
     public static boolean isServiceRunning(Context context, String serviceName) {

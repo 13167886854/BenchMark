@@ -278,6 +278,7 @@ public class JutiZhibiaoActivity extends AppCompatActivity implements View.OnCli
      */
     public Map<String, Object> getInfo() {
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
+        // {ROM={available = 4.68GB, total = 6.24GB}, CPUCores=4, RAM={available =801 MB, total = 2.05GB}}
         Map<String, String> ramInfo = SDCardUtils.getRAMInfo(this);
         if (ramInfo.get("可用").equals(ramInfo.get("总共"))) {
             ramInfo.put("可用", MemInfoUtil.getMemAvailable());

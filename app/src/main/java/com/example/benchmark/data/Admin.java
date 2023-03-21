@@ -15,32 +15,32 @@ package com.example.benchmark.data;
  */
 public class Admin {
     /**
-     * 全局变量记录管理员
+     * 全局变量记录管理员  Global variable record manager
      */
     public static String adminName;
 
     /**
-     * 全局变量记录用户名
+     * 全局变量记录用户名  Global variables record user names
      */
     public static String username;
 
     /**
-     * 全局变量记录登录密码
+     * 全局变量记录登录密码  Global variables record the login password
      */
     public static String password;
 
     /**
-     * 全局变量记录测试平台
+     * 全局变量记录测试平台  Global variable record test platform
      */
     public static String platformName;
 
     /**
-     * 全局变量记录测试时间
+     * 全局变量记录测试时间  Global variables record test times
      */
     public static String testTime;
 
     /**
-     * 登录状态
+     * 登录状态  Logging status
      */
-    public static String status = "Failure"; //
+    public static String status = "Failure";
 }

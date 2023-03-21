@@ -13,16 +13,16 @@ package com.example.benchmark.data;
  * @since 2023/3/7 15:11
  */
 public class CepingData {
-    // 测评的分数
+    // 测评的分数  Test score
     private int grade;
 
-    // 测评模块得图片
+    // 测评模块得图片  Evaluation module to get the picture
     private int cepingImage;
 
-    // 测评的模块
+    // 测评的模块  Evaluation module
     private String cepingItem;
 
-    // 测评得说明信息
+    // 测评得说明信息  The evaluation results in explanatory information
     private String cepingText;
 
     /**

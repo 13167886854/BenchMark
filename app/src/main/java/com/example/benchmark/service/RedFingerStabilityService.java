@@ -135,7 +135,7 @@ public class RedFingerStabilityService implements IStabilityService {
 
     @Override
     public void startQuitCloudPhone() {
-        // 双击返回键退出云手机
+        // 双击返回键退出云手机  Double click the back button to exit the cloud phone
         service.performGlobalAction(GLOBAL_ACTION_BACK);
         try {
             Thread.sleep(1000L);

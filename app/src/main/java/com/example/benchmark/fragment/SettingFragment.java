@@ -59,16 +59,16 @@ public class SettingFragment extends Fragment {
             } else if (msg.what == 222) {
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
 
-                        // 设置标题的图片
+                        // 设置标题的图片  Set the title of the picture
                         .setIcon(R.mipmap.icon)
 
-                        // 设置对话框的标题
+                        // 设置对话框的标题  Set the title of the dialog box
                         .setTitle("checkUpdate")
 
-                        // 设置对话框的内容
+                        // 设置对话框的内容  Set the contents of the dialog box
                         .setMessage("检测到应用有新版本，请前往浏览器更新")
 
-                        // 设置对话框的按钮
+                        // 设置对话框的按钮  The button for the Setup dialog
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -124,7 +124,7 @@ public class SettingFragment extends Fragment {
         setSystemUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 打印信息 do nothing checkUpdate();
+                // 打印信息 do nothing checkUpdate();  do nothing checkUpdate();
                 Toast.makeText(getContext(), "已是最新版本!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -137,7 +137,7 @@ public class SettingFragment extends Fragment {
         Log.e("TWT", "localVersion: " + localVersion);
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String url = tmpUrl + "/upgrade/hint?version=" + localVersion + "&platform=Local";
-        // 创建一个request对象
+        // 创建一个request对象  Create a request object
         Request request = new Request.Builder()
                 .url(url)
                 .build();

@@ -216,10 +216,10 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机内部存储空间
+     * 获取手机内部存储空间  Obtain the internal storage space of the phone
      *
      * @param context
-     * @return 以M, G为单位的容量
+     * @return 以M, G为单位的容量  Capacity in units of M and G
      */
     public static String getTotalInternalMemorySize(Context context) {
         File file = Environment.getDataDirectory();
@@ -231,10 +231,10 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机内部可用存储空间
+     * 获取手机内部可用存储空间  Obtain the internal storage space of the phone
      *
      * @param context
-     * @return 以M, G为单位的容量
+     * @return 以M, G为单位的容量  Capacity in units of M and G
      */
     public static String getAvailableInternalMemorySize(Context context) {
         File file = Environment.getDataDirectory();
@@ -246,10 +246,10 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机外部存储空间
+     * 获取手机外部存储空间  Obtain external storage space of the mobile phone
      *
      * @param context
-     * @return 以M, G为单位的容量
+     * @return 以M, G为单位的容量  Capacity in units of M and G
      */
     public static String getTotalExternalMemorySize(Context context) {
         File file = Environment.getExternalStorageDirectory();
@@ -261,10 +261,10 @@ public class SDCardUtils {
     }
 
     /**
-     * 获取手机外部可用存储空间
+     * 获取手机外部可用存储空间  Obtain external storage space of the mobile phone
      *
      * @param context
-     * @return 以M, G为单位的容量
+     * @return 以M, G为单位的容量  Capacity in units of M and G
      */
     public static String getAvailableExternalMemorySize(Context context) {
         File file = Environment.getExternalStorageDirectory();

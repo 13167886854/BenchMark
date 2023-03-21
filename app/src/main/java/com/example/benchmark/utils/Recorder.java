@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
  */
 public class Recorder {
     /**
-     * Recorder TAG标签
+     * Recorder TAG标签  Recorder TAG
      */
     public static final String TAG = "Recorder";
     
@@ -74,10 +74,10 @@ public class Recorder {
     @SuppressLint("MissingPermission")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public boolean start(Context context, MediaProjection mProjection) {
-        // 判断平台
+        // 判断平台  Judging platform
         String platformKind = YinHuaData.platformType;
 
-        // 如果是云手机平台
+        // 如果是云手机平台  If it is a cloud mobile platform
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {

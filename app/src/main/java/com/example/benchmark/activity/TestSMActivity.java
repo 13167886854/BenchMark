@@ -45,18 +45,18 @@ public class TestSMActivity extends AppCompatActivity {
     private FpsRunnalbe fpsRunnalbe;
     private String path = "";
 
-    // 百分比显示
+    // 百分比显示  Percentage display
     private DecimalFormat df = new DecimalFormat("0.00%");
 
-    // 判断是否正在测试
+    // 判断是否正在测试  Determine whether you are testing
     private boolean isTesting = false;
     private String eachFps = "";
 
     /**
-     * Activity的启动方法
+     * Activity的启动方法  The method to start the Activity
      *
      * @param context 上下文
-     * @param path    Intent传过来的参数
+     * @param path    Intent传过来的参数  The Intent is passed as an argument
      */
     public static void start(Context context, String path) {
         Intent intent = new Intent(context, TestSMActivity.class);
@@ -77,21 +77,21 @@ public class TestSMActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_smactivity);
 
-        // 获取显示文本
+        // 获取显示文本  Get display text
         textInfo = findViewById(R.id.textview);
 
-        // 初始化监听器
+        // 初始化监听器  Initialize the listener
         fpsRunnalbe = new FpsRunnalbe();
 
-        // 初始化视频播放器
+        // 初始化视频播放器  Initialize the video player
         glView = findViewById(R.id.surface_view);
         glView.setEGLContextClientVersion(2);
         glVideoRenderer = new GLVideoRenderer(this);
 
-        // 创建renderer
+        // 创建renderer  Create renderer
         glView.setRenderer(glVideoRenderer);
 
-        // 设置renderer
+        // 设置renderer  Set renderer
         glVideoRenderer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -112,7 +112,7 @@ public class TestSMActivity extends AppCompatActivity {
             Log.e("TestSMActivity: ", ex.toString());
         }
 
-        // 自动开始
+        // 自动开始  Automatic start
         try {
             doTest();
         } catch (IOException e) {
@@ -130,7 +130,7 @@ public class TestSMActivity extends AppCompatActivity {
     private void stopTest() throws IOException {
         isTesting = false;
 
-        // 停止监听和播放
+        // 停止监听和播放  Stop listening and playing
         fpsUtil.stopMonitor(fpsRunnalbe);
         glVideoRenderer.getMediaPlayer().stop();
         glVideoRenderer.getMediaPlayer().prepare();
@@ -164,7 +164,7 @@ public class TestSMActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        // 判断是否正在测试
+        // 判断是否正在测试  Determine whether you are testing
         if (isTesting) {
             glVideoRenderer.getMediaPlayer().stop();
             try {
@@ -191,7 +191,7 @@ public class TestSMActivity extends AppCompatActivity {
         public void run() {
             fpsUtil.updateBeforeGetInfo();
 
-            // 打印测试中数据到TextView上
+            // 打印测试中数据到TextView上  Print the test data to a TextView
             if (eachFps.equals("")) {
                 eachFps += String.valueOf(fpsUtil.getCount());
             } else {
@@ -212,7 +212,7 @@ public class TestSMActivity extends AppCompatActivity {
             );
             fpsUtil.updateAfterGetInfo();
 
-            // 记录绘制次数和绘制时间，用于计算FPS
+            // 记录绘制次数和绘制时间，用于计算FPS  The drawing times and drawing time are recorded for calculating FPS
             FpsUtils.mainHandler.postDelayed(this, FpsUtils.FPS_INTERVAL_TIME);
         }
     }

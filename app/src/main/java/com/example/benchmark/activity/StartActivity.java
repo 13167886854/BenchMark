@@ -32,14 +32,14 @@ public class StartActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 去除标题栏
+        // 去除标题栏  Remove title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
         int num = sharedPreferences.getInt("TestNum", 5);
         TapUtil.mWholeMonitorNum = num;
 
-        // 去除状态栏
+        // 去除状态栏  Remove status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_start);

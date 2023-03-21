@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
  * @since 2023/3/7 17:23
  */
 public class AutoStartUtil {
-    /** 是否已经打开过设置自启动界面的标记，存储起来 */
+    /** 是否已经打开过设置自启动界面的标记，存储起来  Whether you have opened the flag for setting the automatic boot interface, and store it */
     public static final String HAS_OPEN_SETTING_AUTO_START = "hasOpenSettingAutoStart";
 
     /**
@@ -38,11 +38,11 @@ public class AutoStartUtil {
             return;
         }
         Intent intent = new Intent();
-        if (RomUtil.isEmui()) { // 华为
+        if (RomUtil.isEmui()) { // 华为  Huawei
             ComponentName componentName = new ComponentName("com.huawei.systemmanager",
                     "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity");
             intent.setComponent(componentName);
-        } else if (RomUtil.isMiui()) { // 小米
+        } else if (RomUtil.isMiui()) { // 小米  MIUI
             ComponentName componentName = new ComponentName("com.miui.securitycenter",
                     "com.miui.permcenter.autostart.AutoStartManagementActivity");
             intent.setComponent(componentName);
@@ -60,9 +60,13 @@ public class AutoStartUtil {
 
     @NonNull
     private static Intent other(Context context, Intent intent) {
-        // 以上只是市面上主流机型，由于公司你懂的，所以很不容易才凑齐以上设备
-        // 针对于其他设备，我们只能调整当前系统app查看详情界面
-        // 在此根据用户手机当前版本跳转系统设置界面
+        /*
+            以上只是市面上主流机型，由于公司你懂的，所以很不容易才凑齐以上设备。针对于其他设备，我们只能调整当前系统app查看详情界面，在此根据用户
+            手机当前版本跳转系统设置界面。 The above is only the mainstream models on the market, because the company you know,
+            so it is not easy to gather the above equipment. For other devices, we can only adjust the app view details
+            interface of the current system. Switch to the system setting interface based on the current version of the
+            user's mobile phone.
+         */
         if (Build.VERSION.SDK_INT >= 9) {
             intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.fromParts("package", context.getPackageName(), null));
@@ -80,11 +84,15 @@ public class AutoStartUtil {
     }
 
     private static void flyme(Intent intent) {
-        // 魅族
-        // 通过测试，发现魅族是真恶心，也是够了，之前版本还能查看到关于设置自启动这一界面，
-        // 系统更新之后，完全找不到了，心里默默Fuck！
-        // 针对魅族，我们只能通过魅族内置手机管家去设置自启动，
-        // 所以我在这里直接跳转到魅族内置手机管家界面，具体结果请看图
+        // 魅族  MeiZu
+        /*
+            通过测试，发现魅族是真恶心，也是够了，之前版本还能查看到关于设置自启动这一界面，系统更新之后，完全找不到了，心里默默Fuck！ 针对魅族，
+            我们只能通过魅族内置手机管家去设置自启动，所以我在这里直接跳转到魅族内置手机管家界面，具体结果请看图  Through the test, I found
+            that MeiZu is really disgusting, and enough. In the previous version, I could still see the interface about
+            setting since starting. After the system update, I couldn't find it at all. For MeiZu, we can only set the
+            self-startup through the built-in phone butler of MeiZu, so I directly jump to the interface of the built-in
+            phone butler of MeiZu here. Please refer to the figure for specific results
+         */
         ComponentName componentName = ComponentName.unflattenFromString("com.meizu.safe"
                 + "/.permission.PermissionMainActivity");
         intent.setComponent(componentName);

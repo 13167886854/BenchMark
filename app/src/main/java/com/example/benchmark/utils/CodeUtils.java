@@ -48,12 +48,12 @@ import java.util.Map;
  */
 public final class CodeUtils {
     /**
-     * 默认宽度要求
+     * 默认宽度要求  Default width requirement
      */
     public static final int DEFAULT_REQ_WIDTH = 480;
 
     /**
-     * 默认高度要求
+     * 默认高度要求  Default height requirement
      */
     public static final int DEFAULT_REQ_HEIGHT = 640;
 
@@ -62,10 +62,10 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成二维码
+     * 生成二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix) {
@@ -73,11 +73,11 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成二维码
+     * 生成二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param codeColor 二维码的颜色
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param codeColor 二维码的颜色  Color of two-dimensional code
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, int codeColor) {
@@ -85,11 +85,11 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成我二维码
+     * 生成我二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param logo      logo大小默认占二维码的20%
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param logo      logo大小默认占二维码的20%  logo size takes up 20% of the QR code by default
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo) {
@@ -97,12 +97,12 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成我二维码
+     * 生成我二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param logo      logo大小默认占二维码的20%
-     * @param codeColor 二维码的颜色
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param logo      logo大小默认占二维码的20%  logo size takes up 20% of the QR code by default
+     * @param codeColor 二维码的颜色  Color of two-dimensional code
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo, int codeColor) {
@@ -110,48 +110,50 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成二维码
+     * 生成二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param logo      二维码中间的logo
-     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param logo      二维码中间的logo  logo in the middle of QR code
+     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3 Since the maximum fault-tolerant rate
+     *                 of two-dimensional code is 30%, the recommended ratio range is less than 0.3
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
                                         @FloatRange(from = 0.0f, to = 1.0f) float ratio) {
-        // 配置参数
+        // 配置参数  Configuration parameter
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 
-        // 容错级别
+        // 容错级别  Fault tolerance level
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
-        // 设置空白边距的宽度 default is 4
+        // 设置空白边距的宽度 default is 4  Setting the width of the blank margin default is 4
         hints.put(EncodeHintType.MARGIN, 1);
         return createQRCode(content, heightPix, logo, ratio, hints);
     }
 
     /**
-     * 生成二维码
+     * 生成二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param logo      二维码中间的logo
-     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
-     * @param codeColor 二维码的颜色
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param logo      二维码中间的logo  logo in the middle of QR code
+     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3 Since the maximum fault-tolerant rate
+     *                  of two-dimensional code is 30%, the recommended ratio range is less than 0.3
+     * @param codeColor 二维码的颜色  Color of QR code
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
                                       @FloatRange(from = 0.0f, to = 1.0f) float ratio, int codeColor) {
-        // 配置参数
+        // 配置参数  Configuration parameter
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 
-        // 容错级别
+        // 容错级别  Fault tolerance level
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
-        // 设置空白边距的宽度 default is 1
+        // 设置空白边距的宽度 default is 1  Setting the width of the blank margin default is 1
         hints.put(EncodeHintType.MARGIN, 1);
         return createQRCode(content, heightPix, logo, ratio, hints, codeColor);
     }
@@ -173,25 +175,27 @@ public final class CodeUtils {
     }
 
     /**
-     * 生成二维码
+     * 生成二维码  Generate two-dimensional code
      *
-     * @param content   二维码的内容
-     * @param heightPix 二维码的高
-     * @param logo      二维码中间的logo
-     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @param content   二维码的内容  Content of two-dimensional code
+     * @param heightPix 二维码的高  Height of two-dimensional code
+     * @param logo      二维码中间的logo  logo in the middle of QR code
+     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3 Since the maximum fault-tolerant rate
+     *                 of two-dimensional code is 30%, the recommended ratio range is less than 0.3
      * @param hints     提示
-     * @param codeColor 二维码的颜色
+     * @param codeColor 二维码的颜色  Color of QR code
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
                                       @FloatRange(from = 0.0f, to = 1.0f) float ratio, Map<EncodeHintType, ?> hints, int codeColor) {
         try {
-            // 图像数据转换，使用了矩阵转换
+            // 图像数据转换，使用了矩阵转换  Image data conversion, using matrix conversion
             BitMatrix bitMatrix = new QRCodeWriter().encode(content,
                     BarcodeFormat.QR_CODE, heightPix, heightPix, hints);
             int[] pixels = new int[heightPix * heightPix];
             // 下面这里按照二维码的算法，逐个生成二维码的图片，
-            // 两个for循环是图片横列扫描的结果
+            // Here, according to the algorithm of two-dimensional code, the pictures of two-dimensional code are generated one by one.
+            // 两个for循环是图片横列扫描的结果  The two for loops are the result of a horizontal scan of the image
             for (int y = 0; y < heightPix; y++) {
                 for (int x = 0; x < heightPix; x++) {
                     if (bitMatrix.get(x, y)) {
@@ -201,7 +205,7 @@ public final class CodeUtils {
                     }
                 }
             }
-            // 生成二维码图片的格式
+            // 生成二维码图片的格式  Generate two-dimensional code picture format
             Bitmap bitmap = Bitmap.createBitmap(heightPix, heightPix, Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, heightPix, 0, 0, heightPix, heightPix);
             if (logo != null) {
@@ -215,11 +219,12 @@ public final class CodeUtils {
     }
 
     /**
-     * 在二维码中间添加Logo图案
+     * 在二维码中间添加Logo图案  Add a Logo pattern in the middle of the QR code
      *
      * @param src   src
      * @param logo  logo
-     * @param ratio logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @param ratio logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3  Since the maximum fault-tolerant rate of
+     *              two-dimensional code is 30%, the recommended ratio range is less than 0.3
      * @return Bitmap
      */
     private static Bitmap addLogo(Bitmap src, Bitmap logo,
@@ -230,7 +235,7 @@ public final class CodeUtils {
         if (logo == null) {
             return src;
         }
-        // 获取图片的宽高
+        // 获取图片的宽高  Get the width and height of the image
         int srcWidth = src.getWidth();
         int srcHeight = src.getHeight();
         int logoWidth = logo.getWidth();
@@ -241,7 +246,7 @@ public final class CodeUtils {
         if (logoWidth == 0 || logoHeight == 0) {
             return src;
         }
-        // logo大小为二维码整体大小
+        // logo大小为二维码整体大小  The logo size is the overall size of the QR code
         float scaleFactor = srcWidth * ratio / logoWidth;
         Bitmap bitmap;
         bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
@@ -258,9 +263,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析二维码图片
+     * 解析二维码图片  Parse two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
      * @return String
      */
     public static String parseQRCode(String bitmapPath) {
@@ -272,9 +277,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析二维码图片
+     * 解析二维码图片  Parse two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
      * @return Result
      */
     public static Result parseQRCodeResult(String bitmapPath) {
@@ -282,13 +287,19 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析二维码图片
+     * 解析二维码图片  Parse two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
      * @param reqWidth   请求目标宽度，如果实际图片宽度大于此值，会自动进行压缩处理，
      *                   当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
+     *                   Request the target width. If the actual image width is greater than this value, it will be
+     *                   compressed automatically. When both reqWidth and reqHeight are less than or equal to 0,
+     *                   no compression is performed
      * @param reqHeight  请求目标高度，如果实际图片高度大于此值，会自动进行压缩处理，
      *                   当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
+     *                   Request the target height. If the actual height of the image is greater than this value, it
+     *                   will be compressed automatically. When both reqWidth and reqHeight are less than or equal to 0,
+     *                   no compression is performed
      * @return Result
      */
     public static Result parseQRCodeResult(String bitmapPath, int reqWidth, int reqHeight) {
@@ -296,9 +307,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
      * @return String
      */
     public static String parseCode(String bitmapPath) {
@@ -306,10 +317,10 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
-     * @param hints      解析编码类型
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
+     * @param hints      解析编码类型  Analytic encoding type
      * @return String
      */
     public static String parseCode(String bitmapPath, Map<DecodeHintType, Object> hints) {
@@ -321,9 +332,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析二维码图片
+     * 解析二维码图片  Parse two-dimensional code picture
      *
-     * @param bitmap 解析的图片
+     * @param bitmap 解析的图片  Parsed picture
      * @return String
      */
     public static String parseQRCode(Bitmap bitmap) {
@@ -331,9 +342,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmap 解析的图片
+     * @param bitmap 解析的图片  Parsed picture
      * @return String
      */
     public static String parseCode(Bitmap bitmap) {
@@ -357,10 +368,10 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
-     * @param hints      解析编码类型
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
+     * @param hints      解析编码类型  Analytic encoding type
      * @return Result
      */
     public static Result parseCodeResult(String bitmapPath, Map<DecodeHintType, Object> hints) {
@@ -368,14 +379,20 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmapPath 需要解析的图片路径
+     * @param bitmapPath 需要解析的图片路径  The image path to be parsed
      * @param reqWidth   请求目标宽度，如果实际图片宽度大于此值，会自动进行压缩处理，
      *                   当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
+     *                   Request the target width. If the actual image width is greater than this value, it will be
+     *                   compressed automatically. Request the target width. If the actual image width is greater than
+     *                   this value, it will be compressed automatically.
      * @param reqHeight  请求目标高度，如果实际图片高度大于此值，会自动进行压缩处理，
      *                   当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
-     * @param hints      解析编码类型
+     *                   Request the target height. If the actual height of the image is greater than this value, it
+     *                   will be compressed automatically. When both reqWidth and reqHeight are less than or equal to 0,
+     *                   no compression is performed
+     * @param hints      解析编码类型  Analytic encoding type
      * @return Result
      */
     public static Result parseCodeResult(String bitmapPath, int reqWidth,
@@ -384,9 +401,9 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmap 解析的图片
+     * @param bitmap 解析的图片  Parsed picture
      * @return Result
      */
     public static Result parseCodeResult(Bitmap bitmap) {
@@ -394,10 +411,10 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
-     * @param bitmap 解析的图片
-     * @param hints  解析编码类型
+     * @param bitmap 解析的图片  Parsed picture
+     * @param hints  解析编码类型  Analytic encoding type
      * @return Result
      */
     public static Result parseCodeResult(Bitmap bitmap, Map<DecodeHintType, Object> hints) {
@@ -405,10 +422,10 @@ public final class CodeUtils {
     }
 
     /**
-     * 解析一维码/二维码图片
+     * 解析一维码/二维码图片  Analyze one-dimensional code/two-dimensional code picture
      *
      * @param source source
-     * @param hints  解析编码类型
+     * @param hints  解析编码类型  Analytic encoding type
      * @return Result
      */
     public static Result parseCodeResult(LuminanceSource source,
@@ -435,13 +452,14 @@ public final class CodeUtils {
     private static Result decodeInternal(MultiFormatReader reader, LuminanceSource source) {
         Result result = null;
         try {
-            // 采用HybridBinarizer解析
+            // 采用HybridBinarizer解析  Analyze by HybridBinarizer
             result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
         } catch (NotFoundException ex) {
             Log.e("TAG", "decodeInternal: " + ex);
         }
         if (result == null) {
             // 如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
+            // If there is no parsing success, use globalhistogrambinarizer to parse it once
             try {
                 result = reader.decodeWithState(
                         new BinaryBitmap(
@@ -464,37 +482,40 @@ public final class CodeUtils {
      */
     private static Bitmap compressBitmap(String path, int reqWidth, int reqHeight) {
         if (reqWidth > 0 && reqHeight > 0) {
-            // 都大于进行判断是否压缩
+            // 都大于进行判断是否压缩  Are greater than to determine whether to compress
             BitmapFactory.Options newOpts = new BitmapFactory.Options();
 
             // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
-            newOpts.inJustDecodeBounds = true; // 获取原始图片大小
+            // Began to read the pictures and the options at this time. InJustDecodeBounds set to true
+            newOpts.inJustDecodeBounds = true; // 获取原始图片大小  Get the original image size
 
-            BitmapFactory.decodeFile(path, newOpts); // 此时返回bm为空
+            BitmapFactory.decodeFile(path, newOpts); // 此时返回bm为空  bm is now returned as null
 
             BigDecimal width = new BigDecimal(newOpts.outWidth);
             BigDecimal height = new BigDecimal(newOpts.outHeight);
 
             // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+            // Zoom ratio, since it is a fixed scale, can be calculated using only one of the height or width data
             int wSize = 1; // wSize=1表示不缩放
             if (width.intValue() > reqWidth) {
-                // 如果宽度大的话根据宽度固定大小缩放
+                // 如果宽度大的话根据宽度固定大小缩放  If you have a large width, scale by a fixed width
                 wSize = (int) (width.intValue() / reqWidth);
             }
 
-            // wSize=1表示不缩放
+            // wSize=1表示不缩放  wSize=1 indicates no scaling
             int hSize = 1;
             if (height.intValue() > reqHeight) {
-                // 如果高度高的话根据宽度固定大小缩放
+                // 如果高度高的话根据宽度固定大小缩放  If the height is high, scale by a fixed size according to the width
                 hSize = (int) (height.intValue() / reqHeight);
             }
             int size = Math.max(wSize, hSize);
             if (size <= 0) {
                 size = 1;
             }
-            newOpts.inSampleSize = size; // 设置缩放比例
+            newOpts.inSampleSize = size; // 设置缩放比例  Set the scale
 
             // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+            // To read the pictures, note has put options at this time. The inJustDecodeBounds set to false
             newOpts.inJustDecodeBounds = false;
             return BitmapFactory.decodeFile(path, newOpts);
         }
@@ -700,7 +721,7 @@ public final class CodeUtils {
         if (TextUtils.isEmpty(code)) {
             return src;
         }
-        // 获取图片的宽高
+        // 获取图片的宽高  Get the width and height of the image
         int srcWidth = src.getWidth();
         int srcHeight = src.getHeight();
 

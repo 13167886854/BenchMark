@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class GameTouchUtil {
-    /** 测试次数 */
+    /** 测试次数  Number of tests */
     public static final int TEST_NUM = 10;
     private static GameTouchUtil gameTouchUtil = new GameTouchUtil();
 
@@ -30,7 +30,7 @@ public class GameTouchUtil {
     private ArrayList<Long> autoTapTime = new ArrayList<>();
     private ArrayList<Long> testTime = new ArrayList<>();
 
-    // 单例模式
+    // 单例模式  Singleton pattern
     private GameTouchUtil() {
     }
 

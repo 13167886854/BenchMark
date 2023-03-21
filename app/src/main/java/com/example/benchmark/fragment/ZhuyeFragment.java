@@ -83,7 +83,7 @@ public class ZhuyeFragment extends Fragment {
     public void changeFragment(Fragment fragment, boolean isFisrt) {
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
 
-        // 开启事务
+        // 开启事务  Start transaction
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.zhuye_fram, fragment);
         if (!isFisrt) {

@@ -190,6 +190,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         }
         if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
             // 检测华为云手机测试 提示用户输入ip地址加端口
+            // Huawei Cloud mobile Phone test prompts you to enter an ip address and port number
             Log.e(TAG, "onCreateView: hiahiasadsad");
             showDialog();
         }
@@ -235,31 +236,31 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initPhoneBtn() {
-        // 移动云
+        // 移动云  Mobile cloud
         if (getActivity().findViewById(R.id.yidong_phone) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.yidong_phone);
             if (getResources().getDrawable(R.drawable.yidong_phone_dark) instanceof Drawable) {
                 Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone_dark);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
             }
         }
-        // 网易
+        // 网易  Netease
         if (getActivity().findViewById(R.id.wangyiyun_phone) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.wangyiyun_phone);
             if (getResources().getDrawable(R.drawable.wangyi_phone_dark) instanceof Drawable) {
                 Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone_dark);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
             }
         }
-        // 华为
+        // 华为  Huawei
         if (getActivity().findViewById(R.id.kunpeng_phone) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.kunpeng_phone);
             if (getResources().getDrawable(R.drawable.kunpeng_phone_dark) instanceof Drawable) {
                 Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone_dark);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
             }
         }
         if (getActivity().findViewById(R.id.kunpeng_data_phone) instanceof Button) {
@@ -267,16 +268,16 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             if (getResources().getDrawable(R.drawable.kunpeng_phone_dark) instanceof Drawable) {
                 Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone_dark);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
             }
         }
-        // 红手指
+        // 红手指  Red finger
         if (getActivity().findViewById(R.id.redfigure_phone) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.redfigure_phone);
             if (getResources().getDrawable(R.drawable.redfingure_dark) instanceof Drawable) {
                 Drawable drawable = getResources().getDrawable(R.drawable.redfingure_dark);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
             }
         }
     }
@@ -666,7 +667,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Button btn = (Button) vi;
             Drawable drawable = getResources().getDrawable(R.drawable.wangyi_phone);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -677,7 +678,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Button btn = (Button) vi;
             Drawable drawable = getResources().getDrawable(R.drawable.yidong_phone);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -688,7 +689,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Button btn = (Button) vi;
             Drawable drawable = getResources().getDrawable(R.drawable.redfingure);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -699,7 +700,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Button btn = (Button) vi;
             Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -710,7 +711,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             Button btn = (Button) vi;
             Drawable drawable = getResources().getDrawable(R.drawable.kunpeng_phone);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -741,7 +742,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                         CacheUtil.put(CacheConst.KEY_PERFORMANCE_IS_MONITORED, false);
                         Intent intent = new Intent(getActivity(), CePingActivity.class);
 
-                        // 传入checkbox是否被选中
+                        // 传入checkbox是否被选中  Whether the incoming checkbox is selected
                         intent.putExtra(CacheConst.KEY_PLATFORM_KIND, CacheConst.PLATFORM_KIND_CLOUD_PHONE);
                         intent.putExtra(CacheConst.KEY_FLUENCY_INFO, blueLiuChangCheck.isChecked());
                         intent.putExtra(CacheConst.KEY_STABILITY_INFO, blueWenDingCheck.isChecked());
@@ -761,10 +762,16 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();
-        Display display = manager.getDefaultDisplay(); // 获取屏幕宽、高度
-        WindowManager.LayoutParams params = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        params.height = (int) (display.getHeight() * 0.9); // 高度设置为屏幕的0.6，根据实际情况调整
-        params.width = (int) (display.getWidth() * 0.9); // 宽度设置为屏幕的0.65，根据实际情况调整
+        Display display = manager.getDefaultDisplay(); // 获取屏幕宽、高度  Obtain the screen width and height
+
+        // 获取对话框当前的参数值  Gets the current parameter values for the dialog box
+        WindowManager.LayoutParams params = dialogWindow.getAttributes();
+
+        // 高度设置为屏幕的0.6，根据实际情况调整  Set the height to 0.6 of the screen and adjust it according to the actual situation
+        params.height = (int) (display.getHeight() * 0.9);
+
+        // 宽度设置为屏幕的0.65，根据实际情况调整  Set the width to 0.65 of the screen and adjust as needed
+        params.width = (int) (display.getWidth() * 0.9);
         dialogWindow.setAttributes(params);
     }
 }

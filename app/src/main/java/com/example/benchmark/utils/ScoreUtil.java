@@ -45,7 +45,7 @@ public class ScoreUtil {
     public static void calcAndSaveCPUScores(
             int cpuCores
     ) {
-        // 保存CPU结果
+        // 保存CPU结果  Save CPU results
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
 
         if (cpuCores != 0) {
@@ -88,7 +88,7 @@ public class ScoreUtil {
             String gpuRender,
             String gpuVersion
     ) {
-        // 保存GPU结果
+        // 保存GPU结果  Save GPU results
         CacheUtil.put(CacheConst.KEY_GPU_VENDOR, gpuVendor);
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
         CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
@@ -132,7 +132,7 @@ public class ScoreUtil {
             String availableRAM,
             String totalRAM
     ) {
-        // 保存RAM结果
+        // 保存RAM结果  Save RAM results
         CacheUtil.put(CacheConst.KEY_AVAILABLE_RAM, availableRAM);
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
 
@@ -175,7 +175,7 @@ public class ScoreUtil {
             String availableROM,
             String totalROM
     ) {
-        // 保存ROM结果
+        // 保存ROM结果 Save ROM results
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
         if (availableROM != null && totalROM != null) {
@@ -227,7 +227,7 @@ public class ScoreUtil {
             float stutterRate,
             String eachFps
     ) {
-        // 保存流畅性结果
+        // 保存流畅性结果  Save the fluency result
         CacheUtil.put(CacheConst.KEY_AVERAGE_FPS, averageFPS);
         CacheUtil.put(CacheConst.KEY_FRAME_SHAKE_RATE, frameShakeRate);
         CacheUtil.put(CacheConst.KEY_LOW_FRAME_RATE, lowFrameRate);
@@ -235,7 +235,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_JANK_COUNT, jankCount);
         CacheUtil.put(CacheConst.KEY_STUTTER_RATE, stutterRate);
 
-        // 计算流畅性分数
+        // 计算流畅性分数  Calculate fluency scores
         BigDecimal averFpsScore = BigDecimal.valueOf(averageFPS <= 120 ? 100f * averageFPS / (6 * 120) : 100f / 6);
         BigDecimal frameShakeScore = BigDecimal.valueOf(frameShakeRate < 10
                 ? 100f / 6 : 100f * 10 / (6 * frameShakeRate));
@@ -247,10 +247,10 @@ public class ScoreUtil {
         int fluencyScore = (averFpsScore.add(frameShakeScore.
                 add(lowFrameScore.add(frameIntervalScore).add(jankCountScore).add(stutterRateScore)))).intValue();
 
-        // 保存流畅性分数
+        // 保存流畅性分数  Save the fluency score
         CacheUtil.put(CacheConst.KEY_FLUENCY_SCORE, fluencyScore);
 
-        // 判断数据是否为空
+        // 判断数据是否为空  Determines whether the data is empty
         if (averageFPS + frameShakeRate + lowFrameRate + stutterRate + jankCount != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
                     .addParam("adminName", Admin.adminName)
@@ -374,12 +374,12 @@ public class ScoreUtil {
             float averageStartTime,
             float averageQuitTime
     ) {
-        // 保存稳定性结果
+        // 保存稳定性结果  Preservation stability result
         CacheUtil.put(CacheConst.KEY_START_SUCCESS_RATE, startSuccessRate);
         CacheUtil.put(CacheConst.KEY_AVERAGE_START_TIME, averageStartTime);
         CacheUtil.put(CacheConst.KEY_AVERAGE_QUIT_TIME, averageQuitTime);
 
-        // 计算稳定性分数
+        // 计算稳定性分数  Computed stability score
         startSuccessRate /= 100;
         BigDecimal startSuccessScore = new BigDecimal(100f * startSuccessRate / 3);
         BigDecimal averageStartScore = new BigDecimal(averageStartTime
@@ -388,7 +388,7 @@ public class ScoreUtil {
                 < 50 ? 100f / 3 : 100f * (50 / averageQuitTime) / 3);
         int stabilityScores = (startSuccessScore.add(averageStartScore.add(averageQuitScore))).intValue();
 
-        // 保存稳定性分数
+        // 保存稳定性分数  Preservation stability score
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
         if (startSuccessRate + averageStartTime + averageQuitTime != 0.0f) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
@@ -469,7 +469,7 @@ public class ScoreUtil {
      * @date 2023/3/8 09:52
      */
     public static void calaAndSaveGameTouchScores(int testNum, float time) {
-        // 正确率
+        // 正确率  accuracy
         float averageAccuracy = (float) (testNum) / GameTouchUtil.TEST_NUM;
         Log.e("TWT", "GameTouchUtil.testNum: " + GameTouchUtil.TEST_NUM);
         Log.e("TWT", "testNum: " + testNum);
@@ -480,7 +480,7 @@ public class ScoreUtil {
 //        int touchScore = (int) (averAccuracyScore + responseTimeScore);
         int touchScore = (int) (averAccuracyScore.add(responseTimeScore)).intValue();
 
-        // 保存触控体验分数
+        // 保存触控体验分数  Save the touch experience score
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
         averageAccuracy *= 100;
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, averageAccuracy);
@@ -501,7 +501,7 @@ public class ScoreUtil {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void calcAndSaveTouchScores(
             String cloudDownTimeList, String cloudSpendTimeList) {
-        // 没有进行触控测试 没有数据时 直接返回
+        // 没有进行触控测试 没有数据时 直接返回  No touch test. Go back if you don't have any data
         if (cloudDownTimeList == null || cloudSpendTimeList == null) {
             return;
         }
@@ -527,7 +527,7 @@ public class ScoreUtil {
             Log.d("zzll", "calcAndSaveTouchScores: --" + cloudSpendTimeListArr[i]);
         }
 
-        // 判断测试平台
+        // 判断测试平台  Judgment test platform
         String checkPlatform = CacheUtil.getString(CacheConst.KEY_PLATFORM_NAME);
         Log.d("zzl", "测试平台===>" + checkPlatform);
         TreeSet<String> localTapTimes =
@@ -560,7 +560,7 @@ public class ScoreUtil {
                 - CacheUtil.getLong("tapTimeOnLocal1")));
         ArrayList<Long> longs = new ArrayList<>();
 
-        // 响应次数
+        // 响应次数  Response times
         int responseNum = 0;
         if (responseTime0 != 0L) {
             responseNum++;
@@ -610,25 +610,26 @@ public class ScoreUtil {
         Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
 
         // 去掉两个最高延时，去掉两个最低延时，然后求平均值
+        // Take away the two highest delays, take away the two lowest delays, and then take the average
         longs.remove(longs.size() - 1);
         longs.remove(longs.size() - 1);
         longs.remove(0);
         longs.remove(0);
         Log.d("zzl", "calcAndSaveTouchScores: longs==>" + longs);
 
-        // 平均触控时延
+        // 平均触控时延  Average touch delay
         long allResponseTime = 0L;
         for (Long aLong : longs) {
             allResponseTime += aLong;
         }
         BigDecimal avgResponseTime = new BigDecimal(allResponseTime / longs.size());
 
-        // 正确率
+        // 正确率  accuracy
         BigDecimal averageAccuracy = new BigDecimal((responseNum - 4) / longs.size());
         BigDecimal averAccuracyScore = new BigDecimal(100f * averageAccuracy.intValue() / 2);
         BigDecimal responseTimeScore = new BigDecimal(avgResponseTime.intValue() < 50 ? 50 : 100f * 50 / (2 * avgResponseTime.intValue()));
         int touchScore = (averAccuracyScore.add(responseTimeScore)).intValue();
-        // 保存触控体验分数
+        // 保存触控体验分数  Save the touch experience score
         CacheUtil.put(CacheConst.KEY_TOUCH_SCORE, touchScore);
         averageAccuracy = averageAccuracy.scaleByPowerOfTen(2);
         CacheUtil.put(CacheConst.KEY_AVERAGE_ACCURACY, (Set<String>) averageAccuracy);
@@ -721,14 +722,14 @@ public class ScoreUtil {
         float ssim = Float.parseFloat(YinHuaData.ssim);
         float pesq = Float.parseFloat(YinHuaData.pesq);
 
-        // 保存音画质量结果
+        // 保存音画质量结果  Save the sound and picture quality results
         CacheUtil.put(CacheConst.KEY_RESOLUTION, resolution);
         CacheUtil.put(CacheConst.KEY_MAX_DIFF_VALUE, maxDiffValue);
         CacheUtil.put(CacheConst.KEY_PESQ, YinHuaData.pesq);
         CacheUtil.put(CacheConst.KEY_PSNR, YinHuaData.psnr);
         CacheUtil.put(CacheConst.KEY_SSIM, YinHuaData.ssim);
 
-        // 计算音画质量分数
+        // 计算音画质量分数  Calculate the score of sound and picture quality
         String[] resolutionArray = resolution.split("X");
         BigDecimal resolutionValue = new BigDecimal(Integer.parseInt(resolutionArray[0]) * Integer.parseInt(resolutionArray[1]));
         BigDecimal resolutionScore = new BigDecimal(100f * resolutionValue.floatValue() / (4 * 1920 * 1080));
@@ -738,7 +739,7 @@ public class ScoreUtil {
         BigDecimal d4 = new BigDecimal(((100 * pesq) / (4.5 * 4)));
         int soundFrameScore = (resolutionScore.add(maxDiffValueScore.add(d3.add(d4)))).intValue();
 
-        // 保存音画质量分数
+        // 保存音画质量分数  Save the score of sound and picture quality
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
         if (YinHuaData.pesq != null && YinHuaData.ssim != null && YinHuaData.psnr != null) {
             OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")

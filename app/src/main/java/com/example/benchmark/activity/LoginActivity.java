@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // 在文本改变之后记录用户密码
+                // 在文本改变之后记录用户密码   Record the user password after the text changes
                 if (isChecked) {
                     if (sharedPreferences == null) {
                         sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                // 在文本改变之后记录用户账号
+                // 在文本改变之后记录用户账号   Record the user account after the text changes
                 if (isChecked) {
                     if (sharedPreferences == null) {
                         sharedPreferences = getApplication().getSharedPreferences("config", MODE_PRIVATE);
@@ -160,16 +160,17 @@ public class LoginActivity extends AppCompatActivity {
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = LoginActivity.this.getWindowManager();
 
-        // 获取屏幕宽、高度
+        // 获取屏幕宽、高度   Obtain the screen width and height
         Display display = manager.getDefaultDisplay();
 
-        // 获取对话框当前的参数值
+        // 获取对话框当前的参数值   Gets the current parameter values for the dialog box
         WindowManager.LayoutParams params = dialogWindow.getAttributes();
 
         // 高度设置为屏幕的0.6，根据实际情况调整
+        // Set the height to 0.6 of the screen and adjust it according to the actual situation
         params.height = (int) (display.getHeight() * 0.9);
 
-        // 宽度设置为屏幕的0.65，根据实际情况调整
+        // 宽度设置为屏幕的0.65，根据实际情况调整   Set the width to 0.65 of the screen and adjust as needed
         params.width = (int) (display.getWidth() * 0.9);
         dialogWindow.setAttributes(params);
     }

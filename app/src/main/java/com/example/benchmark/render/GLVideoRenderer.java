@@ -132,7 +132,7 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
                 GLES20.GL_LINEAR);
         surfaceTexture = new SurfaceTexture(textureId);
 
-        // 监听是否有新的一帧数据到来
+        // 监听是否有新的一帧数据到来  Listen for a new frame of data
         surfaceTexture.setOnFrameAvailableListener(this);
         Surface surface = new Surface(surfaceTexture);
         mediaPlayer.setSurface(surface);
@@ -178,14 +178,18 @@ public class GLVideoRenderer implements GLSurfaceView.Renderer,
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
         synchronized (this) {
             if (isUpdateSurface) {
-                // 获取新数据
+                // 获取新数据  Get new data
                 surfaceTexture.updateTexImage();
 
-                // 让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
+                /*
+                    让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。The definition of mSTMatrix
+                    is exactly the same as that of projectionMatrix so that the new texture and texture coordinate
+                    system can correspond correctly.
+                 */
                 surfaceTexture.getTransformMatrix(mSTMatrix);
                 isUpdateSurface = false;
 
-                // 编写测试FPS代码
+                // 编写测试FPS代码  Write the test FPS code
                 Log.d("TWT", "UpdateTime:" + System.currentTimeMillis());
                 fpsUtils.addFrame();
             }

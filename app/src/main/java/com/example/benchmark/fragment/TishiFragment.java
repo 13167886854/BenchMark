@@ -89,7 +89,7 @@ public class TishiFragment extends Fragment {
                             myDialog.yes.setEnabled(true);
                         }
                     } else {
-                        // 发送后端登录验证请求
+                        // 发送后端登录验证请求  Send a back-end login authentication request
                         sendLoginQuest();
                     }
                 }
@@ -150,7 +150,7 @@ public class TishiFragment extends Fragment {
             Looper.prepare();
             Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
 
-            // 验证成功后，跳转到主界面
+            // 验证成功后，跳转到主界面  After the verification is successful, the main screen is displayed
             Looper.loop();
         } else {
             Log.d(TAG, "onSuccessful: data==>" + data);
@@ -206,7 +206,7 @@ public class TishiFragment extends Fragment {
                 history.setArguments(bundle);
                 fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, history);
                 fragmentTransaction.commit();
@@ -220,7 +220,7 @@ public class TishiFragment extends Fragment {
                 history.setArguments(bundle);
                 fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, history);
                 fragmentTransaction.commit();
@@ -234,7 +234,7 @@ public class TishiFragment extends Fragment {
                 history.setArguments(bundle);
                 fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, history);
                 fragmentTransaction.commit();
@@ -251,7 +251,7 @@ public class TishiFragment extends Fragment {
                 history.setArguments(bundle);
                 fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, history);
                 fragmentTransaction.commit();
@@ -265,7 +265,7 @@ public class TishiFragment extends Fragment {
                 history.setArguments(bundle);
                 fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, history);
                 fragmentTransaction.commit();
@@ -292,10 +292,16 @@ public class TishiFragment extends Fragment {
         myDialog.show();
         Window dialogWindow = myDialog.getWindow();
         WindowManager manager = getActivity().getWindowManager();
-        Display display = manager.getDefaultDisplay(); // 获取屏幕宽、高度
-        WindowManager.LayoutParams params = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        params.height = (int) (display.getHeight() * 0.9); // 高度设置为屏幕的0.6，根据实际情况调整
-        params.width = (int) (display.getWidth() * 0.9); // 宽度设置为屏幕的0.65，根据实际情况调整
+        Display display = manager.getDefaultDisplay(); // 获取屏幕宽、高度  Obtain the screen width and height
+
+        // 获取对话框当前的参数值  Gets the current parameter values for the dialog box
+        WindowManager.LayoutParams params = dialogWindow.getAttributes();
+
+        // 高度设置为屏幕的0.6，根据实际情况调整 Set the height to 0.6 of the screen and adjust it according to the actual situation
+        params.height = (int) (display.getHeight() * 0.9);
+
+        // 宽度设置为屏幕的0.65，根据实际情况调整  Set the width to 0.65 of the screen and adjust as needed
+        params.width = (int) (display.getWidth() * 0.9);
         dialogWindow.setAttributes(params);
     }
 }

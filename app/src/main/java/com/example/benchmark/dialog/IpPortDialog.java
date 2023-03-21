@@ -37,15 +37,15 @@ public class IpPortDialog extends Dialog {
     /** TAG */
     private static final String TAG = "Login";
 
-    /** 确定按钮 */
+    /** 确定按钮  Confirm button */
     public Button yes;
 
-    private Button no; // 取消按钮
-    private TextView titleTv; // 消息标题文本
-    private TextView messageTv; // 消息提示文本
-    private String titleStr; // 从外界设置的title文本
-    private String messageStr; // 从外界设置的消息文本
-    private View view; // 确定文本和取消文本的显示内容
+    private Button no; // 取消按钮  Cancel button
+    private TextView titleTv; // 消息标题文本  Message header text
+    private TextView messageTv; // 消息提示文本  Message prompt text
+    private String titleStr; // 从外界设置的title文本  The title text is set from the outside
+    private String messageStr; // 从外界设置的消息文本  The message text set from the outside world
+    private View view; // 确定文本和取消文本的显示内容  Determines the text and undisplays the text
     private String yesStr;
     private String noStr;
     private EditText ipAddress;
@@ -53,8 +53,8 @@ public class IpPortDialog extends Dialog {
     private String textIp = "";
     private String testPort = "";
 
-    private OnNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器
-    private OnYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器
+    private OnNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器  Cancel the listener whose button was clicked
+    private OnYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器 A listener that determines that the button was clicked
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -117,19 +117,19 @@ public class IpPortDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ip_port_dialog);
 
-        // 设置背景透明，不然会出现白色直角问题
+        // 设置背景透明，不然会出现白色直角问题 Make the background transparent, otherwise the white right Angle problem will occur
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        // 按空白处不能取消动画
+        // 按空白处不能取消动画  Pressing blank space cannot cancel animation
         setCanceledOnTouchOutside(false);
 
-        // 初始化界面控件
+        // 初始化界面控件  Initializes the interface control
         initView();
 
-        // 初始化界面控件的事件
+        // 初始化界面控件的事件  The event that initializes an interface control
         initEvent();
-        ipAddress = findViewById(R.id.ip_address); // 用户名
+        ipAddress = findViewById(R.id.ip_address); // 用户名  User name
         ipAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
@@ -147,7 +147,7 @@ public class IpPortDialog extends Dialog {
                 IpPort.ip = textIp;
             }
         });
-        port = findViewById(R.id.port); // 密码
+        port = findViewById(R.id.port); // 密码  password
         port.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
@@ -169,7 +169,7 @@ public class IpPortDialog extends Dialog {
     }
     
     private void initEvent() {
-        // 设置确定按钮被点击后，向外界提供监听
+        // 设置确定按钮被点击后，向外界提供监听  Set OK button is clicked, to provide external listening
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,7 +179,7 @@ public class IpPortDialog extends Dialog {
                 yesOnclickListener.onYesClick();
             }
         });
-        // 设置取消按钮被点击后，向外界提供监听
+        // 设置取消按钮被点击后，向外界提供监听  Set Cancel button is clicked to provide external listening
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -44,13 +44,13 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
     private Context mContext = this;
     private String path = "";
 
-    // 百分比显示
+    // 百分比显示   Percentage display
     private DecimalFormat df = new DecimalFormat("0.00%");
 
-    // SharePreferences测试结果保存
+    // SharePreferences测试结果保存   SharePreferences test results are saved
     private String storeName = "LastTestResult";
 
-    // 判断是否正在测试
+    // 判断是否正在测试   Determine whether you are testing
     private boolean isTesting = false;
 
     /**
@@ -79,14 +79,14 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkframeupdate);
 
-        // 获取显示文本
+        // 获取显示文本   Get display text
         textInfo = findViewById(R.id.textview);
 
-        // 初始化视频播放器
+        // 初始化视频播放器   Initialize the video player
         glView = findViewById(R.id.play_surface_view);
         glView.setEGLContextClientVersion(2);
-        glVideoRenderer = new CheckVedioUpdateFrameRenderer(this); // 创建renderer
-        glView.setRenderer(glVideoRenderer); // 设置renderer
+        glVideoRenderer = new CheckVedioUpdateFrameRenderer(this); // 创建renderer   Create renderer
+        glView.setRenderer(glVideoRenderer); // 设置renderer   Set renderer
         glVideoRenderer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
@@ -107,7 +107,7 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
             Log.e("CheckFrameUpdate", ex.toString());
         }
 
-        // 自动开始
+        // 自动开始  Automatic start
         try {
             doTest();
         } catch (IOException ex) {
@@ -160,7 +160,7 @@ public class CheckFrameUpdateActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        // 判断是否正在测试
+        // 判断是否正在测试  Determine whether you are testing
         if (isTesting) {
             glVideoRenderer.getMediaPlayer().stop();
             try {

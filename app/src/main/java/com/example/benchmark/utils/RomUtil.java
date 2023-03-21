@@ -22,7 +22,7 @@ import java.util.Locale;
  * @since 2023/3/7 17:28
  */
 public class RomUtil {
-    /** 输出TAG */
+    /** 输出TAG  Output TAG */
     private static final String TAG = "Rom";
 
     /** MIUI */

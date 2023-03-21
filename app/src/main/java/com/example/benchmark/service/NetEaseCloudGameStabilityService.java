@@ -23,7 +23,7 @@ import com.example.benchmark.utils.TapUtil;
 public class NetEaseCloudGameStabilityService implements IStabilityService {
     private static final String TAG = "NetEaseCloudGameStabilityService";
 
-    // 超过一定时间仍未进入游戏则表示加载失败
+    // 超过一定时间仍未进入游戏则表示加载失败  If you do not enter the game after a certain time, the loading fails
     private final long monitorFialTime = 8000L;
     private final String nodeIdInstantPlay = "com.netease.android.cloudgame:id/start_game_btn";
     private final String nodeTextInstantPlay = "秒玩";

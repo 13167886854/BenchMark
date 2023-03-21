@@ -47,7 +47,7 @@ public class AccessUtils {
      *
      * @return void
      * @throws null
-     * @description: 打开无障碍服务设置
+     * @description: 打开无障碍服务设置  Open barrier-free service Settings
      * @date 2023/2/23 15:25
      */
     public void openAccessibilitySettings() {
@@ -60,7 +60,7 @@ public class AccessUtils {
      *
      * @return boolean
      * @throws null
-     * @description: 辅助服务是否开启
+     * @description: 辅助服务是否开启  Whether the auxiliary service is enabled
      * @date 2023/2/23 15:25
      */
     public boolean isAccessibilityServiceOpen() {
@@ -77,7 +77,7 @@ public class AccessUtils {
      *
      * @return boolean
      * @throws null
-     * @description: 判断后台权限是否已经开启
+     * @description: 判断后台权限是否已经开启  Check whether background permissions are enabled
      * @date 2023/2/23 15:26
      */
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -98,7 +98,7 @@ public class AccessUtils {
      *
      * @return void
      * @throws null
-     * @description: 打开后台无限制运行，保证不会被杀死
+     * @description: 打开后台无限制运行，保证不会被杀死  Open background unlimited running, guaranteed not to be killed
      * @date 2023/2/23 15:26
      */
     @RequiresApi(api = Build.VERSION_CODES.M)

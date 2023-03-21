@@ -166,7 +166,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                 return;
             }
         } else if (redChuKongCheck.isChecked()) {
-            // 检查是否开启无障碍服务。。。。
+            // 检查是否开启无障碍服务。。。。  Check whether barrier-free service is enabled...
             if (!ServiceUtil.isServiceRunning(BaseApp.context, MyAccessibilityService.class.getName())) {
                 Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -227,28 +227,28 @@ public class GameFragment extends Fragment implements View.OnClickListener,
     }
 
     private void initGameBtn() {
-        // 腾讯
+        // 腾讯  Tencent
         if (getActivity().findViewById(R.id.tengxun_game) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
             Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng_dark);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
 
-        // 咪咕
+        // 咪咕  MiGu
         if (getActivity().findViewById(R.id.migu_game) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.migu_game);
             Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou_dark);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
 
-        // 网易
+        // 网易  Netease
         if (getActivity().findViewById(R.id.wangyi_game) instanceof Button) {
             Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
             Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi_dark);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+            btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
         }
     }
 
@@ -411,7 +411,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                     Button btn = (Button) getActivity().findViewById(R.id.tengxun_game);
                     Drawable drawable = getResources().getDrawable(R.drawable.tengxunxianfeng);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
                 }
                 break;
             }
@@ -422,7 +422,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                     Button btn = (Button) getActivity().findViewById(R.id.migu_game);
                     Drawable drawable = getResources().getDrawable(R.drawable.migukuaiyou);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
                 }
                 break;
             }
@@ -433,7 +433,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
                     Button btn = (Button) getActivity().findViewById(R.id.wangyi_game);
                     Drawable drawable = getResources().getDrawable(R.drawable.wangyiyunyouxi);
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标
+                    btn.setCompoundDrawables(null, drawable, null, null); // 设置底图标  Set bottom icon
                 }
                 break;
             }
@@ -508,6 +508,7 @@ public class GameFragment extends Fragment implements View.OnClickListener,
      */
     public Map<String, Object> getInfo() {
         // {ROM={可用=4.68 GB, 总共=6.24 GB}, CPUCores=4, RAM={可用=801 MB, 总共=2.05 GB}}
+        // {ROM={available = 4.68GB, total = 6.24GB}, CPUCores=4, RAM={available =801 MB, total = 2.05GB}}
         Map<String, String> ramInfo = SDCardUtils.getRAMInfo(getContext());
         if (ramInfo.get("可用").equals(ramInfo.get("总共"))) {
             ramInfo.put("可用", MemInfoUtil.getMemAvailable());

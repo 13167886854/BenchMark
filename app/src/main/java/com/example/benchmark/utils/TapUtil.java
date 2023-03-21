@@ -41,7 +41,7 @@ public class TapUtil {
     public static int mWholeMonitorNum;
 
     /**
-     * 点击次数
+     * 点击次数  number of clicks
      */
     public static final int TOTAL_TAP_NUM = 12;
 
@@ -56,7 +56,7 @@ public class TapUtil {
 
     private int phoneCurrentTapNum = 0;
 
-    // 触控测试模拟点击次数
+    // 触控测试模拟点击次数  Touch test simulation click times
     private int mCurrentTapNum = 0;
     private long mLastTapTime = 0L;
     private int turn = 0;
@@ -138,7 +138,7 @@ public class TapUtil {
                 new AccessibilityCallback() {
                     @Override
                     public void onSuccess() {
-                        // 记录发送请求时的系统时间戳
+                        // 记录发送请求时的系统时间戳  Records the system timestamp when the request was sent
                         startTime = System.currentTimeMillis();
                         Request request = new Request.Builder()
                                 .get()
@@ -157,13 +157,13 @@ public class TapUtil {
                                             @Override
                                             public void onResponse(@NotNull Call call, @NotNull Response response)
                                                     throws IOException {
-                                                // 获取成功响应的系统时间戳
+                                                // 获取成功响应的系统时间戳  Gets the system timestamp of the successful response
                                                 endTime = System.currentTimeMillis();
                                                 responseTime = endTime - startTime;
                                                 String result = response.body().string();
                                                 String res = result.substring(81, 94);
 
-                                                // 获取到的时间戳，应该减去响应时延
+                                                // 获取到的时间戳，应该减去响应时延  The timestamp obtained should be subtracted from the response delay
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
                                                 mCurrentTapNum++;
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
@@ -199,9 +199,9 @@ public class TapUtil {
                 Log.d("TWT", "turn = " + turn);
                 turn++;
                 if (turn % 2 == 1) {
-                    tap(2165, 630); // 点击设置按钮
+                    tap(2165, 630); // 点击设置按钮  Click the "Set" button
                 } else {
-                    tap(1000, 830);  // 点击取消按钮
+                    tap(1000, 830);  // 点击取消按钮  Click the Cancel button
                     gameTouchUtil.getTapTime(System.currentTimeMillis());
                 }
                 if (turn == 20) {
@@ -229,7 +229,7 @@ public class TapUtil {
             public void run() {
                 Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);
                 phoneCurrentTapNum++;
-                cloudPhoneTap(screenWidth / 2, screenHeight / 2); // 点击设置按钮
+                cloudPhoneTap(screenWidth / 2, screenHeight / 2); // 点击设置按钮 Click the "Set" button
                 if (phoneCurrentTapNum == TOTAL_TAP_NUM) {
                     phoneCurrentTapNum = 0;
                     Log.d("zzl", "phoneCurrentTapNum = " + phoneCurrentTapNum);

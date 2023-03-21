@@ -25,13 +25,13 @@ import java.util.regex.Pattern;
  * @since 2023/3/7 17:25
  */
 public class MemInfoUtil {
-    // 定义GB的计算常量
+    // 定义GB的计算常量  Define the computation constant for GB
     private static final int GB = 1024 * 1024 * 1024;
 
-    // 定义MB的计算常量
+    // 定义MB的计算常量  Define the computation constant for MB
     private static final int MB = 1024 * 1024;
 
-    // 定义KB的计算常量
+    // 定义KB的计算常量  Define the computation constant for KB
     private static final int KB = 1024;
     private static final String TAG = "MemInfoUtil";
 
@@ -128,7 +128,7 @@ public class MemInfoUtil {
      * @date 2023/3/9 15:52
      */
     public static String bytes2kb(float bytes) {
-        // 格式化小数
+        // 格式化小数  Formatted decimal
         DecimalFormat format = new DecimalFormat("###.00");
         if (bytes / GB >= 1) {
             return format.format(bytes / GB) + " GB";

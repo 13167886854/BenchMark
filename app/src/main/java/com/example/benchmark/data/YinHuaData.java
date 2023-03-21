@@ -14,17 +14,17 @@ package com.example.benchmark.data;
  */
 public class YinHuaData {
     /**
-     * 平台类型
+     * 平台类型  Platform type
      */
     public static String platformType;
 
     /**
-     * 音频得分
+     * 音频得分  Audio score
      */
     public static String pesq;
 
     /**
-     * 视频得分
+     * 视频得分  Video score
      */
     public static String ssim;
 

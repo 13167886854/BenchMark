@@ -86,7 +86,7 @@ import okhttp3.Response;
  */
 public class FxService extends Service {
     /**
-     * 文件路径地址
+     * 文件路径地址  File path address
      */
     public static String path = "";
     private static final String TAG = "TWT";
@@ -112,16 +112,16 @@ public class FxService extends Service {
     private FxService service;
     private TapUtil tapUtil;
 
-    // 视频音频录制变量初始化
+    // 视频音频录制变量初始化  Initialize the video audio recording variable
     private Recorder mRecorder;
     private VirtualDisplay virtualDisplay;
     private MediaRecorder mediaRecorder;
 
-    // 定义浮动窗口布局
+    // 定义浮动窗口布局  Define the floating window layout
     private LinearLayout mFloatLayout;
     private LayoutParams wmParams;
 
-    // 创建浮动窗口设置布局参数的对象
+    // 创建浮动窗口设置布局参数的对象  Create a floating window to set the layout parameters of the object
     private WindowManager mWindowManager;
     private Context mContext;
     private TextView mFloatView;
@@ -204,12 +204,12 @@ public class FxService extends Service {
     private void createFloatView() {
         initFloatView1();
 
-        // 获取状态栏的高度
+        // 获取状态栏的高度  Gets the height of the status bar
         int resourceId = getResources().getIdentifier("status_bar_height",
                 "dimen", "android");
         statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // 浮动窗口按钮
+        // 浮动窗口按钮  Floating window button
         mFloatLayout.measure(View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED), View.MeasureSpec
                 .makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
@@ -250,16 +250,18 @@ public class FxService extends Service {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX is the coordinate of the touch position with respect to the screen
+                        // getX is the coordinate with respect to the button
                         wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY() - btnToBack.getMeasuredHeight() - statusBarHeight;
 
-                        // 刷新
+                        // 刷新  renovate
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        // 小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -267,7 +269,7 @@ public class FxService extends Service {
                         }
                         break;
                 }
-                // 响应返回点击事件
+                // 响应返回点击事件  The response returns the click event
                 if (isClick) {
                     tapUtil.tap(screenWidth / 2, screenHeight / 2);
                     btnMenu.setVisibility(View.GONE);
@@ -286,7 +288,7 @@ public class FxService extends Service {
                 }
                 return true;
             }
-        }); // 设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
     }
 
     private void initFloatView5() {
@@ -301,15 +303,17 @@ public class FxService extends Service {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX is the coordinate of the touch position with respect to the screen
+                        // getX is the coordinate with respect to the button
                         wmParams.x = (int) event.getRawX() - btnToBack.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY()
                                 - btnToBack.getMeasuredHeight() - statusBarHeight;
-                        // 刷新
+                        // 刷新  renovate
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
-                        // 小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -317,14 +321,14 @@ public class FxService extends Service {
                         }
                         break;
                 }
-                // 响应返回点击事件
+                // 响应返回点击事件  The response returns the click event
                 if (isClick) {
                     btnMenu.setVisibility(View.GONE);
                     mFloatView.setVisibility(View.VISIBLE);
                 }
                 return true;
             }
-        }); // 设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
     }
 
     private void initFloatView4() {
@@ -338,16 +342,18 @@ public class FxService extends Service {
                         break;
                     case MotionEvent.ACTION_MOVE:
                         // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX is the coordinate of the touch position with respect to the screen
+                        // getX is the coordinate with respect to the button
                         wmParams.x = (int) event.getRawX() - btnToTap.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY() - btnToTap.getMeasuredHeight() - statusBarHeight;
 
-                        // 刷新
+                        // 刷新  renovate  Less than 0.2 seconds is considered a click
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        // 小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -355,7 +361,7 @@ public class FxService extends Service {
                         }
                         break;
                 }
-                // 响应触控点击事件
+                // 响应触控点击事件  Respond to touch click events
                 if (isClick) {
                     // 这里写开启触控服务
                     Toast.makeText(mContext, "点击了开启触控服务", Toast.LENGTH_SHORT).show();
@@ -364,7 +370,7 @@ public class FxService extends Service {
                 }
                 return true;
             }
-        }); // 设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
     }
 
     private void initFloatView3() {
@@ -380,17 +386,19 @@ public class FxService extends Service {
                     case MotionEvent.ACTION_MOVE:
 
                         // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX is the coordinate of the touch position with respect to the screen
+                        // getX is the coordinate with respect to the button
                         wmParams.x = (int) event.getRawX() - btnToPrCode.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY()
                                 - btnToPrCode.getMeasuredHeight() - statusBarHeight;
 
-                        // 刷新
+                        // 刷新  renovate
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        // 小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -399,7 +407,7 @@ public class FxService extends Service {
                         break;
                 }
 
-                // 响应点击事件
+                // 响应点击事件  Response click event
                 if (isClick) {
                     if (isCodeTouchAble) {
                         toCatchScreen();
@@ -407,7 +415,7 @@ public class FxService extends Service {
                 }
                 return true;
             }
-        }); // 设置监听浮动窗口的触摸移动
+        }); // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
     }
 
     private void initFloatView2() {
@@ -422,17 +430,19 @@ public class FxService extends Service {
                     case MotionEvent.ACTION_MOVE:
 
                         // getRawX是触摸位置相对于屏幕的坐标，getX是相对于按钮的坐标
+                        // getRawX is the coordinate of the touch position with respect to the screen
+                        // getX is the coordinate with respect to the button
                         wmParams.x = (int) event.getRawX() - mFloatView.getMeasuredWidth() / 2;
                         wmParams.y = (int) event.getRawY()
                                 - mFloatView.getMeasuredHeight() / 2 - statusBarHeight;
 
-                        // 刷新
+                        // 刷新  renovate
                         mWindowManager.updateViewLayout(mFloatLayout, wmParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         endTime = System.currentTimeMillis();
 
-                        // 小于0.2秒被判断为点击
+                        // 小于0.2秒被判断为点击  Less than 0.2 seconds is considered a click
                         if ((endTime - startTime) > 200) {
                             isClick = false;
                         } else {
@@ -441,14 +451,14 @@ public class FxService extends Service {
                         break;
                 }
 
-                // 响应点击事件
-                // 点击按钮进行截屏bitmap形式
+                // 响应点击事件  Response click event
+                // 点击按钮进行截屏bitmap形式  Click the button to take a screenshot in bitmap form
                 if (isClick) {
                     mFloatView.setVisibility(View.GONE);
                     btnMenu.setVisibility(View.VISIBLE);
                 }
 
-                // 设置监听浮动窗口的触摸移动
+                // 设置监听浮动窗口的触摸移动  Set to listen for touch movements in the floating window
                 return true;
             }
         });
@@ -457,36 +467,40 @@ public class FxService extends Service {
     private void initFloatView1() {
         wmParams = new LayoutParams();
 
-        // 获取WindowManagerImpl.CompatModeWrapper
+        // 获取WindowManagerImpl.CompatModeWrapper  Get WindowManagerImpl.CompatModeWrapper
         if (mContext.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
             mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         }
-        // 设置window type
+        // 设置window type  Set Window type
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
             wmParams.type = LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
             wmParams.type = LayoutParams.TYPE_TOAST;
         }
 
-        // 设置图片格式，效果为背景透明
+        // 设置图片格式，效果为背景透明  Format the image so that the background is transparent
         wmParams.format = PixelFormat.RGBA_8888;
 
         // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
+        // Make the floating window unfocused (implements operations on visible Windows other than the floating window)
         wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        // 调整悬浮窗显示的停靠位置为左侧置顶
+        // 调整悬浮窗显示的停靠位置为左侧置顶  Adjust the parking window display to the left
         wmParams.gravity = Gravity.START | Gravity.TOP;
 
-        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角)
+        /*
+            以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of the screen as the origin,
+            set the initial value of x and y (set the maximum value to be displayed directly in the lower right corner)
+         */
         wmParams.x = screenWidth - 50;
         wmParams.y = screenHeight / 4 * 3;
 
-        // 设置悬浮窗口长宽数据
+        // 设置悬浮窗口长宽数据  Set the length and width of the floating window
         wmParams.width = LayoutParams.WRAP_CONTENT;
         wmParams.height = LayoutParams.WRAP_CONTENT;
         LayoutInflater inflater = LayoutInflater.from(getApplication());
 
-        // 获取浮动窗口视图所在布局
+        // 获取浮动窗口视图所在布局  Gets the layout of the floating window view
         if (inflater.inflate(R.layout.float_layout, null) instanceof LinearLayout) {
             mFloatLayout = (LinearLayout) inflater.inflate(R.layout.float_layout, null);
         }
@@ -551,10 +565,10 @@ public class FxService extends Service {
                 imageReader.getSurface(), null, null);
         SystemClock.sleep(1000);
 
-        // 取最新的图片
+        // 取最新的图片  Get the latest picture
         Image image = imageReader.acquireLatestImage();
 
-        // 释放 virtualDisplay,不释放会报错
+        // 释放 virtualDisplay,不释放会报错  If virtualDisplay is not released, an error message is displayed
         virtualDisplay.release();
         return image2Bitmap(image);
     }
@@ -643,14 +657,14 @@ public class FxService extends Service {
         Log.e("QT-1", result + "---123");
         Log.e("QT-1", "123---" + result);
         if ("{}".equals(result)) {
-            // 空数据，点击无效
+            // 空数据，点击无效  Null data, click invalid
             return;
         }
         JSONObject jsonData = JSON.parseObject(result);
 
         getInfo1(jsonData);
 
-        // 触控测试数据
+        // 触控测试数据  Touch test data
         ScoreUtil.calcAndSaveTouchScores(
                 getCloudListDataFromJson(jsonData, "cloudDownTimeList"),
                 getCloudListDataFromJson(jsonData, "cloudSpendTimeList")
@@ -670,7 +684,7 @@ public class FxService extends Service {
     }
 
     private void getInfo1(JSONObject jsonData) {
-        // 信息获取
+        // 信息获取  Information retrieval
         Log.e("QT-2", jsonData.toJSONString());
         ScoreUtil.calcAndSaveCPUScores(
                 getIntDataFromJson(jsonData, "cpuCores")
@@ -763,11 +777,11 @@ public class FxService extends Service {
         mediaRecorder.reset();
         virtualDisplay.release();
 
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
@@ -783,7 +797,7 @@ public class FxService extends Service {
     private void stopRecord4() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
 
-        // file是要上传的文件 File() "/"
+        // file是要上传的文件 File() "/"  file is the File to be uploaded File() "/"
         File file = new File(CacheConst.videoPath + File.separator
                 + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
@@ -806,7 +820,7 @@ public class FxService extends Service {
 
     private void stopRecord3() {
         MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
-        // file是要上传的文件 File() "/"
+        // file是要上传的文件 File() "/"  file is the File to be uploaded File() "/"
         File file = new File(CacheConst.videoPath
                 + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
@@ -829,13 +843,13 @@ public class FxService extends Service {
 
     private void stopRecord2(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                // 连接超时
+                // 连接超时  Connection timeout
                 .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 读取超时
+                // 读取超时  Read timeout
                 .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 写入超时
+                // 写入超时  Write timeout
                 .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                 .build();
         client.newCall(request)
@@ -874,13 +888,13 @@ public class FxService extends Service {
 
     private void stopRecord1(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                // 连接超时
+                // 连接超时  Connection timeout
                 .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 读取超时
+                // 读取超时  Read timeout
                 .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 写入超时
+                // 写入超时 Write timeout
                 .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                 .build();
         client.newCall(request)
@@ -942,11 +956,11 @@ public class FxService extends Service {
                 Log.e(TAG, "stopAudioRecord: ", ex);
             }
         }
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {
@@ -1005,13 +1019,13 @@ public class FxService extends Service {
 
     private void stopAudioRecord2(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                // 连接超时
+                // 连接超时  Connection timeout
                 .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 读取超时
+                // 读取超时  Read timeout
                 .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 写入超时
+                // 写入超时  Write timeout
                 .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                 .build();
         client.newCall(request)
@@ -1048,13 +1062,13 @@ public class FxService extends Service {
 
     private void stopAudioRecord1(Request request) {
         OkHttpClient client = new OkHttpClient.Builder()
-                // 连接超时
+                // 连接超时  Connection timeout
                 .connectTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 读取超时
+                // 读取超时  Read timeout
                 .readTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
 
-                // 写入超时
+                // 写入超时  Write timeout
                 .writeTimeout(100 * 60 * 1000, TimeUnit.MILLISECONDS)
                 .build();
         client.newCall(request)
@@ -1100,11 +1114,11 @@ public class FxService extends Service {
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
 
-        // 平台类型
+        // 平台类型  Platform type
         String platformKind = YinHuaData.platformType;
         Log.d("zzl", "stopAudioRecord: 平台类型==> " + platformKind);
 
-        // 如果是云手机
+        // 如果是云手机  If it's a cloud phone
         if (platformKind.equals(CacheConst.PLATFORM_NAME_RED_FINGER_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_NET_EASE_CLOUD_PHONE)
                 || platformKind.equals(CacheConst.PLATFORM_NAME_E_CLOUD_PHONE)) {

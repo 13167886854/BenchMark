@@ -197,18 +197,18 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             startService(fxIntent);
             startFxService();
         }
-        // 云游戏流畅性测试
+        // 云游戏流畅性测试   Cloud game fluency test
         if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME) && isCheckFluency
                 && !isFluencyUntested
         ) {
-            // 开启流畅性测试悬浮窗
+            // 开启流畅性测试悬浮窗   Open the fluency test hover window
             startGameSmoothService();
         } else if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME)
                 && isCheckSoundFrame && !isAudioVideoTested) {
             startGameVAService();
         } else if (platformKind.equals(CacheConst.PLATFORM_KIND_CLOUD_GAME)
                 && isCheckTouch && !isGameTouchTested) {
-            // 开始云游戏触控体验测试。。。
+            // 开始云游戏触控体验测试。。。   Start cloud gaming touch experience testing...
             startGameTouchService();
         } else {
             Log.e(TAG, "非正常启动 ");
@@ -216,7 +216,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
     }
 
     private void init1(Intent intent) {
-        // 获取平台名称
+        // 获取平台名称   Get the platform name
         Admin.platformName = checkedPlat;
 
         YinHuaData.platformType = checkedPlat;
@@ -357,7 +357,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceDisconnected(ComponentName arg0) {
             }
         };
-        // 录屏权限申请
+        // 录屏权限申请   Permission request for screen-recording
         if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -395,7 +395,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceDisconnected(ComponentName arg0) {
             }
         };
-        // 录屏权限申请
+        // 录屏权限申请   Permission request for screen-recording
         if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -433,7 +433,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             public void onServiceDisconnected(ComponentName arg0) {
             }
         };
-        // 录屏权限申请
+        // 录屏权限申请   Permission request for screen-recording
         if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -478,7 +478,7 @@ public class CePingActivity extends Activity implements View.OnClickListener {
             }
         };
 
-        // 录屏权限申请
+        // 录屏权限申请   Permission request for screen-recording
         if (ContextCompat.checkSelfPermission(CePingActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,

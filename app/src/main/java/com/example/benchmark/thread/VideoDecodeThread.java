@@ -88,6 +88,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             }
 
             // 如果设置为SurfaceView，那就动态调整它的高度，保持原视频的宽高比
+            // If it's set to SurfaceView, dynamically adjust its height to keep the aspect ratio of the original video
             if (mSurfaceView != null) {
                 run2(videoFormat);
             }
@@ -102,7 +103,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             int sampleSize = 0;
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
             mMediaExtractor.selectTrack(mVideoTrackIndex);
-            SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器
+            SpeedManager mSpeedManager = new SpeedManager(); // 音视频同步器  Audio and video synchronizer
             while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
                 sampleSize = run3(byteBuffer, bufferInfo, mSpeedManager);
             }
@@ -121,7 +122,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
         int sampleSize;
         sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
 
-        // 填充要解码的数据
+        // 填充要解码的数据  Populate the data to be decoded
         if (sampleSize != -1) {
             if (sampleSize >= 0) {
                 long sampleTime = mMediaExtractor.getSampleTime();
@@ -143,10 +144,10 @@ public class VideoDecodeThread extends Thread implements Runnable {
                 }
             }
         }
-        // 解码已填充的数据
+        // 解码已填充的数据  Decode the populated data
         int outputBufferIndex = mVideoDecoder.dequeueOutputBuffer(bufferInfo, 0);
         if (outputBufferIndex >= 0) {
-            // 控制帧率在24帧左右
+            // 控制帧率在24帧左右 Control frame rate around 24 frames
             mVideoDecoder.releaseOutputBuffer(outputBufferIndex, mSurfaceView != null);
         }
         return sampleSize;
@@ -158,7 +159,7 @@ public class VideoDecodeThread extends Thread implements Runnable {
             ((Activity) contextTemp).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // 按视频大小动态调整SurfaceView的高度
+                    // 按视频大小动态调整SurfaceView的高度  Dynamically adjust the height of the SurfaceView by video size
                     Resources resources = mSurfaceView.getResources();
 
                     final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);
@@ -167,10 +168,10 @@ public class VideoDecodeThread extends Thread implements Runnable {
                     int measuredWidth = mSurfaceView.getMeasuredWidth();
                     int measuredHeight = mSurfaceView.getMeasuredHeight();
 
-                    // 纵屏，宽充满，高按比例缩放
+                    // 纵屏，宽充满，高按比例缩放  Vertical screen, full width, scaled height
                     int showVideoHeight = videoHeight * measuredWidth / videoWith;
 
-                    // 横屏，高充满，宽按比例缩放
+                    // 横屏，高充满，宽按比例缩放  Landscape, full height, scale width
                     int showVideoWidth = videoWith * measuredHeight / videoHeight;
 
                     if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {

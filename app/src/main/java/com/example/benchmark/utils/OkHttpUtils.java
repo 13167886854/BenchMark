@@ -53,7 +53,7 @@ public class OkHttpUtils {
     private Request.Builder request;
 
     /**
-     * 初始化okHttpClient，并且允许https访问
+     * 初始化okHttpClient，并且允许https访问  Initialize the okHttpClient and allow https access
      */
     private OkHttpUtils() {
         if (okHttpClient == null) {
@@ -86,7 +86,7 @@ public class OkHttpUtils {
      * @date 2023/3/8 09:11
      */
     private static Semaphore getSemaphoreInstance() {
-        // 只能1个线程同时访问
+        // 只能1个线程同时访问  Only one thread can access it simultaneously
         synchronized (OkHttpUtils.class) {
             if (semaphore == null) {
                 semaphore = new Semaphore(0);

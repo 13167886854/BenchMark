@@ -137,6 +137,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
             if (mime.contains("audio")) {
                 mAudioTrackIndex = i;
                 // 开始读数据前一定要先选择媒体轨道，否则读取不到数据
+                // Before you start reading data, you must select the media track; otherwise, the data cannot be read
                 mMediaExtractor.selectTrack(mAudioTrackIndex);
                 break;
             }
@@ -164,7 +165,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
         while (sampleSize != -1 && !AudioVideoActivity.isTestOver) {
             sampleSize = mMediaExtractor.readSampleData(byteBuffer, 0);
 
-            // 填充要解码的数据
+            // 填充要解码的数据  Populate the data to be decoded
             if (sampleSize != -1) {
                 int inputBufferIndex = mAudioDecoder.dequeueInputBuffer(0);
                 if (inputBufferIndex >= 0) {
@@ -179,7 +180,7 @@ public class AudioDecodeThread extends Thread implements Runnable {
                 }
             }
 
-            // 解码已填充的数据
+            // 解码已填充的数据  Decode the populated data
             int outputBufferIndex = mAudioDecoder.dequeueOutputBuffer(bufferInfo, 0);
             if (outputBufferIndex >= 0) {
                 ByteBuffer outputBuffer = mAudioDecoder.getOutputBuffer(outputBufferIndex);
@@ -204,7 +205,11 @@ public class AudioDecodeThread extends Thread implements Runnable {
                     .build();
             AudioFormat.Builder builder = new AudioFormat.Builder();
             AudioFormat audioTrackFormat = builder
-                    .setSampleRate(sampleRate) // 部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对
+                    /*
+                        部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对 Part of the audio must be set sampling rate,
+                        part of the audio must be multiplied by the number of channels, otherwise the playback speed is wrong
+                     */
+                    .setSampleRate(sampleRate)
                     .setEncoding(audioFormat)
                     .setChannelMask(channelConfig)
                     .build();

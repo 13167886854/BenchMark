@@ -91,7 +91,7 @@ public class MyAccessibilityService extends AccessibilityService {
     private final Thread mCaptureScreenThread = new Thread(this::captureScreen);
     private final Thread mDealBitmapThread = new Thread(this::dealWithBitmap);
 
-    // 自动点击
+    // 自动点击  Automatic click
     private TapUtil tapUtil;
 
     private int resultCode;
@@ -142,7 +142,7 @@ public class MyAccessibilityService extends AccessibilityService {
     public void onCreate() {
         super.onCreate();
         Notification notification = createForegroundNotification();
-        // 启动前台服务
+        // 启动前台服务  Start the foreground service
         startForeground(1, notification);
         tapUtil = TapUtil.getUtil();
         tapUtil.setService(this);
@@ -161,13 +161,14 @@ public class MyAccessibilityService extends AccessibilityService {
     }
 
     private Notification createForegroundNotification() {
-        // 前台通知的id名，任意
+        // 前台通知的id名，任意  The id name of the foreground notification, any
         String channelId = "ForegroundService";
-        // 前台通知的名称，任意
+        // 前台通知的名称，任意  The name of the foreground notification, any
         String channelName = "Service";
-        // 发送通知的等级，此处为高，根据业务情况而定
+        // 发送通知的等级，此处为高，根据业务情况而定  The level of sending notifications is high. It depends on the service situation
         int importance = NotificationManager.IMPORTANCE_HIGH;
         // 判断Android版本，不同的Android版本请求不一样，以下代码为官方写法
+        // Judge the Android version, different Android version request is different, the following code is the official writing
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
             channel.setLightColor(Color.BLUE);
@@ -177,17 +178,18 @@ public class MyAccessibilityService extends AccessibilityService {
                 notificationManager.createNotificationChannel(channel);
             }
         }
-        // 点击通知时可进入的Activity
+        // 点击通知时可进入的Activity  The Activity you can enter when you click the notification
         Intent notificationIntent = new Intent(this, CePingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        // 最终创建的通知，以下代码为官方写法
+        // 最终创建的通知，以下代码为官方写法  The final notification is created. The following code is the official writing
         // 注释部分是可扩展的参数，根据自己的功能需求添加
+        // The comment section is an extensible parameter, added according to its own functional requirements
         return new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("AccessibilityService")
                 .setContentText("Benchmark无障碍服务工作中")
-                .setContentIntent(pendingIntent) // 点击通知进入Activity
+                .setContentIntent(pendingIntent) // 点击通知进入Activity  Click Notification to enter the Activity
                 .build();
     }
 

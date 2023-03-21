@@ -26,32 +26,32 @@ import java.util.Map;
  */
 public final class DecodeFormatManager {
     /**
-     * 所有的
+     * 所有的  All
      */
     public static final Map<DecodeHintType, Object> ALL_HINTS = new EnumMap<>(DecodeHintType.class);
 
     /**
-     * CODE_128 (最常用的一维码)
+     * CODE_128 (最常用的一维码)  CODE_128 (most commonly used one-dimensional code)
      */
     public static final Map<DecodeHintType, Object> CODE_128_HINTS = createDecodeHint(BarcodeFormat.CODE_128);
 
     /**
-     * QR_CODE (最常用的二维码)
+     * QR_CODE (最常用的二维码)  QR_CODE (the most commonly used QR code)
      */
     public static final Map<DecodeHintType, Object> QR_CODE_HINTS = createDecodeHint(BarcodeFormat.QR_CODE);
 
     /**
-     * 一维码
+     * 一维码  one dimensional code
      */
     public static final Map<DecodeHintType, Object> ONE_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
 
     /**
-     * 二维码
+     * 二维码  two dimensional code
      */
     public static final Map<DecodeHintType, Object> TWO_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
 
     /**
-     * 默认
+     * 默认  default
      */
     public static final Map<DecodeHintType, Object> DEFAULT_HINTS = new EnumMap<>(DecodeHintType.class);
 

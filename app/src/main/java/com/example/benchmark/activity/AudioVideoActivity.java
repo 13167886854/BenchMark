@@ -88,7 +88,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                 return;
             }
 
-            // 当视频帧和音频帧不再增加判断播放结束
+            // 当视频帧和音频帧不再增加判断播放结束 When video frames and audio frames are no longer added judge the end of play
             if (lastAudioCurtime == audiocurtime && lastVideoCurtime == videocurtime && !isCompleted) {
                 isCompleted = true;
             }
@@ -136,7 +136,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_audio_video);
         init();
         Log.d("TWT", "资源文件的路径" + mMp4FilePath);
-        // 直接开始测试崩溃 等待1S后开始测试
+        // 直接开始测试崩溃 等待1S后开始测试  Start the test crash directly and wait 1S to start the test
         Timer timer = new Timer();
         TimerTask task = new TimerTask() {
             @Override
@@ -159,10 +159,10 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                 WindowManager wm = (WindowManager) AudioVideoActivity.this.getSystemService(Context.WINDOW_SERVICE);
                 DisplayMetrics outMetrics = new DisplayMetrics();
                 wm.getDefaultDisplay().getMetrics(outMetrics);
-                // 分辨率
+                // 分辨率   Resolution ratio
                 heightPixels = outMetrics.heightPixels;
                 widthPixels = outMetrics.widthPixels;
-                // 最大同步差
+                // 最大同步差   Maximum synchronization difference
                 maxDifferenceValue = 0;
             }
         }
@@ -189,7 +189,7 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
     private void startTest() {
         videoDecodeThread = new VideoDecodeThread(mMp4FilePath, AudioVideoActivity.this);
         videoDecodeThread.setSurfaceView(mSurfaceView);
-        // 开启音频解码线程
+        // 开启音频解码线程   Start the audio decoding thread
         audioDecodeThread = new AudioDecodeThread(mMp4FilePath, AudioVideoActivity.this);
         if (getSystemService(AUDIO_SERVICE) instanceof AudioManager) {
             AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);

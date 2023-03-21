@@ -17,48 +17,49 @@ import java.util.ArrayList;
  * @since 2023/3/7 17:24
  */
 public class FpsUtils {
-    /** 监听时的刷新时间间隔,设置为1S */
+    /** 监听时的刷新时间间隔,设置为1S  Set the refreshing interval for listening to 1S */
     public static final long FPS_INTERVAL_TIME = 1000L;
 
-    /** 低帧判断  fps<25判断为低帧 */
-    public static final double LOW_FRAME_TIME = 1000.0 / 24; // 每帧传输时间超过fps25的判断为低帧
+    /** 低帧判断  fps<25判断为低帧  Low frame Indicates that the fps is less than 25 */
+    // 每帧传输时间超过fps25的判断为低帧  If the transmission time per frame exceeds fps25, it is considered as low frame
+    public static final double LOW_FRAME_TIME = 1000.0 / 24;
 
     /** handler */
     public static Handler mainHandler = new Handler();
 
     private static FpsUtils fpsUtils = new FpsUtils();
 
-    // 记录单位时间内帧数
+    // 记录单位时间内帧数  Records the number of frames per unit time
     private int count = 0;
 
-    // 记录总帧数
+    // 记录总帧数  Record the total number of frames
     private int totalCount = 0;
 
-    // 记录低帧数
+    // 记录低帧数  Record the low frame count
     private int lowCount = 0;
 
-    // 记录JANK数
+    // 记录JANK数  Record the number of janks
     private int jankCount = 0;
 
-    // 记录卡顿时间
+    // 记录卡顿时间  Record the time of the holdup
     private long shutterTime = 0L;
 
-    // 存储每个单位时间帧数
+    // 存储每个单位时间帧数  Stores frames per unit time
     private ArrayList<Integer> countPerSecond = new ArrayList();
 
-    // 记录开始测试时间戳
+    // 记录开始测试时间戳  Record the start test timestamp
     private long startTime = 0L;
 
-    // 记录结束时间戳
+    // 记录结束时间戳  End of record timestamp
     private long endTime = 0L;
 
-    // 记录上一帧渲染的时间戳
+    // 记录上一帧渲染的时间戳  Record the timestamp of the last frame render
     private long lastTime = 0L;
 
-    // 记录前3次帧耗时
+    // 记录前3次帧耗时  Record the time of 3 frames
     private ArrayList<Integer> last3FrameTimes = new ArrayList();
 
-    // 单例模式
+    // 单例模式  Singleton pattern
 
     private boolean isFpsOpen = false;
 
@@ -134,15 +135,15 @@ public class FpsUtils {
         this.count++;
         this.totalCount++;
 
-        // 判断是否为低帧
+        // 判断是否为低帧  Check whether the frame is low
         if (time > LOW_FRAME_TIME) {
             lowCount++;
         }
-        // 判断是否为jank帧
+        // 判断是否为jank帧  Check whether it is a jank frame
         if (isJank(time)) {
             jankCount++;
         }
-        // 更新渲染帧时间戳
+        // 更新渲染帧时间戳  Update the render frame timestamp
         this.lastTime = System.currentTimeMillis();
     }
 
@@ -181,7 +182,7 @@ public class FpsUtils {
      * @date 2023/3/8 09:03
      */
     public void updateAfterGetInfo() {
-        // fps重新计数
+        // fps重新计数  fps recount
         count = 0;
     }
 

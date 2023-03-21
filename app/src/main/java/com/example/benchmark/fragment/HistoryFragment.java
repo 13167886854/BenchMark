@@ -253,7 +253,7 @@ public class HistoryFragment extends Fragment {
                 TishiFragment tishiFragment = new TishiFragment();
                 FragmentManager fragmentManager = getFragmentManager();
 
-                // 开启事务
+                // 开启事务  Start transaction
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.main_fram, tishiFragment);
                 fragmentTransaction.commit();
