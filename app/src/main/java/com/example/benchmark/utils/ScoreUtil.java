@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.data.Admin;
 import com.example.benchmark.data.IpPort;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.data.YinHuaData;
 
 import java.math.BigDecimal;
@@ -76,7 +77,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_CPU_CORES, cpuCores);
 
         if (cpuCores != 0) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/cpu/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/cpu/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("cores", cpuCores + "")
@@ -120,7 +121,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_GPU_RENDER, gpuRender);
         CacheUtil.put(CacheConst.KEY_GPU_VERSION, gpuVersion);
         if (gpuVendor != null && gpuRender != null && gpuVersion != null) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/gpu/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/gpu/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -164,7 +165,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_TOTAL_RAM, totalRAM);
 
         if (availableRAM != null && totalRAM != null) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/ram/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/ram/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -206,7 +207,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_AVAILABLE_STORAGE, availableROM);
         CacheUtil.put(CacheConst.KEY_TOTAL_STORAGE, totalROM);
         if (availableROM != null && totalROM != null) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/rom/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/rom/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -264,7 +265,7 @@ public class ScoreUtil {
 
         // 判断数据是否为空
         if (fluencyScore != 0) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/fluency/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/fluency/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -452,7 +453,7 @@ public class ScoreUtil {
         // 保存稳定性分数
         CacheUtil.put(CacheConst.KEY_STABILITY_SCORE, stabilityScores);
         if (stabilityScores != 0) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/stability/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/stability/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -648,7 +649,7 @@ public class ScoreUtil {
 
     private static void extracted2(BigDecimal avgResponseTime, BigDecimal averageAccuracy, int touchScore) {
         if (avgResponseTime.add(averageAccuracy).intValue() != 0.0f) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/touch/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/touch/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())
@@ -818,7 +819,7 @@ public class ScoreUtil {
         CacheUtil.put(CacheConst.KEY_SOUND_FRAME_SCORE, soundFrameScore);
         if (YinHuaData.getInstance().getPesq() != null
                 && YinHuaData.getInstance().getSsim() != null && YinHuaData.getInstance().getPsnr() != null) {
-            OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/AudioVideo/save")
+            OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/AudioVideo/save")
                     .addParam("adminName", Admin.getInstance().getAdminName())
                     .addParam("platformName", Admin.getInstance().getPlatformName())
                     .addParam("time", Admin.getInstance().getTestTime())

@@ -51,6 +51,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.R;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.data.YinHuaData;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.CacheUtil;
@@ -817,7 +818,8 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.HUAWEI_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
+                .url(SettingData.getInstance().getServerAddress() + File.separator
+                        + "AudioVideo" + File.separator + "VideoRecord")
                 .post(multipartBody)
                 .build();
         stopRecord2(request);
@@ -840,7 +842,8 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.ALIYUN_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                 .post(multipartBody)
                 .build();
         stopRecord1(request);
@@ -873,8 +876,8 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.getInstance().setPsnr(resArr[1]);
-                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        YinHuaData.getInstance().setPsnr(resArr[resArr.length-3]);
+                        YinHuaData.getInstance().setSsim(resArr[resArr.length-1]);
                         Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
                         Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null
@@ -918,8 +921,8 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.getInstance().setPsnr(resArr[1]);
-                        YinHuaData.getInstance().setSsim(resArr[3]);
+                        YinHuaData.getInstance().setPsnr(resArr[resArr.length-3]);
+                        YinHuaData.getInstance().setSsim(resArr[resArr.length-1]);
                         Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
                         Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null
@@ -994,7 +997,8 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.HUAWEI_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                 .post(multipartBody)
                 .build();
         stopAudioRecord2(request);
@@ -1016,7 +1020,8 @@ public class FxService extends Service {
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--"
                 + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.ALIYUN_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                 .post(multipartBody)
                 .build();
         stopAudioRecord1(request);

@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.benchmark.data.Admin;
 import com.example.benchmark.R;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
 
@@ -413,7 +414,7 @@ public class TestInfoActivity extends AppCompatActivity {
     }
 
     private void queryForData(String username, String type) {
-        OkHttpUtils.builder().url(CacheConst.GLOBAL_IP + "/data/" + username + "/" + type)
+        OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress() + "/data/" + username + "/" + type)
                 .get()
                 .async(new OkHttpUtils.ICallBack() {
                     @Override

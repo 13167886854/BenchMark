@@ -6,6 +6,8 @@
 
 package com.example.benchmark.utils;
 
+import com.example.benchmark.data.SettingData;
+
 /**
  * CacheConst
  *
@@ -357,16 +359,6 @@ public class CacheConst {
      * IMAGE_GAME
      */
     public static final String IMAGE_GAME = "test.jpg";
-
-    /**
-     * ALIYUN_IP
-     */
-    public static final String ALIYUN_IP = "http://175.38.1.81:8080";
-
-    /**
-     * HUAWEI_IP
-     */
-    public static final String HUAWEI_IP = "http://175.38.1.81:8080";
 
     /**
      * GLOBAL_IP

@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.benchmark.data.Admin;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.dialog.LoginDialog;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
@@ -100,7 +101,7 @@ public class TishiFragment extends Fragment {
         ThreadPoolUtil.getPool().execute(new Runnable() {
             @Override
             public void run() {
-                OkHttpUtils.builder().url(CacheConst.GLOBAL_IP
+                OkHttpUtils.builder().url(SettingData.getInstance().getServerAddress()
                         + "/admin/loginAndReg")
                         .addParam("adminName", Admin.getInstance().getUsername())
                         .addParam("adminPasswd", Admin.getInstance().getPassword())

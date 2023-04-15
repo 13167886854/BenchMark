@@ -43,6 +43,7 @@ import androidx.annotation.RequiresApi;
 
 import com.example.benchmark.activity.AudioVideoActivity;
 import com.example.benchmark.activity.CePingActivity;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.data.YinHuaData;
 import com.example.benchmark.R;
 import com.example.benchmark.utils.CacheConst;
@@ -484,7 +485,8 @@ public class GameVATestService extends Service {
             Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
             Log.d("zzl", "stopAudioRecord: CacheConst.VIDEO_GAME_NAME--" + CacheConst.VIDEO_GAME_NAME);
             Request request = new Request.Builder()
-                    .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
+                    .url(SettingData.getInstance().getServerAddress()
+                            + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                     .post(multipartBody)
                     .build();
             stopVideoRecord2(request);
@@ -542,7 +544,8 @@ public class GameVATestService extends Service {
         Log.d("zzl", "stopAudioRecord: CacheConst.audioPath--" + CacheConst.getInstance().getVideoPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_NAME--" + CacheConst.VIDEO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "VideoRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "VideoRecord")
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
@@ -712,7 +715,8 @@ public class GameVATestService extends Service {
                 + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_GAME_NAME--" + CacheConst.AUDIO_GAME_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()
@@ -756,7 +760,8 @@ public class GameVATestService extends Service {
                 + CacheConst.getInstance().getAudioPath());
         Log.d("zzl", "stopAudioRecord: CacheConst.AUDIO_PHONE_NAME--" + CacheConst.AUDIO_PHONE_NAME);
         Request request = new Request.Builder()
-                .url(CacheConst.GLOBAL_IP + File.separator + "AudioVideo" + File.separator + "AudioRecord")
+                .url(SettingData.getInstance().getServerAddress()
+                        + File.separator + "AudioVideo" + File.separator + "AudioRecord")
                 .post(multipartBody)
                 .build();
         OkHttpClient client = new OkHttpClient.Builder()

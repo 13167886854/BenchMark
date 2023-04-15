@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.benchmark.R;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.utils.TapUtil;
 
 /**
@@ -30,7 +32,10 @@ public class SettingsActivity extends AppCompatActivity {
     Button num;
     SharedPreferences.Editor editor;
     SharedPreferences sharedPreferences;
-    private int testNum;
+
+    private EditText serverIp;
+    private EditText serverPort;
+    private SettingData settingData;
 
     /**
      * onCreate
@@ -44,12 +49,20 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
+        settingData = SettingData.getInstance();
+
         num = findViewById(R.id.num);
+        serverIp = findViewById(R.id.serverIp);
+        serverPort = findViewById(R.id.serverPort);
         sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-
-        testNum = sharedPreferences.getInt("testNum", 5);
-        num.setText(String.valueOf(testNum));
+        settingData.setStabilityTestNum(sharedPreferences.getInt("stabilityTestNum",
+                settingData.getStabilityTestNum()));
+        settingData.setServerIp(sharedPreferences.getString("serverIp", settingData.getServerIp()));
+        settingData.setServerPort(sharedPreferences.getString("serverPort", settingData.getServerPort()));
+        num.setText(String.valueOf(settingData.getStabilityTestNum()));
+        serverIp.setText(settingData.getServerIp());
+        serverPort.setText(settingData.getServerPort());
         Log.e(TAG, "onCreate+num: " + num);
     }
 
@@ -62,11 +75,11 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void sub(View view) {
         Log.d(TAG, "sub");
-        if (testNum == 1) {
+        if (settingData.getStabilityTestNum() == 1) {
             return;
         }
-        testNum--;
-        num.setText(String.valueOf(testNum));
+        settingData.setStabilityTestNum(settingData.getStabilityTestNum()-1);
+        num.setText(String.valueOf(settingData.getStabilityTestNum()));
     }
 
     /**
@@ -78,8 +91,8 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void add(View view) {
         Log.d(TAG, "add: add");
-        testNum++;
-        num.setText(String.valueOf(testNum));
+        settingData.setStabilityTestNum(settingData.getStabilityTestNum()+1);
+        num.setText(String.valueOf(settingData.getStabilityTestNum()));
     }
 
     /**
@@ -90,8 +103,12 @@ public class SettingsActivity extends AppCompatActivity {
      * @date 2023/3/9 19:50
      */
     public void save(View view) {
-        TapUtil.getUtil().setmWholeMonitorNum(testNum);
-        editor.putInt("testNum", testNum);
+        TapUtil.getUtil().setmWholeMonitorNum(settingData.getStabilityTestNum());
+        settingData.setServerIp(serverIp.getText().toString());
+        settingData.setServerPort(serverPort.getText().toString());
+        editor.putInt("stabilityTestNum", settingData.getStabilityTestNum());
+        editor.putString("serverIp", settingData.getServerIp());
+        editor.putString("serverPort", settingData.getServerPort());
         editor.apply();
         Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
     }
