@@ -26,6 +26,7 @@ import androidx.annotation.NonNull;
 
 import com.example.benchmark.R;
 import com.example.benchmark.data.IpPort;
+import com.example.benchmark.data.SettingData;
 
 /**
  * IpPortDialog
@@ -148,6 +149,7 @@ public class IpPortDialog extends Dialog {
         // 初始化界面控件的事件  The event that initializes an interface control
         initEvent();
         ipAddress = findViewById(R.id.ip_address); // 用户名  User name
+        ipAddress.setText(SettingData.getInstance().getServerIp());
         ipAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
@@ -165,7 +167,7 @@ public class IpPortDialog extends Dialog {
                 IpPort.getInstance().setIp(textIp);
             }
         });
-        port = findViewById(R.id.port); // 密码  password
+        port = findViewById(R.id.port);
         port.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i0, int i1, int i2) {
