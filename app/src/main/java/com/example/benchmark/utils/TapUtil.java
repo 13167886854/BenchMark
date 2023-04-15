@@ -170,13 +170,15 @@ public class TapUtil {
                                             @Override
                                             public void onResponse(@NotNull Call call, @NotNull Response response)
                                                     throws IOException {
-                                                // 获取成功响应的系统时间戳  Gets the system timestamp of the successful response
+                                                // 获取成功响应的系统时间戳  Gets the system timestamp
+                                                // of the successful response
                                                 endTime = System.currentTimeMillis();
                                                 responseTime = endTime - startTime;
                                                 String result = response.body().string();
                                                 String res = result.substring(81, 94);
 
-                                                // 获取到的时间戳，应该减去响应时延  The timestamp obtained should be subtracted from the response delay
+                                                // 获取到的时间戳，应该减去响应时延  The timestamp obtained should
+                                                // be subtracted from the response delay
                                                 mLastTapTime = Long.valueOf(res) - responseTime;
                                                 mCurrentTapNum++;
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);

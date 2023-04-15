@@ -83,7 +83,8 @@ public class AudioVideoActivity extends AppCompatActivity implements View.OnClic
                 return;
             }
 
-            // 当视频帧和音频帧不再增加判断播放结束 When video frames and audio frames are no longer added judge the end of play
+            // 当视频帧和音频帧不再增加判断播放结束 When video frames and audio frames are no
+            // longer added judge the end of play
             if (lastAudioCurtime == audiocurtime && lastVideoCurtime == videocurtime && !isCompleted) {
                 isCompleted = true;
             }

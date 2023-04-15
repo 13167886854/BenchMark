@@ -241,17 +241,18 @@ public class GameSmoothTestService extends Service {
         wmParams.format = PixelFormat.RGBA_8888;
 
         // 设置浮动窗口不可聚焦（实现操作除浮动窗口外的其他可见窗口的操作）
-        // Make the floating window unfocused (implements operations on visible Windows other than the floating window)
+        // Make the floating window unfocused (implements operations
+        // on visible Windows other than the floating window)
 
         wmParams.flags = LayoutParams.FLAG_NOT_FOCUSABLE;
 
-        // 调整悬浮窗显示的停靠位置为左侧置顶  Adjust the dock position displayed in the suspension window to the left top
+        // 调整悬浮窗显示的停靠位置为左侧置顶  Adjust the dock position displayed in
+        // the suspension window to the left top
         wmParams.gravity = Gravity.START | Gravity.TOP;
 
-        /*
-            以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of the screen as the origin,
-            set the initial value of x and y (set the maximum value to be displayed directly in the lower right corner)
-         */
+        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of
+        // the screen as the origin, set the initial value of x and y (set the maximum value to
+        //  be displayed directly in the lower right corner)
         wmParams.x = width - 50;
         wmParams.y = height / 2;
 

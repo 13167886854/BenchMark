@@ -208,11 +208,11 @@ public class AudioDecodeThread extends Thread implements Runnable {
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .build();
             AudioFormat.Builder builder = new AudioFormat.Builder();
+
+            // 部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对 Part of the audio must
+            // be set sampling rate, part of the audio must be multiplied by the number
+            // of channels, otherwise the playback speed is wrong
             AudioFormat audioTrackFormat = builder
-                    /*
-                        部分音频必须设置采样率，部分音频必须乘声道数，否则播放速度不对 Part of the audio must be set sampling rate,
-                        part of the audio must be multiplied by the number of channels, otherwise the playback speed is wrong
-                     */
                     .setSampleRate(sampleRate)
                     .setEncoding(audioFormat)
                     .setChannelMask(channelConfig)

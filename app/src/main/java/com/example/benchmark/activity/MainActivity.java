@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 AlertDialog dialog = new AlertDialog.Builder(mContext)
                         .setIcon(R.mipmap.icon) // 设置标题的图片   Set the title of the picture
                         .setTitle("checkUpdate") // 设置对话框的标题   Set the title of the picture
-                        .setMessage("检测到应用有新版本，请前往浏览器更新") // 设置对话框的内容 Set the contents of the dialog box
+                        .setMessage("检测到应用有新版本，请前往浏览器更新") // Set the contents of the dialog box
                         .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -303,8 +303,10 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
+
         // 注意此处的判断intent.resolveActivity()可以返回显示该Intent的Activity对应的组件名
-        // Note that intent.resolveActivity() returns the name of the component that shows the Activity with the Intent
+        // Note that intent.resolveActivity() returns the name
+        // of the component that shows the Activity with the Intent
         // 官方解释 : Name of the component implementing an activity that can display the intent
         // Official explanation: Name of the component implementing an activity that can display the intent
         if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -320,11 +322,15 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             return;
         }
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // 安装完成后打开新版本 Open the new version after the installation is complete
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // 给目标应用一个临时授权 Open the new version after the installation is complete
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 判断版本大于等于7.0 The version must be greater than or equal to 7.0
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Open the new version after the installation is complete
+
+        // 给目标应用一个临时授权 Open the new version after the installation is complete
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // 判断版本大于等于7.0 The version must be greater than or equal to 7.0
             // 如果SDK版本>=24，即：Build.VERSION.SDK_INT >= 24，使用FileProvider兼容安装apk
-            // If the SDK version is >=24, that is, Build.VERSION.SDK_INT >=24, install apk using FileProvider-compatible software
+            // If the SDK version is >=24, that is, Build.VERSION.SDK_INT >=24, install apk using
+            // FileProvider-compatible software
             String packageName = mContext.getApplicationContext().getPackageName();
             String authority = new StringBuilder(packageName).append(".fileprovider").toString();
             Log.e("TWT", "authority: " + authority);
@@ -338,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         Log.e("TWT", " mContext.startActivity(intent);");
         mContext.startActivity(intent);
 
-        // 安装完之后会提示”完成”“打开”。When the installation is complete, the message "Finished" and "Open" will be displayed.
+        // 安装完之后会提示”完成”“打开”。When the installation is complete, the message
+        // "Finished" and "Open" will be displayed.
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 }

@@ -296,7 +296,8 @@ public class TishiFragment extends Fragment {
         // 获取对话框当前的参数值  Gets the current parameter values for the dialog box
         WindowManager.LayoutParams params = dialogWindow.getAttributes();
 
-        // 高度设置为屏幕的0.6，根据实际情况调整 Set the height to 0.6 of the screen and adjust it according to the actual situation
+        // 高度设置为屏幕的0.6，根据实际情况调整 Set the height to 0.6 of the screen
+        // and adjust it according to the actual situation
         params.height = (int) (display.getHeight() * 0.9);
 
         // 宽度设置为屏幕的0.65，根据实际情况调整  Set the width to 0.65 of the screen and adjust as needed

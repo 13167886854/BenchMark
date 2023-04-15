@@ -115,8 +115,9 @@ public final class CodeUtils {
      * @param content   二维码的内容  Content of two-dimensional code
      * @param heightPix 二维码的高  Height of two-dimensional code
      * @param logo      二维码中间的logo  logo in the middle of QR code
-     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3 Since the maximum fault-tolerant rate
-     *                 of two-dimensional code is 30%, the recommended ratio range is less than 0.3
+     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     *                 Since the maximum fault-tolerant rate of two-dimensional code
+     *                 is 30%, the recommended ratio range is less than 0.3
      * @return Bitmap
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,
@@ -139,8 +140,9 @@ public final class CodeUtils {
      * @param content   二维码的内容  Content of two-dimensional code
      * @param heightPix 二维码的高  Height of two-dimensional code
      * @param logo      二维码中间的logo  logo in the middle of QR code
-     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3 Since the maximum fault-tolerant rate
-     *                  of two-dimensional code is 30%, the recommended ratio range is less than 0.3
+     * @param ratio     logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     *                 Since the maximum fault-tolerant rate of two-dimensional
+     *                 code is 30%, the recommended ratio range is less than 0.3
      * @param codeColor 二维码的颜色  Color of QR code
      * @return Bitmap
      */
@@ -228,8 +230,9 @@ public final class CodeUtils {
      *
      * @param src   src
      * @param logo  logo
-     * @param ratio logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3  Since the maximum fault-tolerant rate of
-     *              two-dimensional code is 30%, the recommended ratio range is less than 0.3
+     * @param ratio logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3  Since
+     *             the maximum fault-tolerant rate of two-dimensional code is 30%,
+     *             the recommended ratio range is less than 0.3
      * @return Bitmap
      */
     private static Bitmap addLogo(Bitmap src, Bitmap logo,
@@ -505,7 +508,8 @@ public final class CodeUtils {
             // wSize=1表示不缩放  wSize=1 indicates no scaling
             int hSize = 1;
             if (height.intValue() > reqHeight) {
-                // 如果高度高的话根据宽度固定大小缩放  If the height is high, scale by a fixed size according to the width
+                // 如果高度高的话根据宽度固定大小缩放  If the height is high,
+                // scale by a fixed size according to the width
                 hSize = (int) (height.intValue() / reqHeight);
             }
             int size = Math.max(wSize, hSize);

@@ -21,7 +21,10 @@ import android.util.Log;
  * @since 2023/3/7 17:23
  */
 public class AutoStartUtil {
-    /** 是否已经打开过设置自启动界面的标记，存储起来  Whether you have opened the flag for setting the automatic boot interface, and store it */
+    /** 是否已经打开过设置自启动界面的标记，存储起来
+     *  Whether you have opened the flag for
+     *  setting the automatic boot interface, and store it
+     */
     public static final String HAS_OPEN_SETTING_AUTO_START = "hasOpenSettingAutoStart";
 
     /**
@@ -73,14 +76,6 @@ public class AutoStartUtil {
 
     private static void flyme(Intent intent) {
         // 魅族  MeiZu
-        /*
-            通过测试，发现魅族是真恶心，也是够了，之前版本还能查看到关于设置自启动这一界面，系统更新之后，完全找不到了，心里默默Fuck！ 针对魅族，
-            我们只能通过魅族内置手机管家去设置自启动，所以我在这里直接跳转到魅族内置手机管家界面，具体结果请看图  Through the test, I found
-            that MeiZu is really disgusting, and enough. In the previous version, I could still see the interface about
-            setting since starting. After the system update, I couldn't find it at all. For MeiZu, we can only set the
-            self-startup through the built-in phone butler of MeiZu, so I directly jump to the interface of the built-in
-            phone butler of MeiZu here. Please refer to the figure for specific results
-         */
         ComponentName componentName = ComponentName.unflattenFromString("com.meizu.safe"
                 + "/.permission.PermissionMainActivity");
         intent.setComponent(componentName);

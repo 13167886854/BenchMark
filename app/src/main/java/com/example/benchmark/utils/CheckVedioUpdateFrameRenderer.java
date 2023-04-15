@@ -173,11 +173,9 @@ public class CheckVedioUpdateFrameRenderer implements GLSurfaceView.Renderer,
                 // 获取新数据  Get new data
                 surfaceTexture.updateTexImage();
 
-                /*
-                    让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。The definition of mSTMatrix
-                     is exactly the same as that of projectionMatrix so that the new texture and texture coordinate
-                     system can correspond correctly.
-                 */
+                // 让新的纹理和纹理坐标系能够正确的对应,mSTMatrix的定义是和projectionMatrix完全一样的。
+                // The definition of mSTMatrix is exactly the same as that of projectionMatrix
+                // so that the new texture and texture coordinate system can correspond correctly.
                 surfaceTexture.getTransformMatrix(mSTMatrix);
                 isUpdateSurface = false;
                 Log.d("TWT", "onDrawFrame: 画面更新！");

@@ -488,10 +488,10 @@ public class FxService extends Service {
         // 调整悬浮窗显示的停靠位置为左侧置顶  Adjust the parking window display to the left
         wmParams.gravity = Gravity.START | Gravity.TOP;
 
-        /*
-            以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of the screen as the origin,
-            set the initial value of x and y (set the maximum value to be displayed directly in the lower right corner)
-         */
+        // 以屏幕左上角为原点，设置x、y初始值(设置最大直接显示在右下角) Take the upper left corner of the
+        // screen as the origin, set the initial value of x and y (set the maximum
+        // value to be displayed directly in the lower right corner)
+
         wmParams.x = screenWidth - 50;
         wmParams.y = screenHeight / 4 * 3;
 
@@ -528,6 +528,8 @@ public class FxService extends Service {
             if (mFloatLayout != null) {
                 mWindowManager.removeView(mFloatLayout);
             }
+        } catch(IllegalArgumentException ex) {
+            Log.e(TAG, "onDestroy: " + ex.toString());
         } finally {
             mediaProjection.stop();
             stopSelf();
@@ -568,8 +570,6 @@ public class FxService extends Service {
         // 取最新的图片  Get the latest picture
         Image image = imageReader.acquireLatestImage();
 
-        // 释放 virtualDisplay,不释放会报错
-        virtualDisplay.release();
         return image2Bitmap(image);
     }
 

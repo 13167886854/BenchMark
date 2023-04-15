@@ -152,7 +152,8 @@ public class LoginDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mydialog);
 
-        // 设置背景透明，不然会出现白色直角问题  Make the background transparent, otherwise the white right Angle problem will occur
+        // 设置背景透明，不然会出现白色直角问题  Make the background transparent, otherwise the white
+        // right Angle problem will occur
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

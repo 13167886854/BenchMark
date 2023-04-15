@@ -186,7 +186,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
             this.startActivity(intentToFloatPermission);
             return;
         }
-        if (Admin.getInstance().getStatus().equals("success")) {
+        if (Admin.getInstance().getStatus().equals("Success")) {
             if (checkPhoneMap.get(CacheConst.KEY_PLATFORM_NAME) == CacheConst.PLATFORM_NAME_HUAWEI_CLOUD_PHONE) {
                 // 检测华为云手机测试 提示用户输入ip地址加端口
                 Log.e(TAG, "onCreateView: hiahiasadsad");
@@ -196,7 +196,7 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
                 Log.e(TAG, "onCreateView: hiahiasadsad");
                 showDialog();
             }
-        }else{
+        } else {
             startCePingActivity();
         }
     }
@@ -772,7 +772,8 @@ public class PhoneFragment extends Fragment implements View.OnClickListener {
         // 获取对话框当前的参数值  Gets the current parameter values for the dialog box
         WindowManager.LayoutParams params = dialogWindow.getAttributes();
 
-        // 高度设置为屏幕的0.6，根据实际情况调整  Set the height to 0.6 of the screen and adjust it according to the actual situation
+        // 高度设置为屏幕的0.6，根据实际情况调整  Set the height to 0.6 of
+        // the screen and adjust it according to the actual situation
         params.height = (int) (display.getHeight() * 0.9);
 
         // 宽度设置为屏幕的0.65，根据实际情况调整  Set the width to 0.65 of the screen and adjust as needed

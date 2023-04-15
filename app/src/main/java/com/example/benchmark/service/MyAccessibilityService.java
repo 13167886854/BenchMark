@@ -170,10 +170,12 @@ public class MyAccessibilityService extends AccessibilityService {
         String channelId = "ForegroundService";
         // 前台通知的名称，任意  The name of the foreground notification, any
         String channelName = "Service";
-        // 发送通知的等级，此处为高，根据业务情况而定  The level of sending notifications is high. It depends on the service situation
+        // 发送通知的等级，此处为高，根据业务情况而定
+        // The level of sending notifications is high. It depends on the service situation
         int importance = NotificationManager.IMPORTANCE_HIGH;
         // 判断Android版本，不同的Android版本请求不一样，以下代码为官方写法
-        // Judge the Android version, different Android version request is different, the following code is the official writing
+        // Judge the Android version, different Android version
+        // request is different, the following code is the official writing
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
             channel.setLightColor(Color.BLUE);
@@ -188,9 +190,11 @@ public class MyAccessibilityService extends AccessibilityService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        // 最终创建的通知，以下代码为官方写法  The final notification is created. The following code is the official writing
+        // 最终创建的通知，以下代码为官方写法  The final notification
+        // is created. The following code is the official writing
         // 注释部分是可扩展的参数，根据自己的功能需求添加
-        // The comment section is an extensible parameter, added according to its own functional requirements
+        // The comment section is an extensible parameter, added
+        // according to its own functional requirements
         return new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("AccessibilityService")
                 .setContentText("Benchmark无障碍服务工作中")

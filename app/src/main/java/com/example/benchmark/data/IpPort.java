@@ -7,8 +7,8 @@
 package com.example.benchmark.data;
 
 /**
- * IpPort
- *IP address
+ * IpPort IP address
+ *
  * @version 1.0
  * @since 2023/3/7 15:12
  */

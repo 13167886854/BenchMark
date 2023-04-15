@@ -195,7 +195,8 @@ public class VideoDecodeThread extends Thread implements Runnable {
             ((Activity) contextTemp).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    // 按视频大小动态调整SurfaceView的高度  Dynamically adjust the height of the SurfaceView by video size
+                    // 按视频大小动态调整SurfaceView的高度  Dynamically
+                    // adjust the height of the SurfaceView by video size
                     Resources resources = mSurfaceView.getResources();
 
                     final int videoWith = videoFormat.getInteger(MediaFormat.KEY_WIDTH);

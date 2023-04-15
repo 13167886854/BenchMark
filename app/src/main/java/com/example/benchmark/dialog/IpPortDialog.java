@@ -57,8 +57,11 @@ public class IpPortDialog extends Dialog {
     private String textIp = "";
     private String testPort = "";
 
-    private OnNoOnclickListener noOnclickListener; // 取消按钮被点击了的监听器  Cancel the listener whose button was clicked
-    private OnYesOnclickListener yesOnclickListener; // 确定按钮被点击了的监听器 A listener that determines that the button was clicked
+    // 取消按钮被点击了的监听器 Cancel the listener whose button was clicked
+    private OnNoOnclickListener noOnclickListener;
+
+    // 确定按钮被点击了的监听器 A listener that determines that the button was clicked
+    private OnYesOnclickListener yesOnclickListener;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -131,7 +134,8 @@ public class IpPortDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ip_port_dialog);
 
-        // 设置背景透明，不然会出现白色直角问题 Make the background transparent, otherwise the white right Angle problem will occur
+        // 设置背景透明，不然会出现白色直角问题 Make the background transparent,
+        // otherwise the white right Angle problem will occur
         Window window = getWindow();
         window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -176,8 +180,7 @@ public class IpPortDialog extends Dialog {
             @Override
             public void afterTextChanged(Editable editable) {
                 testPort = editable.toString();
-                IpPort.port = testPort;
-                IpPort.ip = textIp;
+                IpPort.getInstance().setIp(testPort);
             }
         });
     }
