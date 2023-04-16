@@ -33,7 +33,10 @@ public class SettingsActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     SharedPreferences sharedPreferences;
 
-    private EditText serverIp;
+    private EditText serverIp1;
+    private EditText serverIp2;
+    private EditText serverIp3;
+    private EditText serverIp4;
     private EditText serverPort;
     private SettingData settingData;
 
@@ -52,18 +55,26 @@ public class SettingsActivity extends AppCompatActivity {
         settingData = SettingData.getInstance();
 
         num = findViewById(R.id.num);
-        serverIp = findViewById(R.id.serverIp);
+        serverIp1 = findViewById(R.id.serverIp1);
+        serverIp2 = findViewById(R.id.serverIp2);
+        serverIp3 = findViewById(R.id.serverIp3);
+        serverIp4 = findViewById(R.id.serverIp4);
         serverPort = findViewById(R.id.serverPort);
         sharedPreferences = getSharedPreferences("Setting", this.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         settingData.setStabilityTestNum(sharedPreferences.getInt("stabilityTestNum",
                 settingData.getStabilityTestNum()));
-        settingData.setServerIp(sharedPreferences.getString("serverIp", settingData.getServerIp()));
+        settingData.setServerIp1(sharedPreferences.getString("serverIp1", settingData.getServerIp1()));
+        settingData.setServerIp2(sharedPreferences.getString("serverIp2", settingData.getServerIp2()));
+        settingData.setServerIp3(sharedPreferences.getString("serverIp3", settingData.getServerIp3()));
+        settingData.setServerIp4(sharedPreferences.getString("serverIp4", settingData.getServerIp4()));
         settingData.setServerPort(sharedPreferences.getString("serverPort", settingData.getServerPort()));
         num.setText(String.valueOf(settingData.getStabilityTestNum()));
-        serverIp.setText(settingData.getServerIp());
+        serverIp1.setText(settingData.getServerIp1());
+        serverIp2.setText(settingData.getServerIp2());
+        serverIp3.setText(settingData.getServerIp3());
+        serverIp4.setText(settingData.getServerIp4());
         serverPort.setText(settingData.getServerPort());
-        Log.e(TAG, "onCreate+num: " + num);
     }
 
     /**
@@ -78,7 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (settingData.getStabilityTestNum() == 1) {
             return;
         }
-        settingData.setStabilityTestNum(settingData.getStabilityTestNum()-1);
+        settingData.setStabilityTestNum(settingData.getStabilityTestNum() - 1);
         num.setText(String.valueOf(settingData.getStabilityTestNum()));
     }
 
@@ -91,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void add(View view) {
         Log.d(TAG, "add: add");
-        settingData.setStabilityTestNum(settingData.getStabilityTestNum()+1);
+        settingData.setStabilityTestNum(settingData.getStabilityTestNum() + 1);
         num.setText(String.valueOf(settingData.getStabilityTestNum()));
     }
 
@@ -104,10 +115,16 @@ public class SettingsActivity extends AppCompatActivity {
      */
     public void save(View view) {
         TapUtil.getUtil().setmWholeMonitorNum(settingData.getStabilityTestNum());
-        settingData.setServerIp(serverIp.getText().toString());
+        settingData.setServerIp1(serverIp1.getText().toString());
+        settingData.setServerIp2(serverIp2.getText().toString());
+        settingData.setServerIp3(serverIp3.getText().toString());
+        settingData.setServerIp4(serverIp4.getText().toString());
         settingData.setServerPort(serverPort.getText().toString());
         editor.putInt("stabilityTestNum", settingData.getStabilityTestNum());
-        editor.putString("serverIp", settingData.getServerIp());
+        editor.putString("serverIp1", settingData.getServerIp1());
+        editor.putString("serverIp2", settingData.getServerIp2());
+        editor.putString("serverIp3", settingData.getServerIp3());
+        editor.putString("serverIp4", settingData.getServerIp4());
         editor.putString("serverPort", settingData.getServerPort());
         editor.apply();
         Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();

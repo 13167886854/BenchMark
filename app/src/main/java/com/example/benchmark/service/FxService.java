@@ -529,7 +529,7 @@ public class FxService extends Service {
             if (mFloatLayout != null) {
                 mWindowManager.removeView(mFloatLayout);
             }
-        } catch(IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             Log.e(TAG, "onDestroy: " + ex.toString());
         } finally {
             mediaProjection.stop();
@@ -540,8 +540,8 @@ public class FxService extends Service {
     /**
      * onStartCommand
      *
-     * @param intent description
-     * @param flags description
+     * @param intent  description
+     * @param flags   description
      * @param startId description
      * @return int
      * @date 2023/3/10 15:27
@@ -876,8 +876,8 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.getInstance().setPsnr(resArr[resArr.length-3]);
-                        YinHuaData.getInstance().setSsim(resArr[resArr.length-1]);
+                        YinHuaData.getInstance().setPsnr(resArr[resArr.length - 3]);
+                        YinHuaData.getInstance().setSsim(resArr[resArr.length - 1]);
                         Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
                         Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null
@@ -921,8 +921,8 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse:" + res);
                         String[] resArr = res.split("=");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
-                        YinHuaData.getInstance().setPsnr(resArr[resArr.length-3]);
-                        YinHuaData.getInstance().setSsim(resArr[resArr.length-1]);
+                        YinHuaData.getInstance().setPsnr(resArr[resArr.length - 3]);
+                        YinHuaData.getInstance().setSsim(resArr[resArr.length - 1]);
                         Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
                         Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null

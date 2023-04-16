@@ -30,7 +30,6 @@ import com.example.benchmark.data.Admin;
 import com.example.benchmark.data.SettingData;
 import com.example.benchmark.dialog.LoginDialog;
 import com.example.benchmark.R;
-import com.example.benchmark.utils.CacheConst;
 import com.example.benchmark.utils.OkHttpUtils;
 import com.example.benchmark.utils.ThreadPoolUtil;
 

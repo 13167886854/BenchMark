@@ -6,8 +6,6 @@
 
 package com.example.benchmark.utils;
 
-import com.example.benchmark.data.SettingData;
-
 /**
  * CacheConst
  *
