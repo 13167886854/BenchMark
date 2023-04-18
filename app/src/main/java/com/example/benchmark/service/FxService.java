@@ -754,7 +754,8 @@ public class FxService extends Service {
         }
         DisplayMetrics metrics = new DisplayMetrics();
         if (this.getSystemService(Context.WINDOW_SERVICE) instanceof WindowManager) {
-            WindowManager windowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+            WindowManager windowManager =
+                    (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
             windowManager.getDefaultDisplay().getMetrics(metrics);
             width = metrics.widthPixels;
             height = metrics.heightPixels;
@@ -801,13 +802,15 @@ public class FxService extends Service {
     }
 
     private void stopRecord4() {
-        MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
+        MediaType type = MediaType.parse("application"
+                + File.separator + "octet-stream");
 
         // file是要上传的文件 File() "/"
         File file = new File(CacheConst.getInstance().getVideoPath() + File.separator
                 + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
-                (MediaType.parse("multipart" + File.separator + "form-data"), file);
+                (MediaType.parse("multipart" + File.separator
+                        + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
@@ -826,12 +829,14 @@ public class FxService extends Service {
     }
 
     private void stopRecord3() {
-        MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
+        MediaType type = MediaType.parse("application"
+                + File.separator + "octet-stream");
         // file是要上传的文件 File() "/"
         File file = new File(CacheConst.getInstance().getVideoPath()
                 + File.separator + CacheConst.VIDEO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
-                (MediaType.parse("multipart" + File.separator + "form-data"), file);
+                (MediaType.parse("multipart"
+                        + File.separator + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("VideoRecord", CacheConst.VIDEO_PHONE_NAME, requestBody)
@@ -878,8 +883,10 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                         YinHuaData.getInstance().setPsnr(resArr[resArr.length - 3]);
                         YinHuaData.getInstance().setSsim(resArr[resArr.length - 1]);
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>"
+                                + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>"
+                                + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null
                                 && YinHuaData.getInstance().getSsim() != null
                                 && YinHuaData.getInstance().getPesq() != null) {
@@ -923,8 +930,10 @@ public class FxService extends Service {
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                         YinHuaData.getInstance().setPsnr(resArr[resArr.length - 3]);
                         YinHuaData.getInstance().setSsim(resArr[resArr.length - 1]);
-                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>" + YinHuaData.getInstance().getPsnr());
-                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>" + YinHuaData.getInstance().getSsim());
+                        Log.d(TAG, "onResponse: YinHuaData.PSNR==>"
+                                + YinHuaData.getInstance().getPsnr());
+                        Log.d(TAG, "onResponse: YinHuaData.SSIM==>"
+                                + YinHuaData.getInstance().getSsim());
                         if (YinHuaData.getInstance().getPsnr() != null
                                 && YinHuaData.getInstance().getSsim() != null
                                 && YinHuaData.getInstance().getPesq() != null) {
@@ -982,7 +991,8 @@ public class FxService extends Service {
     }
 
     private void stopAudioRecord4() {
-        MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
+        MediaType type = MediaType.parse("application"
+                + File.separator + "octet-stream");
         File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
@@ -1005,11 +1015,13 @@ public class FxService extends Service {
     }
 
     private void stopAudioRecord3() {
-        MediaType type = MediaType.parse("application" + File.separator + "octet-stream");
+        MediaType type = MediaType.parse("application"
+                + File.separator + "octet-stream");
         File file = new File(CacheConst.getInstance().getAudioPath() + File.separator
                 + CacheConst.AUDIO_PHONE_NAME);
         RequestBody requestBody = RequestBody.create
-                (MediaType.parse("multipart" + File.separator + "form-data"), file);
+                (MediaType.parse("multipart"
+                        + File.separator + "form-data"), file);
         MultipartBody multipartBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("AudioRecord", CacheConst.AUDIO_PHONE_NAME, requestBody)
@@ -1054,7 +1066,8 @@ public class FxService extends Service {
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr " + Arrays.toString(resArr));
                         YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance()
+                                .getPesq());
                         handler.sendEmptyMessage(computePesq);
                         if (YinHuaData.getInstance().getPsnr() != null
                                 && YinHuaData.getInstance().getSsim() != null
@@ -1097,7 +1110,8 @@ public class FxService extends Service {
                         String[] resArr = res.split(" ");
                         Log.d(TAG, "onResponse: resArr  " + Arrays.toString(resArr));
                         YinHuaData.getInstance().setPesq(resArr[resArr.length - 1]);
-                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance().getPesq());
+                        Log.d(TAG, "onResponse: YinHuaData.PESQ==>" + YinHuaData.getInstance()
+                                .getPesq());
                         handler.sendEmptyMessage(computePesq);
                         if (YinHuaData.getInstance().getPsnr() != null
                                 && YinHuaData.getInstance().getSsim() != null

@@ -11,11 +11,15 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.example.benchmark.data.SettingData;
 import com.example.benchmark.service.GameTouchTestService;
 import com.example.benchmark.service.MyAccessibilityService;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -155,7 +159,8 @@ public class TapUtil {
                         startTime = System.currentTimeMillis();
                         Request request = new Request.Builder()
                                 .get()
-                                .url(CacheConst.WEB_TIME_URL)
+                                .url(SettingData.getInstance().getServerAddress() + File.separator
+                                        + "touch" + File.separator + "time")
                                 .build();
                         ThreadPoolUtil.getPool().execute(new Runnable() {
                             @Override
@@ -175,11 +180,15 @@ public class TapUtil {
                                                 endTime = System.currentTimeMillis();
                                                 responseTime = endTime - startTime;
                                                 String result = response.body().string();
-                                                String res = result.substring(81, 94);
+                                                JSONObject jsonObject = JSON.parseObject(result);
+                                                Long timestamp = (Long) jsonObject.get("timestamp");
+                                                Log.d("tapTimeOnLocal", "onResponse: timestamp" + timestamp);
 
+                                                //String res = result.substring(81, 94);
                                                 // 获取到的时间戳，应该减去响应时延  The timestamp obtained should
                                                 // be subtracted from the response delay
-                                                mLastTapTime = Long.valueOf(res) - responseTime;
+                                                //mLastTapTime = Long.valueOf(res) - responseTime;
+                                                mLastTapTime = timestamp - responseTime;
                                                 mCurrentTapNum++;
                                                 CacheUtil.put(("tapTimeOnLocal" + (mCurrentTapNum)), mLastTapTime);
                                             }
@@ -190,6 +199,7 @@ public class TapUtil {
                             mCurrentTapNum = 0;
                         }
                     }
+
                     @Override
                     public void onFailure() {
                         Log.e("TWT", "tap failure");
